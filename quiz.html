@@ -2,132 +2,672 @@
 <html lang="te">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LOGOS QUEST – Bible Quiz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LOGOS QUEST - Bible Quiz</title>
 
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #eef2ff;
-  margin: 0;
-  padding: 20px;
-  text-align: center;
-}
-.container {
-  max-width: 600px;
-  margin: auto;
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px #0002;
-}
-h1 { color: #243c91; }
-input, select, button {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
+* {
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #101b38, #253e72);
+  color: white;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 28px 15px;
+  background: #101a32;
+}
+
+header h1 {
+  margin: 0;
+  color: #ffd76b;
+  font-size: 30px;
+}
+
+header p {
+  margin-bottom: 0;
+  color: #d7e0f5;
+}
+
+.container {
+  width: 94%;
+  max-width: 650px;
+  margin: 25px auto;
+}
+
+.card {
+  background: white;
+  color: #202840;
+  border-radius: 15px;
+  padding: 24px;
+  box-shadow: 0 8px 25px #0003;
+}
+
+h2 {
+  text-align: center;
+  color: #203a70;
+}
+
+input, select {
+  width: 100%;
+  padding: 13px;
+  margin: 9px 0;
+  border: 1px solid #ccd3df;
   border-radius: 8px;
-  border: 1px solid #ccc;
   font-size: 16px;
 }
+
 button {
-  background: #243c91;
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 9px;
+  background: #1749a2;
   color: white;
+  font-size: 17px;
+  font-weight: bold;
   cursor: pointer;
 }
+
+button:hover {
+  background: #10367c;
+}
+
 .option {
-  background: #e0e7ff;
-  color: black;
+  display: block;
+  width: 100%;
+  background: #f0f4fb;
+  color: #222;
+  border: 2px solid #d7e0ee;
+  text-align: left;
+  margin: 10px 0;
 }
-.selected {
-  background: #93c5fd;
+
+.option.selected {
+  background: #dceaff;
+  border-color: #1749a2;
 }
-.hidden { display: none; }
+
+.hidden {
+  display: none;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+
+.progress {
+  height: 9px;
+  background: #e4e8f1;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #28a56a;
+  transition: width .2s;
+}
+
+#questionText {
+  line-height: 1.6;
+}
+
+.result-score {
+  font-size: 45px;
+  color: #1749a2;
+  text-align: center;
+  font-weight: bold;
+}
+
+.message {
+  text-align: center;
+  line-height: 1.7;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #c9d3e8;
+}
 </style>
 </head>
 
 <body>
+
+<header>
+  <h1>✝ LOGOS QUEST</h1>
+  <p>Live Bible Quiz</p>
+</header>
+
 <div class="container">
 
-<h1>✝ LOGOS QUEST</h1>
-<h3>Live Bible Quiz</h3>
+  <!-- REGISTRATION -->
 
-<div id="registration">
-  <h2>విద్యార్థి నమోదు</h2>
+  <section id="registration" class="card">
 
-  <input id="name" placeholder="మీ పేరు *" required>
-  <input id="mobile" placeholder="మొబైల్ నంబర్ *"
-         inputmode="numeric" maxlength="10" required>
-  <input id="email" type="email"
-         placeholder="ఈమెయిల్ (ఐచ్ఛికం)">
+    <h2>బైబిల్ క్విజ్ పరీక్ష</h2>
 
-  <h3>ప్రశ్నల సంఖ్య</h3>
-  <select id="questionCount">
-    <option value="10">10 ప్రశ్నలు</option>
-    <option value="20">20 ప్రశ్నలు</option>
-    <option value="50">50 ప్రశ్నలు</option>
-    <option value="100">100 ప్రశ్నలు</option>
-  </select>
+    <p>పరీక్ష రాయడానికి మీ వివరాలు నమోదు చేయండి.</p>
 
-  <button onclick="startQuiz()">పరీక్ష ప్రారంభించండి</button>
+    <form id="registrationForm">
+
+      <label>మీ పేరు *</label>
+      <input
+        type="text"
+        id="studentName"
+        placeholder="మీ పూర్తి పేరు"
+        required
+      >
+
+      <label>మొబైల్ నంబర్ *</label>
+      <input
+        type="tel"
+        id="studentMobile"
+        placeholder="10 అంకెల మొబైల్ నంబర్"
+        inputmode="numeric"
+        pattern="[0-9]{10}"
+        maxlength="10"
+        required
+      >
+
+      <label>ఈమెయిల్ (ఐచ్ఛికం)</label>
+      <input
+        type="email"
+        id="studentEmail"
+        placeholder="Email address"
+      >
+
+      <label>ప్రశ్నల సంఖ్య</label>
+
+      <select id="questionCount">
+        <option value="10">10 ప్రశ్నలు</option>
+        <option value="20">20 ప్రశ్నలు</option>
+        <option value="50">50 ప్రశ్నలు</option>
+        <option value="100">100 ప్రశ్నలు</option>
+      </select>
+
+      <button type="submit">
+        పరీక్ష ప్రారంభించండి
+      </button>
+
+    </form>
+
+  </section>
+
+  <!-- QUIZ -->
+
+  <section id="quizSection" class="card hidden">
+
+    <div class="info">
+      <span id="questionNumber"></span>
+      <span id="timer"></span>
+    </div>
+
+    <div class="progress">
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <h3 id="questionText"></h3>
+
+    <div id="optionsContainer"></div>
+
+    <button
+      type="button"
+      id="nextButton"
+      onclick="nextQuestion()"
+    >
+      తదుపరి ప్రశ్న
+    </button>
+
+  </section>
+
+  <!-- RESULTS -->
+
+  <section id="resultSection" class="card hidden">
+
+    <h2>పరీక్ష పూర్తయింది!</h2>
+
+    <p class="message" id="resultName"></p>
+
+    <div class="result-score" id="resultScore"></div>
+
+    <p class="message" id="resultPercentage"></p>
+
+    <p class="message" id="resultTime"></p>
+
+    <p class="message">
+      మీ మార్కులు మాత్రమే చూపించబడుతున్నాయి.
+      సరైన సమాధానాలు ఈ డెమోలో వెల్లడించబడవు.
+    </p>
+
+    <button type="button" onclick="restartQuiz()">
+      మళ్లీ పరీక్ష రాయండి
+    </button>
+
+  </section>
+
 </div>
 
-<div id="quiz" class="hidden">
-  <h3 id="progress"></h3>
-  <h2 id="question"></h2>
-  <div id="options"></div>
-  <button id="nextBtn" onclick="nextQuestion()" disabled>
-    తదుపరి ప్రశ్న
-  </button>
-</div>
-
-<div id="result" class="hidden">
-  <h2>పరీక్ష పూర్తయింది!</h2>
-  <h3 id="studentResult"></h3>
-  <h2 id="marks"></h2>
-  <p>సరైన సమాధానాలు అడ్మిన్ విడుదల చేసిన తర్వాత మాత్రమే కనిపిస్తాయి.</p>
-  <button onclick="location.reload()">హోమ్ పేజీ</button>
-</div>
-
-</div>
+<footer>
+  © LOGOS QUEST | Bible Quiz
+</footer>
 
 <script>
+
+/* BIBLE QUESTION BANK */
+
 const questionBank = [
+
   {
-    q: "బైబిల్‌లో మొదటి పుస్తకం ఏది?",
-    options: ["ఆదికాండము", "నిర్గమకాండము", "మత్తయి", "కీర్తనలు"],
+    question: "బైబిల్‌లో మొదటి పుస్తకం ఏది?",
+    options: [
+      "ఆదికాండము",
+      "నిర్గమకాండము",
+      "మత్తయి",
+      "కీర్తనలు"
+    ],
     answer: 0
   },
+
   {
-    q: "నోవహు ఏమి నిర్మించాడు?",
-    options: ["గోపురం", "ఓడ", "ఆలయం", "బావి"],
+    question: "దేవుడు ప్రపంచాన్ని ఎన్ని రోజులలో సృష్టించాడు?",
+    options: [
+      "3 రోజులు",
+      "5 రోజులు",
+      "6 రోజులు",
+      "7 రోజులు"
+    ],
+    answer: 2
+  },
+
+  {
+    question: "నోవహు ఏమి నిర్మించాడు?",
+    options: [
+      "దేవాలయం",
+      "ఓడ",
+      "గోపురం",
+      "రాజభవనం"
+    ],
     answer: 1
   },
+
   {
-    q: "యేసు క్రీస్తు ఎక్కడ జన్మించారు?",
-    options: ["నజరేతు", "యెరూషలేము", "బేత్లెహేము", "గలిలయ"],
+    question: "ఇశ్రాయేలీయులను ఐగుప్తు నుండి ఎవరు నడిపించారు?",
+    options: [
+      "యోసేపు",
+      "దావీదు",
+      "మోషే",
+      "సొలొమోను"
+    ],
     answer: 2
   },
+
   {
-    q: "దావీదు ఎవరిని ఓడించాడు?",
-    options: ["గొల్యాతు", "సౌలు", "ఫరో", "హేరోదు"],
-    answer: 0
-  },
-  {
-    q: "యేసుకు బాప్తిస్మం ఇచ్చినవారు ఎవరు?",
-    options: ["పేతురు", "బాప్తిస్మమిచ్చు యోహాను", "పౌలు", "యాకోబు"],
+    question: "గొల్యాతును ఎవరు ఓడించారు?",
+    options: [
+      "సౌలు",
+      "దావీదు",
+      "సమూయేలు",
+      "యోనాతాను"
+    ],
     answer: 1
   },
+
   {
-    q: "పది ఆజ్ఞలు ఎవరికి ఇవ్వబడ్డాయి?",
-    options: ["అబ్రాహాము", "యోసేపు", "మోషే", "సొలొమోను"],
+    question: "యేసుక్రీస్తు ఎక్కడ జన్మించారు?",
+    options: [
+      "నజరేతు",
+      "యెరూషలేము",
+      "బేత్లెహేము",
+      "కపెర్నహూము"
+    ],
     answer: 2
   },
+
   {
-    q: "యేసు క్రీస్తుకు ఎంతమంది అపొస్తలులు ఉన్నారు?",
-    options: ["7", "10", "12", "40"],
+    question: "యేసుక్రీస్తు తల్లి పేరు ఏమిటి?",
+    options: [
+      "మార్త",
+      "మరియ",
+      "రూతు",
+      "ఎస్తేరు"
+    ],
+    answer: 1
+  },
+
+  {
+    question: "యేసుక్రీస్తుకు ఎంతమంది అపొస్తలులు ఉన్నారు?",
+    options: [
+      "10",
+      "11",
+      "12",
+      "14"
+    ],
     answer: 2
   },
+
   {
-    q: "యోనా ద
+    question: "యేసును మూడుసార్లు ఎరుగనని చెప్పిన శిష్యుడు ఎవరు?",
+    options: [
+      "యోహాను",
+      "పేతురు",
+      "తోమా",
+      "యాకోబు"
+    ],
+    answer: 1
+  },
+
+  {
+    question: "బైబిల్‌లో చివరి పుస్తకం ఏది?",
+    options: [
+      "యూదా",
+      "హెబ్రీయులకు",
+      "ప్రకటన గ్రంథము",
+      "రోమీయులకు"
+    ],
+    answer: 2
+  }
+
+];
+
+/* QUIZ VARIABLES */
+
+let questions = [];
+let currentQuestion = 0;
+let selectedAnswer = null;
+let score = 0;
+let startTime = 0;
+let student = {};
+
+/* REGISTRATION */
+
+document
+  .getElementById("registrationForm")
+  .addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    startQuiz();
+
+  });
+
+function startQuiz() {
+
+  const name = document
+    .getElementById("studentName")
+    .value.trim();
+
+  const mobile = document
+    .getElementById("studentMobile")
+    .value.trim();
+
+  const email = document
+    .getElementById("studentEmail")
+    .value.trim();
+
+  const count = Number(
+    document.getElementById("questionCount").value
+  );
+
+  if (name.length < 2) {
+    alert("దయచేసి మీ పేరు నమోదు చేయండి.");
+    return;
+  }
+
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    alert("సరైన 10 అంకెల మొబైల్ నంబర్ నమోదు చేయండి.");
+    return;
+  }
+
+  student = {
+    name: name,
+    mobile: mobile,
+    email: email
+  };
+
+  questions = [];
+
+  /*
+    Demo mode:
+    The 10 sample questions repeat for
+    selections above 10.
+  */
+
+  for (let i = 0; i < count; i++) {
+
+    const question = questionBank[i % questionBank.length];
+
+    questions.push({
+      question: question.question,
+      options: [...question.options],
+      answer: question.answer
+    });
+
+  }
+
+  currentQuestion = 0;
+  selectedAnswer = null;
+  score = 0;
+  startTime = Date.now();
+
+  document
+    .getElementById("registration")
+    .classList.add("hidden");
+
+  document
+    .getElementById("resultSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("quizSection")
+    .classList.remove("hidden");
+
+  showQuestion();
+
+}
+
+/* SHOW QUESTION */
+
+function showQuestion() {
+
+  selectedAnswer = null;
+
+  const question = questions[currentQuestion];
+
+  document.getElementById("questionNumber").textContent =
+    "ప్రశ్న " + (currentQuestion + 1) +
+    " / " + questions.length;
+
+  document.getElementById("questionText").textContent =
+    question.question;
+
+  const progress =
+    (currentQuestion / questions.length) * 100;
+
+  document.getElementById("progressBar").style.width =
+    progress + "%";
+
+  const container =
+    document.getElementById("optionsContainer");
+
+  container.innerHTML = "";
+
+  question.options.forEach(function(option, index) {
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "option";
+
+    button.textContent =
+      String.fromCharCode(65 + index) + ". " + option;
+
+    button.addEventListener("click", function() {
+
+      selectedAnswer = index;
+
+      document
+        .querySelectorAll(".option")
+        .forEach(function(item) {
+          item.classList.remove("selected");
+        });
+
+      button.classList.add("selected");
+
+    });
+
+    container.appendChild(button);
+
+  });
+
+  const nextButton =
+    document.getElementById("nextButton");
+
+  nextButton.textContent =
+    currentQuestion === questions.length - 1
+      ? "పరీక్ష ముగించండి"
+      : "తదుపరి ప్రశ్న";
+
+  updateTimer();
+
+}
+
+/* TIMER */
+
+function updateTimer() {
+
+  if (
+    document
+      .getElementById("quizSection")
+      .classList.contains("hidden")
+  ) {
+    return;
+  }
+
+  const seconds = Math.floor(
+    (Date.now() - startTime) / 1000
+  );
+
+  const minutes = Math.floor(seconds / 60);
+
+  const remainingSeconds = seconds % 60;
+
+  document.getElementById("timer").textContent =
+    "సమయం: " +
+    String(minutes).padStart(2, "0") +
+    ":" +
+    String(remainingSeconds).padStart(2, "0");
+
+}
+
+setInterval(updateTimer, 1000);
+
+/* NEXT QUESTION */
+
+function nextQuestion() {
+
+  if (selectedAnswer === null) {
+
+    alert("దయచేసి ఒక సమాధానం ఎంచుకోండి.");
+
+    return;
+  }
+
+  if (
+    selectedAnswer ===
+    questions[currentQuestion].answer
+  ) {
+    score++;
+  }
+
+  currentQuestion++;
+
+  if (currentQuestion < questions.length) {
+
+    showQuestion();
+
+  } else {
+
+    finishQuiz();
+
+  }
+
+}
+
+/* FINISH QUIZ */
+
+function finishQuiz() {
+
+  const totalSeconds = Math.floor(
+    (Date.now() - startTime) / 1000
+  );
+
+  const minutes = Math.floor(totalSeconds / 60);
+
+  const seconds = totalSeconds % 60;
+
+  const percentage = Math.round(
+    (score / questions.length) * 100
+  );
+
+  document
+    .getElementById("quizSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("resultSection")
+    .classList.remove("hidden");
+
+  document.getElementById("resultName").textContent =
+    "పేరు: " + student.name;
+
+  document.getElementById("resultScore").textContent =
+    score + " / " + questions.length;
+
+  document.getElementById("resultPercentage").textContent =
+    "శాతం: " + percentage + "%";
+
+  document.getElementById("resultTime").textContent =
+    "పూర్తి చేసిన సమయం: " +
+    minutes + " నిమిషాలు " +
+    seconds + " సెకన్లు";
+
+  window.scrollTo(0, 0);
+
+}
+
+/* RESTART */
+
+function restartQuiz() {
+
+  document
+    .getElementById("resultSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("registration")
+    .classList.remove("hidden");
+
+  window.scrollTo(0, 0);
+
+}
+
+</script>
+
+</body>
+</html>
