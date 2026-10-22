@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOGOS QUEST - Global Bible Quiz</title>
+<style>
+*{box-sizing:border-box}
+body{
+font-family:Arial,sans-serif;
+background:#eef3fa;
+margin:0;
+padding:15px;
+color:#243247;
+}
+header{
+background:#173c83;
+color:white;
+padding:25px 15px;
+text-align:center;
+border-radius:14px;
+}
+header h1{margin:0;font-size:28px}
+header p{color:#e5edff}
+.card{
+background:white;
+max-width:650px;
+margin:18px auto;
+padding:22px;
+border-radius:14px;
+box-shadow:0 3px 12px #0001;
+}
+h2{color:#173c83}
+input,select{
+width:100%;
+padding:12px;
+margin:8px 0 15px;
+border:1px solid #bbb;
+border-radius:8px;
+font-size:16px;
+}
+button{
+background:#1268d6;
+color:white;
+border:0;
+border-radius:8px;
+padding:13px 20px;
+font-size:16px;
+cursor:pointer;
+margin:7px 4px;
+}
+button:disabled{background:#999}
+.option{
+display:block;
+padding:12px;
+margin:10px 0;
+border:1px solid #ccd5e5;
+border-radius:8px;
+cursor:pointer;
+}
+.option input{
+width:auto;
+margin:0 10px 0 0;
+}
+.hidden{display:none}
+.center{text-align:center}
+#timer{color:#c0392b;font-weight:bold}
+.success{color:green}
+small{color:#666}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>📖 LOGOS QUEST</h1>
+<p>GLOBAL BIBLE QUIZ</p>
+<p>Learn • Believe • Grow</p>
+</header>
+
+<section class="card" id="register">
+<h2>👤 Student Registration</h2>
+
+<label>Full Name *</label>
+<input id="studentName" placeholder="Enter your name">
+
+<label>Mobile Number *</label>
+<input id="studentMobile"
+type="tel"
+inputmode="numeric"
+placeholder="Enter mobile number">
+
+<label>Email (Optional)</label>
+<input id="studentEmail"
+type="email"
+placeholder="Enter email">
+
+<label>Number of Questions</label>
+<select id="questionCount">
+<option value="10">10 Questions</option>
+<option value="20">20 Questions</option>
+</select>
+
+<p><small>
+Demo Exam: English Bible Questions
+</small></p>
+
+<button onclick="startExam()">Start Bible Quiz</button>
+</section>
+
+<section class="card hidden" id="exam">
+
+<div class="center">
+<h2>📚 Bible Quiz</h2>
+<p id="studentDisplay"></p>
+<p id="timer"></p>
+<p id="progress"></p>
+</div>
+
+<h3 id="questionText"></h3>
+
+<div id="options"></div>
+
+<div class="center">
+<button id="nextBtn" onclick="nextQuestion()">
+Next Question
+</button>
+</div>
+
+</section>
+
+<section class="card hidden center" id="result">
