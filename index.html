@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>LOGOS QUEST</title>
+<title>LOGOS QUEST - Live Bible Quiz</title>
 
 <style>
 body {
@@ -36,8 +36,50 @@ button {
     border-radius: 8px;
     margin: 8px;
     font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+p {
+    color: #555;
 }
 </style>
 </head>
 
 <body>
+
+<div class="card">
+    <h1>📖 LOGOS QUEST</h1>
+    <h2>Live Bible Quiz</h2>
+    <p>Welcome to LOGOS QUEST</p>
+</div>
+
+<div class="card">
+    <h2>📚 ఈరోజు లైవ్ ఎగ్జామ్స్</h2>
+    <p>ప్రస్తుతం పరీక్షలు అందుబాటులో లేవు.</p>
+    <button onclick="showMessage()">
+        Join Exam
+    </button>
+</div>
+
+<div class="card">
+    <h2>🏆 విజేతలు</h2>
+    <p>ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
+</div>
+
+<div class="card">
+    <h2>📊 నా ఫలితాలు</h2>
+    <p>మీ పరీక్ష ఫలితాలు ఇక్కడ కనిపిస్తాయి.</p>
+</div>
+
+<script>
+function showMessage() {
+    alert("ప్రస్తుతం లైవ్ పరీక్ష అందుబాటులో లేదు.");
+}
+</script>
+
+</body>
+</html>
