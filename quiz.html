@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOGOS QUEST - నా ఫలితాలు</title>
+
+<title>LOGOS QUEST - Live Bible Quiz</title>
 
 <style>
 * {
@@ -15,6 +16,7 @@ body {
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #101b38, #253e72);
   min-height: 100vh;
+  color: #222;
 }
 
 header {
@@ -33,7 +35,7 @@ header p {
 }
 
 .container {
-  max-width: 650px;
+  max-width: 700px;
   margin: 25px auto;
   padding: 15px;
 }
@@ -46,11 +48,11 @@ header p {
 }
 
 h2 {
-  text-align: center;
   color: #203a70;
+  text-align: center;
 }
 
-input, button {
+input, select, button {
   width: 100%;
   padding: 14px;
   margin: 10px 0;
@@ -58,7 +60,7 @@ input, button {
   font-size: 16px;
 }
 
-input {
+input, select {
   border: 1px solid #ccc;
 }
 
@@ -66,18 +68,73 @@ button {
   background: #1749a2;
   color: white;
   border: none;
+  font-weight: bold;
   cursor: pointer;
 }
 
-.result {
+button:disabled {
+  background: #999;
+}
+
+.option {
+  display: block;
+  padding: 14px;
   background: #f0f4ff;
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 12px;
+  border: 1px solid #d4dff5;
+  border-radius: 8px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.option input {
+  width: auto;
+  margin-right: 10px;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: bold;
+  color: #203a70;
+}
+
+.score {
+  font-size: 36px;
+  color: #1749a2;
+  text-align: center;
+  font-weight: bold;
+}
+
+.center {
+  text-align: center;
+}
+
+.hidden {
+  display: none;
 }
 
 a {
   color: #1749a2;
+}
+
+.link-button {
+  display: block;
+  background: #1749a2;
+  color: white;
+  padding: 14px;
+  text-align: center;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.notice {
+  background: #fff4d6;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 15px;
 }
 </style>
 </head>
@@ -86,25 +143,29 @@ a {
 
 <header>
   <h1>✝ LOGOS QUEST</h1>
-  <p>నా ఫలితాలు</p>
+  <p>Live Bible Quiz</p>
 </header>
 
 <div class="container">
 
-  <div class="card">
+  <!-- REGISTRATION -->
 
-    <h2>మీ పరీక్ష ఫలితాలు</h2>
+  <section id="registration" class="card">
 
-    <p>
-      పరీక్ష సమయంలో ఇచ్చిన మొబైల్ నంబర్
-      నమోదు చేయండి.
-    </p>
+    <h2>బైబిల్ పరీక్ష నమోదు</h2>
 
-    <form id="searchForm">
+    <form id="registrationForm">
 
       <input
-        id="mobile"
+        type="text"
+        id="studentName"
+        placeholder="మీ పూర్తి పేరు"
+        required
+      >
+
+      <input
         type="tel"
+        id="studentMobile"
         placeholder="10 అంకెల మొబైల్ నంబర్"
         maxlength="10"
         pattern="[0-9]{10}"
@@ -112,110 +173,543 @@ a {
         required
       >
 
+      <input
+        type="email"
+        id="studentEmail"
+        placeholder="ఈమెయిల్ (ఐచ్ఛికం)"
+      >
+
+      <label for="questionCount">
+        ప్రశ్నల సంఖ్య
+      </label>
+
+      <select id="questionCount">
+        <option value="10">10 ప్రశ్నలు</option>
+        <option value="20">20 ప్రశ్నలు</option>
+        <option value="50">50 ప్రశ్నలు</option>
+        <option value="100">100 ప్రశ్నలు</option>
+      </select>
+
       <button type="submit">
-        ఫలితాలు చూడండి
+        పరీక్ష ప్రారంభించండి
       </button>
 
     </form>
 
-    <div id="results"></div>
-
-  </div>
-
-  <div class="card">
-
-    <a href="quiz.html">
-      కొత్త పరీక్ష రాయండి
+    <a class="link-button" href="results.html">
+      నా ఫలితాలు
     </a>
 
-    <br><br>
+  </section>
 
-    <a href="index.html">
+  <!-- QUIZ -->
+
+  <section id="quizSection" class="card hidden">
+
+    <div class="info">
+      <span id="questionNumber"></span>
+      <span id="timer">00:00</span>
+    </div>
+
+    <h2 id="questionText"></h2>
+
+    <div id="optionsContainer"></div>
+
+    <button id="nextButton" type="button">
+      తదుపరి ప్రశ్న
+    </button>
+
+  </section>
+
+  <!-- RESULTS -->
+
+  <section id="resultSection" class="card hidden">
+
+    <h2>పరీక్ష ఫలితాలు</h2>
+
+    <p id="resultName" class="center"></p>
+
+    <div id="resultScore" class="score"></div>
+
+    <p id="resultPercentage" class="center"></p>
+
+    <p id="resultTime" class="center"></p>
+
+    <p id="saveStatus" class="center"></p>
+
+    <div class="notice">
+      ఇది డెమో పరీక్ష. సరైన సమాధానాలను
+      ప్రస్తుతం వెల్లడించడం లేదు.
+    </div>
+
+    <a class="link-button" href="results.html">
+      నా ఫలితాలు చూడండి
+    </a>
+
+    <button type="button" onclick="restartQuiz()">
+      మళ్లీ పరీక్ష రాయండి
+    </button>
+
+    <a class="link-button" href="index.html">
       హోమ్ పేజీ
     </a>
 
-  </div>
+  </section>
 
 </div>
 
 <script>
 
-document.getElementById("searchForm")
+// DEMO BIBLE QUESTIONS
+
+const questionBank = [
+  {
+    question: "బైబిల్‌లో మొదటి పుస్తకం ఏది?",
+    options: [
+      "నిర్గమకాండము",
+      "ఆదికాండము",
+      "లేవీయకాండము",
+      "సంఖ్యాకాండము"
+    ],
+    answer: 1
+  },
+  {
+    question: "మొదటి మనిషి ఎవరు?",
+    options: [
+      "నోవహు",
+      "అబ్రాహాము",
+      "ఆదాము",
+      "మోషే"
+    ],
+    answer: 2
+  },
+  {
+    question: "నోవహు ఏమి నిర్మించాడు?",
+    options: [
+      "దేవాలయం",
+      "ఓడ",
+      "గోపురం",
+      "రాజభవనం"
+    ],
+    answer: 1
+  },
+  {
+    question: "యేసు క్రీస్తు ఎక్కడ జన్మించారు?",
+    options: [
+      "నజరేతు",
+      "యెరూషలేము",
+      "బేత్లెహేము",
+      "గలిలయ"
+    ],
+    answer: 2
+  },
+  {
+    question: "దావీదు ఎవరిని ఓడించాడు?",
+    options: [
+      "ఫరో",
+      "గొల్యాతు",
+      "హేరోదు",
+      "పిలాతు"
+    ],
+    answer: 1
+  },
+  {
+    question: "యేసు క్రీస్తుకు ఎంతమంది అపొస్తలులు ఉన్నారు?",
+    options: [
+      "10",
+      "11",
+      "12",
+      "14"
+    ],
+    answer: 2
+  },
+  {
+    question: "యేసు క్రీస్తును మూడుసార్లు ఎరుగనని చెప్పిన శిష్యుడు ఎవరు?",
+    options: [
+      "యోహాను",
+      "పేతురు",
+      "తోమా",
+      "యాకోబు"
+    ],
+    answer: 1
+  },
+  {
+    question: "యోనా ఎన్ని రోజులు పెద్ద చేప కడుపులో ఉన్నాడు?",
+    options: [
+      "ఒక రోజు",
+      "రెండు రోజులు",
+      "మూడు రోజులు",
+      "ఏడు రోజులు"
+    ],
+    answer: 2
+  },
+  {
+    question: "పది ఆజ్ఞలను దేవుడు ఎవరికి ఇచ్చాడు?",
+    options: [
+      "అబ్రాహాము",
+      "మోషే",
+      "దావీదు",
+      "సొలొమోను"
+    ],
+    answer: 1
+  },
+  {
+    question: "బైబిల్‌లో చివరి పుస్తకం ఏది?",
+    options: [
+      "యూదా",
+      "హెబ్రీయులకు",
+      "ప్రకటన గ్రంథము",
+      "రోమీయులకు"
+    ],
+    answer: 2
+  }
+];
+
+let student = {};
+
+let questions = [];
+
+let currentQuestion = 0;
+
+let score = 0;
+
+let startTime = 0;
+
+let timerInterval = null;
+
+let quizFinished = false;
+
+
+// REGISTRATION
+
+document.getElementById("registrationForm")
 .addEventListener("submit", function(event) {
 
   event.preventDefault();
 
-  const mobile = document
-    .getElementById("mobile")
+  startQuiz();
+
+});
+
+
+function startQuiz() {
+
+  const name = document
+    .getElementById("studentName")
     .value.trim();
 
-  const box = document.getElementById("results");
+  const mobile = document
+    .getElementById("studentMobile")
+    .value.trim();
 
-  box.innerHTML = "";
+  const email = document
+    .getElementById("studentEmail")
+    .value.trim();
 
-  if (!/^[0-9]{10}$/.test(mobile)) {
-    box.textContent =
-      "సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి.";
+  const count = Number(
+    document.getElementById("questionCount").value
+  );
+
+  if (name.length < 2) {
+    alert("దయచేసి సరైన పేరు నమోదు చేయండి.");
     return;
   }
 
-  let saved = [];
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    alert("సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి.");
+    return;
+  }
+
+  student = {
+    name: name,
+    mobile: mobile,
+    email: email
+  };
+
+  questions = [];
+
+  // Demo: repeat the available 10 questions
+  // to reach the selected question count.
+
+  for (let i = 0; i < count; i++) {
+
+    questions.push(
+      questionBank[i % questionBank.length]
+    );
+
+  }
+
+  currentQuestion = 0;
+  score = 0;
+  quizFinished = false;
+
+  startTime = Date.now();
+
+  document
+    .getElementById("registration")
+    .classList.add("hidden");
+
+  document
+    .getElementById("resultSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("quizSection")
+    .classList.remove("hidden");
+
+  clearInterval(timerInterval);
+
+  timerInterval = setInterval(updateTimer, 1000);
+
+  updateTimer();
+
+  showQuestion();
+
+}
+
+
+// TIMER
+
+function updateTimer() {
+
+  const seconds = Math.floor(
+    (Date.now() - startTime) / 1000
+  );
+
+  const minutesPart = String(
+    Math.floor(seconds / 60)
+  ).padStart(2, "0");
+
+  const secondsPart = String(
+    seconds % 60
+  ).padStart(2, "0");
+
+  document.getElementById("timer").textContent =
+    minutesPart + ":" + secondsPart;
+
+}
+
+
+// SHOW QUESTION
+
+function showQuestion() {
+
+  const question = questions[currentQuestion];
+
+  document.getElementById("questionNumber").textContent =
+    "ప్రశ్న " +
+    (currentQuestion + 1) +
+    " / " +
+    questions.length;
+
+  document.getElementById("questionText").textContent =
+    question.question;
+
+  const container = document.getElementById(
+    "optionsContainer"
+  );
+
+  container.innerHTML = "";
+
+  question.options.forEach(function(option, index) {
+
+    const label = document.createElement("label");
+
+    label.className = "option";
+
+    const radio = document.createElement("input");
+
+    radio.type = "radio";
+    radio.name = "answer";
+    radio.value = index;
+
+    label.appendChild(radio);
+
+    label.appendChild(
+      document.createTextNode(option)
+    );
+
+    container.appendChild(label);
+
+  });
+
+  const nextButton = document.getElementById("nextButton");
+
+  nextButton.textContent =
+    currentQuestion === questions.length - 1
+    ? "పరీక్ష పూర్తి చేయండి"
+    : "తదుపరి ప్రశ్న";
+
+}
+
+
+// NEXT QUESTION
+
+document.getElementById("nextButton")
+.addEventListener("click", nextQuestion);
+
+
+function nextQuestion() {
+
+  if (quizFinished) return;
+
+  const selected = document.querySelector(
+    'input[name="answer"]:checked'
+  );
+
+  if (!selected) {
+
+    alert("దయచేసి ఒక సమాధానం ఎంచుకోండి.");
+
+    return;
+
+  }
+
+  const selectedAnswer = Number(selected.value);
+
+  if (
+    selectedAnswer ===
+    questions[currentQuestion].answer
+  ) {
+
+    score++;
+
+  }
+
+  currentQuestion++;
+
+  if (currentQuestion >= questions.length) {
+
+    finishQuiz();
+
+  } else {
+
+    showQuestion();
+
+  }
+
+}
+
+
+// FINISH QUIZ AND SAVE RESULT
+
+function finishQuiz() {
+
+  if (quizFinished) return;
+
+  quizFinished = true;
+
+  clearInterval(timerInterval);
+
+  const total = questions.length;
+
+  const percentage = Math.round(
+    (score / total) * 100
+  );
+
+  const elapsedSeconds = Math.floor(
+    (Date.now() - startTime) / 1000
+  );
+
+  const minutes = Math.floor(
+    elapsedSeconds / 60
+  );
+
+  const seconds = elapsedSeconds % 60;
+
+  const timeText =
+    minutes + " నిమిషాలు " +
+    seconds + " సెకన్లు";
+
+  const result = {
+    name: student.name,
+    mobile: student.mobile,
+    email: student.email,
+    score: score,
+    total: total,
+    percentage: percentage,
+    time: timeText,
+    date: new Date().toLocaleString("en-IN")
+  };
+
+  let savedSuccessfully = false;
 
   try {
 
-    saved = JSON.parse(
+    let oldResults = JSON.parse(
       localStorage.getItem("logosQuestResults") || "[]"
     );
 
-    if (!Array.isArray(saved)) {
-      saved = [];
+    if (!Array.isArray(oldResults)) {
+      oldResults = [];
     }
 
+    oldResults.push(result);
+
+    localStorage.setItem(
+      "logosQuestResults",
+      JSON.stringify(oldResults)
+    );
+
+    savedSuccessfully = true;
+
   } catch (error) {
-    saved = [];
+
+    console.error("Result save failed:", error);
+
   }
 
-  const matches = saved.filter(function(item) {
-    return String(item.mobile) === mobile;
-  });
+  document
+    .getElementById("quizSection")
+    .classList.add("hidden");
 
-  if (matches.length === 0) {
+  document
+    .getElementById("resultSection")
+    .classList.remove("hidden");
 
-    box.textContent =
-      "ఈ మొబైల్ నంబర్‌కు సేవ్ అయిన ఫలితాలు లేవు.";
+  document.getElementById("resultName").textContent =
+    "విద్యార్థి పేరు: " + student.name;
 
-    return;
-  }
+  document.getElementById("resultScore").textContent =
+    score + " / " + total;
 
-  matches.reverse().forEach(function(item) {
+  document.getElementById("resultPercentage").textContent =
+    "శాతం: " + percentage + "%";
 
-    const div = document.createElement("div");
+  document.getElementById("resultTime").textContent =
+    "పరీక్ష పూర్తి చేసిన సమయం: " + timeText;
 
-    div.className = "result";
+  document.getElementById("saveStatus").textContent =
+    savedSuccessfully
+    ? "✅ మీ ఫలితం సేవ్ అయింది."
+    : "⚠️ ఫలితం సేవ్ కాలేదు. బ్రౌజర్ సెట్టింగ్స్ చెక్ చేయండి.";
 
-    const lines = [
-      "పేరు: " + (item.name || "-"),
-      "మార్కులు: " + item.score + " / " + item.total,
-      "శాతం: " + item.percentage + "%",
-      "సమయం: " + (item.time || "-"),
-      "తేదీ: " + (item.date || "-")
-    ];
+}
 
-    lines.forEach(function(line) {
 
-      const p = document.createElement("p");
+// RESTART QUIZ
 
-      p.textContent = line;
+function restartQuiz() {
 
-      div.appendChild(p);
+  clearInterval(timerInterval);
 
-    });
+  document
+    .getElementById("resultSection")
+    .classList.add("hidden");
 
-    box.appendChild(div);
+  document
+    .getElementById("quizSection")
+    .classList.add("hidden");
 
-  });
+  document
+    .getElementById("registration")
+    .classList.remove("hidden");
 
-});
+  document.getElementById("registrationForm").reset();
+
+  window.scrollTo(0, 0);
+
+}
 
 </script>
 
