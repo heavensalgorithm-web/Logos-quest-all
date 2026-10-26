@@ -652,6 +652,31 @@ function finishQuiz() {
     );
 
     savedSuccessfully = true;
+    // supabase save here
+    fetch(https://jfhlesmfgwxlqdccfgit.supabase.co/rest/v1//rest/v1/Results", {
+  method: "POST",
+  headers: {
+    "apikey":sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp,
+    "Content-Type": "application/json",
+    "Prefer": "return=minimal"
+  },
+  body: JSON.stringify({
+    Name: result.name,
+    Mobile: result.mobile,
+    Score: result.score,
+    Time: result.time
+  })
+})
+.then(response => {
+  if (!response.ok) {
+    console.error("Supabase save failed:", response.status);
+  } else {
+    console.log("Result saved to Supabase successfully");
+  }
+})
+.catch(error => {
+  console.error("Supabase error:", error);
+});
 
   } catch (error) {
 
