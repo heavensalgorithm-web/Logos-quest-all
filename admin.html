@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LOGOS QUEST - Admin Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#101b38;color:#222}
+header{background:#101a32;color:#ffd76b;text-align:center;padding:22px}
+header h1{margin:0}
+header p{color:white}
+main{max-width:1050px;margin:25px auto;padding:15px}
+.card{background:white;border-radius:14px;padding:22px;margin-bottom:20px}
+h2{color:#203a70}
+input,button{padding:13px;font-size:16px;border-radius:8px}
+input{width:100%;border:1px solid #ccc;margin:8px 0}
+button{background:#1749a2;color:white;border:0;cursor:pointer;margin:8px 5px 8px 0}
+button:disabled{opacity:.5}
+.hidden{display:none}
+.stats{display:flex;gap:12px;flex-wrap:wrap}
+.stat{background:#edf3ff;padding:15px;border-radius:10px;flex:1;min-width:130px}
+.stat strong{display:block;font-size:24px;color:#1749a2}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:650px}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #ddd}
+th{background:#eaf0fc}
+#message{color:#b42318}
+.small{font-size:13px;color:#666}
+</style>
+</head>
+<body>
+
+<header>
+<h1>✝ LOGOS QUEST</h1>
+<p>Secure Admin Dashboard</p>
+</header>
+
+<main>
+<section id="loginSection" class="card">
+<h2>Admin Login</h2>
+<form id="loginForm">
+<input id="email" type="email" placeholder="Admin Email" required>
+<input id="password" type="password" placeholder="Password" required>
+<button type="submit">Login</button>
+</form>
+<p id="message"></p>
+</section>
+
+<section id="dashboard" class="hidden">
+<div class="card">
+<h2>Quiz Results Dashboard</h2>
+<p id="adminEmail"></p>
+<button id="refreshBtn">Refresh Results</button>
+<button id="logoutBtn">Logout</button>
+</div>
+
+<div class="card stats">
+<div class="stat">Total Attempts<strong id="attempts">0</strong></div>
+<div class="stat">Average Score<strong id="average">0%</strong></div>
+<div class="stat">Highest Score<strong id="highest">0%</strong></div>
+</div>
+
+<div class="card">
+<h2>Student Results</h2>
+<input id="search" placeholder="Search by name or mobile number">
+<p id="status"></p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Mobile</th>
+<th>Score</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody id="resultsBody"></tbody>
+</table>
+</div>
+<p class="small">Showing up to 1000 latest records.</p>
+</div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL =
+"https://jfhlesmfgwxlqdccfgit.supabase.co";
+
+const SUPABASE_KEY = "YOUR_PUBLISHABLE_KEY";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let allResults = [];
+
+const $ = id => document.getElementById(id);
+
+function showLogin(message = "") {
+  $("loginSection").classList.remove("hidden");
+  $("dashboard").classList.add("hidden");
+  $("message").textContent = message;
+}
+
+function showDashboard(user) {
+  $("loginSection").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("adminEmail").textContent = user.email || "";
+}
+
+async function verifyAdmin() {
+  const {data: {user}, error} = await db.auth.getUser();
+  if (error || !user) {
+    showLogin();
+    return;
+  }
+
+  const {data, error: adminError} = await db
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (adminError || !data) {
+    await db.auth.signOut();
+    showLogin("Admin access is not authorized.");
+    return;
+  }
+
+  showDashboard(user);
+  await loadResults();
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  $("message").textContent = "Logging in...";
+
+  const {error} = await db.auth.signInWithPassword({
+    email: $("email").value.trim(),
+    password: $("password").value
+  });
+
+  if (error) {
+    $("message").textContent = error.message;
+    return;
+  }
+
+  $("password").value = "";
+  await verifyAdmin();
+});
+
+async function loadResults() {
+  $("status").textContent = "Loading results...";
+
+  const {data,error} = await db
+    .from("Results")
+    .select("Name,Mobile,Score,Time")
+    .limit(1000);
+
+  if (error) {
+    $("status").textContent = "Error: " + error.message;
+    return;
+  }
+
+  allResults = data || [];
+  renderResults();
+}
+
+function renderResults() {
+  const query = $("search").value.trim().toLowerCase();
+  const filtered = allResults.filter(r =>
+    String(r.Name || "").toLowerCase().includes(query) ||
+    String(r.Mobile || "").includes(query)
+  );
+
+  const body = $("resultsBody");
+  body.replaceChildren();
+
+  filtered.forEach(r => {
+    const tr = document.createElement("tr");
+    [r.Name, r.Mobile, r.Score, r.Time].forEach(value => {
+      const td = document.createElement("td");
+      td.textContent = value == null ? "" : String(value);
+      tr.appendChild(td);
+    });
+    body.appendChild(tr);
+  });
+
+  $("status").textContent =
+    filtered.length + " results displayed";
+
+  $("attempts").textContent = allResults.length;
+
+  const scores = allResults
+    .map(r => Number(r.Score))
+    .filter(Number.isFinite);
+
+  const average = scores.length
+    ? scores.reduce((a,b) => a+b,0)/scores.length
+    : 0;
+
+  $("average").textContent = average.toFixed(1) + " marks";
+  $("highest").textContent =
+    scores.length ? Math.max(...scores) + " marks" : "0";
+}
+
+$("search").addEventListener("input",renderResults);
+$("refreshBtn").addEventListener("click",loadResults);
+
+$("logoutBtn").addEventListener("click",async () => {
+  await db.auth.signOut();
+  showLogin();
+});
+
+verifyAdmin();
+</script>
+</body>
+</html>
