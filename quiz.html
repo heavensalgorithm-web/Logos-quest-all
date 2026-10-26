@@ -653,30 +653,54 @@ function finishQuiz() {
 
     savedSuccessfully = true;
     // supabase save here
-    fetch("https://jfhlesmfgwxlqdccfgit.supabase.co/rest/v1/Results",{
+   // SAVE QUIZ RESULT TO SUPABASE
+
+const SUPABASE_URL =
+  "https://jfhlesmfgwxlqdccfgit.supabase.co";
+
+const SUPABASE_KEY = "YOUR_PUBLISHABLE_KEY";
+
+fetch(`${SUPABASE_URL}/rest/v1/Results`, {
   method: "POST",
   headers: {
-    "apikey":sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp,
+    "apikey": SUPABASE_KEY,
     "Content-Type": "application/json",
     "Prefer": "return=minimal"
   },
   body: JSON.stringify({
     Name: result.name,
-    Mobile: result.mobile,
-    Score: result.score,
-    Time: result.time
+    Mobile: String(result.mobile),
+    Score: Number(result.score),
+    Time: String(result.time)
   })
 })
-.then(response => {
+.then(async (response) => {
   if (!response.ok) {
-    console.error("Supabase save failed:", response.status);
+    const errorText = await response.text();
+
+    console.error(
+      "Supabase Error:",
+      response.status,
+      errorText
+    );
+
+    alert(
+      "Result not saved to Supabase.\n" +
+      "Error: " + response.status + "\n" +
+      errorText
+    );
   } else {
-    console.log("Result saved to Supabase successfully");
+    console.log("Result saved to Supabase");
   }
 })
-.catch(error => {
-  console.error("Supabase error:", error);
-});
+.catch((error) => {
+  console.error("Supabase Connection Error:", error);
+
+  alert(
+    "Supabase connection failed: " +
+    error.message
+  );
+}); 
 
   } catch (error) {
 
