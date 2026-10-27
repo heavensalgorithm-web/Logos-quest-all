@@ -14,10 +14,10 @@ header p{color:white}
 main{max-width:1050px;margin:25px auto;padding:15px}
 .card{background:white;border-radius:14px;padding:22px;margin-bottom:20px}
 h2{color:#203a70}
-input,button{padding:13px;font-size:16px;border-radius:8px}
-input{width:100%;border:1px solid #ccc;margin:8px 0}
+input,select,button{padding:13px;font-size:16px;border-radius:8px}
+input,select{width:100%;border:1px solid #ccc;margin:8px 0}
 button{background:#1749a2;color:white;border:0;cursor:pointer;margin:8px 5px 8px 0}
-button:disabled{opacity:.5}
+button:disabled{opacity:.5;cursor:not-allowed}
 .hidden{display:none}
 .stats{display:flex;gap:12px;flex-wrap:wrap}
 .stat{background:#edf3ff;padding:15px;border-radius:10px;flex:1;min-width:130px}
@@ -28,6 +28,12 @@ th,td{padding:12px;text-align:left;border-bottom:1px solid #ddd}
 th{background:#eaf0fc}
 #message{color:#b42318}
 .small{font-size:13px;color:#666}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+label{display:block;font-weight:bold;margin-top:8px}
+.success{color:#147d40}
+.error{color:#b42318}
+.link-button{display:inline-block;background:#1749a2;color:white;text-decoration:none;padding:13px;border-radius:8px;margin:8px 5px 8px 0}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -49,20 +55,118 @@ th{background:#eaf0fc}
 </section>
 
 <section id="dashboard" class="hidden">
+
 <div class="card">
 <h2>Quiz Results Dashboard</h2>
 <p id="adminEmail"></p>
-<button id="refreshBtn">Refresh Results</button>
-<button id="logoutBtn">Logout</button>
-<a href="leaderboard.html">
-<button type="button">🏆 View Leaderboard</button>
+<button id="refreshBtn" type="button">Refresh Results</button>
+<button id="logoutBtn" type="button">Logout</button>
+<a class="link-button" href="leaderboard.html">
+🏆 View Leaderboard
 </a>
 </div>
 
+<!-- LIVE EXAM SCHEDULING -->
+
+<div class="card">
+<h2>📅 Schedule Live Bible Exam</h2>
+<p class="small">
+Admin ఒక రోజులో గరిష్ఠంగా 3 Exams Schedule చేయవచ్చు.
+All times are India Standard Time (IST).
+</p>
+
+<form id="scheduleForm">
+
+<label for="examName">Exam Name</label>
+<input id="examName" type="text"
+placeholder="Example: Genesis Chapter 1 Quiz"
+required maxlength="150">
+
+<div class="grid">
+<div>
+<label for="examDate">Exam Date</label>
+<input id="examDate" type="date" required>
+</div>
+<div>
+<label for="questionCount">Questions</label>
+<select id="questionCount">
+<option value="10">10 Questions</option>
+<option value="20">20 Questions</option>
+<option value="50">50 Questions</option>
+<option value="100">100 Questions</option>
+</select>
+</div>
+<div>
+<label for="startTime">Start Time</label>
+<input id="startTime" type="time" required>
+</div>
+<div>
+<label for="endTime">End Time</label>
+<input id="endTime" type="time" required>
+</div>
+<div>
+<label for="maxAttempts">Maximum Attempts</label>
+<select id="maxAttempts">
+<option value="1">1 Attempt</option>
+<option value="2">2 Attempts</option>
+<option value="3">3 Attempts</option>
+</select>
+</div>
+<div>
+<label for="rankingMethod">Leaderboard Ranking</label>
+<select id="rankingMethod">
+<option value="best">Best Score</option>
+<option value="first">First Attempt Score</option>
+<option value="last">Last Attempt Score</option>
+</select>
+</div>
+</div>
+
+<button id="saveExamBtn" type="submit">
+💾 Save Exam Schedule
+</button>
+</form>
+<p id="scheduleStatus" role="status"></p>
+</div>
+
+<div class="card">
+<h2>📋 Scheduled Exams</h2>
+<button id="refreshExamsBtn" type="button">
+Refresh Exams
+</button>
+<p id="examListStatus"></p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Exam Name</th>
+<th>Start (IST)</th>
+<th>End (IST)</th>
+<th>Questions</th>
+<th>Attempts</th>
+<th>Ranking</th>
+</tr>
+</thead>
+<tbody id="examsBody"></tbody>
+</table>
+</div>
+</div>
+
+<!-- EXISTING RESULTS -->
+
 <div class="card stats">
-<div class="stat">Total Attempts<strong id="attempts">0</strong></div>
-<div class="stat">Average Score<strong id="average">0%</strong></div>
-<div class="stat">Highest Score<strong id="highest">0%</strong></div>
+<div class="stat">
+Total Attempts
+<strong id="attempts">0</strong>
+</div>
+<div class="stat">
+Average Score
+<strong id="average">0</strong>
+</div>
+<div class="stat">
+Highest Score
+<strong id="highest">0</strong>
+</div>
 </div>
 
 <div class="card">
@@ -82,8 +186,9 @@ th{background:#eaf0fc}
 <tbody id="resultsBody"></tbody>
 </table>
 </div>
-<p class="small">Showing up to 1000 latest records.</p>
+<p class="small">Showing up to 1000 records.</p>
 </div>
+
 </section>
 </main>
 
@@ -92,6 +197,8 @@ th{background:#eaf0fc}
 const SUPABASE_URL =
 "https://jfhlesmfgwxlqdccfgit.supabase.co";
 
+// Use the same working publishable key from
+// your existing admin.html file.
 const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
 const db = window.supabase.createClient(
@@ -99,9 +206,8 @@ const db = window.supabase.createClient(
   SUPABASE_KEY
 );
 
-let allResults = [];
-
 const $ = id => document.getElementById(id);
+let allResults = [];
 
 function showLogin(message = "") {
   $("loginSection").classList.remove("hidden");
@@ -116,38 +222,39 @@ function showDashboard(user) {
 }
 
 async function verifyAdmin() {
-  const {data: {user}, error} = await db.auth.getUser();
-  if (error || !user) {
+  const {data:{user},error} = await db.auth.getUser();
+
+  if(error || !user){
     showLogin();
     return;
   }
 
-  const {data, error: adminError} = await db
+  const {data,error:adminError} = await db
     .from("admin_users")
     .select("user_id")
-    .eq("user_id", user.id)
+    .eq("user_id",user.id)
     .maybeSingle();
 
-  if (adminError || !data) {
+  if(adminError || !data){
     await db.auth.signOut();
     showLogin("Admin access is not authorized.");
     return;
   }
 
   showDashboard(user);
-  await loadResults();
+  await Promise.all([loadResults(),loadExams()]);
 }
 
-$("loginForm").addEventListener("submit", async event => {
+$("loginForm").addEventListener("submit",async event=>{
   event.preventDefault();
   $("message").textContent = "Logging in...";
 
   const {error} = await db.auth.signInWithPassword({
-    email: $("email").value.trim(),
-    password: $("password").value
+    email:$("email").value.trim(),
+    password:$("password").value
   });
 
-  if (error) {
+  if(error){
     $("message").textContent = error.message;
     return;
   }
@@ -156,7 +263,7 @@ $("loginForm").addEventListener("submit", async event => {
   await verifyAdmin();
 });
 
-async function loadResults() {
+async function loadResults(){
   $("status").textContent = "Loading results...";
 
   const {data,error} = await db
@@ -164,8 +271,8 @@ async function loadResults() {
     .select("Name,Mobile,Score,Time")
     .limit(1000);
 
-  if (error) {
-    $("status").textContent = "Error: " + error.message;
+  if(error){
+    $("status").textContent = "Error: "+error.message;
     return;
   }
 
@@ -173,19 +280,19 @@ async function loadResults() {
   renderResults();
 }
 
-function renderResults() {
+function renderResults(){
   const query = $("search").value.trim().toLowerCase();
-  const filtered = allResults.filter(r =>
-    String(r.Name || "").toLowerCase().includes(query) ||
-    String(r.Mobile || "").includes(query)
+  const filtered = allResults.filter(r=>
+    String(r.Name||"").toLowerCase().includes(query) ||
+    String(r.Mobile||"").includes(query)
   );
 
   const body = $("resultsBody");
   body.replaceChildren();
 
-  filtered.forEach(r => {
+  filtered.forEach(r=>{
     const tr = document.createElement("tr");
-    [r.Name, r.Mobile, r.Score, r.Time].forEach(value => {
+    [r.Name,r.Mobile,r.Score,r.Time].forEach(value=>{
       const td = document.createElement("td");
       td.textContent = value == null ? "" : String(value);
       tr.appendChild(td);
@@ -194,28 +301,173 @@ function renderResults() {
   });
 
   $("status").textContent =
-    filtered.length + " results displayed";
+    filtered.length+" results displayed";
 
   $("attempts").textContent = allResults.length;
 
   const scores = allResults
-    .map(r => Number(r.Score))
+    .map(r=>Number(r.Score))
     .filter(Number.isFinite);
 
   const average = scores.length
-    ? scores.reduce((a,b) => a+b,0)/scores.length
+    ? scores.reduce((a,b)=>a+b,0)/scores.length
     : 0;
 
-  $("average").textContent = average.toFixed(1) + " marks";
+  $("average").textContent =
+    average.toFixed(1)+" marks";
+
   $("highest").textContent =
-    scores.length ? Math.max(...scores) + " marks" : "0";
+    scores.length ? Math.max(...scores)+" marks" : "0";
 }
 
 $("search").addEventListener("input",renderResults);
 $("refreshBtn").addEventListener("click",loadResults);
 
-$("logoutBtn").addEventListener("click",async () => {
+// Convert an India date/time into a UTC ISO timestamp.
+// IST is UTC+05:30 and does not use daylight saving.
+function istToIso(date,time){
+  const value = new Date(date+"T"+time+":00+05:30");
+  if(Number.isNaN(value.getTime())){
+    throw new Error("Invalid date or time.");
+  }
+  return value.toISOString();
+}
+
+function formatIST(value){
+  return new Intl.DateTimeFormat("en-IN",{
+    timeZone:"Asia/Kolkata",
+    day:"2-digit",
+    month:"short",
+    year:"numeric",
+    hour:"2-digit",
+    minute:"2-digit",
+    hour12:true
+  }).format(new Date(value));
+}
+
+$("scheduleForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+
+  const name = $("examName").value.trim();
+  const date = $("examDate").value;
+  const start = $("startTime").value;
+  const end = $("endTime").value;
+  const status = $("scheduleStatus");
+  const button = $("saveExamBtn");
+
+  status.textContent = "";
+  status.className = "";
+
+  if(!name || !date || !start || !end){
+    status.textContent = "Please fill all required fields.";
+    status.className = "error";
+    return;
+  }
+
+  let startIso,endIso;
+
+  try{
+    startIso = istToIso(date,start);
+    endIso = istToIso(date,end);
+  }catch(error){
+    status.textContent = error.message;
+    status.className = "error";
+    return;
+  }
+
+  if(new Date(endIso)<=new Date(startIso)){
+    status.textContent =
+      "End Time must be later than Start Time.";
+    status.className = "error";
+    return;
+  }
+
+  if(new Date(startIso)<=new Date()){
+    status.textContent =
+      "Please choose a future exam start time.";
+    status.className = "error";
+    return;
+  }
+
+  const exam = {
+    exam_name:name,
+    start_time:startIso,
+    end_time:endIso,
+    question_count:Number($("questionCount").value),
+    max_attempts:Number($("maxAttempts").value),
+    ranking_method:$("rankingMethod").value
+  };
+
+  button.disabled = true;
+  status.textContent = "Saving exam schedule...";
+
+  try{
+    const {error} = await db
+      .from("exam_schedules")
+      .insert(exam);
+
+    if(error) throw error;
+
+    status.textContent = "✅ Exam scheduled successfully!";
+    status.className = "success";
+
+    $("scheduleForm").reset();
+    await loadExams();
+
+  }catch(error){
+    status.textContent = "Error: "+error.message;
+    status.className = "error";
+  }finally{
+    button.disabled = false;
+  }
+});
+
+async function loadExams(){
+  $("examListStatus").textContent = "Loading exams...";
+
+  const {data,error} = await db
+    .from("exam_schedules")
+    .select("id,exam_name,start_time,end_time,question_count,max_attempts,ranking_method")
+    .order("start_time",{ascending:true})
+    .limit(200);
+
+  if(error){
+    $("examListStatus").textContent =
+      "Error: "+error.message;
+    return;
+  }
+
+  const body = $("examsBody");
+  body.replaceChildren();
+
+  (data||[]).forEach(exam=>{
+    const tr = document.createElement("tr");
+
+    [
+      exam.exam_name,
+      formatIST(exam.start_time),
+      formatIST(exam.end_time),
+      exam.question_count,
+      exam.max_attempts,
+      exam.ranking_method
+    ].forEach(value=>{
+      const td = document.createElement("td");
+      td.textContent = String(value ?? "");
+      tr.appendChild(td);
+    });
+
+    body.appendChild(tr);
+  });
+
+  $("examListStatus").textContent =
+    (data||[]).length+" scheduled exams displayed.";
+}
+
+$("refreshExamsBtn").addEventListener("click",loadExams);
+
+$("logoutBtn").addEventListener("click",async()=>{
   await db.auth.signOut();
+  allResults = [];
   showLogin();
 });
 
