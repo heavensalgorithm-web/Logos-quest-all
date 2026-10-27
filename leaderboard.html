@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOGOS QUEST - Top 10 Leaderboard</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#101b38;
+  color:#222;
+}
+header{
+  background:#101a32;
+  color:#ffd76b;
+  text-align:center;
+  padding:25px 15px;
+}
+header h1{margin:0}
+header p{color:white}
+main{
+  max-width:850px;
+  margin:25px auto;
+  padding:15px;
+}
+.card{
+  background:white;
+  padding:22px;
+  border-radius:15px;
+}
+h2{text-align:center;color:#203a70}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  padding:14px 8px;
+  text-align:center;
+  border-bottom:1px solid #ddd;
+}
+th{background:#edf3ff}
+tr.gold{background:#fff5cd}
+tr.silver{background:#f0f2f5}
+tr.bronze{background:#fff0e3}
+button{
+  background:#1749a2;
+  color:white;
+  padding:12px 20px;
+  border:0;
+  border-radius:8px;
+  cursor:pointer;
+}
+.actions{text-align:center;margin:20px}
+#status{text-align:center;color:#555}
+.note{text-align:center;font-size:13px;color:#666}
+</style>
+</head>
+
+<body>
+<header>
+<h1>✝ LOGOS QUEST</h1>
+<p>LIVE BIBLE QUIZ</p>
+</header>
+
+<main>
+<div class="card">
+<h2>🏆 TOP 10 LEADERBOARD</h2>
+<p id="status">Loading leaderboard...</p>
+
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Name</th>
+<th>Score</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody id="leaderboardBody"></tbody>
+</table>
+
+<div class="actions">
+<button onclick="loadLeaderboard()">🔄 Refresh</button>
+</div>
+
+<p class="note">
+Only names, scores and quiz times are displayed.
+</p>
+</div>
+</main>
+
+<script>
+const SUPABASE_URL =
+"https://jfhlesmfgwxlqdccfgit.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+
+async function loadLeaderboard(){
+  const status = document.getElementById("status");
+  const body = document.getElementById("leaderboardBody");
+
+  status.textContent = "Loading leaderboard...";
+  body.replaceChildren();
+
+  try{
+    const response = await fetch(
+      SUPABASE_URL + "/rest/v1/rpc/get_top10_leaderboard",
+      {
+        method:"POST",
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Content-Type":"application/json"
+        },
+        body:"{}"
+      }
+    );
+
+    if(!response.ok){
+      throw new Error("HTTP " + response.status);
+    }
+
+    const results = await response.json();
+
+    if(results.length === 0){
+      status.textContent = "No quiz results available yet.";
+      return;
+    }
+
+    const medals = ["🥇","🥈","🥉"];
+
+    results.forEach((student,index)=>{
+      const tr = document.createElement("tr");
+
+      if(index===0) tr.className="gold";
+      if(index===1) tr.className="silver";
+      if(index===2) tr.className="bronze";
+
+      const values = [
+        medals[index] || String(index+1),
+        student.Name,
+        student.Score,
+        student.Time
+      ];
+
+      values.forEach(value=>{
+        const td = document.createElement("td");
+        td.textContent = value == null ? "" : String(value);
+        tr.appendChild(td);
+      });
+
+      body.appendChild(tr);
+    });
+
+    status.textContent =
+      "Top " + results.length + " participants";
+
+  }catch(error){
+    status.textContent =
+      "Unable to load leaderboard: " + error.message;
+  }
+}
+
+loadLeaderboard();
+</script>
+</body>
+</html>
