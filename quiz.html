@@ -82,11 +82,18 @@ button:disabled{background:#999;cursor:not-allowed}
 <p id="resultPercentage" class="center"></p>
 <p id="resultTime" class="center"></p>
 <p id="saveStatus" class="center" role="status"></p>
+
 <div class="notice">
-ఇది Demo Questions ఆధారంగా పనిచేసే Live Exam Preview.
-Cloudలో సేవ్ అయ్యే Demo Scoresను Official Leaderboardకు ఉపయోగించవద్దు.
-Secure scoring, per-exam leaderboard, attempt limits ఇంకా అమలు చేయలేదు.
+  📖 ఈ పరీక్షలో మీ సమాధానాలను Supabase Serverలో
+  పరిశీలించి Marks Calculate చేస్తాం.
+
+  ⚠️ ప్రస్తుతం ఇది Testing Version మాత్రమే.
+  Prize-based Official Exams కోసం Student Verification,
+  Submission Security, Secure Leaderboard ఇంకా
+  పూర్తి చేయాల్సి ఉంది.
 </div>
+
+
 <a class="link-button" href="results.html">నా ఫలితాలు చూడండి</a>
 <a class="link-button" href="leaderboard.html">🏆 Existing Demo Top 10 Leaderboard</a>
 <button id="returnButton" type="button">మరొక పరీక్ష చూడండి</button>
@@ -116,6 +123,10 @@ const questionBank = [
 
 let exams = [];
 let selectedExam = null;
+  
+let secureAttemptId = null;
+let secureExamMode = false;
+
 let student = {};
 let questions = [];
 let answers = [];
@@ -263,56 +274,30 @@ return;
 
 const startButton = $("startButton");
 
+
 startButton.disabled = true;
-startButton.textContent = "Attempts Check అవుతున్నాయి...";
+startButton.textContent = "Bible Questions Loading...";
+
+student = {name, mobile, town, state, email};
+
+// Prepare secure exam session
+secureAttemptId = null;
+secureExamMode = false;
+  
+
+startButton.disabled = true;
+startButton.textContent = "Bible Questions Loading...";
 
 try {
-  const response = await fetch(
-    SUPABASE_URL +
-    "/rest/v1/rpc/check_demo_exam_attempts",
-    {
-      method: "POST",
-      headers: {
-        apikey: SUPABASE_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        p_exam_id: selectedExam.id,
-        p_student_mobile: mobile
-      })
-    }
-  );
+  await loadSecureQuestions();
 
-  if (!response.ok) {
-    throw new Error("Attempts Check Failed");
-  }
-
-  const data = await response.json();
-  const attemptInfo = data[0];
-
-  if (!attemptInfo) {
-    alert("Exam వివరాలు అందుబాటులో లేవు.");
-    return;
-  }
-
-  if (!attemptInfo.can_start) {
-    alert(
-      "Exam ప్రారంభించలేరు.\n" +
-      "Used Attempts: " +
-      attemptInfo.attempts_used +
-      "\nAllowed Attempts: " +
-      attemptInfo.attempts_allowed
-    );
-    return;
-  }
-
-  if (statusFor(selectedExam) !== "live") {
-    alert("Exam సమయం ముగిసింది.");
-    return;
+  if (!questions.length) {
+    throw new Error("No questions available.");
   }
 
 } catch (error) {
-  alert("Attempts Check కాలేదు. మళ్లీ ప్రయత్నించండి.");
+  console.error("Secure exam start failed:", error);
+  alert("Exam ప్రారంభించలేకపోయాము.\n\n" + error.message);
   return;
 
 } finally {
@@ -320,14 +305,29 @@ try {
   startButton.textContent = "పరీక్ష ప్రారంభించండి";
 }
 
-student={name,mobile,town,state,email};
+currentQuestion=0;
+quizFinished=false;
+  
+quizFinished = false;
+submitting = false;
 
-// DEMO: 10 questions repeat for larger exams
-questions=Array.from(
-{length:selectedExam.question_count},
-(_,i)=>questionBank[i%questionBank.length]
-);
-answers=new Array(questions.length).fill(null);
+// Keep the selected answers for retry.
+clearInterval(timerInterval);
+
+// Show the quiz again so the student
+// can retry submission.
+showOnly("quizSection");
+
+// Disable moving to other questions.
+// The student can retry submitting.
+$("nextButton").disabled = true;
+$("submitButton").textContent = "🔄 Retry Submission";
+
+// Do not calculate marks in the browser.
+  
+submitting=false;
+startTime=Date.now();
+
 currentQuestion=0;
 quizFinished=false;
 submitting=false;
@@ -341,6 +341,53 @@ showQuestion();
 updateTimer();
 }
 
+async function loadSecureQuestions() {
+  if (!selectedExam) {
+    throw new Error("Please select an exam.");
+  }
+
+  const response = await fetch(
+    SUPABASE_URL + "/rest/v1/rpc/start_secure_exam",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        p_exam_id: selectedExam.id,
+        p_student_name: student.name,
+        p_student_mobile: student.mobile,
+        p_student_town: student.town,
+        p_student_state: student.state
+      })
+    }
+  );
+
+  if (!response.ok) {
+    const details = await response.text();
+    throw new Error(details);
+  }
+
+  const data = await response.json();
+
+  if (!data.attempt_id ||
+      !Array.isArray(data.questions)) {
+    throw new Error("Invalid exam questions response.");
+  }
+
+  secureAttemptId = data.attempt_id;
+  secureExamMode = true;
+
+  questions = data.questions.map(q => ({
+    question: q.question,
+    options: q.options,
+    question_order: q.question_order
+  }));
+
+  answers = new Array(questions.length).fill(null);
+}
+
 function updateTimer(){
 if(quizFinished||!selectedExam)return;
 const remaining=Math.max(0,Math.ceil(
@@ -349,7 +396,16 @@ const remaining=Math.max(0,Math.ceil(
 const min=String(Math.floor(remaining/60)).padStart(2,"0");
 const sec=String(remaining%60).padStart(2,"0");
 $("timer").textContent="మిగిలిన సమయం: "+min+":"+sec;
-if(remaining<=0)finishQuiz(true);
+
+if (remaining <= 0 && !submitting) {
+  clearInterval(timerInterval);
+
+  // Submit automatically when exam time ends.
+  // If submission fails, do not start
+  // another automatic retry loop.
+  finishQuiz(true);
+}
+
 }
 
 function saveAnswer(){
@@ -375,6 +431,7 @@ radio.type="radio";
 radio.name="answer";
 radio.value=index;
 radio.checked=answers[currentQuestion]===index;
+radio.disabled = $("submitButton").textContent === "🔄 Retry Submission";
 label.appendChild(radio);
 label.appendChild(document.createTextNode(option));
 container.appendChild(label);
@@ -383,6 +440,10 @@ container.appendChild(label);
 $("nextButton").textContent=
 currentQuestion===questions.length-1?
 "పరీక్ష పూర్తి చేయండి":"తదుపరి ప్రశ్న";
+
+$("nextButton").disabled =
+  $("submitButton").textContent === "🔄 Retry Submission";
+  
 }
 
 $("nextButton").addEventListener("click",()=>{
@@ -401,26 +462,143 @@ showQuestion();
 }
 });
 
-$("submitButton").addEventListener("click",()=>{
-if(quizFinished)return;
-if(confirm("మీ పరీక్షను ఇప్పుడే పూర్తి చేయాలా?")){
-saveAnswer();
-finishQuiz(false);
+
+$("submitButton").addEventListener("click", () => {
+  if (quizFinished || submitting) return;
+
+  const isRetry =
+    $("submitButton").textContent === "🔄 Retry Submission";
+
+  if (isRetry) {
+    // Answers are already saved in memory.
+    // Retry sending them to Supabase.
+    finishQuiz(false);
+    return;
+  }
+
+  if (confirm("మీ పరీక్షను ఇప్పుడే పూర్తి చేయాలా?")) {
+    saveAnswer();
+    finishQuiz(false);
+  }
+});
+  
 }
 });
 
+async function submitSecureAnswers() {
+  if (!secureAttemptId || !secureExamMode) {
+    throw new Error("Secure exam attempt not found.");
+  }
+
+  const submittedAnswers = answers
+    .map((answer, index) => {
+      if (answer === null) return null;
+
+      return {
+        question_order: questions[index].question_order,
+        selected_answer: ["A", "B", "C", "D"][answer]
+      };
+    })
+    .filter(item => item !== null);
+
+  const response = await fetch(
+    SUPABASE_URL + "/rest/v1/rpc/submit_secure_exam",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        p_attempt_id: secureAttemptId,
+        p_answers: submittedAnswers
+      })
+    }
+  );
+
+  if (!response.ok) {
+    const details = await response.text();
+    throw new Error(details);
+  }
+
+  const result = await response.json();
+
+  if (!result.success) {
+    throw new Error("Secure exam submission failed.");
+  }
+
+  return result;
+}
+
 async function finishQuiz(auto){
-if(quizFinished||submitting)return;
-submitting=true;
-saveAnswer();
-quizFinished=true;
+
+if (quizFinished || submitting) return;
+
+submitting = true;
+
+// Save the current answer only during
+// the first submission, not during retry.
+const isRetry =
+  $("submitButton").textContent === "🔄 Retry Submission";
+
+if (!isRetry) {
+  saveAnswer();
+}
+
+quizFinished = true;
+clearInterval(timerInterval);
+  
+
+
+let total = questions.length;
+let score = 0;
+let percentage = 0;
+let secureResult = null;
+
+try {
+  if (!secureExamMode || !secureAttemptId) {
+    throw new Error("Secure exam session missing.");
+  }
+
+  secureResult = await submitSecureAnswers();
+
+  total = Number(secureResult.total_questions);
+  score = Number(secureResult.score);
+  percentage = Number(secureResult.percentage);
+
+} catch (error) {
+  console.error("Secure scoring failed:", error);
+
+  alert(
+    "Exam Answers Serverలో Save కాలేదు.\n" +
+    "Error: " + error.message
+  );
+
+ 
+quizFinished = false;
+submitting = false;
+
 clearInterval(timerInterval);
 
-const total=questions.length;
-const score=questions.reduce(
-(sum,q,i)=>sum+(answers[i]===q.answer?1:0),0
-);
-const percentage=Math.round(score/total*100);
+// Keep the existing answers for retry.
+showOnly("quizSection");
+
+// Allow retry without changing answers.
+$("submitButton").disabled = false;
+$("submitButton").textContent = "🔄 Retry Submission";
+
+document.querySelectorAll(
+  '#optionsContainer input[type="radio"]'
+).forEach(radio => {
+  radio.disabled = true;
+});
+
+$("nextButton").disabled = true;
+
+return;
+ 
+}
+
 const elapsedSeconds=Math.max(0,Math.floor(
 (Date.now()-startTime)/1000
 ));
@@ -469,53 +647,31 @@ localSaved=true;
 console.error("Local save failed",error);
 }
 
-// Save DEMO result to Supabase.
-// This is not secure official scoring.
-try{
-const response=await fetch(
-SUPABASE_URL+"/rest/v1/rpc/save_demo_exam_result",
-{
-method:"POST",
-headers:{
-...headers,
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-p_exam_id:selectedExam.id,
-p_student_name:student.name,
-p_student_mobile:student.mobile,
-p_student_town:student.town,
-p_student_state:student.state,
-p_score:score,
-p_total_questions:total,
-p_time_seconds:elapsedSeconds
-})
-}
-);
-if(!response.ok){
-throw new Error(
-"HTTP "+response.status+": "+await response.text()
-);
-}
-cloudSaved=true;
-}catch(error){
-cloudError=error.message;
-console.error("Demo cloud save failed",error);
-}
+
+// Secure score already saved in Supabase
+// Do not save again to demo results
+
+cloudSaved = true;
+cloudError = "";
+
+
 
 if(cloudSaved){
-$("saveStatus").textContent=
-"✅ Demo Result Supabaseలో సేవ్ అయింది."+
-(localSaved?" ఈ పరికరంలో కూడా సేవ్ అయింది.":"");
-$("saveStatus").className="center success";
+  $("saveStatus").textContent =
+    "✅ Secure Exam Result Supabaseలో సేవ్ అయింది." +
+    (localSaved ? " ఈ పరికరంలో కూడా సేవ్ అయింది." : "");
+
+  $("saveStatus").className = "center success";
 }else{
-$("saveStatus").textContent=
-"⚠️ Cloud Save కాలేదు: "+cloudError+
-(localSaved?" | Local Result సేవ్ అయింది.":"");
-$("saveStatus").className="center error";
+  $("saveStatus").textContent =
+    "⚠️ Result Save కాలేదు: " + cloudError;
+
+  $("saveStatus").className = "center error";
 }
-submitting=false;
+
+submitting = false;
 }
+
 
 $("returnButton").addEventListener("click",()=>{
 selectedExam=null;
