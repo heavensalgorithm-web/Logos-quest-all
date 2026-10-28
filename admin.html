@@ -14,8 +14,9 @@ header p{color:white}
 main{max-width:1050px;margin:25px auto;padding:15px}
 .card{background:white;border-radius:14px;padding:22px;margin-bottom:20px}
 h2{color:#203a70}
-input,select,button{padding:13px;font-size:16px;border-radius:8px}
-input,select{width:100%;border:1px solid #ccc;margin:8px 0}
+input,select,button,textarea{padding:13px;font-size:16px;border-radius:8px}
+input,select,textarea{width:100%;border:1px solid #ccc;margin:8px 0}
+textarea{min-height:85px;resize:vertical;font-family:inherit}
 button{background:#1749a2;color:white;border:0;cursor:pointer;margin:8px 5px 8px 0}
 button:disabled{opacity:.5;cursor:not-allowed}
 .hidden{display:none}
@@ -33,6 +34,9 @@ label{display:block;font-weight:bold;margin-top:8px}
 .success{color:#147d40}
 .error{color:#b42318}
 .link-button{display:inline-block;background:#1749a2;color:white;text-decoration:none;padding:13px;border-radius:8px;margin:8px 5px 8px 0}
+.danger{background:#b42318}
+.secondary{background:#687487}
+.question-actions{white-space:nowrap}
 @media(max-width:600px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -61,9 +65,7 @@ label{display:block;font-weight:bold;margin-top:8px}
 <p id="adminEmail"></p>
 <button id="refreshBtn" type="button">Refresh Results</button>
 <button id="logoutBtn" type="button">Logout</button>
-<a class="link-button" href="leaderboard.html">
-🏆 View Leaderboard
-</a>
+<a class="link-button" href="leaderboard.html">🏆 View Leaderboard</a>
 </div>
 
 <!-- LIVE EXAM SCHEDULING -->
@@ -76,7 +78,6 @@ All times are India Standard Time (IST).
 </p>
 
 <form id="scheduleForm">
-
 <label for="examName">Exam Name</label>
 <input id="examName" type="text"
 placeholder="Example: Genesis Chapter 1 Quiz"
@@ -131,9 +132,7 @@ required maxlength="150">
 
 <div class="card">
 <h2>📋 Scheduled Exams</h2>
-<button id="refreshExamsBtn" type="button">
-Refresh Exams
-</button>
+<button id="refreshExamsBtn" type="button">Refresh Exams</button>
 <p id="examListStatus"></p>
 <div class="table-wrap">
 <table>
@@ -150,6 +149,146 @@ Refresh Exams
 <tbody id="examsBody"></tbody>
 </table>
 </div>
+</div>
+
+<!-- BIBLE QUESTION MANAGEMENT -->
+
+<div class="card" id="questionManager">
+<h2>📖 Bible Question Management</h2>
+<p class="small">
+Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు.
+Correct Answers Studentsకి ఈ Page ద్వారా చూపించబడవు.
+</p>
+
+<form id="questionForm">
+
+<div class="grid">
+<div>
+<label for="bibleBook">Bible Book</label>
+<input id="bibleBook" type="text"
+placeholder="Example: Genesis"
+required maxlength="100">
+</div>
+
+<div>
+<label for="chapterNumber">Chapter Number</label>
+<input id="chapterNumber" type="number"
+min="1" max="150" required placeholder="1">
+</div>
+
+<div>
+<label for="questionLanguage">Language</label>
+<select id="questionLanguage">
+<option value="telugu">Telugu</option>
+<option value="english">English</option>
+<option value="tamil">Tamil</option>
+</select>
+</div>
+
+<div>
+<label for="questionDifficulty">Difficulty</label>
+<select id="questionDifficulty">
+<option value="easy">Easy</option>
+<option value="medium">Medium</option>
+<option value="tough">Tough</option>
+</select>
+</div>
+</div>
+
+<label for="questionText">Bible Question</label>
+<textarea id="questionText" required
+placeholder="ప్రశ్న ఇక్కడ నమోదు చేయండి"></textarea>
+
+<div class="grid">
+<div>
+<label for="optionA">Option A</label>
+<input id="optionA" required maxlength="1000">
+</div>
+<div>
+<label for="optionB">Option B</label>
+<input id="optionB" required maxlength="1000">
+</div>
+<div>
+<label for="optionC">Option C</label>
+<input id="optionC" required maxlength="1000">
+</div>
+<div>
+<label for="optionD">Option D</label>
+<input id="optionD" required maxlength="1000">
+</div>
+</div>
+
+<label for="correctAnswer">Correct Answer</label>
+<select id="correctAnswer">
+<option value="A">Option A</option>
+<option value="B">Option B</option>
+<option value="C">Option C</option>
+<option value="D">Option D</option>
+</select>
+
+<button id="saveQuestionBtn" type="submit">
+💾 Save Bible Question
+</button>
+
+<button id="cancelEditBtn" class="secondary hidden" type="button">
+Cancel Edit
+</button>
+</form>
+
+<p id="questionStatus" role="status"></p>
+</div>
+
+<div class="card">
+<h2>📚 Saved Bible Questions</h2>
+
+<div class="grid">
+<div>
+<label for="filterLanguage">Filter Language</label>
+<select id="filterLanguage">
+<option value="">All Languages</option>
+<option value="telugu">Telugu</option>
+<option value="english">English</option>
+<option value="tamil">Tamil</option>
+</select>
+</div>
+
+<div>
+<label for="filterDifficulty">Filter Difficulty</label>
+<select id="filterDifficulty">
+<option value="">All Difficulties</option>
+<option value="easy">Easy</option>
+<option value="medium">Medium</option>
+<option value="tough">Tough</option>
+</select>
+</div>
+</div>
+
+<input id="questionSearch"
+placeholder="Search Bible Book or Question">
+
+<button id="refreshQuestionsBtn" type="button">
+🔄 Refresh Questions
+</button>
+
+<p id="questionListStatus"></p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Book</th>
+<th>Chapter</th>
+<th>Language</th>
+<th>Difficulty</th>
+<th>Question</th>
+<th>Answer</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="questionsBody"></tbody>
+</table>
+</div>
+<p class="small">Showing up to 1000 questions.</p>
 </div>
 
 <!-- EXISTING RESULTS -->
@@ -186,7 +325,7 @@ Highest Score
 <tbody id="resultsBody"></tbody>
 </table>
 </div>
-<p class="small">Showing up to 1000 records.</p>
+<p class="small">Showing up to 1000 records from the original Results table.</p>
 </div>
 
 </section>
@@ -194,12 +333,12 @@ Highest Score
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+
 const SUPABASE_URL =
 "https://jfhlesmfgwxlqdccfgit.supabase.co";
 
-// Use the same working publishable key from
-// your existing admin.html file.
-const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+const SUPABASE_KEY =
+"sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
 const db = window.supabase.createClient(
   SUPABASE_URL,
@@ -207,7 +346,10 @@ const db = window.supabase.createClient(
 );
 
 const $ = id => document.getElementById(id);
+
 let allResults = [];
+let allQuestions = [];
+let editingQuestionId = null;
 
 function showLogin(message = "") {
   $("loginSection").classList.remove("hidden");
@@ -242,7 +384,12 @@ async function verifyAdmin() {
   }
 
   showDashboard(user);
-  await Promise.all([loadResults(),loadExams()]);
+
+  await Promise.all([
+    loadResults(),
+    loadExams(),
+    loadQuestions()
+  ]);
 }
 
 $("loginForm").addEventListener("submit",async event=>{
@@ -262,6 +409,8 @@ $("loginForm").addEventListener("submit",async event=>{
   $("password").value = "";
   await verifyAdmin();
 });
+
+// EXISTING RESULTS
 
 async function loadResults(){
   $("status").textContent = "Loading results...";
@@ -292,11 +441,13 @@ function renderResults(){
 
   filtered.forEach(r=>{
     const tr = document.createElement("tr");
+
     [r.Name,r.Mobile,r.Score,r.Time].forEach(value=>{
       const td = document.createElement("td");
       td.textContent = value == null ? "" : String(value);
       tr.appendChild(td);
     });
+
     body.appendChild(tr);
   });
 
@@ -323,13 +474,15 @@ function renderResults(){
 $("search").addEventListener("input",renderResults);
 $("refreshBtn").addEventListener("click",loadResults);
 
-// Convert an India date/time into a UTC ISO timestamp.
-// IST is UTC+05:30 and does not use daylight saving.
+// EXAM SCHEDULING
+
 function istToIso(date,time){
   const value = new Date(date+"T"+time+":00+05:30");
+
   if(Number.isNaN(value.getTime())){
     throw new Error("Invalid date or time.");
   }
+
   return value.toISOString();
 }
 
@@ -465,13 +618,306 @@ async function loadExams(){
 
 $("refreshExamsBtn").addEventListener("click",loadExams);
 
+// BIBLE QUESTION MANAGEMENT
+
+function getQuestionFormData(){
+  const chapter = Number($("chapterNumber").value);
+
+  if(!Number.isInteger(chapter) || chapter < 1){
+    throw new Error("Enter a valid chapter number.");
+  }
+
+  const question = {
+    bible_book:$("bibleBook").value.trim(),
+    chapter_number:chapter,
+    language:$("questionLanguage").value,
+    difficulty:$("questionDifficulty").value,
+    question_text:$("questionText").value.trim(),
+    option_a:$("optionA").value.trim(),
+    option_b:$("optionB").value.trim(),
+    option_c:$("optionC").value.trim(),
+    option_d:$("optionD").value.trim(),
+    correct_answer:$("correctAnswer").value
+  };
+
+  if(Object.values(question).some(value=>
+    value === "" || value == null
+  )){
+    throw new Error("Please fill all question fields.");
+  }
+
+  return question;
+}
+
+function resetQuestionForm(){
+  $("questionForm").reset();
+  editingQuestionId = null;
+  $("saveQuestionBtn").textContent =
+    "💾 Save Bible Question";
+  $("cancelEditBtn").classList.add("hidden");
+}
+
+$("questionForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+
+  const status = $("questionStatus");
+  const button = $("saveQuestionBtn");
+
+  status.className = "";
+
+  let question;
+
+  try{
+    question = getQuestionFormData();
+  }catch(error){
+    status.textContent = error.message;
+    status.className = "error";
+    return;
+  }
+
+  button.disabled = true;
+  status.textContent =
+    editingQuestionId
+      ? "Updating Bible Question..."
+      : "Saving Bible Question...";
+
+  try{
+    let query;
+
+    if(editingQuestionId){
+      query = db
+        .from("bible_questions")
+        .update(question)
+        .eq("id",editingQuestionId)
+        .select("id");
+    }else{
+      query = db
+        .from("bible_questions")
+        .insert(question)
+        .select("id");
+    }
+
+    const {data,error} = await query;
+
+    if(error) throw error;
+
+    if(!data || !data.length){
+      throw new Error(
+        "Question was not saved. Check admin permissions."
+      );
+    }
+
+    status.textContent =
+      editingQuestionId
+        ? "✅ Bible Question Updated!"
+        : "✅ Bible Question Saved!";
+
+    status.className = "success";
+
+    resetQuestionForm();
+    await loadQuestions();
+
+  }catch(error){
+    status.textContent =
+      "Error: " + error.message;
+    status.className = "error";
+  }finally{
+    button.disabled = false;
+  }
+});
+
+async function loadQuestions(){
+  $("questionListStatus").textContent =
+    "Loading Bible Questions...";
+
+  const {data,error} = await db
+    .from("bible_questions")
+    .select("*")
+    .order("created_at",{ascending:false})
+    .limit(1000);
+
+  if(error){
+    $("questionListStatus").textContent =
+      "Error: " + error.message;
+    $("questionListStatus").className = "error";
+    return;
+  }
+
+  allQuestions = data || [];
+  $("questionListStatus").className = "";
+  renderQuestions();
+}
+
+function renderQuestions(){
+  const language = $("filterLanguage").value;
+  const difficulty = $("filterDifficulty").value;
+  const search = $("questionSearch").value
+    .trim().toLowerCase();
+
+  const filtered = allQuestions.filter(q=>{
+    if(language && q.language !== language)return false;
+    if(difficulty && q.difficulty !== difficulty)return false;
+
+    const text = (
+      q.bible_book + " " +
+      q.chapter_number + " " +
+      q.question_text
+    ).toLowerCase();
+
+    return text.includes(search);
+  });
+
+  const body = $("questionsBody");
+  body.replaceChildren();
+
+  filtered.forEach(q=>{
+    const tr = document.createElement("tr");
+
+    [
+      q.bible_book,
+      q.chapter_number,
+      q.language,
+      q.difficulty,
+      q.question_text,
+      q.correct_answer
+    ].forEach(value=>{
+      const td = document.createElement("td");
+      td.textContent = String(value ?? "");
+      tr.appendChild(td);
+    });
+
+    const actions = document.createElement("td");
+    actions.className = "question-actions";
+
+    const editBtn = document.createElement("button");
+    editBtn.type = "button";
+    editBtn.textContent = "✏️ Edit";
+    editBtn.addEventListener("click",()=>editQuestion(q.id));
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "danger";
+    deleteBtn.textContent = "🗑 Delete";
+    deleteBtn.addEventListener("click",()=>deleteQuestion(q.id));
+
+    actions.appendChild(editBtn);
+    actions.appendChild(deleteBtn);
+    tr.appendChild(actions);
+    body.appendChild(tr);
+  });
+
+  $("questionListStatus").textContent =
+    filtered.length + " Bible Questions displayed.";
+}
+
+function editQuestion(id){
+  const q = allQuestions.find(item=>item.id===id);
+  if(!q)return;
+
+  editingQuestionId = id;
+
+  $("bibleBook").value = q.bible_book;
+  $("chapterNumber").value = q.chapter_number;
+  $("questionLanguage").value = q.language;
+  $("questionDifficulty").value = q.difficulty;
+  $("questionText").value = q.question_text;
+  $("optionA").value = q.option_a;
+  $("optionB").value = q.option_b;
+  $("optionC").value = q.option_c;
+  $("optionD").value = q.option_d;
+  $("correctAnswer").value = q.correct_answer;
+
+  $("saveQuestionBtn").textContent =
+    "💾 Update Bible Question";
+
+  $("cancelEditBtn").classList.remove("hidden");
+
+  $("questionStatus").textContent =
+    "Editing selected Bible Question.";
+
+  $("questionStatus").className = "";
+
+  $("questionManager").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+}
+
+async function deleteQuestion(id){
+  const q = allQuestions.find(item=>item.id===id);
+  if(!q)return;
+
+  if(!confirm(
+    "Delete this Bible Question?\n\n" +
+    q.question_text
+  ))return;
+
+  $("questionListStatus").textContent =
+    "Deleting Bible Question...";
+
+  const {data,error} = await db
+    .from("bible_questions")
+    .delete()
+    .eq("id",id)
+    .select("id");
+
+  if(error){
+    $("questionListStatus").textContent =
+      "Delete Error: " + error.message;
+    $("questionListStatus").className = "error";
+    return;
+  }
+
+  if(!data || !data.length){
+    $("questionListStatus").textContent =
+      "Question not deleted. Check permissions.";
+    return;
+  }
+
+  if(editingQuestionId === id){
+    resetQuestionForm();
+  }
+
+  await loadQuestions();
+}
+
+$("cancelEditBtn").addEventListener(
+  "click",
+  resetQuestionForm
+);
+
+$("refreshQuestionsBtn").addEventListener(
+  "click",
+  loadQuestions
+);
+
+$("filterLanguage").addEventListener(
+  "change",
+  renderQuestions
+);
+
+$("filterDifficulty").addEventListener(
+  "change",
+  renderQuestions
+);
+
+$("questionSearch").addEventListener(
+  "input",
+  renderQuestions
+);
+
+// LOGOUT
+
 $("logoutBtn").addEventListener("click",async()=>{
   await db.auth.signOut();
   allResults = [];
+  allQuestions = [];
+  resetQuestionForm();
   showLogin();
 });
 
 verifyAdmin();
+
 </script>
 </body>
 </html>
