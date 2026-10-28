@@ -86,6 +86,52 @@ required maxlength="150">
 <div class="grid">
 <div>
 <label for="examDate">Exam Date</label>
+  
+<!-- EXAM QUESTION SELECTION -->
+
+<div class="grid">
+
+<div>
+<label for="examBibleBook">Bible Book</label>
+<input
+  id="examBibleBook"
+  type="text"
+  placeholder="Example: Genesis"
+  maxlength="100"
+  required>
+</div>
+
+<div>
+<label for="examChapter">Chapter Number</label>
+<input
+  id="examChapter"
+  type="number"
+  min="1"
+  max="150"
+  placeholder="Example: 1"
+  required>
+</div>
+
+<div>
+<label for="examLanguage">Question Language</label>
+<select id="examLanguage" required>
+<option value="telugu">Telugu</option>
+<option value="english">English</option>
+<option value="tamil">Tamil</option>
+</select>
+</div>
+
+<div>
+<label for="examDifficulty">Question Difficulty</label>
+<select id="examDifficulty" required>
+<option value="easy">Easy</option>
+<option value="medium">Medium</option>
+<option value="tough">Tough</option>
+</select>
+</div>
+
+</div>
+
 <input id="examDate" type="date" required>
 </div>
 <div>
@@ -542,14 +588,23 @@ $("scheduleForm").addEventListener("submit",async event=>{
     return;
   }
 
-  const exam = {
-    exam_name:name,
-    start_time:startIso,
-    end_time:endIso,
-    question_count:Number($("questionCount").value),
-    max_attempts:Number($("maxAttempts").value),
-    ranking_method:$("rankingMethod").value
-  };
+const exam = {
+  exam_name: name,
+
+  bible_book: $("examBibleBook").value.trim(),
+  chapter_number: Number($("examChapter").value),
+  question_language: $("examLanguage").value,
+  question_difficulty: $("examDifficulty").value,
+
+  start_time: startIso,
+  end_time: endIso,
+
+  question_count: Number($("questionCount").value),
+  max_attempts: Number($("maxAttempts").value),
+  ranking_method: $("rankingMethod").value
+};
+  
+  
 
   button.disabled = true;
   status.textContent = "Saving exam schedule...";
