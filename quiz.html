@@ -5,404 +5,113 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LOGOS QUEST - Live Bible Quiz</title>
-
 <style>
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#101b38,#253e72);
-  min-height:100vh;
-  color:#222;
-}
-
-header{
-  background:#101a32;
-  color:#ffd76b;
-  text-align:center;
-  padding:25px 15px;
-}
-
-header h1{margin:0}
-header p{color:white}
-
-.container{
-  max-width:750px;
-  margin:25px auto;
-  padding:15px;
-}
-
-.card{
-  background:white;
-  padding:25px;
-  border-radius:15px;
-  margin-bottom:20px;
-}
-
-h2{
-  color:#203a70;
-  text-align:center;
-}
-
-input,select,button{
-  width:100%;
-  padding:14px;
-  margin:10px 0;
-  border-radius:8px;
-  font-size:16px;
-}
-
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#101b38,#253e72);min-height:100vh;color:#222}
+header{background:#101a32;color:#ffd76b;text-align:center;padding:25px 15px}
+header h1{margin:0}header p{color:white}
+.container{max-width:750px;margin:25px auto;padding:15px}
+.card{background:white;padding:25px;border-radius:15px;margin-bottom:20px}
+h2{color:#203a70;text-align:center}
+input,select,button{width:100%;padding:14px;margin:10px 0;border-radius:8px;font-size:16px}
 input,select{border:1px solid #ccc}
-
-button{
-  background:#1749a2;
-  color:white;
-  border:none;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button:disabled{
-  background:#999;
-  cursor:not-allowed;
-}
-
-.option{
-  display:block;
-  padding:14px;
-  background:#f0f4ff;
-  border:1px solid #d4dff5;
-  border-radius:8px;
-  margin:10px 0;
-  cursor:pointer;
-}
-
-.option input{
-  width:auto;
-  margin-right:10px;
-}
-
-.info{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  font-weight:bold;
-  color:#203a70;
-}
-
-.score{
-  font-size:36px;
-  color:#1749a2;
-  text-align:center;
-  font-weight:bold;
-}
-
-.center{text-align:center}
-.hidden{display:none}
-a{color:#1749a2}
-
-.link-button{
-  display:block;
-  background:#1749a2;
-  color:white;
-  padding:14px;
-  text-align:center;
-  border-radius:8px;
-  text-decoration:none;
-  margin-top:12px;
-  font-weight:bold;
-}
-
-.notice{
-  background:#fff4d6;
-  padding:12px;
-  border-radius:8px;
-  margin-top:15px;
-}
-
-.exam{
-  border:1px solid #d4dff5;
-  border-radius:12px;
-  padding:15px;
-  margin:12px 0;
-  background:#f8faff;
-}
-
-.exam h3{
-  margin:0 0 8px;
-  color:#203a70;
-}
-
-.exam p{margin:6px 0}
-.muted{color:#666}
-.status{font-weight:bold}
-.error{color:#b42318}
-.success{color:#137547}
+button{background:#1749a2;color:white;border:none;font-weight:bold;cursor:pointer}
+button:disabled{background:#999;cursor:not-allowed}
+.option{display:block;padding:14px;background:#f0f4ff;border:1px solid #d4dff5;border-radius:8px;margin:10px 0;cursor:pointer}
+.option input{width:auto;margin-right:10px}
+.info{display:flex;justify-content:space-between;gap:10px;font-weight:bold;color:#203a70}
+.score{font-size:36px;color:#1749a2;text-align:center;font-weight:bold}
+.center{text-align:center}.hidden{display:none}a{color:#1749a2}
+.link-button{display:block;background:#1749a2;color:white;padding:14px;text-align:center;border-radius:8px;text-decoration:none;margin-top:12px;font-weight:bold}
+.notice{background:#fff4d6;padding:12px;border-radius:8px;margin-top:15px}
+.exam{border:1px solid #d4dff5;border-radius:12px;padding:15px;margin:12px 0;background:#f8faff}
+.exam h3{margin:0 0 8px;color:#203a70}.exam p{margin:6px 0}
+.muted{color:#666}.status{font-weight:bold}.error{color:#b42318}.success{color:#137547}
 </style>
 </head>
-
 <body>
 
 <header>
-  <h1>✝ LOGOS QUEST</h1>
-  <p>Live Bible Quiz</p>
+<h1>✝ LOGOS QUEST</h1>
+<p>Live Bible Quiz</p>
 </header>
 
 <div class="container">
 
-<!-- LIVE EXAMS -->
-
 <section id="liveExams" class="card">
-  <h2>📅 Live Bible Exams</h2>
-
-  <p class="center muted">
-    సమయాలన్నీ భారత కాలమానం (IST).
-  </p>
-
-  <p id="examStatus" role="status">
-    పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...
-  </p>
-
-  <div id="examList"></div>
-
-  <button id="refreshExams" type="button">
-    🔄 Refresh Exams
-  </button>
+<h2>📅 Live Bible Exams</h2>
+<p class="center muted">సమయాలన్నీ భారత కాలమానం (IST).</p>
+<p id="examStatus" role="status">పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...</p>
+<div id="examList"></div>
+<button id="refreshExams" type="button">🔄 Refresh Exams</button>
 </section>
-
-<!-- REGISTRATION -->
 
 <section id="registration" class="card hidden">
+<h2 id="registrationTitle">బైబిల్ పరీక్ష నమోదు</h2>
+<p id="selectedExamInfo" class="notice"></p>
 
-  <h2 id="registrationTitle">
-    బైబిల్ పరీక్ష నమోదు
-  </h2>
+<form id="registrationForm">
+<input type="text" id="studentName" placeholder="మీ పూర్తి పేరు" required minlength="2" maxlength="100">
+<input type="tel" id="studentMobile" placeholder="10 అంకెల మొబైల్ నంబర్" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" required>
+<input type="text" id="studentTown" placeholder="మీ Town / City" required minlength="2" maxlength="100">
+<input type="text" id="studentState" placeholder="మీ State" required minlength="2" maxlength="100">
+<input type="email" id="studentEmail" placeholder="ఈమెయిల్ (ఐచ్ఛికం)">
+<button id="startButton" type="submit">పరీక్ష ప్రారంభించండి</button>
+</form>
 
-  <p id="selectedExamInfo" class="notice"></p>
-
-  <form id="registrationForm">
-
-    <input
-      type="text"
-      id="studentName"
-      placeholder="మీ పూర్తి పేరు"
-      required
-      minlength="2"
-    >
-
-    <input
-      type="tel"
-      id="studentMobile"
-      placeholder="10 అంకెల మొబైల్ నంబర్"
-      maxlength="10"
-      pattern="[0-9]{10}"
-      inputmode="numeric"
-      required
-    >
-
-    <input
-      type="email"
-      id="studentEmail"
-      placeholder="ఈమెయిల్ (ఐచ్ఛికం)"
-    >
-
-    <button id="startButton" type="submit">
-      పరీక్ష ప్రారంభించండి
-    </button>
-
-  </form>
-
-  <button id="backToExams" type="button">
-    ← Exams List
-  </button>
-
-  <a class="link-button" href="results.html">
-    నా ఫలితాలు
-  </a>
-
+<button id="backToExams" type="button">← Exams List</button>
+<a class="link-button" href="results.html">నా ఫలితాలు</a>
 </section>
-
-<!-- QUIZ -->
 
 <section id="quizSection" class="card hidden">
-
-  <p id="activeExamName" class="center"></p>
-
-  <div class="info">
-    <span id="questionNumber"></span>
-    <span id="timer">00:00</span>
-  </div>
-
-  <h2 id="questionText"></h2>
-
-  <div id="optionsContainer"></div>
-
-  <button id="nextButton" type="button">
-    తదుపరి ప్రశ్న
-  </button>
-
-  <button id="submitButton" type="button">
-    పరీక్ష ఇప్పుడే పూర్తి చేయండి
-  </button>
-
+<p id="activeExamName" class="center"></p>
+<div class="info">
+<span id="questionNumber"></span>
+<span id="timer">00:00</span>
+</div>
+<h2 id="questionText"></h2>
+<div id="optionsContainer"></div>
+<button id="nextButton" type="button">తదుపరి ప్రశ్న</button>
+<button id="submitButton" type="button">పరీక్ష ఇప్పుడే పూర్తి చేయండి</button>
 </section>
 
-<!-- RESULTS -->
-
 <section id="resultSection" class="card hidden">
-
-  <h2>పరీక్ష ఫలితాలు</h2>
-
-  <p id="resultName" class="center"></p>
-
-  <div id="resultScore" class="score"></div>
-
-  <p id="resultPercentage" class="center"></p>
-
-  <p id="resultTime" class="center"></p>
-
-  <p id="saveStatus" class="center" role="status"></p>
-
-  <div class="notice">
-    ఇది Demo Questions ఆధారంగా పనిచేసే Live Exam Preview.
-    Secure scoring, per-exam leaderboard, attempt limits
-    ఇంకా అమలు చేయలేదు.
-  </div>
-
-  <a class="link-button" href="results.html">
-    నా ఫలితాలు చూడండి
-  </a>
-
-  <a class="link-button" href="leaderboard.html">
-    🏆 Existing Demo Top 10 Leaderboard
-  </a>
-
-  <button id="returnButton" type="button">
-    మరొక పరీక్ష చూడండి
-  </button>
-
-  <a class="link-button" href="index.html">
-    హోమ్ పేజీ
-  </a>
-
+<h2>పరీక్ష ఫలితాలు</h2>
+<p id="resultName" class="center"></p>
+<div id="resultScore" class="score"></div>
+<p id="resultPercentage" class="center"></p>
+<p id="resultTime" class="center"></p>
+<p id="saveStatus" class="center" role="status"></p>
+<div class="notice">
+ఇది Demo Questions ఆధారంగా పనిచేసే Live Exam Preview.
+Cloudలో సేవ్ అయ్యే Demo Scoresను Official Leaderboardకు ఉపయోగించవద్దు.
+Secure scoring, per-exam leaderboard, attempt limits ఇంకా అమలు చేయలేదు.
+</div>
+<a class="link-button" href="results.html">నా ఫలితాలు చూడండి</a>
+<a class="link-button" href="leaderboard.html">🏆 Existing Demo Top 10 Leaderboard</a>
+<button id="returnButton" type="button">మరొక పరీక్ష చూడండి</button>
+<a class="link-button" href="index.html">హోమ్ పేజీ</a>
 </section>
 
 </div>
 
 <script>
-
-const SUPABASE_URL =
-  "https://jfhlesmfgwxlqdccfgit.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
 const $ = id => document.getElementById(id);
 
-// DEMO BIBLE QUESTIONS
-
 const questionBank = [
-  {
-    question:"బైబిల్‌లో మొదటి పుస్తకం ఏది?",
-    options:[
-      "నిర్గమకాండము",
-      "ఆదికాండము",
-      "లేవీయకాండము",
-      "సంఖ్యాకాండము"
-    ],
-    answer:1
-  },
-  {
-    question:"మొదటి మనిషి ఎవరు?",
-    options:[
-      "నోవహు",
-      "అబ్రాహాము",
-      "ఆదాము",
-      "మోషే"
-    ],
-    answer:2
-  },
-  {
-    question:"నోవహు ఏమి నిర్మించాడు?",
-    options:[
-      "దేవాలయం",
-      "ఓడ",
-      "గోపురం",
-      "రాజభవనం"
-    ],
-    answer:1
-  },
-  {
-    question:"యేసు క్రీస్తు ఎక్కడ జన్మించారు?",
-    options:[
-      "నజరేతు",
-      "యెరూషలేము",
-      "బేత్లెహేము",
-      "గలిలయ"
-    ],
-    answer:2
-  },
-  {
-    question:"దావీదు ఎవరిని ఓడించాడు?",
-    options:[
-      "ఫరో",
-      "గొల్యాతు",
-      "హేరోదు",
-      "పిలాతు"
-    ],
-    answer:1
-  },
-  {
-    question:"యేసు క్రీస్తుకు ఎంతమంది అపొస్తలులు ఉన్నారు?",
-    options:[
-      "10",
-      "11",
-      "12",
-      "14"
-    ],
-    answer:2
-  },
-  {
-    question:"యేసు క్రీస్తును మూడుసార్లు ఎరుగనని చెప్పిన శిష్యుడు ఎవరు?",
-    options:[
-      "యోహాను",
-      "పేతురు",
-      "తోమా",
-      "యాకోబు"
-    ],
-    answer:1
-  },
-  {
-    question:"యోనా ఎన్ని రోజులు పెద్ద చేప కడుపులో ఉన్నాడు?",
-    options:[
-      "ఒక రోజు",
-      "రెండు రోజులు",
-      "మూడు రోజులు",
-      "ఏడు రోజులు"
-    ],
-    answer:2
-  },
-  {
-    question:"పది ఆజ్ఞలను దేవుడు ఎవరికి ఇచ్చాడు?",
-    options:[
-      "అబ్రాహాము",
-      "మోషే",
-      "దావీదు",
-      "సొలొమోను"
-    ],
-    answer:1
-  },
-  {
-    question:"బైబిల్‌లో చివరి పుస్తకం ఏది?",
-    options:[
-      "యూదా",
-      "హెబ్రీయులకు",
-      "ప్రకటన గ్రంథము",
-      "రోమీయులకు"
-    ],
-    answer:2
-  }
+{question:"బైబిల్‌లో మొదటి పుస్తకం ఏది?",options:["నిర్గమకాండము","ఆదికాండము","లేవీయకాండము","సంఖ్యాకాండము"],answer:1},
+{question:"మొదటి మనిషి ఎవరు?",options:["నోవహు","అబ్రాహాము","ఆదాము","మోషే"],answer:2},
+{question:"నోవహు ఏమి నిర్మించాడు?",options:["దేవాలయం","ఓడ","గోపురం","రాజభవనం"],answer:1},
+{question:"యేసు క్రీస్తు ఎక్కడ జన్మించారు?",options:["నజరేతు","యెరూషలేము","బేత్లెహేము","గలిలయ"],answer:2},
+{question:"దావీదు ఎవరిని ఓడించాడు?",options:["ఫరో","గొల్యాతు","హేరోదు","పిలాతు"],answer:1},
+{question:"యేసు క్రీస్తుకు ఎంతమంది అపొస్తలులు ఉన్నారు?",options:["10","11","12","14"],answer:2},
+{question:"యేసు క్రీస్తును మూడుసార్లు ఎరుగనని చెప్పిన శిష్యుడు ఎవరు?",options:["యోహాను","పేతురు","తోమా","యాకోబు"],answer:1},
+{question:"యోనా ఎన్ని రోజులు పెద్ద చేప కడుపులో ఉన్నాడు?",options:["ఒక రోజు","రెండు రోజులు","మూడు రోజులు","ఏడు రోజులు"],answer:2},
+{question:"పది ఆజ్ఞలను దేవుడు ఎవరికి ఇచ్చాడు?",options:["అబ్రాహాము","మోషే","దావీదు","సొలొమోను"],answer:1},
+{question:"బైబిల్‌లో చివరి పుస్తకం ఏది?",options:["యూదా","హెబ్రీయులకు","ప్రకటన గ్రంథము","రోమీయులకు"],answer:2}
 ];
 
 let exams = [];
@@ -416,531 +125,353 @@ let timerInterval = null;
 let quizFinished = false;
 let submitting = false;
 
-const headers = {
-  apikey: SUPABASE_KEY
+const headers = {apikey:SUPABASE_KEY};
+
+function formatIST(value){
+return new Intl.DateTimeFormat("en-IN",{
+timeZone:"Asia/Kolkata",
+day:"2-digit",month:"short",year:"numeric",
+hour:"2-digit",minute:"2-digit",hour12:true
+}).format(new Date(value));
+}
+
+function statusFor(exam){
+const now=Date.now();
+const start=Date.parse(exam.start_time);
+const end=Date.parse(exam.end_time);
+if(now<start)return "upcoming";
+if(now>=end)return "ended";
+return "live";
+}
+
+function showOnly(id){
+["liveExams","registration","quizSection","resultSection"].forEach(section=>{
+$(section).classList.toggle("hidden",section!==id);
+});
+window.scrollTo(0,0);
+}
+
+async function loadExams(){
+$("examStatus").textContent="పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...";
+try{
+const url=SUPABASE_URL+"/rest/v1/exam_schedules"+
+"?select=id,exam_name,start_time,end_time,question_count,max_attempts,ranking_method"+
+"&order=start_time.asc&limit=100";
+const response=await fetch(url,{headers});
+if(!response.ok)throw new Error("HTTP "+response.status+": "+await response.text());
+exams=await response.json();
+renderExams();
+}catch(error){
+$("examStatus").textContent="పరీక్షలు లోడ్ కాలేదు: "+error.message;
+$("examStatus").className="error";
+}
+}
+
+function renderExams(){
+const list=$("examList");
+list.replaceChildren();
+$("examStatus").className="";
+if(!exams.length){
+$("examStatus").textContent="ప్రస్తుతం Schedule చేసిన Exams లేవు.";
+return;
+}
+$("examStatus").textContent="పరీక్షల సంఖ్య: "+exams.length;
+
+exams.forEach(exam=>{
+const state=statusFor(exam);
+const card=document.createElement("div");
+card.className="exam";
+const title=document.createElement("h3");
+title.textContent=exam.exam_name;
+card.appendChild(title);
+
+const info=document.createElement("p");
+info.textContent="🕒 "+formatIST(exam.start_time)+" – "+formatIST(exam.end_time);
+card.appendChild(info);
+
+const details=document.createElement("p");
+details.textContent="ప్రశ్నలు: "+exam.question_count+
+" | Allowed Attempts (planned): "+exam.max_attempts;
+card.appendChild(details);
+
+const badge=document.createElement("p");
+badge.className="status "+(state==="live"?"success":"muted");
+badge.textContent=state==="live"?"🟢 Exam Live":
+state==="upcoming"?"⏳ Upcoming Exam":"🔒 Exam Ended";
+card.appendChild(badge);
+
+const btn=document.createElement("button");
+btn.type="button";
+btn.disabled=state!=="live";
+btn.textContent=state==="live"?"Start Exam":"Exam Not Available";
+btn.addEventListener("click",()=>selectExam(exam.id));
+card.appendChild(btn);
+list.appendChild(card);
+});
+}
+
+function selectExam(id){
+const exam=exams.find(e=>e.id===id);
+if(!exam||statusFor(exam)!=="live"){
+renderExams();
+alert("ఈ పరీక్ష ప్రస్తుతం అందుబాటులో లేదు.");
+return;
+}
+selectedExam=exam;
+$("registrationTitle").textContent=exam.exam_name;
+$("selectedExamInfo").textContent=
+"పరీక్ష ముగింపు: "+formatIST(exam.end_time)+
+" | ప్రశ్నలు: "+exam.question_count;
+showOnly("registration");
+}
+
+$("refreshExams").addEventListener("click",loadExams);
+
+$("backToExams").addEventListener("click",()=>{
+selectedExam=null;
+showOnly("liveExams");
+renderExams();
+});
+
+$("registrationForm").addEventListener("submit",event=>{
+event.preventDefault();
+startQuiz();
+});
+
+function startQuiz(){
+if(!selectedExam||statusFor(selectedExam)!=="live"){
+alert("Exam సమయం ముగిసింది లేదా ఇంకా ప్రారంభం కాలేదు.");
+showOnly("liveExams");
+renderExams();
+return;
+}
+
+const name=$("studentName").value.trim();
+const mobile=$("studentMobile").value.trim();
+const town=$("studentTown").value.trim();
+const state=$("studentState").value.trim();
+const email=$("studentEmail").value.trim();
+
+if(name.length<2||town.length<2||state.length<2){
+alert("పేరు, Town, State సరిగ్గా నమోదు చేయండి.");
+return;
+}
+if(!/^[0-9]{10}$/.test(mobile)){
+alert("సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి.");
+return;
+}
+
+student={name,mobile,town,state,email};
+
+// DEMO: 10 questions repeat for larger exams
+questions=Array.from(
+{length:selectedExam.question_count},
+(_,i)=>questionBank[i%questionBank.length]
+);
+answers=new Array(questions.length).fill(null);
+currentQuestion=0;
+quizFinished=false;
+submitting=false;
+startTime=Date.now();
+
+$("activeExamName").textContent=selectedExam.exam_name;
+showOnly("quizSection");
+clearInterval(timerInterval);
+timerInterval=setInterval(updateTimer,250);
+showQuestion();
+updateTimer();
+}
+
+function updateTimer(){
+if(quizFinished||!selectedExam)return;
+const remaining=Math.max(0,Math.ceil(
+(Date.parse(selectedExam.end_time)-Date.now())/1000
+));
+const min=String(Math.floor(remaining/60)).padStart(2,"0");
+const sec=String(remaining%60).padStart(2,"0");
+$("timer").textContent="మిగిలిన సమయం: "+min+":"+sec;
+if(remaining<=0)finishQuiz(true);
+}
+
+function saveAnswer(){
+const selected=document.querySelector('input[name="answer"]:checked');
+if(selected)answers[currentQuestion]=Number(selected.value);
+}
+
+function showQuestion(){
+if(quizFinished)return;
+const q=questions[currentQuestion];
+$("questionNumber").textContent=
+"ప్రశ్న "+(currentQuestion+1)+" / "+questions.length;
+$("questionText").textContent=q.question;
+
+const container=$("optionsContainer");
+container.replaceChildren();
+
+q.options.forEach((option,index)=>{
+const label=document.createElement("label");
+label.className="option";
+const radio=document.createElement("input");
+radio.type="radio";
+radio.name="answer";
+radio.value=index;
+radio.checked=answers[currentQuestion]===index;
+label.appendChild(radio);
+label.appendChild(document.createTextNode(option));
+container.appendChild(label);
+});
+
+$("nextButton").textContent=
+currentQuestion===questions.length-1?
+"పరీక్ష పూర్తి చేయండి":"తదుపరి ప్రశ్న";
+}
+
+$("nextButton").addEventListener("click",()=>{
+if(quizFinished)return;
+const selected=document.querySelector('input[name="answer"]:checked');
+if(!selected){
+alert("దయచేసి ఒక సమాధానం ఎంచుకోండి.");
+return;
+}
+saveAnswer();
+currentQuestion++;
+if(currentQuestion>=questions.length){
+finishQuiz(false);
+}else{
+showQuestion();
+}
+});
+
+$("submitButton").addEventListener("click",()=>{
+if(quizFinished)return;
+if(confirm("మీ పరీక్షను ఇప్పుడే పూర్తి చేయాలా?")){
+saveAnswer();
+finishQuiz(false);
+}
+});
+
+async function finishQuiz(auto){
+if(quizFinished||submitting)return;
+submitting=true;
+saveAnswer();
+quizFinished=true;
+clearInterval(timerInterval);
+
+const total=questions.length;
+const score=questions.reduce(
+(sum,q,i)=>sum+(answers[i]===q.answer?1:0),0
+);
+const percentage=Math.round(score/total*100);
+const elapsedSeconds=Math.max(0,Math.floor(
+(Date.now()-startTime)/1000
+));
+const minutes=Math.floor(elapsedSeconds/60);
+const seconds=elapsedSeconds%60;
+const timeText=minutes+" నిమిషాలు "+seconds+" సెకన్లు";
+
+const result={
+name:student.name,
+mobile:student.mobile,
+email:student.email,
+town:student.town,
+state:student.state,
+score,total,percentage,
+time:timeText,
+date:new Date().toLocaleString("en-IN"),
+exam_id:selectedExam.id,
+exam_name:selectedExam.exam_name
 };
 
-function formatIST(value) {
-  return new Intl.DateTimeFormat("en-IN", {
-    timeZone:"Asia/Kolkata",
-    day:"2-digit",
-    month:"short",
-    year:"numeric",
-    hour:"2-digit",
-    minute:"2-digit",
-    hour12:true
-  }).format(new Date(value));
-}
+showOnly("resultSection");
+$("resultName").textContent=
+"విద్యార్థి పేరు: "+student.name+
+(auto?" (Auto Submitted)":"");
+$("resultScore").textContent=score+" / "+total;
+$("resultPercentage").textContent="శాతం: "+percentage+"%";
+$("resultTime").textContent=
+"పరీక్ష పూర్తి చేసిన సమయం: "+timeText;
+$("saveStatus").textContent="ఫలితాన్ని సేవ్ చేస్తున్నాం...";
 
-function statusFor(exam) {
-  const now = Date.now();
-  const start = Date.parse(exam.start_time);
-  const end = Date.parse(exam.end_time);
+let localSaved=false;
+let cloudSaved=false;
+let cloudError="";
 
-  if (now < start) return "upcoming";
-  if (now >= end) return "ended";
-
-  return "live";
-}
-
-function showOnly(id) {
-  [
-    "liveExams",
-    "registration",
-    "quizSection",
-    "resultSection"
-  ].forEach(section => {
-    $(section).classList.toggle(
-      "hidden",
-      section !== id
-    );
-  });
-
-  window.scrollTo(0, 0);
-}
-
-// LOAD EXAMS FROM SUPABASE
-
-async function loadExams() {
-  $("examStatus").textContent =
-    "పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...";
-
-  try {
-    const url =
-      SUPABASE_URL +
-      "/rest/v1/exam_schedules" +
-      "?select=id,exam_name,start_time,end_time," +
-      "question_count,max_attempts,ranking_method" +
-      "&order=start_time.asc&limit=100";
-
-    const response = await fetch(url, {headers});
-
-    if (!response.ok) {
-      throw new Error(
-        "HTTP " +
-        response.status +
-        ": " +
-        await response.text()
-      );
-    }
-
-    exams = await response.json();
-
-    renderExams();
-
-  } catch(error) {
-    $("examStatus").textContent =
-      "పరీక్షలు లోడ్ కాలేదు: " + error.message;
-
-    $("examStatus").className = "error";
-  }
-}
-
-// DISPLAY UPCOMING AND LIVE EXAMS
-
-function renderExams() {
-  const list = $("examList");
-  list.replaceChildren();
-
-  $("examStatus").className = "";
-
-  if (!exams.length) {
-    $("examStatus").textContent =
-      "ప్రస్తుతం Schedule చేసిన Exams లేవు.";
-    return;
-  }
-
-  $("examStatus").textContent =
-    "పరీక్షల సంఖ్య: " + exams.length;
-
-  exams.forEach(exam => {
-    const state = statusFor(exam);
-
-    const card = document.createElement("div");
-    card.className = "exam";
-
-    const title = document.createElement("h3");
-    title.textContent = exam.exam_name;
-    card.appendChild(title);
-
-    const info = document.createElement("p");
-    info.textContent =
-      "🕒 " +
-      formatIST(exam.start_time) +
-      " – " +
-      formatIST(exam.end_time);
-
-    card.appendChild(info);
-
-    const details = document.createElement("p");
-    details.textContent =
-      "ప్రశ్నలు: " +
-      exam.question_count +
-      " | Allowed Attempts (planned): " +
-      exam.max_attempts;
-
-    card.appendChild(details);
-
-    const badge = document.createElement("p");
-    badge.className =
-      "status " +
-      (state === "live" ? "success" : "muted");
-
-    badge.textContent =
-      state === "live"
-        ? "🟢 Exam Live"
-        : state === "upcoming"
-        ? "⏳ Upcoming Exam"
-        : "🔒 Exam Ended";
-
-    card.appendChild(badge);
-
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.disabled = state !== "live";
-
-    btn.textContent =
-      state === "live"
-        ? "Start Exam"
-        : "Exam Not Available";
-
-    btn.addEventListener("click", () => {
-      selectExam(exam.id);
-    });
-
-    card.appendChild(btn);
-    list.appendChild(card);
-  });
-}
-
-function selectExam(id) {
-  const exam = exams.find(e => e.id === id);
-
-  if (!exam || statusFor(exam) !== "live") {
-    renderExams();
-    alert("ఈ పరీక్ష ప్రస్తుతం అందుబాటులో లేదు.");
-    return;
-  }
-
-  selectedExam = exam;
-
-  $("registrationTitle").textContent =
-    exam.exam_name;
-
-  $("selectedExamInfo").textContent =
-    "పరీక్ష ముగింపు: " +
-    formatIST(exam.end_time) +
-    " | ప్రశ్నలు: " +
-    exam.question_count;
-
-  showOnly("registration");
-}
-
-$("refreshExams").addEventListener(
-  "click",
-  loadExams
+try{
+let oldResults=JSON.parse(
+localStorage.getItem("logosQuestResults")||"[]"
 );
-
-$("backToExams").addEventListener(
-  "click",
-  () => {
-    selectedExam = null;
-    showOnly("liveExams");
-    renderExams();
-  }
+if(!Array.isArray(oldResults))oldResults=[];
+oldResults.push(result);
+localStorage.setItem(
+"logosQuestResults",JSON.stringify(oldResults)
 );
+localSaved=true;
+}catch(error){
+console.error("Local save failed",error);
+}
 
-// STUDENT REGISTRATION
-
-$("registrationForm").addEventListener(
-  "submit",
-  event => {
-    event.preventDefault();
-    startQuiz();
-  }
+// Save DEMO result to Supabase.
+// This is not secure official scoring.
+try{
+const response=await fetch(
+SUPABASE_URL+"/rest/v1/rpc/save_demo_exam_result",
+{
+method:"POST",
+headers:{
+...headers,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+p_exam_id:selectedExam.id,
+p_student_name:student.name,
+p_student_mobile:student.mobile,
+p_student_town:student.town,
+p_student_state:student.state,
+p_score:score,
+p_total_questions:total,
+p_time_seconds:elapsedSeconds
+})
+}
 );
-
-function startQuiz() {
-  if (
-    !selectedExam ||
-    statusFor(selectedExam) !== "live"
-  ) {
-    alert(
-      "Exam సమయం ముగిసింది లేదా ఇంకా ప్రారంభం కాలేదు."
-    );
-
-    showOnly("liveExams");
-    renderExams();
-    return;
-  }
-
-  const name = $("studentName").value.trim();
-  const mobile = $("studentMobile").value.trim();
-  const email = $("studentEmail").value.trim();
-
-  if (name.length < 2) {
-    alert("దయచేసి సరైన పేరు నమోదు చేయండి.");
-    return;
-  }
-
-  if (!/^[0-9]{10}$/.test(mobile)) {
-    alert("సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి.");
-    return;
-  }
-
-  student = {name,mobile,email};
-
-  // Demo questions repeat for counts above 10.
-  questions = Array.from(
-    {length:selectedExam.question_count},
-    (_,i) => questionBank[i % questionBank.length]
-  );
-
-  answers = new Array(questions.length).fill(null);
-
-  currentQuestion = 0;
-  quizFinished = false;
-  submitting = false;
-  startTime = Date.now();
-
-  $("activeExamName").textContent =
-    selectedExam.exam_name;
-
-  showOnly("quizSection");
-
-  clearInterval(timerInterval);
-
-  timerInterval = setInterval(updateTimer,250);
-
-  showQuestion();
-  updateTimer();
+if(!response.ok){
+throw new Error(
+"HTTP "+response.status+": "+await response.text()
+);
+}
+cloudSaved=true;
+}catch(error){
+cloudError=error.message;
+console.error("Demo cloud save failed",error);
 }
 
-// COUNTDOWN TIMER
-
-function updateTimer() {
-  if (quizFinished || !selectedExam) return;
-
-  const remaining = Math.max(
-    0,
-    Math.ceil(
-      (
-        Date.parse(selectedExam.end_time) -
-        Date.now()
-      ) / 1000
-    )
-  );
-
-  const min = String(
-    Math.floor(remaining / 60)
-  ).padStart(2,"0");
-
-  const sec = String(
-    remaining % 60
-  ).padStart(2,"0");
-
-  $("timer").textContent =
-    "మిగిలిన సమయం: " +
-    min + ":" + sec;
-
-  if (remaining <= 0) {
-    finishQuiz(true);
-  }
+if(cloudSaved){
+$("saveStatus").textContent=
+"✅ Demo Result Supabaseలో సేవ్ అయింది."+
+(localSaved?" ఈ పరికరంలో కూడా సేవ్ అయింది.":"");
+$("saveStatus").className="center success";
+}else{
+$("saveStatus").textContent=
+"⚠️ Cloud Save కాలేదు: "+cloudError+
+(localSaved?" | Local Result సేవ్ అయింది.":"");
+$("saveStatus").className="center error";
+}
+submitting=false;
 }
 
-// SAVE ANSWER
-
-function saveAnswer() {
-  const selected = document.querySelector(
-    'input[name="answer"]:checked'
-  );
-
-  if (selected) {
-    answers[currentQuestion] =
-      Number(selected.value);
-  }
-}
-
-// DISPLAY QUESTION
-
-function showQuestion() {
-  if (quizFinished) return;
-
-  const q = questions[currentQuestion];
-
-  $("questionNumber").textContent =
-    "ప్రశ్న " +
-    (currentQuestion + 1) +
-    " / " +
-    questions.length;
-
-  $("questionText").textContent = q.question;
-
-  const container = $("optionsContainer");
-  container.replaceChildren();
-
-  q.options.forEach((option,index) => {
-    const label = document.createElement("label");
-    label.className = "option";
-
-    const radio = document.createElement("input");
-    radio.type = "radio";
-    radio.name = "answer";
-    radio.value = index;
-
-    radio.checked =
-      answers[currentQuestion] === index;
-
-    label.appendChild(radio);
-    label.appendChild(
-      document.createTextNode(option)
-    );
-
-    container.appendChild(label);
-  });
-
-  $("nextButton").textContent =
-    currentQuestion === questions.length - 1
-      ? "పరీక్ష పూర్తి చేయండి"
-      : "తదుపరి ప్రశ్న";
-}
-
-// NEXT QUESTION
-
-$("nextButton").addEventListener("click", () => {
-  if (quizFinished) return;
-
-  const selected = document.querySelector(
-    'input[name="answer"]:checked'
-  );
-
-  if (!selected) {
-    alert("దయచేసి ఒక సమాధానం ఎంచుకోండి.");
-    return;
-  }
-
-  saveAnswer();
-  currentQuestion++;
-
-  if (currentQuestion >= questions.length) {
-    finishQuiz(false);
-  } else {
-    showQuestion();
-  }
+$("returnButton").addEventListener("click",()=>{
+selectedExam=null;
+$("registrationForm").reset();
+showOnly("liveExams");
+loadExams();
 });
-
-// MANUAL SUBMIT
-
-$("submitButton").addEventListener("click", () => {
-  if (quizFinished) return;
-
-  if (
-    confirm("మీ పరీక్షను ఇప్పుడే పూర్తి చేయాలా?")
-  ) {
-    saveAnswer();
-    finishQuiz(false);
-  }
-});
-
-// FINISH EXAM
-
-async function finishQuiz(auto) {
-  if (quizFinished || submitting) return;
-
-  submitting = true;
-  saveAnswer();
-  quizFinished = true;
-
-  clearInterval(timerInterval);
-
-  const total = questions.length;
-
-  const score = questions.reduce(
-    (sum,q,i) =>
-      sum + (answers[i] === q.answer ? 1 : 0),
-    0
-  );
-
-  const percentage = Math.round(
-    score / total * 100
-  );
-
-  const elapsedSeconds = Math.max(
-    0,
-    Math.floor((Date.now() - startTime) / 1000)
-  );
-
-  const minutes = Math.floor(
-    elapsedSeconds / 60
-  );
-
-  const seconds = elapsedSeconds % 60;
-
-  const timeText =
-    minutes +
-    " నిమిషాలు " +
-    seconds +
-    " సెకన్లు";
-
-  const result = {
-    name:student.name,
-    mobile:student.mobile,
-    email:student.email,
-    score,
-    total,
-    percentage,
-    time:timeText,
-    date:new Date().toLocaleString("en-IN"),
-    exam_id:selectedExam.id,
-    exam_name:selectedExam.exam_name
-  };
-
-  showOnly("resultSection");
-
-  $("resultName").textContent =
-    "విద్యార్థి పేరు: " +
-    student.name +
-    (auto ? " (Auto Submitted)" : "");
-
-  $("resultScore").textContent =
-    score + " / " + total;
-
-  $("resultPercentage").textContent =
-    "శాతం: " + percentage + "%";
-
-  $("resultTime").textContent =
-    "పరీక్ష పూర్తి చేసిన సమయం: " + timeText;
-
-  $("saveStatus").textContent =
-    "ఫలితాన్ని సేవ్ చేస్తున్నాం...";
-
-  let localSaved = false;
-
-  try {
-    let oldResults = JSON.parse(
-      localStorage.getItem(
-        "logosQuestResults"
-      ) || "[]"
-    );
-
-    if (!Array.isArray(oldResults)) {
-      oldResults = [];
-    }
-
-    oldResults.push(result);
-
-    localStorage.setItem(
-      "logosQuestResults",
-      JSON.stringify(oldResults)
-    );
-
-    localSaved = true;
-
-  } catch(error) {
-    console.error(
-      "Local save failed",
-      error
-    );
-  }
-
-  // Live Exam Results are saved locally only.
-  // Secure cloud results will be added later.
-
-  $("saveStatus").textContent =
-    localSaved
-      ? "✅ ఈ పరికరంలో ఫలితం సేవ్ అయింది. Live Exam Cloud Results ఇంకా ఏర్పాటు చేయాలి."
-      : "⚠️ ఫలితం సేవ్ కాలేదు. Browser storage తనిఖీ చేయండి.";
-
-  submitting = false;
-}
-
-// RETURN TO EXAMS
-
-$("returnButton").addEventListener(
-  "click",
-  () => {
-    selectedExam = null;
-    $("registrationForm").reset();
-    showOnly("liveExams");
-    loadExams();
-  }
-);
-
-// INITIAL LOAD
 
 loadExams();
 
-// REFRESH EXAM STATUS EVERY 15 SECONDS
-
-setInterval(() => {
-  if (
-    !$("liveExams").classList.contains("hidden")
-  ) {
-    renderExams();
-  }
+setInterval(()=>{
+if(!$("liveExams").classList.contains("hidden")){
+renderExams();
+}
 },15000);
-
 </script>
-
 </body>
 </html>
