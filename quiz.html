@@ -238,7 +238,7 @@ event.preventDefault();
 startQuiz();
 });
 
-function startQuiz(){
+async function startQuiz(){
 if(!selectedExam||statusFor(selectedExam)!=="live"){
 alert("Exam సమయం ముగిసింది లేదా ఇంకా ప్రారంభం కాలేదు.");
 showOnly("liveExams");
@@ -259,6 +259,65 @@ return;
 if(!/^[0-9]{10}$/.test(mobile)){
 alert("సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి.");
 return;
+}
+
+const startButton = $("startButton");
+
+startButton.disabled = true;
+startButton.textContent = "Attempts Check అవుతున్నాయి...";
+
+try {
+  const response = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/rpc/check_demo_exam_attempts",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        p_exam_id: selectedExam.id,
+        p_student_mobile: mobile
+      })
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Attempts Check Failed");
+  }
+
+  const data = await response.json();
+  const attemptInfo = data[0];
+
+  if (!attemptInfo) {
+    alert("Exam వివరాలు అందుబాటులో లేవు.");
+    return;
+  }
+
+  if (!attemptInfo.can_start) {
+    alert(
+      "Exam ప్రారంభించలేరు.\n" +
+      "Used Attempts: " +
+      attemptInfo.attempts_used +
+      "\nAllowed Attempts: " +
+      attemptInfo.attempts_allowed
+    );
+    return;
+  }
+
+  if (statusFor(selectedExam) !== "live") {
+    alert("Exam సమయం ముగిసింది.");
+    return;
+  }
+
+} catch (error) {
+  alert("Attempts Check కాలేదు. మళ్లీ ప్రయత్నించండి.");
+  return;
+
+} finally {
+  startButton.disabled = false;
+  startButton.textContent = "పరీక్ష ప్రారంభించండి";
 }
 
 student={name,mobile,town,state,email};
