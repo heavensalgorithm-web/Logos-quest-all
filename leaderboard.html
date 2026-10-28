@@ -3,168 +3,596 @@
 <html lang="te">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LOGOS QUEST - Top 10 Leaderboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOGOS QUEST - Leaderboard</title>
 
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#101b38;
+  background:linear-gradient(135deg,#101b38,#253e72);
+  min-height:100vh;
   color:#222;
 }
+
 header{
   background:#101a32;
   color:#ffd76b;
   text-align:center;
   padding:25px 15px;
 }
+
 header h1{margin:0}
 header p{color:white}
+
 main{
-  max-width:850px;
+  max-width:950px;
   margin:25px auto;
   padding:15px;
 }
+
 .card{
   background:white;
   padding:22px;
   border-radius:15px;
+  margin-bottom:20px;
 }
-h2{text-align:center;color:#203a70}
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-th,td{
-  padding:14px 8px;
+
+h2{
   text-align:center;
-  border-bottom:1px solid #ddd;
+  color:#203a70;
 }
-th{background:#edf3ff}
-tr.gold{background:#fff5cd}
-tr.silver{background:#f0f2f5}
-tr.bronze{background:#fff0e3}
+
+select,button{
+  width:100%;
+  padding:13px;
+  border-radius:8px;
+  font-size:16px;
+  margin:10px 0;
+}
+
+select{
+  border:1px solid #ccc;
+  background:white;
+}
+
 button{
   background:#1749a2;
   color:white;
-  padding:12px 20px;
-  border:0;
-  border-radius:8px;
+  border:none;
+  font-weight:bold;
   cursor:pointer;
 }
-.actions{text-align:center;margin:20px}
-#status{text-align:center;color:#555}
-.note{text-align:center;font-size:13px;color:#666}
+
+button:disabled{
+  background:#999;
+  cursor:not-allowed;
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:500px;
+}
+
+th,td{
+  padding:13px 8px;
+  text-align:center;
+  border-bottom:1px solid #ddd;
+}
+
+th{
+  background:#edf3ff;
+  color:#203a70;
+}
+
+tr.gold{background:#fff5cd}
+tr.silver{background:#f0f2f5}
+tr.bronze{background:#fff0e3}
+
+.status{
+  text-align:center;
+  color:#555;
+  padding:10px;
+}
+
+.error{color:#b42318}
+.success{color:#137547}
+
+.note{
+  text-align:center;
+  font-size:13px;
+  color:#666;
+  line-height:1.6;
+}
+
+.notice{
+  background:#fff4d6;
+  border-radius:8px;
+  padding:12px;
+  margin:15px 0;
+}
+
+.link-button{
+  display:block;
+  background:#1749a2;
+  color:white;
+  text-align:center;
+  text-decoration:none;
+  padding:14px;
+  border-radius:8px;
+  font-weight:bold;
+  margin-top:12px;
+}
+
+.hidden{display:none}
 </style>
 </head>
 
 <body>
+
 <header>
-<h1>✝ LOGOS QUEST</h1>
-<p>LIVE BIBLE QUIZ</p>
+  <h1>✝ LOGOS QUEST</h1>
+  <p>LIVE BIBLE QUIZ</p>
 </header>
 
 <main>
-<div class="card">
-<h2>🏆 TOP 10 LEADERBOARD</h2>
-<p id="status">Loading leaderboard...</p>
 
-<table>
-<thead>
-<tr>
-<th>Rank</th>
-<th>Name</th>
-<th>Score</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody id="leaderboardBody"></tbody>
-</table>
+<section class="card">
 
-<div class="actions">
-<button onclick="loadLeaderboard()">🔄 Refresh</button>
-</div>
+  <h2>🏆 LIVE EXAM TOP 10</h2>
 
-<p class="note">
-Only names, scores and quiz times are displayed.
-</p>
-</div>
+  <p class="note">
+    ప్రతి Exam ముగిసిన తర్వాత Top 10 Results కనిపిస్తాయి.
+  </p>
+
+  <label for="examSelect">
+    <strong>Select Exam</strong>
+  </label>
+
+  <select id="examSelect">
+    <option value="">Loading Exams...</option>
+  </select>
+
+  <p id="examInfo" class="notice hidden"></p>
+
+  <p id="liveStatus" class="status" role="status">
+    Loading...
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Town / State</th>
+          <th>Score</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+
+      <tbody id="liveLeaderboardBody"></tbody>
+    </table>
+  </div>
+
+  <button id="refreshLive" type="button">
+    🔄 Refresh Live Exam Results
+  </button>
+
+  <p class="note">
+    Demo Results మాత్రమే. Prize Winners నిర్ణయించడానికి
+    Secure Scoring ఇంకా ఏర్పాటు చేయాలి.
+  </p>
+
+</section>
+
+<section class="card">
+
+  <h2>🏅 OLD DEMO TOP 10</h2>
+
+  <p id="oldStatus" class="status" role="status">
+    Loading leaderboard...
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Score</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+
+      <tbody id="oldLeaderboardBody"></tbody>
+    </table>
+  </div>
+
+  <button id="refreshOld" type="button">
+    🔄 Refresh Old Leaderboard
+  </button>
+
+</section>
+
+<section class="card">
+
+  <a class="link-button" href="quiz.html">
+    📝 Live Bible Exams
+  </a>
+
+  <a class="link-button" href="index.html">
+    🏠 Home Page
+  </a>
+
+</section>
+
 </main>
 
 <script>
+
 const SUPABASE_URL =
-"https://jfhlesmfgwxlqdccfgit.supabase.co";
+  "https://jfhlesmfgwxlqdccfgit.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+const SUPABASE_KEY =
+  "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
-async function loadLeaderboard(){
-  const status = document.getElementById("status");
-  const body = document.getElementById("leaderboardBody");
+const $ = id => document.getElementById(id);
 
-  status.textContent = "Loading leaderboard...";
-  body.replaceChildren();
+let exams = [];
 
-  try{
+const headers = {
+  apikey: SUPABASE_KEY,
+  "Content-Type": "application/json"
+};
+
+function formatIST(value) {
+  return new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  }).format(new Date(value));
+}
+
+function formatTime(seconds) {
+  const value = Number(seconds);
+
+  if (!Number.isFinite(value) || value < 0) {
+    return "-";
+  }
+
+  const min = Math.floor(value / 60);
+  const sec = Math.floor(value % 60);
+
+  return (
+    String(min).padStart(2, "0") +
+    ":" +
+    String(sec).padStart(2, "0")
+  );
+}
+
+function clearTable(id) {
+  $(id).replaceChildren();
+}
+
+function addCell(row, value) {
+  const td = document.createElement("td");
+
+  td.textContent =
+    value == null ? "" : String(value);
+
+  row.appendChild(td);
+}
+
+function rowStyle(row, index) {
+  if (index === 0) row.className = "gold";
+  if (index === 1) row.className = "silver";
+  if (index === 2) row.className = "bronze";
+}
+
+function medal(rank) {
+  if (rank === 1) return "🥇";
+  if (rank === 2) return "🥈";
+  if (rank === 3) return "🥉";
+
+  return String(rank);
+}
+
+// LOAD EXAM SCHEDULES
+
+async function loadExams() {
+  const select = $("examSelect");
+
+  select.replaceChildren();
+
+  const loading = document.createElement("option");
+  loading.value = "";
+  loading.textContent = "Loading Exams...";
+  select.appendChild(loading);
+
+  $("liveStatus").textContent =
+    "Exam List లోడ్ అవుతోంది...";
+
+  try {
+    const url =
+      SUPABASE_URL +
+      "/rest/v1/exam_schedules" +
+      "?select=id,exam_name,start_time,end_time" +
+      "&order=start_time.desc&limit=100";
+
+    const response = await fetch(url, {
+      headers: {
+        apikey: SUPABASE_KEY
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        "HTTP " +
+        response.status +
+        ": " +
+        await response.text()
+      );
+    }
+
+    exams = await response.json();
+
+    select.replaceChildren();
+
+    if (!exams.length) {
+      const option = document.createElement("option");
+      option.value = "";
+      option.textContent = "No Exams Available";
+      select.appendChild(option);
+
+      $("liveStatus").textContent =
+        "ప్రస్తుతం Exams లేవు.";
+
+      return;
+    }
+
+    exams.forEach(exam => {
+      const option = document.createElement("option");
+
+      option.value = exam.id;
+
+      option.textContent =
+        exam.exam_name +
+        " - " +
+        formatIST(exam.start_time);
+
+      select.appendChild(option);
+    });
+
+    await loadLiveLeaderboard();
+
+  } catch (error) {
+    $("liveStatus").textContent =
+      "Exam List Load కాలేదు: " + error.message;
+
+    $("liveStatus").className = "status error";
+  }
+}
+
+// EXAM-WISE TOP 10
+
+async function loadLiveLeaderboard() {
+  const examId = $("examSelect").value;
+
+  clearTable("liveLeaderboardBody");
+
+  $("liveStatus").className = "status";
+
+  if (!examId) {
+    $("liveStatus").textContent =
+      "ముందుగా Exam Select చేయండి.";
+    return;
+  }
+
+  const exam = exams.find(e => e.id === examId);
+
+  if (!exam) {
+    $("liveStatus").textContent =
+      "Exam వివరాలు అందుబాటులో లేవు.";
+    return;
+  }
+
+  $("examInfo").classList.remove("hidden");
+
+  $("examInfo").textContent =
+    "📅 " +
+    exam.exam_name +
+    " | Start: " +
+    formatIST(exam.start_time) +
+    " | End: " +
+    formatIST(exam.end_time);
+
+  if (Date.now() < Date.parse(exam.end_time)) {
+    $("liveStatus").textContent =
+      "⏳ Exam ఇంకా ముగియలేదు. Exam ముగిసిన తర్వాత Results కనిపిస్తాయి.";
+    return;
+  }
+
+  $("liveStatus").textContent =
+    "Top 10 Results లోడ్ అవుతున్నాయి...";
+
+  try {
     const response = await fetch(
-      SUPABASE_URL + "/rest/v1/rpc/get_top10_leaderboard",
+      SUPABASE_URL +
+      "/rest/v1/rpc/get_exam_demo_top10",
       {
-        method:"POST",
-        headers:{
-          "apikey":SUPABASE_KEY,
-          "Content-Type":"application/json"
-        },
-        body:"{}"
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          p_exam_id: examId
+        })
       }
     );
 
-    if(!response.ok){
-      throw new Error("HTTP " + response.status);
+    if (!response.ok) {
+      throw new Error(
+        "HTTP " +
+        response.status +
+        ": " +
+        await response.text()
+      );
     }
 
     const results = await response.json();
 
-    if(results.length === 0){
-      status.textContent = "No quiz results available yet.";
+    if (!Array.isArray(results) || !results.length) {
+      $("liveStatus").textContent =
+        "ఈ Examకి ఇంకా Results లేవు.";
       return;
     }
 
-    const medals = ["🥇","🥈","🥉"];
-
-    results.forEach((student,index)=>{
+    results.forEach((student, index) => {
       const tr = document.createElement("tr");
 
-      if(index===0) tr.className="gold";
-      if(index===1) tr.className="silver";
-      if(index===2) tr.className="bronze";
+      rowStyle(tr, index);
 
-      const values = [
-        medals[index] || String(index+1),
-        student.Name,
-        student.Score,
-        student.Time
-      ];
+      const rank =
+        Number(student.rank_position) || index + 1;
 
-      values.forEach(value=>{
-        const td = document.createElement("td");
-        td.textContent = value == null ? "" : String(value);
-        tr.appendChild(td);
-      });
+      const location = [
+        student.student_town,
+        student.student_state
+      ].filter(Boolean).join(", ");
+
+      addCell(tr, medal(rank));
+      addCell(tr, student.student_name);
+      addCell(tr, location || "-");
+      addCell(
+        tr,
+        student.score + "/" + student.total_questions
+      );
+      addCell(
+        tr,
+        formatTime(student.time_seconds)
+      );
+
+      $("liveLeaderboardBody").appendChild(tr);
+    });
+
+    $("liveStatus").textContent =
+      "🏆 Top " +
+      results.length +
+      " Participants";
+
+    $("liveStatus").className =
+      "status success";
+
+  } catch (error) {
+    $("liveStatus").textContent =
+      "Leaderboard Load కాలేదు: " + error.message;
+
+    $("liveStatus").className =
+      "status error";
+  }
+}
+
+// OLD DEMO LEADERBOARD
+
+async function loadOldLeaderboard() {
+  const status = $("oldStatus");
+  const body = $("oldLeaderboardBody");
+
+  status.textContent =
+    "Loading Old Leaderboard...";
+
+  status.className = "status";
+
+  body.replaceChildren();
+
+  try {
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/rpc/get_top10_leaderboard",
+      {
+        method: "POST",
+        headers,
+        body: "{}"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "HTTP " +
+        response.status +
+        ": " +
+        await response.text()
+      );
+    }
+
+    const results = await response.json();
+
+    if (!Array.isArray(results) || !results.length) {
+      status.textContent =
+        "No Old Demo Results Available.";
+      return;
+    }
+
+    results.forEach((student, index) => {
+      const tr = document.createElement("tr");
+
+      rowStyle(tr, index);
+
+      addCell(tr, medal(index + 1));
+      addCell(tr, student.Name);
+      addCell(tr, student.Score);
+      addCell(tr, student.Time);
 
       body.appendChild(tr);
     });
 
     status.textContent =
-      "Top " + results.length + " participants";
+      "Top " + results.length + " Participants";
 
-  }catch(error){
+    status.className = "status success";
+
+  } catch (error) {
     status.textContent =
-      "Unable to load leaderboard: " + error.message;
+      "Unable to load Old Leaderboard: " +
+      error.message;
+
+    status.className = "status error";
   }
 }
 
-loadLeaderboard();
+// EVENTS
+
+$("examSelect").addEventListener(
+  "change",
+  loadLiveLeaderboard
+);
+
+$("refreshLive").addEventListener(
+  "click",
+  loadLiveLeaderboard
+);
+
+$("refreshOld").addEventListener(
+  "click",
+  loadOldLeaderboard
+);
+
+// INITIAL LOAD
+
+loadExams();
+loadOldLeaderboard();
+
 </script>
+
 </body>
 </html>
