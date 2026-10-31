@@ -1020,7 +1020,19 @@ $("aiGenerateBtn").addEventListener("click", async () => {
       }
     );
 
-    if (error) throw error;
+    if (error) {
+  const response = error.context;
+  let details = error.message;
+
+  if (response && typeof response.json === "function") {
+    try {
+      const body = await response.json();
+      details = body.error || body.message || JSON.stringify(body);
+    } catch (_) {}
+  }
+
+  throw new Error(details);
+}
     if (!data?.success || !Array.isArray(data.questions)) {
       throw new Error(data?.error || "AI generation failed.");
     }
