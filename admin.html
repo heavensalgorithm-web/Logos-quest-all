@@ -206,6 +206,26 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు.
 Correct Answers Studentsకి ఈ Page ద్వారా చూపించబడవు.
 </p>
 
+<div style="margin:20px 0; padding:16px; background:#eef4ff; border-radius:10px;">
+  <h3>✨ AI Bible Question Generator</h3>
+  <p>Generate Bible quiz questions using AI.</p>
+
+  <button type="button" id="aiGenerateBtn">
+    ✨ Generate Questions with AI
+  </button>
+
+<label for="aiQuestionCount">Number of AI Questions</label>
+<select id="aiQuestionCount">
+  <option value="10">10 Questions</option>
+  <option value="20">20 Questions</option>
+  <option value="50">50 Questions</option>
+  <option value="100">100 Questions</option>
+</select>
+  
+  <p id="aiGenerateStatus"></p>
+  <div id="aiQuestionPreview"></div>
+</div>
+
 <form id="questionForm">
 
 <div class="grid">
@@ -960,6 +980,91 @@ $("questionSearch").addEventListener(
   "input",
   renderQuestions
 );
+
+ // GEMINI AI BIBLE QUESTION GENERATOR
+
+let aiGeneratedQuestions = [];
+
+$("aiGenerateBtn").addEventListener("click", async () => {
+  const status = $("aiGenerateStatus");
+  const button = $("aiGenerateBtn");
+  const preview = $("aiQuestionPreview");
+
+  const book = $("bibleBook").value.trim();
+  const chapter = Number($("chapterNumber").value);
+  const language = $("questionLanguage").value;
+  const difficulty = $("questionDifficulty").value;
+  const count = Number($("aiQuestionCount").value);
+
+  if (!book || !Number.isInteger(chapter) || chapter < 1) {
+    status.textContent =
+      "Please enter Bible Book and Chapter Number first.";
+    return;
+  }
+
+  button.disabled = true;
+  status.textContent = "✨ Generating AI Bible Questions...";
+  preview.replaceChildren();
+
+  try {
+    const { data, error } = await db.functions.invoke(
+      "generate-bible-questions",
+      {
+        body: {
+          bible_book: book,
+          chapter_number: chapter,
+          language,
+          difficulty,
+          count
+        }
+      }
+    );
+
+    if (error) throw error;
+    if (!data?.success || !Array.isArray(data.questions)) {
+      throw new Error(data?.error || "AI generation failed.");
+    }
+
+    aiGeneratedQuestions = data.questions;
+    status.textContent =
+      "✅ Generated " + aiGeneratedQuestions.length +
+      " questions. Review before saving.";
+
+    aiGeneratedQuestions.forEach((q, index) => {
+      const box = document.createElement("div");
+      box.style.cssText =
+        "background:white;padding:12px;margin:10px 0;border-radius:8px;";
+
+      const heading = document.createElement("strong");
+      heading.textContent =
+        (index + 1) + ". " + q.question_text;
+      box.appendChild(heading);
+
+      ["A", "B", "C", "D"].forEach(letter => {
+        const p = document.createElement("p");
+        p.textContent =
+          letter + ") " + q["option_" + letter.toLowerCase()];
+        box.appendChild(p);
+      });
+
+      const answer = document.createElement("p");
+      answer.textContent =
+        "Correct Answer: " + q.correct_answer +
+        (q.verse_reference
+          ? " | Reference: " + q.verse_reference
+          : "");
+      box.appendChild(answer);
+
+      preview.appendChild(box);
+    });
+
+  } catch (error) {
+    status.textContent =
+      "❌ AI Error: " + (error.message || String(error));
+  } finally {
+    button.disabled = false;
+  }
+});
 
 // LOGOUT
 
