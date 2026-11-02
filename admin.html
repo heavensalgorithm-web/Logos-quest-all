@@ -1111,6 +1111,7 @@ $("aiGenerateBtn").addEventListener("click", async () => {
 
       } catch (error) {
         console.error("AI batch error:", error);
+        alert("AI Batch Error: " + error.message);
         status.textContent =
           "⚠️ Batch failed. Retrying... " +
           aiGeneratedQuestions.length + "/" + count;
