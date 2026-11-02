@@ -981,14 +981,74 @@ $("questionSearch").addEventListener(
   renderQuestions
 );
 
+ 
  // GEMINI AI BIBLE QUESTION GENERATOR
 
 let aiGeneratedQuestions = [];
 
+function renderAIQuestions() {
+  const preview = $("aiQuestionPreview");
+  preview.replaceChildren();
+
+  aiGeneratedQuestions.forEach((q, index) => {
+    const box = document.createElement("div");
+    box.style.cssText =
+      "background:white;padding:12px;margin:10px 0;border-radius:8px;";
+
+    const heading = document.createElement("strong");
+    heading.textContent =
+      (index + 1) + ". " + q.question_text;
+    box.appendChild(heading);
+
+    ["A", "B", "C", "D"].forEach(letter => {
+      const p = document.createElement("p");
+      p.textContent =
+        letter + ") " + q["option_" + letter.toLowerCase()];
+      box.appendChild(p);
+    });
+
+    const answer = document.createElement("p");
+    answer.textContent =
+      "Correct Answer: " + q.correct_answer +
+      (q.verse_reference
+        ? " | Reference: " + q.verse_reference
+        : "");
+
+    box.appendChild(answer);
+    preview.appendChild(box);
+  });
+}
+
+async function requestAIQuestions(settings) {
+  const { data, error } = await db.functions.invoke(
+    "generate-bible-questions",
+    { body: settings }
+  );
+
+  if (error) {
+    let details = error.message;
+
+    if (error.context &&
+        typeof error.context.json === "function") {
+      try {
+        const body = await error.context.json();
+        details = body.error || body.message || details;
+      } catch (_) {}
+    }
+
+    throw new Error(details);
+  }
+
+  if (!data?.success || !Array.isArray(data.questions)) {
+    throw new Error(data?.error || "AI generation failed.");
+  }
+
+  return data.questions;
+}
+
 $("aiGenerateBtn").addEventListener("click", async () => {
   const status = $("aiGenerateStatus");
   const button = $("aiGenerateBtn");
-  const preview = $("aiQuestionPreview");
 
   const book = $("bibleBook").value.trim();
   const chapter = Number($("chapterNumber").value);
@@ -1003,72 +1063,70 @@ $("aiGenerateBtn").addEventListener("click", async () => {
   }
 
   button.disabled = true;
-  status.textContent = "✨ Generating AI Bible Questions...";
-  preview.replaceChildren();
+  aiGeneratedQuestions = [];
+  $("aiQuestionPreview").replaceChildren();
+
+  const seen = new Set();
+  const batchSize = 5;
+  const maxAttempts = Math.ceil(count / batchSize) * 3;
 
   try {
-    const { data, error } = await db.functions.invoke(
-      "generate-bible-questions",
-      {
-        body: {
+    for (
+      let attempt = 0;
+      attempt < maxAttempts &&
+      aiGeneratedQuestions.length < count;
+      attempt++
+    ) {
+      const remaining = count - aiGeneratedQuestions.length;
+
+      status.textContent =
+        "✨ Generating Questions: " +
+        aiGeneratedQuestions.length + "/" + count +
+        " completed. Please wait...";
+
+      try {
+        const batch = await requestAIQuestions({
           bible_book: book,
           chapter_number: chapter,
           language,
           difficulty,
-          count
+          count: remaining
+        });
+
+        for (const q of batch) {
+          const key = String(q.question_text || "")
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, " ");
+
+          if (!key || seen.has(key)) continue;
+
+          seen.add(key);
+          aiGeneratedQuestions.push(q);
+
+          if (aiGeneratedQuestions.length >= count) break;
         }
+
+        renderAIQuestions();
+
+      } catch (error) {
+        console.error("AI batch error:", error);
+        status.textContent =
+          "⚠️ Batch failed. Retrying... " +
+          aiGeneratedQuestions.length + "/" + count;
       }
-    );
-
-    if (error) {
-  const response = error.context;
-  let details = error.message;
-
-  if (response && typeof response.json === "function") {
-    try {
-      const body = await response.json();
-      details = body.error || body.message || JSON.stringify(body);
-    } catch (_) {}
-  }
-
-  throw new Error(details);
-}
-    if (!data?.success || !Array.isArray(data.questions)) {
-      throw new Error(data?.error || "AI generation failed.");
     }
 
-    aiGeneratedQuestions = data.questions;
-    status.textContent =
-      "✅ Generated " + aiGeneratedQuestions.length +
-      " questions. Review before saving.";
-
-    aiGeneratedQuestions.forEach((q, index) => {
-      const box = document.createElement("div");
-      box.style.cssText =
-        "background:white;padding:12px;margin:10px 0;border-radius:8px;";
-
-      const heading = document.createElement("strong");
-      heading.textContent =
-        (index + 1) + ". " + q.question_text;
-      box.appendChild(heading);
-
-      ["A", "B", "C", "D"].forEach(letter => {
-        const p = document.createElement("p");
-        p.textContent =
-          letter + ") " + q["option_" + letter.toLowerCase()];
-        box.appendChild(p);
-      });
-
-      const answer = document.createElement("p");
-      answer.textContent =
-        "Correct Answer: " + q.correct_answer +
-        (q.verse_reference
-          ? " | Reference: " + q.verse_reference
-          : "");
-      box.appendChild(answer);
-
-      preview.appendChild(box);
-    });
+    if (aiGeneratedQuestions.length === count) {
+      status.textContent =
+        "✅ Successfully generated " + count +
+        " questions. Review all answers before saving.";
+    } else {
+      status.textContent =
+        "⚠️ Generated " + aiGeneratedQuestions.length +
+        " of " + count +
+        " questions. Some batches failed or repeated questions.";
+    }
 
   } catch (error) {
     status.textContent =
