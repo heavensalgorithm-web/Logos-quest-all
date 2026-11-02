@@ -1112,6 +1112,7 @@ $("aiGenerateBtn").addEventListener("click", async () => {
         }
 
         renderAIQuestions();
+        $("aiSaveAllBtn").classList.remove("hidden");
 
       } catch (error) {
         console.error("AI batch error:", error);
@@ -1136,6 +1137,67 @@ $("aiGenerateBtn").addEventListener("click", async () => {
   } catch (error) {
     status.textContent =
       "❌ AI Error: " + (error.message || String(error));
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$("aiSaveAllBtn").addEventListener("click", async () => {
+  const button = $("aiSaveAllBtn");
+  const status = $("aiSaveStatus");
+
+  if (!aiGeneratedQuestions.length) {
+    status.textContent = "No AI questions to save.";
+    return;
+  }
+
+  if (!confirm(
+    "Have you reviewed all questions and answers?\n" +
+    "Save " + aiGeneratedQuestions.length + " questions?"
+  )) return;
+
+  button.disabled = true;
+  status.textContent = "Saving AI questions...";
+
+  try {
+    const questions = aiGeneratedQuestions.map(q => ({
+      bible_book: q.bible_book,
+      chapter_number: q.chapter_number,
+      language: q.language,
+      difficulty: q.difficulty,
+      question_text: q.question_text,
+      option_a: q.option_a,
+      option_b: q.option_b,
+      option_c: q.option_c,
+      option_d: q.option_d,
+      correct_answer: q.correct_answer
+    }));
+
+    const { data, error } = await db
+      .from("bible_questions")
+      .insert(questions)
+      .select("id");
+
+    if (error) throw error;
+
+    if (!data || data.length !== questions.length) {
+      throw new Error("Could not verify all saved questions.");
+    }
+
+    status.textContent =
+      "✅ Successfully saved " + data.length +
+      " AI Bible Questions!";
+    status.className = "success";
+
+    aiGeneratedQuestions = [];
+    button.classList.add("hidden");
+    $("aiQuestionPreview").replaceChildren();
+
+    await loadQuestions();
+
+  } catch (error) {
+    status.textContent = "❌ Save Error: " + error.message;
+    status.className = "error";
   } finally {
     button.disabled = false;
   }
