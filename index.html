@@ -254,6 +254,7 @@ function renderExams(){
   });
 }
 
+
 async function loadExams(){
   const status = $("examStatus");
 
@@ -261,42 +262,45 @@ async function loadExams(){
   status.textContent =
     "పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...";
 
-  try{
-    if(SUPABASE_KEY.startsWith("PASTE_")){
-      throw new Error(
-        "Supabase publishable key ఇంకా పెట్టలేదు."
-      );
+  const controller = new AbortController();
+  const timeout = setTimeout(
+    () => controller.abort(),
+    15000
+  );
+
+  try {
+    if (!SUPABASE_KEY ||
+        SUPABASE_KEY.startsWith("PASTE_")) {
+      throw new Error("Supabase publishable key missing");
     }
 
-    const {data,error} = await db
+    const {data, error} = await db
       .from("exam_schedules")
       .select(
         "id,exam_name,start_time,end_time,question_count,max_attempts"
       )
       .gt("end_time",new Date().toISOString())
       .order("start_time",{ascending:true})
-      .limit(50);
+      .limit(50)
+      .abortSignal(controller.signal);
 
-    if(error) throw error;
+    if (error) throw error;
 
     exams = data || [];
     renderExams();
 
-  }catch(error){
+  } catch (error) {
     console.error("Exam loading error:",error);
+
     status.textContent =
-      "❌ Exams loading error: " + error.message;
+      "❌ Exams loading error: " +
+      (controller.signal.aborted
+        ? "Connection timed out after 15 seconds"
+        : error.message);
+
     status.className = "center error";
+
+  } finally {
+    clearTimeout(timeout);
   }
 }
-
-$("refreshBtn").addEventListener("click",loadExams);
-
-loadExams();
-
-setInterval(renderExams,15000);
-setInterval(loadExams,60000);
-</script>
-
-</body>
-</html>
