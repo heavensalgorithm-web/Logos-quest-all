@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOGOS QUEST - Exam</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:16px;background:#f4f7fb;font-family:Arial,sans-serif;color:#202938}
+.card{max-width:680px;margin:18px auto;background:white;padding:22px;border-radius:14px;box-shadow:0 2px 10px #dce3ee}
+h1,h2{text-align:center;color:#174ea6}
+input,select{width:100%;padding:12px;margin:7px 0 15px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px}
+button{background:#174ea6;color:white;border:0;border-radius:8px;padding:13px 20px;font-size:16px;cursor:pointer}
+button:disabled{background:#94a3b8}
+.question{padding:16px;border:1px solid #dbe4f0;border-radius:10px;margin:15px 0}
+.option{display:block;padding:10px;margin:7px 0;background:#f8fafc;border-radius:7px}
+.option input{width:auto;margin:0 8px 0 0}
+.hidden{display:none}
+.center{text-align:center}
+.error{color:#b91c1c}
+#timer{font-size:23px;font-weight:bold;color:#b91c1c;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="card center">
+<h1>📖 LOGOS QUEST</h1>
+<p>Live Bible Quiz</p>
+<h2 id="examTitle">Loading Exam...</h2>
+<p id="examInfo"></p>
+</div>
+
+<div class="card" id="registration">
+<h2>📝 Student Registration</h2>
+<form id="registrationForm">
+<label>Full Name</label>
+<input id="studentName" required minlength="2" maxlength="100">
+
+<label>Mobile Number</label>
+<input id="studentMobile" type="tel" inputmode="numeric"
+pattern="[0-9]{10}" maxlength="10" required>
+
+<label>Town</label>
+<input id="studentTown" required minlength="2" maxlength="100">
+
+<label>State</label>
+<input id="studentState" required minlength="2" maxlength="100" value="Andhra Pradesh">
+
+<button id="startBtn" type="submit">▶ Start Exam</button>
+</form>
+</div>
+
+<div class="card hidden" id="examSection">
+<h2>📚 Bible Quiz</h2>
+<div id="timer">Time Remaining: --:--</div>
+<div id="questions"></div>
+<button id="submitBtn" type="button">✅ Submit Exam</button>
+</div>
+
+<div class="card hidden center" id="resultSection">
+<h2>🏆 Exam Result</h2>
+<h1 id="scoreText"></h1>
+<p id="resultDetails"></p>
+<a href="leaderboard.html">View Leaderboard</a>
+</div>
+
+<div class="card center">
+<p id="status">Loading exam details...</p>
+<a href="quiz.html">← Back to Exams</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_KEY="sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+
+const examId=new URLSearchParams(location.search).get("exam_id");
+let exam=null;
+let attemptId=null;
+let assignedQuestions=[];
+let deadline=0;
+let timerHandle=null;
+let submitting=false;
+
+function showStatus(message,isError=false){
+  $("status").textContent=message;
+  $("status").className=isError?"error":"";
+}
+
+function formatIST(value){
+ return new Intl.DateTimeFormat("en-IN",{
+  timeZone:"Asia/Kolkata",dateStyle:"medium",timeStyle:"short"
+ }).format(new Date(value));
+}
+
+async function loadExam(){
+ try{
+  if(!examId)throw new Error("Exam ID missing. Join from Exams page.");
+
+  const {data,error}=await db.from("exam_schedules")
+   .select("id,exam_name,start_time,end_time,question_count")
+   .eq("id",examId).single();
+
+  if(error)throw error;
+  exam=data;
+
+  $("examTitle").textContent=exam.exam_name;
+  $("examInfo").textContent=
+   "Start: "+formatIST(exam.start_time)+
+   " | End: "+formatIST(exam.end_time);
+
+  const now=Date.now();
+  if(now<new Date(exam.start_time).getTime())
+   throw new Error("Exam has not started yet.");
+  if(now>=new Date(exam.end_time).getTime())
+   throw new Error("Exam time has ended.");
+
+  showStatus("Exam is live. Please register.");
+ }catch(err){
+  $("registration").classList.add("hidden");
+  showStatus("❌ "+err.message,true);
+ }
+}
+
+$("registrationForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ const button=$("startBtn");
+ button.disabled=true;
+ showStatus("Starting secure exam...");
+
+ try{
+  const {data,error}=await db.rpc("start_secure_exam",{
+   p_exam_id:examId,
+   p_student_name:$("studentName").value.trim(),
+   p_student_mobile:$("studentMobile").value.trim(),
+   p_student_town:$("studentTown").value.trim(),
+   p_student_state:$("studentState").value.trim()
+  });
+
+  if(error)throw error;
+  if(!data?.attempt_id||!Array.isArray(data.questions))
+   throw new Error("Unexpected exam response.");
+
+  attemptId=data.attempt_id;
+  assignedQuestions=data.questions;
+  if(!assignedQuestions.length)throw new Error("No questions returned.");
+
+  $("registration").classList.add("hidden");
+  $("examSection").classList.remove("hidden");
+  renderQuestions();
+
+  deadline=new Date(exam.end_time).getTime();
+  timerHandle=setInterval(updateTimer,1000);
+  updateTimer();
+  showStatus("Exam started successfully.");
+ }catch(err){
+  showStatus("❌ "+err.message,true);
+  button.disabled=false;
+ }
+});
+
+function renderQuestions(){
+ const container=$("questions");
+ container.replaceChildren();
+
+ assignedQuestions.forEach((q,index)=>{
+  const number=q.question_order??index+1;
+  const block=document.createElement("div");
+  block.className="question";
+
+  const heading=document.createElement("h3");
+  heading.textContent=number+". "+q.question;
+  block.appendChild(heading);
+
+  ["A","B","C","D"].forEach((letter,i)=>{
+   const label=document.createElement("label");
+   label.className="option";
+
+   const radio=document.createElement("input");
+   radio.type="radio";
+   radio.name="question_"+number;
+   radio.value=letter;
+
+   const span=document.createElement("span");
+   span.textContent=letter+". "+(q.options?.[i]??"");
+
+   label.append(radio,span);
+   block.appendChild(label);
+  });
+
+  container.appendChild(block);
+ });
+}
+
+function updateTimer(){
+ const remaining=Math.max(0,deadline-Date.now());
+ const seconds=Math.ceil(remaining/1000);
+ const min=Math.floor(seconds/60);
+ const sec=seconds%60;
+ $("timer").textContent="⏳ Time Remaining: "+
+  String(min).padStart(2,"0")+":"+
+  String(sec).padStart(2,"0");
+
+ if(remaining<=0){
+  clearInterval(timerHandle);
+  submitExam(true);
+ }
+}
+
+$("submitBtn").addEventListener("click",()=>submitExam(false));
+
+async function submitExam(automatic){
+ if(submitting||!attemptId)return;
+
+ if(!automatic&&!confirm("Submit your exam now?"))return;
+
+ submitting=true;
+ $("submitBtn").disabled=true;
+ clearInterval(timerHandle);
+ showStatus("Submitting answers...");
+
+ const answers=[];
+ assignedQuestions.forEach((q,index)=>{
+  const number=q.question_order??index+1;
+  const checked=document.querySelector(
+   'input[name="question_'+number+'"]:checked'
+  );
+  if(checked){
+   answers.push({
+    question_order:number,
+    selected_answer:checked.value
+   });
+  }
+ });
+
+ try{
+  const {data,error}=await db.rpc("submit_secure_exam",{
+   p_attempt_id:attemptId,
+   p_answers:answers
+  });
+
+  if(error)throw error;
+
+  $("examSection").classList.add("hidden");
+  $("resultSection").classList.remove("hidden");
+  $("scoreText").textContent=
+   data.score+" / "+data.total_questions;
+  $("resultDetails").textContent=
+   "Percentage: "+data.percentage+"% | Time: "+
+   data.time_seconds+" seconds";
+  showStatus("✅ Exam submitted successfully.");
+ }catch(err){
+  showStatus("❌ Submission failed: "+err.message,true);
+  $("submitBtn").disabled=false;
+  submitting=false;
+  if(Date.now()<deadline){
+   timerHandle=setInterval(updateTimer,1000);
+   updateTimer();
+  }
+ }
+}
+
+loadExam();
+</script>
+</body>
+</html>
