@@ -1173,14 +1173,55 @@ $("aiSaveAllBtn").addEventListener("click", async () => {
       correct_answer: q.correct_answer
     }));
 
+const normalize = text =>
+  String(text || "")
+    .normalize("NFKC")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+
+const { data: existing, error: checkError } = await db
+  .from("bible_questions")
+  .select("bible_book,chapter_number,language,question_text")
+  .eq("chapter_number", questions[0].chapter_number)
+  .eq("language", questions[0].language)
+  .limit(1000);
+
+if (checkError) throw checkError;
+
+const keyOf = q => [
+  normalize(q.bible_book),
+  q.chapter_number,
+  normalize(q.language),
+  normalize(q.question_text)
+].join("|");
+
+const seen = new Set((existing || []).map(keyOf));
+
+const uniqueQuestions = questions.filter(q => {
+  const key = keyOf(q);
+  if (seen.has(key)) return false;
+  seen.add(key);
+  return true;
+});
+
+const skipped = questions.length - uniqueQuestions.length;
+
+if (uniqueQuestions.length === 0) {
+  status.textContent =
+    "⚠️ All questions are duplicates. Nothing saved.";
+  status.className = "error";
+  return;
+}
+
     const { data, error } = await db
       .from("bible_questions")
-      .insert(questions)
+      .insert(uniqueQuestions)
       .select("id");
 
     if (error) throw error;
 
-    if (!data || data.length !== questions.length) {
+    if (!data || data.length !== uniqueQuestions.length) {
       throw new Error("Could not verify all saved questions.");
     }
 
