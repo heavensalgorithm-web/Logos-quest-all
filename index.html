@@ -1,84 +1,301 @@
+
 <!DOCTYPE html>
 <html lang="te">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>LOGOS QUEST - Live Bible Quiz</title>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    margin: 0;
-    padding: 20px;
-    text-align: center;
+*{box-sizing:border-box}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  margin:0;
+  padding:18px;
+  color:#202938;
 }
 
-h1 {
-    color: #174ea6;
+.card{
+  background:white;
+  padding:22px;
+  margin:16px auto;
+  border-radius:14px;
+  max-width:650px;
+  box-shadow:0 2px 10px #dce3ee;
 }
 
-.card {
-    background: white;
-    padding: 20px;
-    margin: 15px auto;
-    border-radius: 12px;
-    max-width: 450px;
-    box-shadow: 0 2px 8px #ddd;
+h1{
+  color:#174ea6;
+  text-align:center;
 }
 
-button {
-    background: #087cff;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    margin: 8px;
-    font-size: 16px;
-    cursor: pointer;
+h2{text-align:center}
+
+.center{text-align:center}
+
+p{color:#555}
+
+button{
+  background:#087cff;
+  color:white;
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  margin:8px 0;
+  font-size:16px;
+  cursor:pointer;
 }
 
-button:hover {
-    background: #0056b3;
+button:disabled{
+  background:#9ca3af;
+  cursor:not-allowed;
 }
 
-p {
-    color: #555;
+.exam{
+  border:1px solid #d9e4f5;
+  border-radius:12px;
+  padding:16px;
+  margin-top:14px;
 }
+
+.exam h3{
+  color:#174ea6;
+  margin-top:0;
+}
+
+.live{
+  color:green;
+  font-weight:bold;
+}
+
+.upcoming{
+  color:#b7791f;
+  font-weight:bold;
+}
+
+.error{color:#b91c1c}
+
+a{color:#174ea6}
 </style>
 </head>
 
 <body>
 
-<div class="card">
-    <h1>📖 LOGOS QUEST</h1>
-    <h2>Live Bible Quiz</h2>
-    <p>Welcome to LOGOS QUEST</p>
+<div class="card center">
+  <h1>📖 LOGOS QUEST</h1>
+  <h2>Live Bible Quiz</h2>
+  <p>Welcome to LOGOS QUEST</p>
 </div>
 
 <div class="card">
-    <h2>📚 ఈరోజు లైవ్ ఎగ్జామ్స్</h2>
-    <p>ప్రస్తుతం పరీక్షలు అందుబాటులో లేవు.</p>
-    <button onclick="showMessage()">
-        Join Exam
-    </button>
+  <h2>📚 లైవ్ బైబిల్ పరీక్షలు</h2>
+  <p class="center">పరీక్షల సమయాలు IST ప్రకారం</p>
+
+  <div class="center">
+    <button id="refreshBtn">🔄 Refresh Exams</button>
+  </div>
+
+  <p id="examStatus" class="center">
+    పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...
+  </p>
+
+  <div id="examList"></div>
 </div>
 
-<div class="card">
-    <h2>🏆 విజేతలు</h2>
-    <p>ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
+<div class="card center">
+  <h2>🏆 విజేతలు</h2>
+  <p>ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
+  <a href="leaderboard.html">View Leaderboard</a>
 </div>
 
-<div class="card">
-    <h2>📊 నా ఫలితాలు</h2>
-    <p>మీ పరీక్ష ఫలితాలు ఇక్కడ కనిపిస్తాయి.</p>
+<div class="card center">
+  <h2>📊 నా ఫలితాలు</h2>
+  <p>మీ పరీక్ష ఫలితాలు ఇక్కడ చూడవచ్చు.</p>
+  <a href="results.html">View Results</a>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-function showMessage() {
-    alert("ప్రస్తుతం లైవ్ పరీక్ష అందుబాటులో లేదు.");
+const SUPABASE_URL =
+  "https://jfhlesmfgwxlqdccfgit.supabase.co";
+
+// మీ admin.html లో ఉన్న public publishable key ఇక్కడ పెట్టండి.
+// Secret/service_role key ఎప్పుడూ పెట్టవద్దు.
+const SUPABASE_KEY = "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const $ = id => document.getElementById(id);
+
+let exams = [];
+
+function formatIST(value){
+  return new Intl.DateTimeFormat("en-IN",{
+    timeZone:"Asia/Kolkata",
+    day:"2-digit",
+    month:"short",
+    year:"numeric",
+    hour:"2-digit",
+    minute:"2-digit",
+    hour12:true
+  }).format(new Date(value));
 }
+
+function makeText(tag,text){
+  const el = document.createElement(tag);
+  el.textContent = text;
+  return el;
+}
+
+function joinExam(exam){
+  const now = Date.now();
+  const start = new Date(exam.start_time).getTime();
+  const end = new Date(exam.end_time).getTime();
+
+  if(now < start){
+    alert("ఈ పరీక్ష ఇంకా ప్రారంభం కాలేదు.");
+    return;
+  }
+
+  if(now >= end){
+    alert("ఈ పరీక్ష సమయం ముగిసింది.");
+    return;
+  }
+
+  const params = new URLSearchParams({
+    exam_id:String(exam.id)
+  });
+
+  window.location.href =
+    "quiz.html?" + params.toString();
+}
+
+function renderExams(){
+  const list = $("examList");
+  list.replaceChildren();
+
+  const now = Date.now();
+
+  const visible = exams.filter(exam =>
+    new Date(exam.end_time).getTime() > now
+  );
+
+  if(!visible.length){
+    $("examStatus").textContent =
+      "ప్రస్తుతం లైవ్ లేదా రాబోయే పరీక్షలు లేవు.";
+    return;
+  }
+
+  const liveCount = visible.filter(exam =>
+    new Date(exam.start_time).getTime() <= now
+  ).length;
+
+  $("examStatus").textContent =
+    liveCount
+      ? "🟢 " + liveCount + " Live Exam(s) available"
+      : "రాబోయే పరీక్షలు క్రింద చూడండి.";
+
+  visible.forEach(exam=>{
+    const start = new Date(exam.start_time).getTime();
+    const end = new Date(exam.end_time).getTime();
+    const isLive = now >= start && now < end;
+
+    const card = document.createElement("div");
+    card.className = "exam";
+
+    card.appendChild(
+      makeText("h3",exam.exam_name || "Bible Quiz")
+    );
+
+    const state = makeText(
+      "p",
+      isLive ? "🟢 LIVE NOW" : "🟡 UPCOMING"
+    );
+
+    state.className = isLive ? "live" : "upcoming";
+    card.appendChild(state);
+
+    card.appendChild(
+      makeText("p","📅 Start: " + formatIST(exam.start_time))
+    );
+
+    card.appendChild(
+      makeText("p","⏰ End: " + formatIST(exam.end_time))
+    );
+
+    card.appendChild(
+      makeText("p","📝 Questions: " + exam.question_count)
+    );
+
+    card.appendChild(
+      makeText("p","🔁 Attempts: " + exam.max_attempts)
+    );
+
+    const button = document.createElement("button");
+
+    button.textContent = isLive
+      ? "▶ Join Exam"
+      : "⏳ Exam Not Started";
+
+    button.disabled = !isLive;
+
+    button.addEventListener("click",()=>{
+      joinExam(exam);
+    });
+
+    card.appendChild(button);
+    list.appendChild(card);
+  });
+}
+
+async function loadExams(){
+  const status = $("examStatus");
+
+  status.className = "center";
+  status.textContent =
+    "పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...";
+
+  try{
+    if(SUPABASE_KEY.startsWith("PASTE_")){
+      throw new Error(
+        "Supabase publishable key ఇంకా పెట్టలేదు."
+      );
+    }
+
+    const {data,error} = await db
+      .from("exam_schedules")
+      .select(
+        "id,exam_name,start_time,end_time,question_count,max_attempts"
+      )
+      .gt("end_time",new Date().toISOString())
+      .order("start_time",{ascending:true})
+      .limit(50);
+
+    if(error) throw error;
+
+    exams = data || [];
+    renderExams();
+
+  }catch(error){
+    console.error("Exam loading error:",error);
+    status.textContent =
+      "❌ Exams loading error: " + error.message;
+    status.className = "center error";
+  }
+}
+
+$("refreshBtn").addEventListener("click",loadExams);
+
+loadExams();
+
+setInterval(renderExams,15000);
+setInterval(loadExams,60000);
 </script>
 
 </body>
