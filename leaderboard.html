@@ -430,7 +430,7 @@ async function loadLiveLeaderboard() {
   try {
     const response = await fetch(
       SUPABASE_URL +
-      "/rest/v1/rpc/get_exam_demo_top10",
+      "/rest/v1/rpc/get_secure_exam_top10"
       {
         method: "POST",
         headers,
