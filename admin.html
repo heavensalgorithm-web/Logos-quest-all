@@ -361,6 +361,43 @@ placeholder="Search Bible Book or Question">
 <p class="small">Showing up to 1000 questions.</p>
 </div>
 
+<!-- LIVE EXAM WINNERS DASHBOARD -->
+
+<div class="card">
+  <h2>🏆 Live Exam Results & Winners</h2>
+
+  <label for="winnerExamSelect">Select Exam</label>
+  <select id="winnerExamSelect">
+    <option value="">Select Exam</option>
+  </select>
+
+  <button id="loadWinnersBtn" type="button">
+    🔄 View Exam Winners
+  </button>
+
+  <p id="winnersStatus" role="status"></p>
+
+  <h3>🥇 Top 3 Winners</h3>
+  <div id="top3Winners" class="stats"></div>
+
+  <h3>🏅 Top 10 Participants</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Town / State</th>
+          <th>Score</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody id="adminWinnersBody"></tbody>
+    </table>
+  </div>
+</div>
+
 <!-- EXISTING RESULTS -->
 
 <div class="card stats">
