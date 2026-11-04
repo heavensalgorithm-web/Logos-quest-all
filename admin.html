@@ -1406,7 +1406,8 @@ $("loadWinnersBtn").addEventListener(
 
 $("releaseAnswersBtn").addEventListener("click", async () => {
   
-alert("Release Button Click Working!");
+document.getElementById("releaseAnswersStatus").textContent =
+  "✅ Release Button Click Working!";
 
   const examId = $("winnerExamSelect").value;
   const status = $("releaseAnswersStatus");
