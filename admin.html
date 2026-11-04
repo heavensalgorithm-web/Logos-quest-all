@@ -492,11 +492,12 @@ async function verifyAdmin() {
 
   showDashboard(user);
 
-  await Promise.all([
-    loadResults(),
-    loadExams(),
-    loadQuestions()
-  ]);
+await Promise.all([
+  loadResults(),
+  loadExams(),
+  loadQuestions(),
+  loadWinnerExams()
+]);
 }
 
 $("loginForm").addEventListener("submit",async event=>{
@@ -1281,6 +1282,121 @@ if (uniqueQuestions.length === 0) {
     button.disabled = false;
   }
 });
+
+ // LIVE EXAM WINNERS
+
+async function loadWinnerExams() {
+  const select = $("winnerExamSelect");
+  const status = $("winnersStatus");
+
+  status.textContent = "Loading Exams...";
+
+  const { data, error } = await db
+    .from("exam_schedules")
+    .select("id,exam_name,start_time,end_time")
+    .order("start_time", { ascending: false })
+    .limit(100);
+
+  if (error) {
+    status.textContent = "Error: " + error.message;
+    return;
+  }
+
+  select.replaceChildren();
+  select.add(new Option("Select Exam", ""));
+
+  (data || []).forEach(exam => {
+    select.add(new Option(
+      exam.exam_name + " - " + formatIST(exam.start_time),
+      exam.id
+    ));
+  });
+
+  status.textContent =
+    "Exams Found: " + (data || []).length;
+}
+
+async function loadAdminWinners() {
+  const examId = $("winnerExamSelect").value;
+  const status = $("winnersStatus");
+  const body = $("adminWinnersBody");
+  const top3 = $("top3Winners");
+
+  body.replaceChildren();
+  top3.replaceChildren();
+
+  if (!examId) {
+    status.textContent = "Please select an exam.";
+    return;
+  }
+
+  status.textContent = "Loading Winners...";
+
+  const { data, error } = await db.rpc(
+    "get_secure_exam_top10",
+    { p_exam_id: examId }
+  );
+
+  if (error) {
+    status.textContent = "Error: " + error.message;
+    return;
+  }
+
+  if (!data || !data.length) {
+    status.textContent =
+      "No results available for this exam.";
+    return;
+  }
+
+  function formatTime(seconds) {
+    if (seconds == null) return "-";
+    const n = Number(seconds);
+    return String(Math.floor(n / 60)).padStart(2, "0") +
+      ":" + String(Math.floor(n % 60)).padStart(2, "0");
+  }
+
+  data.forEach((student, index) => {
+    const rank = index + 1;
+    const tr = document.createElement("tr");
+
+    const values = [
+      rank <= 3 ? ["🥇", "🥈", "🥉"][rank - 1] : rank,
+      student.student_name,
+      [student.student_town, student.student_state]
+        .filter(Boolean).join(", "),
+      student.score + "/" + student.total_questions,
+      formatTime(student.time_seconds)
+    ];
+
+    values.forEach(value => {
+      const td = document.createElement("td");
+      td.textContent = String(value ?? "");
+      tr.appendChild(td);
+    });
+
+    body.appendChild(tr);
+
+    if (rank <= 3) {
+      const card = document.createElement("div");
+      card.className = "stat";
+      card.textContent =
+        ["🥇", "🥈", "🥉"][rank - 1] +
+        " " + student.student_name +
+        " — " + student.score +
+        "/" + student.total_questions;
+
+      top3.appendChild(card);
+    }
+  });
+
+  status.textContent =
+    "🏆 Top " + data.length + " Participants Loaded!";
+}
+
+$("loadWinnersBtn").addEventListener(
+  "click",
+  loadAdminWinners
+);
 
 // LOGOUT
 
