@@ -1404,6 +1404,36 @@ $("loadWinnersBtn").addEventListener(
   loadAdminWinners
 );
 
+$("releaseAnswersBtn").addEventListener("click", async () => {
+  const examId = $("winnerExamSelect").value;
+  const status = $("releaseAnswersStatus");
+
+  if (!examId) {
+    status.textContent = "Please select an exam first.";
+    return;
+  }
+
+  if (!confirm("Release correct answers for this exam?")) return;
+
+  const button = $("releaseAnswersBtn");
+  button.disabled = true;
+  status.textContent = "Releasing answers...";
+
+  try {
+    const { error } = await db.rpc("release_exam_answers", {
+      p_exam_id: examId
+    });
+
+    if (error) throw error;
+
+    status.textContent = "✅ Correct Answers Released Successfully!";
+  } catch (error) {
+    status.textContent = "❌ " + error.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+
 // LOGOUT
 
 $("logoutBtn").addEventListener("click",async()=>{
