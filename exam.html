@@ -80,6 +80,7 @@ const $=id=>document.getElementById(id);
 const examId=new URLSearchParams(location.search).get("exam_id");
 let exam=null;
 let attemptId=null;
+let reviewToken = null;  
 let assignedQuestions=[];
 let deadline=0;
 let timerHandle=null;
