@@ -80,6 +80,7 @@ const $=id=>document.getElementById(id);
 const examId=new URLSearchParams(location.search).get("exam_id");
 let exam=null;
 let attemptId=null;
+ let submitToken = null; 
 let reviewToken = null;  
 let assignedQuestions=[];
 let deadline=0;
@@ -146,6 +147,7 @@ $("registrationForm").addEventListener("submit",async event=>{
    throw new Error("Unexpected exam response.");
 
   attemptId=data.attempt_id;
+   submitToken = data.submit_token;
   assignedQuestions=data.questions;
   if(!assignedQuestions.length)throw new Error("No questions returned.");
 
@@ -239,22 +241,13 @@ async function submitExam(automatic){
 
  try{
   const {data,error}=await db.rpc("submit_secure_exam",{
-   p_attempt_id:attemptId,
-   p_answers:answers
-  });
+  p_attempt_id:attemptId,
+  p_answers:answers,
+  p_submit_token:submitToken
+});
 
   if(error)throw error;
-const { data: tokenData, error: tokenError } = await db.rpc(
-  "create_attempt_review_token",
-  { p_attempt_id: attemptId }
-);
 
-if (tokenError) {
-  console.error("Review token error:", tokenError.message);
-} else {
-  reviewToken = tokenData;
-  sessionStorage.setItem("logos_review_" + attemptId, reviewToken);
-}
   $("examSection").classList.add("hidden");
   $("resultSection").classList.remove("hidden");
   $("scoreText").textContent=
