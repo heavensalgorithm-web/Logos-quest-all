@@ -705,7 +705,8 @@ async function loadExams(){
       "Error: "+error.message;
     return;
   }
-
+$("winnersStatus").textContent =
+  "Exams Found: " + (data || []).length;
   const body = $("examsBody");
   body.replaceChildren();
 
