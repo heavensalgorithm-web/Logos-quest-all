@@ -271,7 +271,63 @@ async function submitExam(automatic){
   }
  }
 }
+$("reviewBtn").addEventListener("click", async () => {
+  const section = $("reviewSection");
+  section.textContent = "Loading your answers...";
 
+  if (!attemptId || !reviewToken) {
+    section.textContent =
+      "Review token unavailable. Please use your original exam session.";
+    return;
+  }
+
+  try {
+    const { data, error } = await db.rpc(
+      "get_secure_exam_review",
+      {
+        p_attempt_id: attemptId,
+        p_review_token: reviewToken
+      }
+    );
+
+    if (error) throw error;
+
+    section.replaceChildren();
+
+    const questions = data.questions || [];
+
+    questions.forEach((q, i) => {
+      const card = document.createElement("div");
+      card.style.cssText =
+        "text-align:left;padding:15px;margin:12px 0;border:1px solid #ddd;border-radius:8px;";
+
+      const heading = document.createElement("h3");
+      heading.textContent =
+        (i + 1) + ". " + q.question_text;
+      card.appendChild(heading);
+
+      const selected = document.createElement("p");
+      selected.textContent =
+        "Your Answer: " + (q.selected_answer || "Not Answered");
+      card.appendChild(selected);
+
+      const correct = document.createElement("p");
+      correct.textContent =
+        "Correct Answer: " + q.correct_answer;
+      card.appendChild(correct);
+
+      section.appendChild(card);
+    });
+
+    if (!questions.length) {
+      section.textContent = "No review questions available.";
+    }
+
+  } catch (err) {
+    section.textContent =
+      "Review unavailable: " + err.message;
+  }
+});
 loadExam();
 </script>
 </body>
