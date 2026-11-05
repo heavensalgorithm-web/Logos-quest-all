@@ -162,12 +162,7 @@ $("authForm").addEventListener("submit",async event=>{
  }
 });
 
-(async()=>{
- const {data}=await db.auth.getSession();
- if(data.session){
-  window.location.replace("student-dashboard.html");
- }
-})();
+
 </script>
 </body>
 </html>
