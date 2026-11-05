@@ -143,8 +143,25 @@ async function loadProfile() {
   });
 }
 
+async function logoutStudent() {
+  const { error } = await db.auth.signOut();
+
+  if (error) {
+    alert("Logout failed. Please try again.");
+    return;
+  }
+
+  window.location.replace("student-login.html");
+}
+
 loadProfile();
 </script>
+
+<div class="card">
+  <button class="btn" style="width:100%;border:0;cursor:pointer;font-size:16px" onclick="logoutStudent()">
+    🚪 Logout
+  </button>
+</div>
 
 </body>
 </html>
