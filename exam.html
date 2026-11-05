@@ -275,7 +275,7 @@ $("reviewBtn").addEventListener("click", async () => {
   const section = $("reviewSection");
   section.textContent = "Loading your answers...";
 
-  if (!attemptId || !reviewToken) {
+  if (!attemptId || !submitToken) {
     section.textContent =
       "Review token unavailable. Please use your original exam session.";
     return;
@@ -286,7 +286,7 @@ $("reviewBtn").addEventListener("click", async () => {
       "get_secure_exam_review",
       {
         p_attempt_id: attemptId,
-        p_review_token: reviewToken
+        p_submit_token: submitToken
       }
     );
 
