@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOGOS QUEST - Student Login</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;padding:18px;background:#f4f7fb;
+  font-family:Arial,sans-serif;color:#202938;
+}
+.card{
+  max-width:450px;margin:45px auto;background:white;
+  padding:25px;border-radius:15px;
+  box-shadow:0 3px 15px #dce3ee;
+}
+h1,h2{text-align:center;color:#174ea6}
+p{text-align:center;color:#64748b}
+input{
+  width:100%;padding:13px;margin:8px 0;
+  border:1px solid #cbd5e1;border-radius:8px;
+  font-size:16px;
+}
+button{
+  width:100%;padding:13px;margin-top:12px;
+  background:#174ea6;color:white;border:0;
+  border-radius:8px;font-size:16px;cursor:pointer;
+}
+button:disabled{opacity:.6}
+.switch{
+  background:none;color:#174ea6;
+  text-decoration:underline;
+}
+.hidden{display:none}
+#status{white-space:pre-wrap}
+</style>
+</head>
+<body>
+
+<div class="card">
+<h1>📖 LOGOS QUEST</h1>
+<h2 id="formTitle">🎓 Student Login</h2>
+<p>Welcome to Live Bible Quiz</p>
+
+<form id="authForm">
+<div id="registerFields" class="hidden">
+<input id="fullName" placeholder="Full Name"
+  maxlength="100">
+<input id="mobile" placeholder="10-digit Mobile Number"
+  type="tel" inputmode="numeric" maxlength="10">
+<input id="town" placeholder="Town" maxlength="100">
+<input id="state" placeholder="State"
+  maxlength="100" value="Andhra Pradesh">
+</div>
+
+<input id="email" type="email"
+  placeholder="Email Address" required
+  autocomplete="email">
+
+<input id="password" type="password"
+  placeholder="Password (minimum 8 characters)"
+  minlength="8" required
+  autocomplete="current-password">
+
+<button id="submitBtn" type="submit">Login</button>
+</form>
+
+<button id="switchBtn" class="switch" type="button">
+New Student? Create Account
+</button>
+
+<p id="status"></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL =
+ "https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_KEY =
+ "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+
+const db = window.supabase.createClient(
+ SUPABASE_URL,SUPABASE_KEY
+);
+const $ = id => document.getElementById(id);
+let registering = false;
+
+function setStatus(message,error=false){
+ $("status").textContent=message;
+ $("status").style.color=error?"#b91c1c":"#166534";
+}
+
+$("switchBtn").addEventListener("click",()=>{
+ registering=!registering;
+ $("registerFields").classList.toggle("hidden",!registering);
+ $("formTitle").textContent=registering
+  ?"📝 Student Registration":"🎓 Student Login";
+ $("submitBtn").textContent=registering
+  ?"Create Account":"Login";
+ $("switchBtn").textContent=registering
+  ?"Already Registered? Login"
+  :"New Student? Create Account";
+ $("password").autocomplete=registering
+  ?"new-password":"current-password";
+ setStatus("");
+});
+
+$("authForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ const button=$("submitBtn");
+ button.disabled=true;
+ setStatus("Please wait...");
+
+ try{
+  const email=$("email").value.trim();
+  const password=$("password").value;
+
+  if(registering){
+   const name=$("fullName").value.trim();
+   const mobile=$("mobile").value.trim();
+   const town=$("town").value.trim();
+   const state=$("state").value.trim();
+
+   if(name.length<2 || town.length<2 || state.length<2)
+    throw new Error("Please complete all student details.");
+
+   if(!/^[0-9]{10}$/.test(mobile))
+    throw new Error("Enter a valid 10-digit mobile number.");
+
+   const {data,error}=await db.auth.signUp({
+    email,password,
+    options:{
+     data:{
+      full_name:name,
+      mobile:mobile,
+      town:town,
+      state:state
+     }
+    }
+   });
+
+   if(error)throw error;
+
+   if(data.session){
+    window.location.replace("student-dashboard.html");
+   }else{
+    setStatus("Account created. Please login or check whether email confirmation is required.");
+   }
+  }else{
+   const {error}=await db.auth.signInWithPassword({
+    email,password
+   });
+   if(error)throw error;
+   window.location.replace("student-dashboard.html");
+  }
+ }catch(err){
+  setStatus("❌ "+err.message,true);
+ }finally{
+  button.disabled=false;
+ }
+});
+
+(async()=>{
+ const {data}=await db.auth.getSession();
+ if(data.session){
+  window.location.replace("student-dashboard.html");
+ }
+})();
+</script>
+</body>
+</html>
