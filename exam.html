@@ -296,28 +296,73 @@ $("reviewBtn").addEventListener("click", async () => {
 
     const questions = data.questions || [];
 
-    questions.forEach((q, i) => {
-      const card = document.createElement("div");
-      card.style.cssText =
-        "text-align:left;padding:15px;margin:12px 0;border:1px solid #ddd;border-radius:8px;";
+    
+let correctCount = 0;
+let wrongCount = 0;
+let unansweredCount = 0;
 
-      const heading = document.createElement("h3");
-      heading.textContent =
-        (i + 1) + ". " + q.question_text;
-      card.appendChild(heading);
+questions.forEach((q, i) => {
+  const card = document.createElement("div");
+  card.style.cssText =
+    "text-align:left;padding:15px;margin:12px 0;border:1px solid #ddd;border-radius:8px;";
 
-      const selected = document.createElement("p");
-      selected.textContent =
-        "Your Answer: " + (q.selected_answer || "Not Answered");
-      card.appendChild(selected);
+  const heading = document.createElement("h3");
+  heading.textContent = (i + 1) + ". " + q.question_text;
+  card.appendChild(heading);
 
-      const correct = document.createElement("p");
-      correct.textContent =
-        "Correct Answer: " + q.correct_answer;
-      card.appendChild(correct);
+  const options = {
+    A: q.option_a,
+    B: q.option_b,
+    C: q.option_c,
+    D: q.option_d
+  };
 
-      section.appendChild(card);
-    });
+  const selectedKey = q.selected_answer;
+  const correctKey = q.correct_answer;
+
+  const selected = document.createElement("p");
+  const correct = document.createElement("p");
+
+  if (!selectedKey) {
+    unansweredCount++;
+    selected.textContent = "⚪ Your Answer: Not Answered";
+    selected.style.color = "#64748b";
+  } else if (selectedKey === correctKey) {
+    correctCount++;
+    selected.textContent =
+      "✅ Your Answer: " + selectedKey +
+      " – " + (options[selectedKey] || "");
+    selected.style.color = "green";
+  } else {
+    wrongCount++;
+    selected.textContent =
+      "❌ Your Answer: " + selectedKey +
+      " – " + (options[selectedKey] || "");
+    selected.style.color = "red";
+  }
+
+  correct.textContent =
+    "✅ Correct Answer: " + correctKey +
+    " – " + (options[correctKey] || "");
+  correct.style.color = "green";
+
+  card.appendChild(selected);
+  card.appendChild(correct);
+  section.appendChild(card);
+});
+
+const summary = document.createElement("div");
+summary.style.cssText =
+  "padding:15px;margin:15px 0;background:#f1f5f9;border-radius:10px;font-weight:bold;text-align:left;";
+
+summary.textContent =
+  "📊 Total: " + questions.length +
+  " | ✅ Correct: " + correctCount +
+  " | ❌ Wrong: " + wrongCount +
+  " | ⚪ Unanswered: " + unansweredCount;
+
+section.prepend(summary);
+
 
     if (!questions.length) {
       section.textContent = "No review questions available.";
