@@ -252,7 +252,7 @@ async function submitExam(automatic){
 });
 
   if(error)throw error;
-
+reviewToken = submitToken;
   $("examSection").classList.add("hidden");
   $("resultSection").classList.remove("hidden");
   $("scoreText").textContent=
