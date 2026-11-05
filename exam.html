@@ -47,6 +47,14 @@ pattern="[0-9]{10}" maxlength="10" required>
 <label>State</label>
 <input id="studentState" required minlength="2" maxlength="100" value="Andhra Pradesh">
 
+<label for="studentLanguage">🌐 Select Exam Language</label>
+<select id="studentLanguage" required>
+  <option value="">-- Select Language --</option>
+  <option value="Telugu">తెలుగు (Telugu)</option>
+  <option value="English">English</option>
+  <option value="Tamil">தமிழ் (Tamil)</option>
+</select>
+
 <button id="startBtn" type="submit">▶ Start Exam</button>
 </form>
 </div>
