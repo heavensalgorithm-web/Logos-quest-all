@@ -77,7 +77,12 @@ a{
   </div>
 </div>
 
-
+<div class="card">
+  <h2>👤 My Profile</h2>
+  <div id="studentProfile">
+    <p class="note">Loading student details...</p>
+  </div>
+</div>
 
 <div class="card">
   <h2>📜 My Exam History</h2>
@@ -96,6 +101,50 @@ a{
     ▶ View Available Exams
   </a>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
+  
+const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+
+
+const db = window.supabase.createClient(
+  SUPABASE_URL, SUPABASE_KEY
+);
+
+async function loadProfile() {
+  const profile = document.getElementById("studentProfile");
+
+  const { data: { user }, error } = await db.auth.getUser();
+
+  if (error || !user) {
+    window.location.replace("student-login.html");
+    return;
+  }
+
+  const info = user.user_metadata || {};
+
+  const fields = [
+    ["👤 Name", info.full_name],
+    ["📱 Mobile", info.mobile],
+    ["🏙️ Town", info.town],
+    ["📍 State", info.state],
+    ["📧 Email", user.email]
+  ];
+
+  profile.replaceChildren();
+
+  fields.forEach(([label, value]) => {
+    const p = document.createElement("p");
+    p.style.textAlign = "left";
+    p.textContent = label + ": " + (value || "Not provided");
+    profile.appendChild(p);
+  });
+}
+
+loadProfile();
+</script>
 
 </body>
 </html>
