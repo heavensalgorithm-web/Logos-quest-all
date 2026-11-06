@@ -224,6 +224,11 @@ Correct Answers Studentsకి ఈ Page ద్వారా చూపించబ
   
   <p id="aiGenerateStatus"></p>
   <button type="button" id="aiSaveAllBtn" class="hidden">
+   
+<button type="button" id="aiDownloadCsvBtn" class="hidden">
+  📥 Download Telugu + English + Tamil CSV
+</button>
+ 
   💾 Save All AI Questions
 </button>
 <p id="aiSaveStatus" role="status"></p>
@@ -1095,7 +1100,7 @@ async function requestAIQuestions(settings) {
   return data.questions;
 }
 
-$("aiGenerateBtn").addEventListener("click", async () => {
+$("aiGenerateBtn").addEventListener("old-ai-generate", async () => {
   const status = $("aiGenerateStatus");
   const button = $("aiGenerateBtn");
 
@@ -1289,6 +1294,182 @@ if (uniqueQuestions.length === 0) {
   }
 });
 
+let trilingualQuestions = [];
+
+function downloadTrilingualCSV() {
+  if (!trilingualQuestions.length) {
+    alert("Please generate questions first.");
+    return;
+  }
+
+  const columns = [
+    "question_id", "bible_book", "chapter_number",
+    "difficulty", "verse_reference", "correct_answer",
+    ...["telugu", "english", "tamil"].flatMap(lang => [
+      lang + "_question",
+      lang + "_option_a",
+      lang + "_option_b",
+      lang + "_option_c",
+      lang + "_option_d"
+    ])
+  ];
+
+  const escapeCSV = value =>
+    '"' + String(value ?? "").replace(/"/g, '""') + '"';
+
+  const rows = trilingualQuestions.map((q, index) => {
+    const row = [
+      "Q" + String(index + 1).padStart(3, "0"),
+      q.bible_book,
+      q.chapter_number,
+      q.difficulty,
+      q.verse_reference,
+      q.correct_answer
+    ];
+
+    for (const lang of ["telugu", "english", "tamil"]) {
+      const item = q[lang] || {};
+      row.push(
+        item.question_text,
+        item.option_a,
+        item.option_b,
+        item.option_c,
+        item.option_d
+      );
+    }
+
+    return row.map(escapeCSV).join(",");
+  });
+
+  const csv = "\uFEFF" +
+    [columns.map(escapeCSV).join(","), ...rows].join("\r\n");
+
+  const blob = new Blob([csv], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "LOGOS_QUEST_3_Languages.csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+$("aiDownloadCsvBtn").addEventListener(
+  "click",
+  downloadTrilingualCSV
+);
+
+async function generateTrilingualQuestions() {
+  const status = $("aiGenerateStatus");
+  const button = $("aiGenerateBtn");
+
+  const book = $("bibleBook").value.trim();
+  const chapter = Number($("chapterNumber").value);
+  const difficulty = $("questionDifficulty").value;
+  const count = Number($("aiQuestionCount").value);
+
+  if (!book || !Number.isInteger(chapter) || chapter < 1) {
+    status.textContent = "Enter Bible Book and Chapter first.";
+    return;
+  }
+
+  button.disabled = true;
+  trilingualQuestions = [];
+  $("aiDownloadCsvBtn").classList.add("hidden");
+  $("aiSaveAllBtn").classList.add("hidden");
+  $("aiQuestionPreview").replaceChildren();
+
+  try {
+    for (let i = 0; i < count; i += 2) {
+      status.textContent =
+        "✨ Generating 3 languages: " +
+        trilingualQuestions.length + "/" + count;
+
+      const { data, error } = await db.functions.invoke(
+        "generate-trilingual-questions",
+        {
+          body: {
+            bible_book: book,
+            chapter_number: chapter,
+            difficulty,
+            count: Math.min(2, count - i)
+          }
+        }
+      );
+
+      if (error) {
+        let message = error.message;
+        if (error.context?.json) {
+          try {
+            const details = await error.context.json();
+            message = details.error || message;
+          } catch (_) {}
+        }
+        throw new Error(message);
+      }
+
+      if (!data?.success || !Array.isArray(data.questions)) {
+        throw new Error(data?.error || "AI generation failed");
+      }
+
+      for (const q of data.questions) {
+        trilingualQuestions.push({
+          ...q,
+          bible_book: book,
+          chapter_number: chapter,
+          difficulty
+        });
+      }
+    }
+
+    status.textContent =
+      "✅ " + trilingualQuestions.length +
+      " questions generated in Telugu, English and Tamil. Review before download.";
+
+    $("aiDownloadCsvBtn").classList.remove("hidden");
+
+    const preview = $("aiQuestionPreview");
+    trilingualQuestions.forEach((q, i) => {
+      const box = document.createElement("div");
+      box.style.cssText =
+        "background:white;padding:12px;margin:10px 0;border-radius:8px;";
+
+      const title = document.createElement("h4");
+      title.textContent =
+        (i + 1) + ". " + q.telugu.question_text;
+      box.appendChild(title);
+
+      for (const lang of ["english", "tamil"]) {
+        const p = document.createElement("p");
+        p.textContent =
+          lang.toUpperCase() + ": " + q[lang].question_text;
+        box.appendChild(p);
+      }
+
+      const answer = document.createElement("p");
+      answer.textContent =
+        "Answer: " + q.correct_answer +
+        " | " + q.verse_reference;
+      box.appendChild(answer);
+
+      preview.appendChild(box);
+    });
+
+  } catch (error) {
+    status.textContent = "❌ " + error.message;
+  } finally {
+    button.disabled = false;
+  }
+}
+
+// Replace the existing AI Generate click behavior
+// by using this new handler in the next step.
+$("aiGenerateBtn").addEventListener("click", generateTrilingualQuestions);
  // LIVE EXAM WINNERS
 
 async function loadWinnerExams() {
