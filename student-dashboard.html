@@ -155,7 +155,95 @@ async function logoutStudent() {
   window.location.replace("student-login.html");
 }
 
+async function loadExamHistory() {
+  const container = document.getElementById("examHistory");
+
+  const { data: { user }, error: authError } =
+    await db.auth.getUser();
+
+  if (authError || !user) {
+    container.textContent = "Please login first.";
+    return;
+  }
+
+  const { data: attempts, error } = await db
+    .from("secure_exam_attempts")
+    .select("exam_id,score,total_questions,started_at,submitted_at,status")
+    .eq("user_id", user.id)
+    .eq("status", "submitted")
+    .order("submitted_at", { ascending: false })
+    .limit(100);
+
+  if (error) {
+    container.textContent = "Error: " + error.message;
+    return;
+  }
+
+  container.replaceChildren();
+
+  if (!attempts || attempts.length === 0) {
+    container.textContent = "No completed exams yet.";
+    return;
+  }
+
+  const examIds = [...new Set(attempts.map(a => a.exam_id))];
+
+  const { data: exams } = await db
+    .from("exam_schedules")
+    .select("id,exam_name")
+    .in("id", examIds);
+
+  const examNames = new Map(
+    (exams || []).map(e => [e.id, e.exam_name])
+  );
+
+  attempts.forEach(attempt => {
+    const card = document.createElement("div");
+    card.className = "tile";
+    card.style.marginBottom = "12px";
+    card.style.textAlign = "left";
+
+    const score = Number(attempt.score || 0);
+    const total = Number(attempt.total_questions || 0);
+    const percentage = total
+      ? ((score / total) * 100).toFixed(1)
+      : "0.0";
+
+    const started = new Date(attempt.started_at);
+    const submitted = new Date(attempt.submitted_at);
+
+    const seconds = Math.max(
+      0,
+      Math.round((submitted - started) / 1000)
+    );
+
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
+    const lines = [
+      "📖 Exam: " +
+        (examNames.get(attempt.exam_id) || "Bible Exam"),
+      "🏆 Score: " + score + "/" + total,
+      "📊 Percentage: " + percentage + "%",
+      "⏱️ Time: " + minutes + "m " +
+        remainingSeconds + "s",
+      "📅 Date: " + submitted.toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata"
+      })
+    ];
+
+    lines.forEach(line => {
+      const p = document.createElement("p");
+      p.textContent = line;
+      card.appendChild(p);
+    });
+
+    container.appendChild(card);
+  });
+}
+
 loadProfile();
+loadExamHistory();
 </script>
 
 <div class="card">
