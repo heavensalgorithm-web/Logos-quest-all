@@ -224,7 +224,9 @@ Correct Answers Studentsకి ఈ Page ద్వారా చూపించబ
   
   <p id="aiGenerateStatus"></p>
   <button type="button" id="aiSaveAllBtn" class="hidden">
-   
+  <button type="button" id="aiSaveTrilingualBtn" class="hidden">
+  💾 Save Telugu + English + Tamil Questions
+</button> 
 <button type="button" id="aiDownloadCsvBtn" class="hidden">
   📥 Download Telugu + English + Tamil CSV
 </button>
@@ -1432,7 +1434,7 @@ async function generateTrilingualQuestions() {
       " questions generated in Telugu, English and Tamil. Review before download.";
 
     $("aiDownloadCsvBtn").classList.remove("hidden");
-
+$("aiSaveTrilingualBtn").classList.remove("hidden");
     const preview = $("aiQuestionPreview");
     trilingualQuestions.forEach((q, i) => {
       const box = document.createElement("div");
@@ -1470,6 +1472,9 @@ async function generateTrilingualQuestions() {
 // Replace the existing AI Generate click behavior
 // by using this new handler in the next step.
 $("aiGenerateBtn").addEventListener("click", generateTrilingualQuestions);
+ $("aiSaveTrilingualBtn").addEventListener("click", async () => {
+  alert("Save button connected successfully!");
+}); 
  // LIVE EXAM WINNERS
 
 async function loadWinnerExams() {
