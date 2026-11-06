@@ -92,6 +92,33 @@ pattern="[0-9]{10}" maxlength="10" required>
 const SUPABASE_URL="https://jfhlesmfgwxlqdccfgit.supabase.co";
 const SUPABASE_KEY="sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+ async function loadLoggedInStudent() {
+  const { data: { user }, error } = await db.auth.getUser();
+
+  if (error || !user) {
+    window.location.replace("student-login.html");
+    return;
+  }
+
+  const details = user.user_metadata || {};
+
+  const fields = {
+    studentName: details.full_name,
+    studentMobile: details.mobile,
+    studentTown: details.town,
+    studentState: details.state
+  };
+
+  for (const [id, value] of Object.entries(fields)) {
+    const input = document.getElementById(id);
+    if (input) {
+      input.value = value || "";
+      input.readOnly = true;
+    }
+  }
+}
+
+loadLoggedInStudent(); 
 const $=id=>document.getElementById(id);
 
 const examId=new URLSearchParams(location.search).get("exam_id");
