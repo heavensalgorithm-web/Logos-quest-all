@@ -179,6 +179,13 @@ $("registrationForm").addEventListener("submit",async event=>{
  showStatus("Starting secure exam...");
 
  try{
+  const { data: { user }, error: authError } =
+  await db.auth.getUser();
+
+if (authError || !user) {
+  window.location.href = "student-login.html";
+  return;
+}
   const {data,error}=await db.rpc("start_secure_exam",{
    p_exam_id:examId,
    p_student_name:$("studentName").value.trim(),
