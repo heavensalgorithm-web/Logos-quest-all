@@ -34,6 +34,7 @@ button:disabled{background:#94a3b8}
 <div class="card" id="registration">
 <h2>📝 Student Registration</h2>
 <form id="registrationForm">
+ <div style="display:none"> 
 <label>Full Name</label>
 <input id="studentName" required minlength="2" maxlength="100">
 
@@ -46,7 +47,7 @@ pattern="[0-9]{10}" maxlength="10" required>
 
 <label>State</label>
 <input id="studentState" required minlength="2" maxlength="100" value="Andhra Pradesh">
-
+</div>
 <label for="studentLanguage">🌐 Select Exam Language</label>
 <select id="studentLanguage" required>
   <option value="">-- Select Language --</option>
