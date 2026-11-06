@@ -1472,6 +1472,134 @@ $("aiSaveTrilingualBtn").classList.remove("hidden");
 // Replace the existing AI Generate click behavior
 // by using this new handler in the next step.
 $("aiGenerateBtn").addEventListener("click", generateTrilingualQuestions); 
+ 
+$("aiSaveTrilingualBtn").addEventListener("click", async () => {
+  const btn = $("aiSaveTrilingualBtn");
+  const status = $("aiSaveStatus");
+
+  if (!trilingualQuestions.length) {
+    alert("Please generate questions first.");
+    return;
+  }
+
+  if (!confirm("Save all questions in 3 languages?")) return;
+
+  btn.disabled = true;
+  let saved = 0;
+
+  try {
+    for (const q of trilingualQuestions) {
+      const telugu = q.telugu;
+      const english = q.english;
+      const tamil = q.tamil;
+
+      if (!telugu?.question_text ||
+          !english?.question_text ||
+          !tamil?.question_text) {
+        throw new Error("Question translation missing.");
+      }
+
+      const answer = String(q.correct_answer || "")
+        .trim().toUpperCase();
+
+      if (!["A", "B", "C", "D"].includes(answer)) {
+        throw new Error("Invalid correct answer.");
+      }
+
+      const { data: existing, error: findError } = await db
+        .from("bible_questions")
+        .select("id")
+        .eq("bible_book", q.bible_book)
+        .eq("chapter_number", q.chapter_number)
+        .eq("language", "telugu")
+        .eq("question_text", telugu.question_text)
+        .limit(1);
+
+      if (findError) throw findError;
+
+      let questionId = existing?.[0]?.id;
+
+      if (!questionId) {
+        const { data, error } = await db
+          .from("bible_questions")
+          .insert({
+            bible_book: q.bible_book,
+            chapter_number: q.chapter_number,
+            language: "telugu",
+            difficulty: q.difficulty,
+            question_text: telugu.question_text,
+            option_a: telugu.option_a,
+            option_b: telugu.option_b,
+            option_c: telugu.option_c,
+            option_d: telugu.option_d,
+            correct_answer: answer
+          })
+          .select("id")
+          .single();
+
+        if (error) throw error;
+        questionId = data.id;
+      }
+
+      const { data: existingTranslations, error: readError } =
+        await db
+          .from("bible_question_translations")
+          .select("language")
+          .eq("question_id", questionId);
+
+      if (readError) throw readError;
+
+      const languages = new Set(
+        (existingTranslations || []).map(t => t.language)
+      );
+
+      const translations = ["telugu", "english", "tamil"]
+        .filter(lang => !languages.has(lang))
+        .map(lang => ({
+          question_id: questionId,
+          language: lang,
+          question_text: q[lang].question_text,
+          option_a: q[lang].option_a,
+          option_b: q[lang].option_b,
+          option_c: q[lang].option_c,
+          option_d: q[lang].option_d
+        }));
+
+      if (translations.length) {
+        const { error } = await db
+          .from("bible_question_translations")
+          .insert(translations);
+
+        if (error) throw error;
+      }
+
+      saved++;
+      status.textContent =
+        "Saving questions: " + saved + "/" +
+        trilingualQuestions.length;
+    }
+
+    status.textContent =
+      "✅ Successfully saved " + saved +
+      " questions in Telugu, English and Tamil!";
+
+    status.className = "success";
+    trilingualQuestions = [];
+    btn.classList.add("hidden");
+
+    await loadQuestions();
+
+  } catch (error) {
+    status.textContent =
+      "❌ Save Error: " + error.message +
+      " | Completed: " + saved;
+
+    status.className = "error";
+  } finally {
+    btn.disabled = false;
+  }
+});
+ 
  // LIVE EXAM WINNERS
 
 async function loadWinnerExams() {
