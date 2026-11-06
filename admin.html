@@ -1471,10 +1471,7 @@ $("aiSaveTrilingualBtn").classList.remove("hidden");
 
 // Replace the existing AI Generate click behavior
 // by using this new handler in the next step.
-$("aiGenerateBtn").addEventListener("click", generateTrilingualQuestions);
- $("aiSaveTrilingualBtn").addEventListener("click", async () => {
-  alert("Save button connected successfully!");
-}); 
+$("aiGenerateBtn").addEventListener("click", generateTrilingualQuestions); 
  // LIVE EXAM WINNERS
 
 async function loadWinnerExams() {
