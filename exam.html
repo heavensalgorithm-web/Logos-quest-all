@@ -271,66 +271,38 @@ function getSelectedAnswers() {
 }
 
 function renderQuestions(){
- const container=$("questions");
- const preservedAnswers = getSelectedAnswers();
- container.replaceChildren();
+  const container = $("questions");
+  container.replaceChildren();
 
- assignedQuestions.forEach((q,index)=>{
-  const number=q.question_order??index+1;
-  const qId=q.question_id || q.id;
+  assignedQuestions.forEach((q, index) => {
+    const number = q.question_order ?? index + 1;
+    const block = document.createElement("div");
+    block.className = "question";
 
-  // భాష పేరును చిన్న అక్షరాలలోకి మార్చడం (telugu / english / tamil)
-  const activeLang = (currentLanguage || "telugu").toLowerCase();
+    const heading = document.createElement("h3");
+    heading.textContent = number + ". " + q.question;
+    block.appendChild(heading);
 
-  // డీఫాల్ట్ తెలుగు డేటా
-  let qText = q.question || q.question_text;
-  let optA = q.options?.[0] ?? q.option_a ?? "";
-  let optB = q.options?.[1] ?? q.option_b ?? "";
-  let optC = q.options?.[2] ?? q.option_c ?? "";
-  let optD = q.options?.[3] ?? q.option_d ?? "";
+    ["A", "B", "C", "D"].forEach((letter, i) => {
+      const label = document.createElement("label");
+      label.className = "option";
 
-  // ఎంచుకున్న భాష డేటా ఉందో లేదో తనిఖీ
-  const langObj = q[activeLang] || (translationsMap[qId] && translationsMap[qId][activeLang]);
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "question_" + number;
+      radio.value = letter;
 
-  if (langObj) {
-    qText = langObj.text || langObj.question_text || qText;
-    optA = langObj.a || langObj.option_a || optA;
-    optB = langObj.b || langObj.option_b || optB;
-    optC = langObj.c || langObj.option_c || optC;
-    optD = langObj.d || langObj.option_d || optD;
-  }
-   
-  const block=document.createElement("div");
-  block.className="question";
+      const span = document.createElement("span");
+      span.textContent = letter + ". " + (q.options?.[i] ?? "");
 
-  const heading=document.createElement("h3");
-  heading.textContent=number+". "+qText;
-  block.appendChild(heading);
+      label.append(radio, span);
+      block.appendChild(label);
+    });
 
-  const opts = { A: optA, B: optB, C: optC, D: optD };
-
-  ["A","B","C","D"].forEach(letter=>{
-   const label=document.createElement("label");
-   label.className="option";
-
-   const radio=document.createElement("input");
-   radio.type="radio";
-   radio.name="question_"+number;
-   radio.value=letter;
-   if (preservedAnswers[number] === letter) {
-     radio.checked = true;
-   }
-
-   const span=document.createElement("span");
-   span.textContent=letter+". "+(opts[letter] ?? "");
-
-   label.append(radio,span);
-   block.appendChild(label);
+    container.appendChild(block);
   });
-
-  container.appendChild(block);
- });
 }
+
 
 
 // Language switch event during live exam
