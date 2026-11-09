@@ -278,15 +278,25 @@ function renderQuestions(){
  assignedQuestions.forEach((q,index)=>{
   const number=q.question_order??index+1;
   const qId=q.question_id || q.id;
-  
-  // Choose question text according to selected language
+
+  // ఎంచుకున్న భాష ప్రకారం ప్రశ్నను తీసుకోవడం
   let qText = q.question || q.question_text;
   let optA = q.options?.[0] ?? q.option_a ?? "";
   let optB = q.options?.[1] ?? q.option_b ?? "";
   let optC = q.options?.[2] ?? q.option_c ?? "";
   let optD = q.options?.[3] ?? q.option_d ?? "";
 
-  if (qId && translationsMap[qId] && translationsMap[qId][currentLanguage]) {
+  // 1. Supabase ఫంక్షన్ నేరుగా పంపిన భాషా ఆబ్జెక్ట్ ఉంటే
+  if (q[currentLanguage]) {
+    const l = q[currentLanguage];
+    qText = l.text || l.question_text || qText;
+    optA = l.a || l.option_a || optA;
+    optB = l.b || l.option_b || optB;
+    optC = l.c || l.option_c || optC;
+    optD = l.d || l.option_d || optD;
+  } 
+  // 2. లేదా translationsMap ద్వారా లోడ్ అయిన అనువాదం ఉంటే
+  else if (qId && translationsMap[qId] && translationsMap[qId][currentLanguage]) {
     const t = translationsMap[qId][currentLanguage];
     qText = t.question_text || qText;
     optA = t.option_a || optA;
@@ -326,6 +336,7 @@ function renderQuestions(){
   container.appendChild(block);
  });
 }
+
 
 // Language switch event during live exam
 $("inExamLangSwitcher").addEventListener("change", (e) => {
