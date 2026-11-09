@@ -279,32 +279,27 @@ function renderQuestions(){
   const number=q.question_order??index+1;
   const qId=q.question_id || q.id;
 
-  // ఎంచుకున్న భాష ప్రకారం ప్రశ్నను తీసుకోవడం
+  // భాష పేరును చిన్న అక్షరాలలోకి మార్చడం (telugu / english / tamil)
+  const activeLang = (currentLanguage || "telugu").toLowerCase();
+
+  // డీఫాల్ట్ తెలుగు డేటా
   let qText = q.question || q.question_text;
   let optA = q.options?.[0] ?? q.option_a ?? "";
   let optB = q.options?.[1] ?? q.option_b ?? "";
   let optC = q.options?.[2] ?? q.option_c ?? "";
   let optD = q.options?.[3] ?? q.option_d ?? "";
 
-  // 1. Supabase ఫంక్షన్ నేరుగా పంపిన భాషా ఆబ్జెక్ట్ ఉంటే
-  if (q[currentLanguage]) {
-    const l = q[currentLanguage];
-    qText = l.text || l.question_text || qText;
-    optA = l.a || l.option_a || optA;
-    optB = l.b || l.option_b || optB;
-    optC = l.c || l.option_c || optC;
-    optD = l.d || l.option_d || optD;
-  } 
-  // 2. లేదా translationsMap ద్వారా లోడ్ అయిన అనువాదం ఉంటే
-  else if (qId && translationsMap[qId] && translationsMap[qId][currentLanguage]) {
-    const t = translationsMap[qId][currentLanguage];
-    qText = t.question_text || qText;
-    optA = t.option_a || optA;
-    optB = t.option_b || optB;
-    optC = t.option_c || optC;
-    optD = t.option_d || optD;
-  }
+  // ఎంచుకున్న భాష డేటా ఉందో లేదో తనిఖీ
+  const langObj = q[activeLang] || (translationsMap[qId] && translationsMap[qId][activeLang]);
 
+  if (langObj) {
+    qText = langObj.text || langObj.question_text || qText;
+    optA = langObj.a || langObj.option_a || optA;
+    optB = langObj.b || langObj.option_b || optB;
+    optC = langObj.c || langObj.option_c || optC;
+    optD = langObj.d || langObj.option_d || optD;
+  }
+   
   const block=document.createElement("div");
   block.className="question";
 
