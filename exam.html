@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="te">
 <head>
@@ -14,12 +13,15 @@ input,select{width:100%;padding:12px;margin:7px 0 15px;border:1px solid #cbd5e1;
 button{background:#174ea6;color:white;border:0;border-radius:8px;padding:13px 20px;font-size:16px;cursor:pointer}
 button:disabled{background:#94a3b8}
 .question{padding:16px;border:1px solid #dbe4f0;border-radius:10px;margin:15px 0}
-.option{display:block;padding:10px;margin:7px 0;background:#f8fafc;border-radius:7px}
+.option{display:block;padding:10px;margin:7px 0;background:#f8fafc;border-radius:7px;cursor:pointer}
 .option input{width:auto;margin:0 8px 0 0}
 .hidden{display:none}
 .center{text-align:center}
 .error{color:#b91c1c}
-#timer{font-size:23px;font-weight:bold;color:#b91c1c;text-align:center}
+#timer{font-size:22px;font-weight:bold;color:#b91c1c;text-align:center;margin-bottom:12px}
+.exam-top-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#eef4ff;padding:12px 16px;border-radius:10px;margin-bottom:15px}
+.exam-top-bar label{font-weight:bold;margin:0;color:#174ea6}
+.exam-top-bar select{width:auto;margin:0;padding:8px 12px;background:white}
 </style>
 </head>
 <body>
@@ -34,13 +36,12 @@ button:disabled{background:#94a3b8}
 <div class="card" id="registration">
 <h2>📝 Student Registration</h2>
 <form id="registrationForm">
- <div style="display:none"> 
+<div style="display:none"> 
 <label>Full Name</label>
 <input id="studentName" required minlength="2" maxlength="100">
 
 <label>Mobile Number</label>
-<input id="studentMobile" type="tel" inputmode="numeric"
-pattern="[0-9]{10}" maxlength="10" required>
+<input id="studentMobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
 
 <label>Town</label>
 <input id="studentTown" required minlength="2" maxlength="100">
@@ -48,16 +49,12 @@ pattern="[0-9]{10}" maxlength="10" required>
 <label>State</label>
 <input id="studentState" required minlength="2" maxlength="100" value="Andhra Pradesh">
 </div>
-<label for="studentLanguage">🌐 Select Exam Language</label>
+
+<label for="studentLanguage">🌐 Select Default Exam Language</label>
 <select id="studentLanguage" required>
-  <option value="">-- Select Language --</option>
-  
-
-<option value="telugu">తెలుగు (Telugu)</option>
-<option value="english" disabled>English (Coming Soon)</option>
-<option value="tamil" disabled>தமிழ் (Coming Soon)</option>
-
-
+  <option value="telugu" selected>తెలుగు (Telugu)</option>
+  <option value="english">English</option>
+  <option value="tamil">தமிழ் (Tamil)</option>
 </select>
 
 <button id="startBtn" type="submit">▶ Start Exam</button>
@@ -65,10 +62,21 @@ pattern="[0-9]{10}" maxlength="10" required>
 </div>
 
 <div class="card hidden" id="examSection">
-<h2>📚 Bible Quiz</h2>
-<div id="timer">Time Remaining: --:--</div>
-<div id="questions"></div>
-<button id="submitBtn" type="button">✅ Submit Exam</button>
+  <div class="exam-top-bar">
+    <div id="timer">⏳ Time: --:--</div>
+    <div>
+      <label for="inExamLangSwitcher">🌐 Language: </label>
+      <select id="inExamLangSwitcher">
+        <option value="telugu">తెలుగు (Telugu)</option>
+        <option value="english">English</option>
+        <option value="tamil">தமிழ் (Tamil)</option>
+      </select>
+    </div>
+  </div>
+
+  <h2>📚 Bible Quiz</h2>
+  <div id="questions"></div>
+  <button id="submitBtn" type="button" style="width:100%;margin-top:15px;">✅ Submit Exam</button>
 </div>
 
 <div class="card hidden center" id="resultSection">
@@ -76,10 +84,8 @@ pattern="[0-9]{10}" maxlength="10" required>
 <h1 id="scoreText"></h1>
 <p id="resultDetails"></p>
 <a href="leaderboard.html">View Leaderboard</a>
- <br><br>
-<button id="reviewBtn" type="button">
-  📖 Review My Answers
-</button>
+<br><br>
+<button id="reviewBtn" type="button">📖 Review My Answers</button>
 <div id="reviewSection"></div>
 </div>
 
@@ -93,7 +99,10 @@ pattern="[0-9]{10}" maxlength="10" required>
 const SUPABASE_URL="https://jfhlesmfgwxlqdccfgit.supabase.co";
 const SUPABASE_KEY="sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
- async function loadLoggedInStudent() {
+
+const $=id=>document.getElementById(id);
+
+async function loadLoggedInStudent() {
   const { data: { user }, error } = await db.auth.getUser();
 
   if (error || !user) {
@@ -119,15 +128,16 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
   }
 }
 
-loadLoggedInStudent(); 
-const $=id=>document.getElementById(id);
+loadLoggedInStudent();
 
 const examId=new URLSearchParams(location.search).get("exam_id");
 let exam=null;
 let attemptId=null;
- let submitToken = null; 
-let reviewToken = null;  
+let submitToken=null; 
+let reviewToken=null;  
 let assignedQuestions=[];
+let translationsMap={}; // Cache for multi-language translations
+let currentLanguage="telugu";
 let deadline=0;
 let timerHandle=null;
 let submitting=false;
@@ -172,6 +182,28 @@ async function loadExam(){
  }
 }
 
+// Fetch 3-language translations for all assigned questions
+async function loadTranslations(questionIds) {
+  if (!questionIds || !questionIds.length) return;
+  try {
+    const { data, error } = await db
+      .from("bible_question_translations")
+      .select("question_id, language, question_text, option_a, option_b, option_c, option_d")
+      .in("question_id", questionIds);
+
+    if (!error && data) {
+      data.forEach(t => {
+        if (!translationsMap[t.question_id]) {
+          translationsMap[t.question_id] = {};
+        }
+        translationsMap[t.question_id][t.language] = t;
+      });
+    }
+  } catch (e) {
+    console.warn("Could not pre-fetch translations:", e);
+  }
+}
+
 $("registrationForm").addEventListener("submit",async event=>{
  event.preventDefault();
  const button=$("startBtn");
@@ -179,20 +211,23 @@ $("registrationForm").addEventListener("submit",async event=>{
  showStatus("Starting secure exam...");
 
  try{
-  const { data: { user }, error: authError } =
-  await db.auth.getUser();
+  const { data: { user }, error: authError } = await db.auth.getUser();
 
-if (authError || !user) {
-  window.location.href = "student-login.html";
-  return;
-}
+  if (authError || !user) {
+    window.location.href = "student-login.html";
+    return;
+  }
+
+  currentLanguage = $("studentLanguage").value || "telugu";
+  $("inExamLangSwitcher").value = currentLanguage;
+
   const {data,error}=await db.rpc("start_secure_exam",{
    p_exam_id:examId,
    p_student_name:$("studentName").value.trim(),
    p_student_mobile:$("studentMobile").value.trim(),
    p_student_town:$("studentTown").value.trim(),
    p_student_state:$("studentState").value.trim(),
-p_language:$("studentLanguage").value
+   p_language:currentLanguage
   });
 
   if(error)throw error;
@@ -200,9 +235,13 @@ p_language:$("studentLanguage").value
    throw new Error("Unexpected exam response.");
 
   attemptId=data.attempt_id;
-   submitToken = data.submit_token;
+  submitToken = data.submit_token;
   assignedQuestions=data.questions;
   if(!assignedQuestions.length)throw new Error("No questions returned.");
+
+  // Pre-load all available language translations for questions
+  const qIds = assignedQuestions.map(q => q.question_id || q.id).filter(Boolean);
+  await loadTranslations(qIds);
 
   $("registration").classList.add("hidden");
   $("examSection").classList.remove("hidden");
@@ -218,20 +257,54 @@ p_language:$("studentLanguage").value
  }
 });
 
+// Preserve selected radio inputs when switching languages
+function getSelectedAnswers() {
+  const selected = {};
+  assignedQuestions.forEach((q, index) => {
+    const number = q.question_order ?? index + 1;
+    const checked = document.querySelector(`input[name="question_${number}"]:checked`);
+    if (checked) {
+      selected[number] = checked.value;
+    }
+  });
+  return selected;
+}
+
 function renderQuestions(){
  const container=$("questions");
+ const preservedAnswers = getSelectedAnswers();
  container.replaceChildren();
 
  assignedQuestions.forEach((q,index)=>{
   const number=q.question_order??index+1;
+  const qId=q.question_id || q.id;
+  
+  // Choose question text according to selected language
+  let qText = q.question || q.question_text;
+  let optA = q.options?.[0] ?? q.option_a ?? "";
+  let optB = q.options?.[1] ?? q.option_b ?? "";
+  let optC = q.options?.[2] ?? q.option_c ?? "";
+  let optD = q.options?.[3] ?? q.option_d ?? "";
+
+  if (qId && translationsMap[qId] && translationsMap[qId][currentLanguage]) {
+    const t = translationsMap[qId][currentLanguage];
+    qText = t.question_text || qText;
+    optA = t.option_a || optA;
+    optB = t.option_b || optB;
+    optC = t.option_c || optC;
+    optD = t.option_d || optD;
+  }
+
   const block=document.createElement("div");
   block.className="question";
 
   const heading=document.createElement("h3");
-  heading.textContent=number+". "+q.question;
+  heading.textContent=number+". "+qText;
   block.appendChild(heading);
 
-  ["A","B","C","D"].forEach((letter,i)=>{
+  const opts = { A: optA, B: optB, C: optC, D: optD };
+
+  ["A","B","C","D"].forEach(letter=>{
    const label=document.createElement("label");
    label.className="option";
 
@@ -239,9 +312,12 @@ function renderQuestions(){
    radio.type="radio";
    radio.name="question_"+number;
    radio.value=letter;
+   if (preservedAnswers[number] === letter) {
+     radio.checked = true;
+   }
 
    const span=document.createElement("span");
-   span.textContent=letter+". "+(q.options?.[i]??"");
+   span.textContent=letter+". "+(opts[letter] ?? "");
 
    label.append(radio,span);
    block.appendChild(label);
@@ -251,12 +327,18 @@ function renderQuestions(){
  });
 }
 
+// Language switch event during live exam
+$("inExamLangSwitcher").addEventListener("change", (e) => {
+  currentLanguage = e.target.value;
+  renderQuestions();
+});
+
 function updateTimer(){
  const remaining=Math.max(0,deadline-Date.now());
  const seconds=Math.ceil(remaining/1000);
  const min=Math.floor(seconds/60);
  const sec=seconds%60;
- $("timer").textContent="⏳ Time Remaining: "+
+ $("timer").textContent="⏳ Time: "+
   String(min).padStart(2,"0")+":"+
   String(sec).padStart(2,"0");
 
@@ -294,13 +376,13 @@ async function submitExam(automatic){
 
  try{
   const {data,error}=await db.rpc("submit_secure_exam",{
-  p_attempt_id:attemptId,
-  p_answers:answers,
-  p_submit_token:submitToken
-});
+    p_attempt_id:attemptId,
+    p_answers:answers,
+    p_submit_token:submitToken
+  });
 
   if(error)throw error;
-reviewToken = submitToken;
+  reviewToken = submitToken;
   $("examSection").classList.add("hidden");
   $("resultSection").classList.remove("hidden");
   $("scoreText").textContent=
@@ -319,6 +401,7 @@ reviewToken = submitToken;
   }
  }
 }
+
 $("reviewBtn").addEventListener("click", async () => {
   const section = $("reviewSection");
   section.textContent = "Loading your answers...";
@@ -341,76 +424,73 @@ $("reviewBtn").addEventListener("click", async () => {
     if (error) throw error;
 
     section.replaceChildren();
-
     const questions = data.questions || [];
-
     
-let correctCount = 0;
-let wrongCount = 0;
-let unansweredCount = 0;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let unansweredCount = 0;
 
-questions.forEach((q, i) => {
-  const card = document.createElement("div");
-  card.style.cssText =
-    "text-align:left;padding:15px;margin:12px 0;border:1px solid #ddd;border-radius:8px;";
+    questions.forEach((q, i) => {
+      const card = document.createElement("div");
+      card.style.cssText =
+        "text-align:left;padding:15px;margin:12px 0;border:1px solid #ddd;border-radius:8px;";
 
-  const heading = document.createElement("h3");
-  heading.textContent = (i + 1) + ". " + q.question_text;
-  card.appendChild(heading);
+      const heading = document.createElement("h3");
+      heading.textContent = (i + 1) + ". " + q.question_text;
+      card.appendChild(heading);
 
-  const options = {
-    A: q.option_a,
-    B: q.option_b,
-    C: q.option_c,
-    D: q.option_d
-  };
+      const options = {
+        A: q.option_a,
+        B: q.option_b,
+        C: q.option_c,
+        D: q.option_d
+      };
 
-  const selectedKey = q.selected_answer;
-  const correctKey = q.correct_answer;
+      const selectedKey = q.selected_answer;
+      const correctKey = q.correct_answer;
 
-  const selected = document.createElement("p");
-  const correct = document.createElement("p");
+      const selected = document.createElement("p");
+      const correct = document.createElement("p");
 
-  if (!selectedKey) {
-    unansweredCount++;
-    selected.textContent = "⚪ Your Answer: Not Answered";
-    selected.style.color = "#64748b";
-  } else if (selectedKey === correctKey) {
-    correctCount++;
-    selected.textContent =
-      "✅ Your Answer: " + selectedKey +
-      " – " + (options[selectedKey] || "");
-    selected.style.color = "green";
-  } else {
-    wrongCount++;
-    selected.textContent =
-      "❌ Your Answer: " + selectedKey +
-      " – " + (options[selectedKey] || "");
-    selected.style.color = "red";
-  }
+      if (!selectedKey) {
+        unansweredCount++;
+        selected.textContent = "⚪ Your Answer: Not Answered";
+        selected.style.color = "#64748b";
+      } else if (selectedKey === correctKey) {
+        correctCount++;
+        selected.textContent =
+          "✅ Your Answer: " + selectedKey +
+          " – " + (options[selectedKey] || "");
+        selected.style.color = "green";
+      } else {
+        wrongCount++;
+        selected.textContent =
+          "❌ Your Answer: " + selectedKey +
+          " – " + (options[selectedKey] || "");
+        selected.style.color = "red";
+      }
 
-  correct.textContent =
-    "✅ Correct Answer: " + correctKey +
-    " – " + (options[correctKey] || "");
-  correct.style.color = "green";
+      correct.textContent =
+        "✅ Correct Answer: " + correctKey +
+        " – " + (options[correctKey] || "");
+      correct.style.color = "green";
 
-  card.appendChild(selected);
-  card.appendChild(correct);
-  section.appendChild(card);
-});
+      card.appendChild(selected);
+      card.appendChild(correct);
+      section.appendChild(card);
+    });
 
-const summary = document.createElement("div");
-summary.style.cssText =
-  "padding:15px;margin:15px 0;background:#f1f5f9;border-radius:10px;font-weight:bold;text-align:left;";
+    const summary = document.createElement("div");
+    summary.style.cssText =
+      "padding:15px;margin:15px 0;background:#f1f5f9;border-radius:10px;font-weight:bold;text-align:left;";
 
-summary.textContent =
-  "📊 Total: " + questions.length +
-  " | ✅ Correct: " + correctCount +
-  " | ❌ Wrong: " + wrongCount +
-  " | ⚪ Unanswered: " + unansweredCount;
+    summary.textContent =
+      "📊 Total: " + questions.length +
+      " | ✅ Correct: " + correctCount +
+      " | ❌ Wrong: " + wrongCount +
+      " | ⚪ Unanswered: " + unansweredCount;
 
-section.prepend(summary);
-
+    section.prepend(summary);
 
     if (!questions.length) {
       section.textContent = "No review questions available.";
@@ -421,6 +501,7 @@ section.prepend(summary);
       "Review unavailable: " + err.message;
   }
 });
+
 loadExam();
 </script>
 </body>
