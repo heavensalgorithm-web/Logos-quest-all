@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="te">
 <head>
@@ -86,30 +85,27 @@ required maxlength="150">
 <div class="grid">
 <div>
 <label for="examDate">Exam Date</label>
-  
-<!-- EXAM QUESTION SELECTION -->
+<input id="examDate" type="date" required>
+</div>
 
-<div class="grid">
+<div>
+<label for="questionCount">Questions</label>
+<select id="questionCount">
+<option value="10">10 Questions</option>
+<option value="20">20 Questions</option>
+<option value="50">50 Questions</option>
+<option value="100">100 Questions</option>
+</select>
+</div>
 
 <div>
 <label for="examBibleBook">Bible Book</label>
-<input
-  id="examBibleBook"
-  type="text"
-  placeholder="Example: Genesis"
-  maxlength="100"
-  required>
+<input id="examBibleBook" type="text" placeholder="Example: Genesis" maxlength="100" required>
 </div>
 
 <div>
 <label for="examChapter">Chapter Number</label>
-<input
-  id="examChapter"
-  type="number"
-  min="1"
-  max="150"
-  placeholder="Example: 1"
-  required>
+<input id="examChapter" type="number" min="1" max="150" placeholder="Example: 1" required>
 </div>
 
 <div>
@@ -130,27 +126,16 @@ required maxlength="150">
 </select>
 </div>
 
-</div>
-
-<input id="examDate" type="date" required>
-</div>
-<div>
-<label for="questionCount">Questions</label>
-<select id="questionCount">
-<option value="10">10 Questions</option>
-<option value="20">20 Questions</option>
-<option value="50">50 Questions</option>
-<option value="100">100 Questions</option>
-</select>
-</div>
 <div>
 <label for="startTime">Start Time</label>
 <input id="startTime" type="time" required>
 </div>
+
 <div>
 <label for="endTime">End Time</label>
 <input id="endTime" type="time" required>
 </div>
+
 <div>
 <label for="maxAttempts">Maximum Attempts</label>
 <select id="maxAttempts">
@@ -159,6 +144,7 @@ required maxlength="150">
 <option value="3">3 Attempts</option>
 </select>
 </div>
+
 <div>
 <label for="rankingMethod">Leaderboard Ranking</label>
 <select id="rankingMethod">
@@ -169,9 +155,7 @@ required maxlength="150">
 </div>
 </div>
 
-<button id="saveExamBtn" type="submit">
-💾 Save Exam Schedule
-</button>
+<button id="saveExamBtn" type="submit">💾 Save Exam Schedule</button>
 </form>
 <p id="scheduleStatus" role="status"></p>
 </div>
@@ -210,47 +194,37 @@ Correct Answers Studentsకి ఈ Page ద్వారా చూపించబ
   <h3>✨ AI Bible Question Generator</h3>
   <p>Generate Bible quiz questions using AI.</p>
 
-  <button type="button" id="aiGenerateBtn">
-    ✨ Generate Questions with AI
-  </button>
+  <button type="button" id="aiGenerateBtn">✨ Generate Questions with AI</button>
 
-<label for="aiQuestionCount">Number of AI Questions</label>
-<select id="aiQuestionCount">
-  <option value="10">10 Questions</option>
-  <option value="20">20 Questions</option>
-  <option value="50">50 Questions</option>
-  <option value="100">100 Questions</option>
-</select>
+  <label for="aiQuestionCount">Number of AI Questions</label>
+  <select id="aiQuestionCount">
+    <option value="10">10 Questions</option>
+    <option value="20">20 Questions</option>
+    <option value="50">50 Questions</option>
+    <option value="100">100 Questions</option>
+  </select>
   
   <p id="aiGenerateStatus"></p>
-  <button type="button" id="aiSaveAllBtn" class="hidden">
-  <button type="button" id="aiSaveTrilingualBtn">
-  💾 Save Telugu + English + Tamil Questions
-</button> 
-<button type="button" id="aiDownloadCsvBtn" class="hidden">
-  📥 Download Telugu + English + Tamil CSV
-</button>
- 
-  💾 Save All AI Questions
-</button>
-<p id="aiSaveStatus" role="status"></p>
+
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">
+    <button type="button" id="aiSaveTrilingualBtn" class="hidden">💾 Save Telugu + English + Tamil Questions</button> 
+    <button type="button" id="aiDownloadCsvBtn" class="hidden">📥 Download Telugu + English + Tamil CSV</button>
+  </div>
+
+  <p id="aiSaveStatus" role="status"></p>
   <div id="aiQuestionPreview"></div>
 </div>
 
 <form id="questionForm">
-
 <div class="grid">
 <div>
 <label for="bibleBook">Bible Book</label>
-<input id="bibleBook" type="text"
-placeholder="Example: Genesis"
-required maxlength="100">
+<input id="bibleBook" type="text" placeholder="Example: Genesis" required maxlength="100">
 </div>
 
 <div>
 <label for="chapterNumber">Chapter Number</label>
-<input id="chapterNumber" type="number"
-min="1" max="150" required placeholder="1">
+<input id="chapterNumber" type="number" min="1" max="150" required placeholder="1">
 </div>
 
 <div>
@@ -273,8 +247,7 @@ min="1" max="150" required placeholder="1">
 </div>
 
 <label for="questionText">Bible Question</label>
-<textarea id="questionText" required
-placeholder="ప్రశ్న ఇక్కడ నమోదు చేయండి"></textarea>
+<textarea id="questionText" required placeholder="ప్రశ్న ఇక్కడ నమోదు చేయండి"></textarea>
 
 <div class="grid">
 <div>
@@ -303,13 +276,8 @@ placeholder="ప్రశ్న ఇక్కడ నమోదు చేయండ�
 <option value="D">Option D</option>
 </select>
 
-<button id="saveQuestionBtn" type="submit">
-💾 Save Bible Question
-</button>
-
-<button id="cancelEditBtn" class="secondary hidden" type="button">
-Cancel Edit
-</button>
+<button id="saveQuestionBtn" type="submit">💾 Save Bible Question</button>
+<button id="cancelEditBtn" class="secondary hidden" type="button">Cancel Edit</button>
 </form>
 
 <p id="questionStatus" role="status"></p>
@@ -340,13 +308,8 @@ Cancel Edit
 </div>
 </div>
 
-<input id="questionSearch"
-placeholder="Search Bible Book or Question">
-
-<button id="refreshQuestionsBtn" type="button">
-🔄 Refresh Questions
-</button>
-
+<input id="questionSearch" placeholder="Search Bible Book or Question">
+<button id="refreshQuestionsBtn" type="button">🔄 Refresh Questions</button>
 <p id="questionListStatus"></p>
 
 <div class="table-wrap">
@@ -378,23 +341,16 @@ placeholder="Search Bible Book or Question">
     <option value="">Select Exam</option>
   </select>
 
-  <button id="loadWinnersBtn" type="button">
-    🔄 View Exam Winners
-  </button>
+  <button id="loadWinnersBtn" type="button">🔄 View Exam Winners</button>
+  <button id="releaseAnswersBtn" type="button">🔓 Release Correct Answers</button>
 
-<button id="releaseAnswersBtn" type="button">
-  🔓 Release Correct Answers
-</button>
-
-<p id="releaseAnswersStatus" role="status"></p>
-
+  <p id="releaseAnswersStatus" role="status"></p>
   <p id="winnersStatus" role="status"></p>
 
   <h3>🥇 Top 3 Winners</h3>
   <div id="top3Winners" class="stats"></div>
 
   <h3>🏅 Top 10 Participants</h3>
-
   <div class="table-wrap">
     <table>
       <thead>
@@ -454,22 +410,16 @@ Highest Score
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
-const SUPABASE_URL =
-"https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
-const SUPABASE_KEY =
-"sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
-
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = id => document.getElementById(id);
 
 let allResults = [];
 let allQuestions = [];
 let editingQuestionId = null;
+let trilingualQuestions = [];
 
 function showLogin(message = "") {
   $("loginSection").classList.remove("hidden");
@@ -505,12 +455,12 @@ async function verifyAdmin() {
 
   showDashboard(user);
 
-await Promise.all([
-  loadResults(),
-  loadExams(),
-  loadQuestions(),
-  loadWinnerExams()
-]);
+  await Promise.all([
+    loadResults(),
+    loadExams(),
+    loadQuestions(),
+    loadWinnerExams()
+  ]);
 }
 
 $("loginForm").addEventListener("submit",async event=>{
@@ -562,34 +512,22 @@ function renderResults(){
 
   filtered.forEach(r=>{
     const tr = document.createElement("tr");
-
     [r.Name,r.Mobile,r.Score,r.Time].forEach(value=>{
       const td = document.createElement("td");
       td.textContent = value == null ? "" : String(value);
       tr.appendChild(td);
     });
-
     body.appendChild(tr);
   });
 
-  $("status").textContent =
-    filtered.length+" results displayed";
-
+  $("status").textContent = filtered.length+" results displayed";
   $("attempts").textContent = allResults.length;
 
-  const scores = allResults
-    .map(r=>Number(r.Score))
-    .filter(Number.isFinite);
+  const scores = allResults.map(r=>Number(r.Score)).filter(Number.isFinite);
+  const average = scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : 0;
 
-  const average = scores.length
-    ? scores.reduce((a,b)=>a+b,0)/scores.length
-    : 0;
-
-  $("average").textContent =
-    average.toFixed(1)+" marks";
-
-  $("highest").textContent =
-    scores.length ? Math.max(...scores)+" marks" : "0";
+  $("average").textContent = average.toFixed(1)+" marks";
+  $("highest").textContent = scores.length ? Math.max(...scores)+" marks" : "0";
 }
 
 $("search").addEventListener("input",renderResults);
@@ -599,11 +537,9 @@ $("refreshBtn").addEventListener("click",loadResults);
 
 function istToIso(date,time){
   const value = new Date(date+"T"+time+":00+05:30");
-
   if(Number.isNaN(value.getTime())){
     throw new Error("Invalid date or time.");
   }
-
   return value.toISOString();
 }
 
@@ -650,45 +586,35 @@ $("scheduleForm").addEventListener("submit",async event=>{
   }
 
   if(new Date(endIso)<=new Date(startIso)){
-    status.textContent =
-      "End Time must be later than Start Time.";
+    status.textContent = "End Time must be later than Start Time.";
     status.className = "error";
     return;
   }
 
   if(new Date(startIso)<=new Date()){
-    status.textContent =
-      "Please choose a future exam start time.";
+    status.textContent = "Please choose a future exam start time.";
     status.className = "error";
     return;
   }
 
-const exam = {
-  exam_name: name,
-
-  bible_book: $("examBibleBook").value.trim(),
-  chapter_number: Number($("examChapter").value),
-  question_language: $("examLanguage").value,
-  question_difficulty: $("examDifficulty").value,
-
-  start_time: startIso,
-  end_time: endIso,
-
-  question_count: Number($("questionCount").value),
-  max_attempts: Number($("maxAttempts").value),
-  ranking_method: $("rankingMethod").value
-};
-  
-  
+  const exam = {
+    exam_name: name,
+    bible_book: $("examBibleBook").value.trim(),
+    chapter_number: Number($("examChapter").value),
+    question_language: $("examLanguage").value,
+    question_difficulty: $("examDifficulty").value,
+    start_time: startIso,
+    end_time: endIso,
+    question_count: Number($("questionCount").value),
+    max_attempts: Number($("maxAttempts").value),
+    ranking_method: $("rankingMethod").value
+  };
 
   button.disabled = true;
   status.textContent = "Saving exam schedule...";
 
   try{
-    const {error} = await db
-      .from("exam_schedules")
-      .insert(exam);
-
+    const {error} = await db.from("exam_schedules").insert(exam);
     if(error) throw error;
 
     status.textContent = "✅ Exam scheduled successfully!";
@@ -715,18 +641,16 @@ async function loadExams(){
     .limit(200);
 
   if(error){
-    $("examListStatus").textContent =
-      "Error: "+error.message;
+    $("examListStatus").textContent = "Error: "+error.message;
     return;
   }
-$("winnersStatus").textContent =
-  "Exams Found: " + (data || []).length;
+
+  $("winnersStatus").textContent = "Exams Found: " + (data || []).length;
   const body = $("examsBody");
   body.replaceChildren();
 
   (data||[]).forEach(exam=>{
     const tr = document.createElement("tr");
-
     [
       exam.exam_name,
       formatIST(exam.start_time),
@@ -739,17 +663,15 @@ $("winnersStatus").textContent =
       td.textContent = String(value ?? "");
       tr.appendChild(td);
     });
-
     body.appendChild(tr);
   });
 
-  $("examListStatus").textContent =
-    (data||[]).length+" scheduled exams displayed.";
+  $("examListStatus").textContent = (data||[]).length+" scheduled exams displayed.";
 }
 
 $("refreshExamsBtn").addEventListener("click",loadExams);
 
-// BIBLE QUESTION MANAGEMENT
+// MANUAL BIBLE QUESTION MANAGEMENT
 
 function getQuestionFormData(){
   const chapter = Number($("chapterNumber").value);
@@ -771,9 +693,7 @@ function getQuestionFormData(){
     correct_answer:$("correctAnswer").value
   };
 
-  if(Object.values(question).some(value=>
-    value === "" || value == null
-  )){
+  if(Object.values(question).some(value=> value === "" || value == null)){
     throw new Error("Please fill all question fields.");
   }
 
@@ -783,8 +703,7 @@ function getQuestionFormData(){
 function resetQuestionForm(){
   $("questionForm").reset();
   editingQuestionId = null;
-  $("saveQuestionBtn").textContent =
-    "💾 Save Bible Question";
+  $("saveQuestionBtn").textContent = "💾 Save Bible Question";
   $("cancelEditBtn").classList.add("hidden");
 }
 
@@ -793,11 +712,9 @@ $("questionForm").addEventListener("submit",async event=>{
 
   const status = $("questionStatus");
   const button = $("saveQuestionBtn");
-
   status.className = "";
 
   let question;
-
   try{
     question = getQuestionFormData();
   }catch(error){
@@ -807,50 +724,27 @@ $("questionForm").addEventListener("submit",async event=>{
   }
 
   button.disabled = true;
-  status.textContent =
-    editingQuestionId
-      ? "Updating Bible Question..."
-      : "Saving Bible Question...";
+  status.textContent = editingQuestionId ? "Updating Bible Question..." : "Saving Bible Question...";
 
   try{
     let query;
-
     if(editingQuestionId){
-      query = db
-        .from("bible_questions")
-        .update(question)
-        .eq("id",editingQuestionId)
-        .select("id");
+      query = db.from("bible_questions").update(question).eq("id",editingQuestionId).select("id");
     }else{
-      query = db
-        .from("bible_questions")
-        .insert(question)
-        .select("id");
+      query = db.from("bible_questions").insert(question).select("id");
     }
 
     const {data,error} = await query;
-
     if(error) throw error;
 
-    if(!data || !data.length){
-      throw new Error(
-        "Question was not saved. Check admin permissions."
-      );
-    }
-
-    status.textContent =
-      editingQuestionId
-        ? "✅ Bible Question Updated!"
-        : "✅ Bible Question Saved!";
-
+    status.textContent = editingQuestionId ? "✅ Bible Question Updated!" : "✅ Bible Question Saved!";
     status.className = "success";
 
     resetQuestionForm();
     await loadQuestions();
 
   }catch(error){
-    status.textContent =
-      "Error: " + error.message;
+    status.textContent = "Error: " + error.message;
     status.className = "error";
   }finally{
     button.disabled = false;
@@ -858,8 +752,7 @@ $("questionForm").addEventListener("submit",async event=>{
 });
 
 async function loadQuestions(){
-  $("questionListStatus").textContent =
-    "Loading Bible Questions...";
+  $("questionListStatus").textContent = "Loading Bible Questions...";
 
   const {data,error} = await db
     .from("bible_questions")
@@ -868,8 +761,7 @@ async function loadQuestions(){
     .limit(1000);
 
   if(error){
-    $("questionListStatus").textContent =
-      "Error: " + error.message;
+    $("questionListStatus").textContent = "Error: " + error.message;
     $("questionListStatus").className = "error";
     return;
   }
@@ -882,19 +774,13 @@ async function loadQuestions(){
 function renderQuestions(){
   const language = $("filterLanguage").value;
   const difficulty = $("filterDifficulty").value;
-  const search = $("questionSearch").value
-    .trim().toLowerCase();
+  const search = $("questionSearch").value.trim().toLowerCase();
 
   const filtered = allQuestions.filter(q=>{
-    if(language && q.language !== language)return false;
-    if(difficulty && q.difficulty !== difficulty)return false;
+    if(language && q.language !== language) return false;
+    if(difficulty && q.difficulty !== difficulty) return false;
 
-    const text = (
-      q.bible_book + " " +
-      q.chapter_number + " " +
-      q.question_text
-    ).toLowerCase();
-
+    const text = (q.bible_book + " " + q.chapter_number + " " + q.question_text).toLowerCase();
     return text.includes(search);
   });
 
@@ -903,7 +789,6 @@ function renderQuestions(){
 
   filtered.forEach(q=>{
     const tr = document.createElement("tr");
-
     [
       q.bible_book,
       q.chapter_number,
@@ -937,8 +822,7 @@ function renderQuestions(){
     body.appendChild(tr);
   });
 
-  $("questionListStatus").textContent =
-    filtered.length + " Bible Questions displayed.";
+  $("questionListStatus").textContent = filtered.length + " Bible Questions displayed.";
 }
 
 function editQuestion(id){
@@ -946,7 +830,6 @@ function editQuestion(id){
   if(!q)return;
 
   editingQuestionId = id;
-
   $("bibleBook").value = q.bible_book;
   $("chapterNumber").value = q.chapter_number;
   $("questionLanguage").value = q.language;
@@ -958,50 +841,27 @@ function editQuestion(id){
   $("optionD").value = q.option_d;
   $("correctAnswer").value = q.correct_answer;
 
-  $("saveQuestionBtn").textContent =
-    "💾 Update Bible Question";
-
+  $("saveQuestionBtn").textContent = "💾 Update Bible Question";
   $("cancelEditBtn").classList.remove("hidden");
-
-  $("questionStatus").textContent =
-    "Editing selected Bible Question.";
-
+  $("questionStatus").textContent = "Editing selected Bible Question.";
   $("questionStatus").className = "";
 
-  $("questionManager").scrollIntoView({
-    behavior:"smooth",
-    block:"start"
-  });
+  $("questionManager").scrollIntoView({ behavior:"smooth", block:"start" });
 }
 
 async function deleteQuestion(id){
   const q = allQuestions.find(item=>item.id===id);
   if(!q)return;
 
-  if(!confirm(
-    "Delete this Bible Question?\n\n" +
-    q.question_text
-  ))return;
+  if(!confirm("Delete this Bible Question?\n\n" + q.question_text)) return;
 
-  $("questionListStatus").textContent =
-    "Deleting Bible Question...";
+  $("questionListStatus").textContent = "Deleting Bible Question...";
 
-  const {data,error} = await db
-    .from("bible_questions")
-    .delete()
-    .eq("id",id)
-    .select("id");
+  const {data,error} = await db.from("bible_questions").delete().eq("id",id).select("id");
 
   if(error){
-    $("questionListStatus").textContent =
-      "Delete Error: " + error.message;
+    $("questionListStatus").textContent = "Delete Error: " + error.message;
     $("questionListStatus").className = "error";
-    return;
-  }
-
-  if(!data || !data.length){
-    $("questionListStatus").textContent =
-      "Question not deleted. Check permissions.";
     return;
   }
 
@@ -1012,291 +872,13 @@ async function deleteQuestion(id){
   await loadQuestions();
 }
 
-$("cancelEditBtn").addEventListener(
-  "click",
-  resetQuestionForm
-);
+$("cancelEditBtn").addEventListener("click", resetQuestionForm);
+$("refreshQuestionsBtn").addEventListener("click", loadQuestions);
+$("filterLanguage").addEventListener("change", renderQuestions);
+$("filterDifficulty").addEventListener("change", renderQuestions);
+$("questionSearch").addEventListener("input", renderQuestions);
 
-$("refreshQuestionsBtn").addEventListener(
-  "click",
-  loadQuestions
-);
-
-$("filterLanguage").addEventListener(
-  "change",
-  renderQuestions
-);
-
-$("filterDifficulty").addEventListener(
-  "change",
-  renderQuestions
-);
-
-$("questionSearch").addEventListener(
-  "input",
-  renderQuestions
-);
-
- 
- // GEMINI AI BIBLE QUESTION GENERATOR
-
-let aiGeneratedQuestions = [];
-
-function renderAIQuestions() {
-  const preview = $("aiQuestionPreview");
-  preview.replaceChildren();
-
-  aiGeneratedQuestions.forEach((q, index) => {
-    const box = document.createElement("div");
-    box.style.cssText =
-      "background:white;padding:12px;margin:10px 0;border-radius:8px;";
-
-    const heading = document.createElement("strong");
-    heading.textContent =
-      (index + 1) + ". " + q.question_text;
-    box.appendChild(heading);
-
-    ["A", "B", "C", "D"].forEach(letter => {
-      const p = document.createElement("p");
-      p.textContent =
-        letter + ") " + q["option_" + letter.toLowerCase()];
-      box.appendChild(p);
-    });
-
-    const answer = document.createElement("p");
-    answer.textContent =
-      "Correct Answer: " + q.correct_answer +
-      (q.verse_reference
-        ? " | Reference: " + q.verse_reference
-        : "");
-
-    box.appendChild(answer);
-    preview.appendChild(box);
-  });
-}
-
-async function requestAIQuestions(settings) {
-  const { data, error } = await db.functions.invoke(
-    "generate-bible-questions",
-    { body: settings }
-  );
-
-  if (error) {
-    let details = error.message;
-
-    if (error.context &&
-        typeof error.context.json === "function") {
-      try {
-        const body = await error.context.json();
-        details = body.error || body.message || details;
-      } catch (_) {}
-    }
-
-    throw new Error(details);
-  }
-
-  if (!data?.success || !Array.isArray(data.questions)) {
-    throw new Error(data?.error || "AI generation failed.");
-  }
-
-  return data.questions;
-}
-
-$("aiGenerateBtn").addEventListener("old-ai-generate", async () => {
-  const status = $("aiGenerateStatus");
-  const button = $("aiGenerateBtn");
-
-  const book = $("bibleBook").value.trim();
-  const chapter = Number($("chapterNumber").value);
-  const language = $("questionLanguage").value;
-  const difficulty = $("questionDifficulty").value;
-  const count = Number($("aiQuestionCount").value);
-
-  if (!book || !Number.isInteger(chapter) || chapter < 1) {
-    status.textContent =
-      "Please enter Bible Book and Chapter Number first.";
-    return;
-  }
-
-  button.disabled = true;
-  aiGeneratedQuestions = [];
-  $("aiQuestionPreview").replaceChildren();
-
-  const seen = new Set();
-  const batchSize = 5;
-  const maxAttempts = Math.ceil(count / batchSize) * 3;
-
-  try {
-    for (
-      let attempt = 0;
-      attempt < maxAttempts &&
-      aiGeneratedQuestions.length < count;
-      attempt++
-    ) {
-      const remaining = count - aiGeneratedQuestions.length;
-
-      status.textContent =
-        "✨ Generating Questions: " +
-        aiGeneratedQuestions.length + "/" + count +
-        " completed. Please wait...";
-
-      try {
-        const batch = await requestAIQuestions({
-          bible_book: book,
-          chapter_number: chapter,
-          language,
-          difficulty,
-          count: remaining
-        });
-
-        for (const q of batch) {
-          const key = String(q.question_text || "")
-            .trim()
-            .toLowerCase()
-            .replace(/\s+/g, " ");
-
-          if (!key || seen.has(key)) continue;
-
-          seen.add(key);
-          aiGeneratedQuestions.push(q);
-
-          if (aiGeneratedQuestions.length >= count) break;
-        }
-
-        renderAIQuestions();
-        $("aiSaveAllBtn").classList.remove("hidden");
-
-      } catch (error) {
-        console.error("AI batch error:", error);
-        alert("AI Batch Error: " + error.message);
-        status.textContent =
-          "⚠️ Batch failed. Retrying... " +
-          aiGeneratedQuestions.length + "/" + count;
-      }
-    }
-
-    if (aiGeneratedQuestions.length === count) {
-      status.textContent =
-        "✅ Successfully generated " + count +
-        " questions. Review all answers before saving.";
-    } else {
-      status.textContent =
-        "⚠️ Generated " + aiGeneratedQuestions.length +
-        " of " + count +
-        " questions. Some batches failed or repeated questions.";
-    }
-
-  } catch (error) {
-    status.textContent =
-      "❌ AI Error: " + (error.message || String(error));
-  } finally {
-    button.disabled = false;
-  }
-});
-
-$("aiSaveAllBtn").addEventListener("click", async () => {
-  const button = $("aiSaveAllBtn");
-  const status = $("aiSaveStatus");
-
-  if (!aiGeneratedQuestions.length) {
-    status.textContent = "No AI questions to save.";
-    return;
-  }
-
-  if (!confirm(
-    "Have you reviewed all questions and answers?\n" +
-    "Save " + aiGeneratedQuestions.length + " questions?"
-  )) return;
-
-  button.disabled = true;
-  status.textContent = "Saving AI questions...";
-
-  try {
-    const questions = aiGeneratedQuestions.map(q => ({
-      bible_book: q.bible_book,
-      chapter_number: q.chapter_number,
-      language: q.language,
-      difficulty: q.difficulty,
-      question_text: q.question_text,
-      option_a: q.option_a,
-      option_b: q.option_b,
-      option_c: q.option_c,
-      option_d: q.option_d,
-      correct_answer: q.correct_answer
-    }));
-
-const normalize = text =>
-  String(text || "")
-    .normalize("NFKC")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ");
-
-const { data: existing, error: checkError } = await db
-  .from("bible_questions")
-  .select("bible_book,chapter_number,language,question_text")
-  .eq("chapter_number", questions[0].chapter_number)
-  .eq("language", questions[0].language)
-  .limit(1000);
-
-if (checkError) throw checkError;
-
-const keyOf = q => [
-  normalize(q.bible_book),
-  q.chapter_number,
-  normalize(q.language),
-  normalize(q.question_text)
-].join("|");
-
-const seen = new Set((existing || []).map(keyOf));
-
-const uniqueQuestions = questions.filter(q => {
-  const key = keyOf(q);
-  if (seen.has(key)) return false;
-  seen.add(key);
-  return true;
-});
-
-const skipped = questions.length - uniqueQuestions.length;
-
-if (uniqueQuestions.length === 0) {
-  status.textContent =
-    "⚠️ All questions are duplicates. Nothing saved.";
-  status.className = "error";
-  return;
-}
-
-    const { data, error } = await db
-      .from("bible_questions")
-      .insert(uniqueQuestions)
-      .select("id");
-
-    if (error) throw error;
-
-    if (!data || data.length !== uniqueQuestions.length) {
-      throw new Error("Could not verify all saved questions.");
-    }
-
-    status.textContent =
-      "✅ Successfully saved " + data.length +
-      " AI Bible Questions!";
-    status.className = "success";
-
-    aiGeneratedQuestions = [];
-    button.classList.add("hidden");
-    $("aiQuestionPreview").replaceChildren();
-
-    await loadQuestions();
-
-  } catch (error) {
-    status.textContent = "❌ Save Error: " + error.message;
-    status.className = "error";
-  } finally {
-    button.disabled = false;
-  }
-});
-
-let trilingualQuestions = [];
+// AI TRILINGUAL QUESTION GENERATOR
 
 function downloadTrilingualCSV() {
   if (!trilingualQuestions.length) {
@@ -1316,8 +898,7 @@ function downloadTrilingualCSV() {
     ])
   ];
 
-  const escapeCSV = value =>
-    '"' + String(value ?? "").replace(/"/g, '""') + '"';
+  const escapeCSV = value => '"' + String(value ?? "").replace(/"/g, '""') + '"';
 
   const rows = trilingualQuestions.map((q, index) => {
     const row = [
@@ -1339,17 +920,11 @@ function downloadTrilingualCSV() {
         item.option_d
       );
     }
-
     return row.map(escapeCSV).join(",");
   });
 
-  const csv = "\uFEFF" +
-    [columns.map(escapeCSV).join(","), ...rows].join("\r\n");
-
-  const blob = new Blob([csv], {
-    type: "text/csv;charset=utf-8;"
-  });
-
+  const csv = "\uFEFF" + [columns.map(escapeCSV).join(","), ...rows].join("\r\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -1357,14 +932,10 @@ function downloadTrilingualCSV() {
   document.body.appendChild(link);
   link.click();
   link.remove();
-
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-$("aiDownloadCsvBtn").addEventListener(
-  "click",
-  downloadTrilingualCSV
-);
+$("aiDownloadCsvBtn").addEventListener("click", downloadTrilingualCSV);
 
 async function generateTrilingualQuestions() {
   const status = $("aiGenerateStatus");
@@ -1376,21 +947,20 @@ async function generateTrilingualQuestions() {
   const count = Number($("aiQuestionCount").value);
 
   if (!book || !Number.isInteger(chapter) || chapter < 1) {
-    status.textContent = "Enter Bible Book and Chapter first.";
+    status.textContent = "Please enter Bible Book and Chapter Number first.";
+    status.className = "error";
     return;
   }
 
   button.disabled = true;
   trilingualQuestions = [];
   $("aiDownloadCsvBtn").classList.add("hidden");
-  $("aiSaveAllBtn").classList.add("hidden");
+  $("aiSaveTrilingualBtn").classList.add("hidden");
   $("aiQuestionPreview").replaceChildren();
 
   try {
     for (let i = 0; i < count; i += 2) {
-      status.textContent =
-        "✨ Generating 3 languages: " +
-        trilingualQuestions.length + "/" + count;
+      status.textContent = "✨ Generating 3 languages: " + trilingualQuestions.length + "/" + count;
 
       const { data, error } = await db.functions.invoke(
         "generate-trilingual-questions",
@@ -1429,34 +999,29 @@ async function generateTrilingualQuestions() {
       }
     }
 
-    status.textContent =
-      "✅ " + trilingualQuestions.length +
-      " questions generated in Telugu, English and Tamil. Review before download.";
+    status.textContent = "✅ " + trilingualQuestions.length + " questions generated in Telugu, English and Tamil. Review before saving.";
+    status.className = "success";
 
     $("aiDownloadCsvBtn").classList.remove("hidden");
-$("aiSaveTrilingualBtn").classList.remove("hidden");
+    $("aiSaveTrilingualBtn").classList.remove("hidden");
+
     const preview = $("aiQuestionPreview");
     trilingualQuestions.forEach((q, i) => {
       const box = document.createElement("div");
-      box.style.cssText =
-        "background:white;padding:12px;margin:10px 0;border-radius:8px;";
+      box.style.cssText = "background:white;padding:12px;margin:10px 0;border-radius:8px;";
 
       const title = document.createElement("h4");
-      title.textContent =
-        (i + 1) + ". " + q.telugu.question_text;
+      title.textContent = (i + 1) + ". " + q.telugu.question_text;
       box.appendChild(title);
 
       for (const lang of ["english", "tamil"]) {
         const p = document.createElement("p");
-        p.textContent =
-          lang.toUpperCase() + ": " + q[lang].question_text;
+        p.textContent = lang.toUpperCase() + ": " + q[lang].question_text;
         box.appendChild(p);
       }
 
       const answer = document.createElement("p");
-      answer.textContent =
-        "Answer: " + q.correct_answer +
-        " | " + q.verse_reference;
+      answer.textContent = "Answer: " + q.correct_answer + " | " + (q.verse_reference || "");
       box.appendChild(answer);
 
       preview.appendChild(box);
@@ -1464,15 +1029,15 @@ $("aiSaveTrilingualBtn").classList.remove("hidden");
 
   } catch (error) {
     status.textContent = "❌ " + error.message;
+    status.className = "error";
   } finally {
     button.disabled = false;
   }
 }
 
-// Replace the existing AI Generate click behavior
-// by using this new handler in the next step.
 $("aiGenerateBtn").addEventListener("click", generateTrilingualQuestions); 
- 
+
+// SAVE ALL GENERATED QUESTIONS (TRILINGUAL TO SUPABASE)
 $("aiSaveTrilingualBtn").addEventListener("click", async () => {
   const btn = $("aiSaveTrilingualBtn");
   const status = $("aiSaveStatus");
@@ -1482,10 +1047,12 @@ $("aiSaveTrilingualBtn").addEventListener("click", async () => {
     return;
   }
 
-  if (!confirm("Save all questions in 3 languages?")) return;
+  if (!confirm("Save all " + trilingualQuestions.length + " questions to Supabase in 3 languages?")) return;
 
   btn.disabled = true;
   let saved = 0;
+  status.className = "";
+  status.textContent = "Saving questions to database...";
 
   try {
     for (const q of trilingualQuestions) {
@@ -1493,114 +1060,92 @@ $("aiSaveTrilingualBtn").addEventListener("click", async () => {
       const english = q.english;
       const tamil = q.tamil;
 
-      if (!telugu?.question_text ||
-          !english?.question_text ||
-          !tamil?.question_text) {
-        throw new Error("Question translation missing.");
+      if (!telugu?.question_text || !english?.question_text || !tamil?.question_text) {
+        continue;
       }
 
-      const answer = String(q.correct_answer || "")
-        .trim().toUpperCase();
+      const answer = String(q.correct_answer || "").trim().toUpperCase();
 
-      if (!["A", "B", "C", "D"].includes(answer)) {
-        throw new Error("Invalid correct answer.");
-      }
-
-      const { data: existing, error: findError } = await db
+      // 1. Insert or find Main Question in bible_questions
+      const { data: insertedQuestion, error: mainError } = await db
         .from("bible_questions")
+        .insert({
+          bible_book: q.bible_book,
+          chapter_number: q.chapter_number,
+          language: "telugu",
+          difficulty: q.difficulty,
+          question_text: telugu.question_text,
+          option_a: telugu.option_a,
+          option_b: telugu.option_b,
+          option_c: telugu.option_c,
+          option_d: telugu.option_d,
+          correct_answer: answer
+        })
         .select("id")
-        .eq("bible_book", q.bible_book)
-        .eq("chapter_number", q.chapter_number)
-        .eq("language", "telugu")
-        .eq("question_text", telugu.question_text)
-        .limit(1);
+        .single();
 
-      if (findError) throw findError;
-
-      let questionId = existing?.[0]?.id;
-
-      if (!questionId) {
-        const { data, error } = await db
-          .from("bible_questions")
-          .insert({
-            bible_book: q.bible_book,
-            chapter_number: q.chapter_number,
-            language: "telugu",
-            difficulty: q.difficulty,
-            question_text: telugu.question_text,
-            option_a: telugu.option_a,
-            option_b: telugu.option_b,
-            option_c: telugu.option_c,
-            option_d: telugu.option_d,
-            correct_answer: answer
-          })
-          .select("id")
-          .single();
-
-        if (error) throw error;
-        questionId = data.id;
+      if (mainError) {
+        console.error("Main question error:", mainError);
+        continue;
       }
 
-      const { data: existingTranslations, error: readError } =
-        await db
-          .from("bible_question_translations")
-          .select("language")
-          .eq("question_id", questionId);
+      const questionId = insertedQuestion.id;
 
-      if (readError) throw readError;
-
-      const languages = new Set(
-        (existingTranslations || []).map(t => t.language)
-      );
-
-      const translations = ["telugu", "english", "tamil"]
-        .filter(lang => !languages.has(lang))
-        .map(lang => ({
+      // 2. Insert Translations into bible_question_translations
+      const translations = [
+        {
           question_id: questionId,
-          language: lang,
-          question_text: q[lang].question_text,
-          option_a: q[lang].option_a,
-          option_b: q[lang].option_b,
-          option_c: q[lang].option_c,
-          option_d: q[lang].option_d
-        }));
+          language: "telugu",
+          question_text: telugu.question_text,
+          option_a: telugu.option_a,
+          option_b: telugu.option_b,
+          option_c: telugu.option_c,
+          option_d: telugu.option_d
+        },
+        {
+          question_id: questionId,
+          language: "english",
+          question_text: english.question_text,
+          option_a: english.option_a,
+          option_b: english.option_b,
+          option_c: english.option_c,
+          option_d: english.option_d
+        },
+        {
+          question_id: questionId,
+          language: "tamil",
+          question_text: tamil.question_text,
+          option_a: tamil.option_a,
+          option_b: tamil.option_b,
+          option_c: tamil.option_c,
+          option_d: tamil.option_d
+        }
+      ];
 
-      if (translations.length) {
-        const { error } = await db
-          .from("bible_question_translations")
-          .insert(translations);
-
-        if (error) throw error;
-      }
+      await db.from("bible_question_translations").insert(translations);
 
       saved++;
-      status.textContent =
-        "Saving questions: " + saved + "/" +
-        trilingualQuestions.length;
+      status.textContent = "Saving questions: " + saved + "/" + trilingualQuestions.length;
     }
 
-    status.textContent =
-      "✅ Successfully saved " + saved +
-      " questions in Telugu, English and Tamil!";
-
+    status.textContent = "✅ Successfully saved " + saved + " questions in Telugu, English and Tamil!";
     status.className = "success";
+
     trilingualQuestions = [];
     btn.classList.add("hidden");
+    $("aiQuestionPreview").replaceChildren();
 
     await loadQuestions();
 
   } catch (error) {
-    status.textContent =
-      "❌ Save Error: " + error.message +
-      " | Completed: " + saved;
-
+    status.textContent = "❌ Save Error: " + error.message;
     status.className = "error";
   } finally {
     btn.disabled = false;
   }
 });
- 
- // LIVE EXAM WINNERS
+
+// LIVE EXAM WINNERS
 
 async function loadWinnerExams() {
   const select = $("winnerExamSelect");
@@ -1629,8 +1174,7 @@ async function loadWinnerExams() {
     ));
   });
 
-  status.textContent =
-    "Exams Found: " + (data || []).length;
+  status.textContent = "Exams Found: " + (data || []).length;
 }
 
 async function loadAdminWinners() {
@@ -1660,16 +1204,14 @@ async function loadAdminWinners() {
   }
 
   if (!data || !data.length) {
-    status.textContent =
-      "No results available for this exam.";
+    status.textContent = "No results available for this exam.";
     return;
   }
 
   function formatTime(seconds) {
     if (seconds == null) return "-";
     const n = Number(seconds);
-    return String(Math.floor(n / 60)).padStart(2, "0") +
-      ":" + String(Math.floor(n % 60)).padStart(2, "0");
+    return String(Math.floor(n / 60)).padStart(2, "0") + ":" + String(Math.floor(n % 60)).padStart(2, "0");
   }
 
   data.forEach((student, index) => {
@@ -1679,8 +1221,7 @@ async function loadAdminWinners() {
     const values = [
       rank <= 3 ? ["🥇", "🥈", "🥉"][rank - 1] : rank,
       student.student_name,
-      [student.student_town, student.student_state]
-        .filter(Boolean).join(", "),
+      [student.student_town, student.student_state].filter(Boolean).join(", "),
       student.score + "/" + student.total_questions,
       formatTime(student.time_seconds)
     ];
@@ -1696,30 +1237,17 @@ async function loadAdminWinners() {
     if (rank <= 3) {
       const card = document.createElement("div");
       card.className = "stat";
-      card.textContent =
-        ["🥇", "🥈", "🥉"][rank - 1] +
-        " " + student.student_name +
-        " — " + student.score +
-        "/" + student.total_questions;
-
+      card.textContent = ["🥇", "🥈", "🥉"][rank - 1] + " " + student.student_name + " — " + student.score + "/" + student.total_questions;
       top3.appendChild(card);
     }
   });
 
-  status.textContent =
-    "🏆 Top " + data.length + " Participants Loaded!";
+  status.textContent = "🏆 Top " + data.length + " Participants Loaded!";
 }
 
-$("loadWinnersBtn").addEventListener(
-  "click",
-  loadAdminWinners
-);
+$("loadWinnersBtn").addEventListener("click", loadAdminWinners);
 
 $("releaseAnswersBtn").addEventListener("click", async () => {
-  
-document.getElementById("releaseAnswersStatus").textContent =
-  "✅ Release Button Click Working!";
-
   const examId = $("winnerExamSelect").value;
   const status = $("releaseAnswersStatus");
 
@@ -1735,12 +1263,8 @@ document.getElementById("releaseAnswersStatus").textContent =
   status.textContent = "Releasing answers...";
 
   try {
-    const { error } = await db.rpc("release_exam_answers", {
-      p_exam_id: examId
-    });
-
+    const { error } = await db.rpc("release_exam_answers", { p_exam_id: examId });
     if (error) throw error;
-
     status.textContent = "✅ Correct Answers Released Successfully!";
   } catch (error) {
     status.textContent = "❌ " + error.message;
