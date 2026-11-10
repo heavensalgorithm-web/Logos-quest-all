@@ -318,7 +318,9 @@ const i18n = {
     lblTime: "సమయం",
     lblDate: "తేదీ",
     btnNew: "📝 కొత్త పరీక్ష",
-    btnHome: "🏠 హోమ్ పేజీ"
+    btnHome: "🏠 హోమ్ పేజీ",
+    mins: "నిమిషాలు",
+    secs: "సెకన్లు"
   },
   en: {
     back: "← Home",
@@ -335,7 +337,9 @@ const i18n = {
     lblTime: "Time",
     lblDate: "Date",
     btnNew: "📝 New Exam",
-    btnHome: "🏠 Home Page"
+    btnHome: "🏠 Home Page",
+    mins: "mins",
+    secs: "secs"
   },
   ta: {
     back: "← முகப்பு",
@@ -352,115 +356,12 @@ const i18n = {
     lblTime: "நேரம்",
     lblDate: "தேதி",
     btnNew: "📝 புதிய தேர்வு",
-    btnHome: "🏠 முகப்புப் பக்கம்"
+    btnHome: "🏠 முகப்புப் பக்கம்",
+    mins: "நிமிடங்கள்",
+    secs: "வினாடிகள்"
   },
   hi: {
     back: "← होम",
     hdrSub: "मेरे परिणाम",
     title: "आपके परीक्षा परिणाम",
-    desc: "परीक्षा के दौरान दिया गया मोबाइल नंबर दर्ज करें।",
-    placeholder: "10 अंकों का मोबाइल नंबर",
-    btnSearch: "परिणाम देखें",
-    errMobile: "कृपया वैध 10 अंकों का मोबाइल नंबर दर्ज करें।",
-    noResults: "इस मोबाइल नंबर के लिए कोई परिणाम नहीं मिला।",
-    lblName: "नाम",
-    lblScore: "अंक",
-    lblPercentage: "प्रतिशत",
-    lblTime: "समय",
-    lblDate: "तारीख",
-    btnNew: "📝 नई परीक्षा",
-    btnHome: "🏠 होम पेज"
-  }
-};
-
-function changeLanguage(lang) {
-  currentLang = lang;
-  localStorage.setItem("logos_quest_lang", lang);
-  applyTranslations();
-  searchAndRenderResults();
-}
-
-function applyTranslations() {
-  const t = i18n[currentLang] || i18n.te;
-  $("langSelect").value = currentLang;
-  $("btnBack").textContent = t.back;
-  $("hdrSubtitle").textContent = t.hdrSub;
-  $("txtResultsTitle").textContent = t.title;
-  $("txtResultsDesc").textContent = t.desc;
-  $("mobile").placeholder = t.placeholder;
-  $("btnSubmit").textContent = t.btnSearch;
-  $("btnNavNew").textContent = t.btnNew;
-  $("btnNavHome").textContent = t.btnHome;
-}
-
-function searchAndRenderResults() {
-  const t = i18n[currentLang] || i18n.te;
-  const mobile = $("mobile").value.trim();
-  const box = $("results");
-
-  if (!mobile) return;
-  box.innerHTML = "";
-
-  if (!/^[0-9]{10}$/.test(mobile)) {
-    box.innerHTML = `<div class="status-msg" style="color:#f87171;">${t.errMobile}</div>`;
-    return;
-  }
-
-  let saved = [];
-  try {
-    saved = JSON.parse(localStorage.getItem("logosQuestResults") || "[]");
-    if (!Array.isArray(saved)) saved = [];
-  } catch (error) {
-    saved = [];
-  }
-
-  const matches = saved.filter(item => String(item.mobile) === mobile);
-
-  if (matches.length === 0) {
-    box.innerHTML = `<div class="status-msg">${t.noResults}</div>`;
-    return;
-  }
-
-  matches.reverse().forEach(item => {
-    const div = document.createElement("div");
-    div.className = "result";
-
-    const lines = [
-      `<strong>${t.lblName}:</strong> ${item.name || "-"}`,
-      `<strong>${t.lblScore}:</strong> ${item.score} / ${item.total}`,
-      `<strong>${t.lblPercentage}:</strong> ${item.percentage}%`,
-      `<strong>${t.lblTime}:</strong> ${item.time || "-"}`,
-      `<strong>${t.lblDate}:</strong> ${item.date || "-"}`
-    ];
-
-    lines.forEach(line => {
-      const p = document.createElement("p");
-      p.innerHTML = line;
-      div.appendChild(p);
-    });
-
-    box.appendChild(div);
-  });
-}
-
-// ఫారమ్ సబ్‌మిషన్
-$("searchForm").addEventListener("submit", function(event) {
-  event.preventDefault();
-  searchAndRenderResults();
-});
-
-// లాగిన్ యూజర్ వివరాలు ఉంటే ఆటో-ఫిల్ చేయడం
-window.addEventListener("DOMContentLoaded", () => {
-  applyTranslations();
-  try {
-    const user = JSON.parse(localStorage.getItem("logos_quest_user") || "{}");
-    if (user && user.identifier && /^[0-9]{10}$/.test(user.identifier)) {
-      $("mobile").value = user.identifier;
-      searchAndRenderResults();
-    }
-  } catch (e) {}
-});
-</script>
-
-</body>
-</html>
+    desc: "परीक्षा के दौरान दिया गया मोबाइल नंबर दर्ज
