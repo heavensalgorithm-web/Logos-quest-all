@@ -51,7 +51,7 @@ body {
 }
 
 .lang-select {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.95);
   color: var(--gold-primary);
   border: 1.5px solid var(--card-border);
   padding: 8px 14px;
@@ -61,6 +61,11 @@ body {
   outline: none;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.lang-select option {
+  background: #0f172a;
+  color: #f8fafc;
 }
 
 .card {
@@ -300,16 +305,17 @@ a {
 
 <body>
 
-<!-- భాష మార్పిడి సెలెక్టర్ (Language Selector) -->
+<!-- భాష మార్పిడి డ్రాప్‌డౌన్ (తెలుగు, English, தமிழ், हिन्दी) -->
 <div class="lang-selector-box">
   <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
     <option value="te">🇮🇳 తెలుగు</option>
     <option value="en">🌐 English</option>
+    <option value="ta">🇮🇳 தமிழ்</option>
     <option value="hi">🇮🇳 हिन्दी</option>
   </select>
 </div>
 
-<!-- ================= AUTH VIEW (ఖాతా సృష్టించండి / లాగిన్ సెక్షన్) ================= -->
+<!-- ================= AUTH VIEW ================= -->
 <div id="authContainer" class="card" style="max-width:440px;">
   <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
   <h1>LOGOS QUEST</h1>
@@ -343,7 +349,7 @@ a {
   </form>
 </div>
 
-<!-- ================= DASHBOARD VIEW (ఎగ్జామ్స్ & హోమ్ సెక్షన్) ================= -->
+<!-- ================= DASHBOARD VIEW ================= -->
 <div id="dashboardContainer" style="display:none;">
 
   <div class="card" style="padding:16px 20px;">
@@ -406,7 +412,7 @@ let currentMode = "register";
 let currentUser = null;
 let exams = [];
 
-/* --- బహుభాషా నిఘంటువు (Translations) --- */
+/* --- బహుభాషా నిఘంటువు (Telugu, English, Tamil, Hindi) --- */
 const i18n = {
   te: {
     authSubTitle: "పరీక్షల్లో పాల్గొనడానికి అకౌంట్ వివరాలు నమోదు చేయండి",
@@ -471,6 +477,38 @@ const i18n = {
     errName: "Please enter your full name.",
     errFields: "Please enter all required fields.",
     logoutConfirm: "Are you sure you want to log out?"
+  },
+  ta: {
+    authSubTitle: "தேர்வுகளில் பங்கேற்க உங்கள் கணக்கு விவரங்களை உள்ளிடவும்",
+    tabRegister: "கணக்கை உருவாக்கவும்",
+    tabLogin: "உள்நுழைக",
+    lblFullName: "முழு பெயர் (Full Name)",
+    lblIdentifier: "தொலைபேசி எண் அல்லது மின்னஞ்சல்",
+    lblPassword: "கடவுச்சொல் (Password)",
+    btnRegister: "கணக்கை உருவாக்கவும் (Sign Up)",
+    btnLogin: "உள்நுழையவும் (Login)",
+    btnLogout: "🚪 வெளியேறு",
+    dashSubtitle: "பைபிள் வினாடி வினா போட்டிக்கு வரவேற்கிறோம்",
+    dashExamsTitle: "📚 நேரலை பைபிள் தேர்வுகள்",
+    dashIstNotice: "தேர்வு நேரங்கள் IST படி அமைக்கப்பட்டவை",
+    btnRefresh: "🔄 தேர்வுகளைப் புதுப்பிக்கவும்",
+    loadingExams: "தேர்வு அட்டவணைகள் ஏற்றப்படுகின்றன...",
+    noExams: "தற்போது நேரலை அல்லது வரவிருக்கும் தேர்வுகள் இல்லை.",
+    liveCount: "🟢 {count} நேரலைத் தேர்வு(கள்) உள்ளன",
+    upcomingOnly: "வரவிருக்கும் தேர்வுகளை கீழே காண்க.",
+    btnJoin: "▶ தேர்வில் சேரவும்",
+    btnNotStarted: "⏳ இன்னும் தொடங்கவில்லை",
+    dashWinnersTitle: "🏆 வெற்றியாளர்கள்",
+    dashWinnersDesc: "இந்த வார வெற்றியாளர்கள் விரைவில் தோன்றுவார்கள்.",
+    linkLeaderboard: "முன்னணிப் பலகையைப் பார்க்கவும் →",
+    dashResultsTitle: "📊 எனது முடிவுகள்",
+    dashResultsDesc: "உங்கள் தேர்வு முடிவுகளை இங்கே பார்க்கலாம்.",
+    linkResults: "முடிவுகளைக் காண்க →",
+    examNotStartedAlert: "இந்தத் தேர்வு இன்னும் தொடங்கவில்லை.",
+    examEndedAlert: "இந்தத் தேர்வு முடிந்துவிட்டது.",
+    errName: "தயவுசெய்து உங்கள் முழு பெயரை உள்ளிடவும்.",
+    errFields: "தயவுசெய்து அனைத்து விவரங்களையும் உள்ளிடவும்.",
+    logoutConfirm: "நிச்சயமாக வெளியேற விரும்புகிறீர்களா?"
   },
   hi: {
     authSubTitle: "परीक्षाओं में भाग लेने के लिए अपना खाता विवरण दर्ज करें",
@@ -569,7 +607,7 @@ function showDashboard() {
 function switchAuthTab(mode) {
   currentMode = mode;
   $("authMsg").style.display = "none";
-  const t = i18n[currentLang];
+  const t = i18n[currentLang] || i18n.te;
   if (mode === "register") {
     $("tabRegister").classList.add("active");
     $("tabLogin").classList.remove("active");
@@ -585,7 +623,7 @@ function switchAuthTab(mode) {
 
 async function handleAuthSubmit(e) {
   e.preventDefault();
-  const t = i18n[currentLang];
+  const t = i18n[currentLang] || i18n.te;
   const msgEl = $("authMsg");
   msgEl.style.display = "none";
 
@@ -622,7 +660,7 @@ function showMsg(text) {
 }
 
 function logoutUser() {
-  const t = i18n[currentLang];
+  const t = i18n[currentLang] || i18n.te;
   if (confirm(t.logoutConfirm)) {
     localStorage.removeItem("logos_quest_user");
     currentUser = null;
@@ -650,7 +688,7 @@ function makeText(tag,text){
 }
 
 function joinExam(exam){
-  const t = i18n[currentLang];
+  const t = i18n[currentLang] || i18n.te;
   const now = Date.now();
   const start = new Date(exam.start_time).getTime();
   const end = new Date(exam.end_time).getTime();
@@ -675,7 +713,7 @@ function joinExam(exam){
 }
 
 function renderExams(){
-  const t = i18n[currentLang];
+  const t = i18n[currentLang] || i18n.te;
   const list = $("examList");
   list.replaceChildren();
 
@@ -725,36 +763,4 @@ function renderExams(){
 }
 
 async function loadExams(){
-  const t = i18n[currentLang];
-  const status = $("examStatus");
-  status.className = "center";
-  status.textContent = t.loadingExams;
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
-
-  try {
-    const {data, error} = await db
-      .from("exam_schedules")
-      .select("id,exam_name,start_time,end_time,question_count,max_attempts")
-      .gt("end_time",new Date().toISOString())
-      .order("start_time",{ascending:true})
-      .limit(50)
-      .abortSignal(controller.signal);
-
-    if (error) throw error;
-    exams = data || [];
-    renderExams();
-  } catch (error) {
-    status.textContent = "❌ " + (controller.signal.aborted ? "Connection timed out" : error.message);
-    status.className = "center error";
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
-// ప్రారంభంలో అప్లై చేయడం
-checkExistingSession();
-</script>
-</body>
-</html>
+  const t = i18n[currentLang] || i18
