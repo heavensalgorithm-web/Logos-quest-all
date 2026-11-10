@@ -22,7 +22,7 @@
   --gold-dark: #ca8a04;
   --gold-glow: rgba(250, 204, 21, 0.35);
   --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  --text-muted: #cbd5e1;
   --live-green: #10b981;
   --upcoming-gold: #f59e0b;
 }
@@ -132,7 +132,7 @@ p {
 .input-field {
   width: 100%;
   padding: 13px 16px;
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(15, 23, 42, 0.85);
   border: 1.5px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   color: #ffffff;
@@ -149,7 +149,7 @@ p {
 /* టాబ్ స్విచర్ (Login / Sign Up) */
 .auth-tabs {
   display: flex;
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(15, 23, 42, 0.8);
   border-radius: 12px;
   padding: 4px;
   margin-bottom: 20px;
@@ -168,19 +168,21 @@ p {
   cursor: pointer;
   box-shadow: none;
   margin: 0;
+  text-align: center;
 }
 
 .tab-btn.active {
   background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
-  color: #0b1329;
+  color: #0b1329 !important;
+  font-weight: 700;
   box-shadow: 0 2px 8px var(--gold-glow);
 }
 
 /* బటన్లు */
 .btn-action {
   background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
-  color: #0b1329;
-  font-weight: 700;
+  color: #0b1329 !important;
+  font-weight: 800;
   padding: 14px 24px;
   border: none;
   border-radius: 12px;
@@ -190,6 +192,7 @@ p {
   box-shadow: 0 4px 14px var(--gold-glow);
   transition: all 0.25s ease;
   width: 100%;
+  text-align: center;
 }
 
 .btn-action:hover:not(:disabled) {
@@ -305,7 +308,7 @@ a {
 
 <body>
 
-<!-- భాష మార్పిడి డ్రాప్‌డౌన్ (తెలుగు, English, தமிழ், हिन्दी) -->
+<!-- భాష మార్పిడి సెలెక్టర్ -->
 <div class="lang-selector-box">
   <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
     <option value="te">🇮🇳 తెలుగు</option>
@@ -320,32 +323,32 @@ a {
   <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
   <h1>LOGOS QUEST</h1>
   <h2>Live Bible Quiz</h2>
-  <p class="center" id="authSubTitle" style="font-size:14px; margin-bottom:20px;"></p>
+  <p class="center" id="authSubTitle" style="font-size:14px; margin-bottom:20px;">పరీక్షల్లో పాల్గొనడానికి అకౌంట్ వివరాలు నమోదు చేయండి</p>
 
   <div class="auth-tabs">
-    <button class="tab-btn active" id="tabRegister" onclick="switchAuthTab('register')"></button>
-    <button class="tab-btn" id="tabLogin" onclick="switchAuthTab('login')"></button>
+    <button type="button" class="tab-btn active" id="tabRegister" onclick="switchAuthTab('register')">ఖాతా సృష్టించండి</button>
+    <button type="button" class="tab-btn" id="tabLogin" onclick="switchAuthTab('login')">లాగిన్</button>
   </div>
 
   <form id="authForm" onsubmit="handleAuthSubmit(event)">
     <div class="input-group" id="nameGroup">
-      <label id="lblFullName"></label>
+      <label id="lblFullName">మీ పూర్తి పేరు (Full Name)</label>
       <input type="text" id="authName" class="input-field" placeholder="Ex: Prasanth Kumar">
     </div>
 
     <div class="input-group">
-      <label id="lblIdentifier"></label>
+      <label id="lblIdentifier">ఫోన్ నంబర్ లేదా ఈమెయిల్</label>
       <input type="text" id="authIdentifier" class="input-field" placeholder="Ex: 9876543210 / email@test.com" required>
     </div>
 
     <div class="input-group">
-      <label id="lblPassword"></label>
+      <label id="lblPassword">పాస్‌వర్డ్ (Password)</label>
       <input type="password" id="authPassword" class="input-field" placeholder="••••••••" required>
     </div>
 
     <p id="authMsg" class="center error" style="display:none;"></p>
 
-    <button type="submit" class="btn-action" id="authSubmitBtn"></button>
+    <button type="submit" class="btn-action" id="authSubmitBtn">ఖాతా సృష్టించండి (Sign Up)</button>
   </form>
 </div>
 
@@ -357,22 +360,22 @@ a {
       <div class="user-info">
         <span>👤 <span id="currentUserName">User</span></span>
       </div>
-      <button class="btn-secondary" onclick="logoutUser()" id="btnLogout"></button>
+      <button type="button" class="btn-secondary" onclick="logoutUser()" id="btnLogout">🚪 లాగౌట్</button>
     </div>
 
     <div class="center">
       <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img" style="width:75px; height:75px;">
       <h1>LOGOS QUEST</h1>
-      <p style="margin:4px 0 0;" id="dashSubtitle"></p>
+      <p style="margin:4px 0 0;" id="dashSubtitle">బైబిల్ క్విజ్ పోటీలకు స్వాగతం</p>
     </div>
   </div>
 
   <div class="card">
-    <h2 id="dashExamsTitle"></h2>
-    <p class="center" id="dashIstNotice"></p>
+    <h2 id="dashExamsTitle">📚 లైవ్ బైబిల్ పరీక్షలు</h2>
+    <p class="center" id="dashIstNotice">పరీక్షల సమయాలు IST ప్రకారం</p>
 
     <div class="center">
-      <button class="btn-action" style="max-width:240px;" id="refreshBtn" onclick="loadExams()"></button>
+      <button type="button" class="btn-action" style="max-width:240px;" id="refreshBtn" onclick="loadExams()">🔄 పరీక్షలను రిఫ్రెష్ చేయండి</button>
     </div>
 
     <p id="examStatus" class="center"></p>
@@ -380,15 +383,15 @@ a {
   </div>
 
   <div class="card center">
-    <h2 id="dashWinnersTitle"></h2>
-    <p id="dashWinnersDesc"></p>
-    <a href="leaderboard.html" id="linkLeaderboard"></a>
+    <h2 id="dashWinnersTitle">🏆 విజేతలు</h2>
+    <p id="dashWinnersDesc">ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
+    <a href="leaderboard.html" id="linkLeaderboard">లీడర్‌బోర్డ్ చూడండి →</a>
   </div>
 
   <div class="card center">
-    <h2 id="dashResultsTitle"></h2>
-    <p id="dashResultsDesc"></p>
-    <a href="results.html" id="linkResults"></a>
+    <h2 id="dashResultsTitle">📊 నా ఫలితాలు</h2>
+    <p id="dashResultsDesc">మీ పరీక్ష ఫలితాలు ఇక్కడ చూడవచ్చు.</p>
+    <a href="results.html" id="linkResults">ఫలితాలు చూడండి →</a>
   </div>
 
   <div class="footer-links">
@@ -555,27 +558,33 @@ function changeLanguage(lang) {
 
 function applyTranslations() {
   const t = i18n[currentLang] || i18n.te;
-  $("langSelect").value = currentLang;
+  const selectEl = $("langSelect");
+  if (selectEl) selectEl.value = currentLang;
 
-  $("authSubTitle").textContent = t.authSubTitle;
-  $("tabRegister").textContent = t.tabRegister;
-  $("tabLogin").textContent = t.tabLogin;
-  $("lblFullName").textContent = t.lblFullName;
-  $("lblIdentifier").textContent = t.lblIdentifier;
-  $("lblPassword").textContent = t.lblPassword;
-  $("authSubmitBtn").textContent = currentMode === "register" ? t.btnRegister : t.btnLogin;
+  const setTxt = (id, val) => {
+    const el = $(id);
+    if (el) el.textContent = val;
+  };
 
-  $("btnLogout").textContent = t.btnLogout;
-  $("dashSubtitle").textContent = t.dashSubtitle;
-  $("dashExamsTitle").textContent = t.dashExamsTitle;
-  $("dashIstNotice").textContent = t.dashIstNotice;
-  $("refreshBtn").textContent = t.btnRefresh;
-  $("dashWinnersTitle").textContent = t.dashWinnersTitle;
-  $("dashWinnersDesc").textContent = t.dashWinnersDesc;
-  $("linkLeaderboard").textContent = t.linkLeaderboard;
-  $("dashResultsTitle").textContent = t.dashResultsTitle;
-  $("dashResultsDesc").textContent = t.dashResultsDesc;
-  $("linkResults").textContent = t.linkResults;
+  setTxt("authSubTitle", t.authSubTitle);
+  setTxt("tabRegister", t.tabRegister);
+  setTxt("tabLogin", t.tabLogin);
+  setTxt("lblFullName", t.lblFullName);
+  setTxt("lblIdentifier", t.lblIdentifier);
+  setTxt("lblPassword", t.lblPassword);
+  setTxt("authSubmitBtn", currentMode === "register" ? t.btnRegister : t.btnLogin);
+
+  setTxt("btnLogout", t.btnLogout);
+  setTxt("dashSubtitle", t.dashSubtitle);
+  setTxt("dashExamsTitle", t.dashExamsTitle);
+  setTxt("dashIstNotice", t.dashIstNotice);
+  setTxt("refreshBtn", t.btnRefresh);
+  setTxt("dashWinnersTitle", t.dashWinnersTitle);
+  setTxt("dashWinnersDesc", t.dashWinnersDesc);
+  setTxt("linkLeaderboard", t.linkLeaderboard);
+  setTxt("dashResultsTitle", t.dashResultsTitle);
+  setTxt("dashResultsDesc", t.dashResultsDesc);
+  setTxt("linkResults", t.linkResults);
 }
 
 /* --- అథెంటికేషన్ లాజిక్ --- */
@@ -750,6 +759,7 @@ function renderExams(){
     card.appendChild(makeText("p","🔁 Attempts: " + exam.max_attempts));
 
     const button = document.createElement("button");
+    button.type = "button";
     button.className = "btn-action";
     button.style.width = "100%";
     button.textContent = isLive ? t.btnJoin : t.btnNotStarted;
@@ -763,4 +773,38 @@ function renderExams(){
 }
 
 async function loadExams(){
-  const t = i18n[currentLang] || i18
+  const t = i18n[currentLang] || i18n.te;
+  const status = $("examStatus");
+  status.className = "center";
+  status.textContent = t.loadingExams;
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+
+  try {
+    const {data, error} = await db
+      .from("exam_schedules")
+      .select("id,exam_name,start_time,end_time,question_count,max_attempts")
+      .gt("end_time",new Date().toISOString())
+      .order("start_time",{ascending:true})
+      .limit(50)
+      .abortSignal(controller.signal);
+
+    if (error) throw error;
+    exams = data || [];
+    renderExams();
+  } catch (error) {
+    status.textContent = "❌ " + (controller.signal.aborted ? "Connection timed out" : error.message);
+    status.className = "center error";
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+// ప్రారంభంలో లోడ్ చేయడం
+window.addEventListener("DOMContentLoaded", () => {
+  checkExistingSession();
+});
+</script>
+</body>
+</html>
