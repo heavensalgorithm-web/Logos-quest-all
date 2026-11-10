@@ -42,7 +42,6 @@ body {
   min-height: 100vh;
 }
 
-/* లాంగ్వేజ్ స్విచర్ డ్రాప్‌డౌన్ */
 .lang-selector-box {
   display: flex;
   justify-content: flex-end;
@@ -116,7 +115,6 @@ p {
   margin: 8px 0;
 }
 
-/* ఇన్‌పుట్ ఫీల్డ్స్ */
 .input-group {
   margin-bottom: 14px;
   text-align: left;
@@ -146,7 +144,53 @@ p {
   box-shadow: 0 0 10px var(--gold-glow);
 }
 
-/* టాబ్ స్విచర్ (Login / Sign Up) */
+/* ఫోటో అప్‌లోడ్ / కెమెరా స్టైలింగ్ */
+.photo-upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 2px dashed rgba(234, 179, 8, 0.4);
+  border-radius: 16px;
+}
+
+.preview-photo {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--gold-primary);
+  margin-bottom: 12px;
+  display: none;
+  box-shadow: 0 4px 15px var(--gold-glow);
+}
+
+.photo-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-photo {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--gold-primary);
+  border: 1px solid var(--card-border);
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn-photo:hover {
+  background: rgba(234, 179, 8, 0.2);
+}
+
 .auth-tabs {
   display: flex;
   background: rgba(15, 23, 42, 0.8);
@@ -154,16 +198,17 @@ p {
   padding: 4px;
   margin-bottom: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 4px;
 }
 
 .tab-btn {
   flex: 1;
-  padding: 10px;
+  padding: 10px 4px;
   border: none;
   background: transparent;
   color: var(--text-muted);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   border-radius: 8px;
   cursor: pointer;
   box-shadow: none;
@@ -174,11 +219,10 @@ p {
 .tab-btn.active {
   background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
   color: #0b1329 !important;
-  font-weight: 700;
+  font-weight: 800;
   box-shadow: 0 2px 8px var(--gold-glow);
 }
 
-/* బటన్లు */
 .btn-action {
   background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
   color: #0b1329 !important;
@@ -211,17 +255,15 @@ p {
   cursor: pointer;
   width: auto;
   margin: 0;
-  box-shadow: none;
 }
 
-/* యూజర్ హెడర్ బార్ */
 .user-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: rgba(15, 23, 42, 0.7);
   border: 1px solid var(--card-border);
-  padding: 12px 18px;
+  padding: 10px 16px;
   border-radius: 14px;
   margin-bottom: 16px;
 }
@@ -229,30 +271,26 @@ p {
 .user-info {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-size: 14px;
   font-weight: 600;
   color: var(--gold-primary);
 }
 
-/* ఎగ్జామ్ కార్డులు */
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--gold-primary);
+}
+
 .exam {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 18px;
   margin-top: 16px;
-}
-
-.exam h3 {
-  color: #f8fafc;
-  margin: 0 0 8px 0;
-  font-size: 18px;
-}
-
-.exam p {
-  font-size: 14px;
-  margin: 4px 0;
 }
 
 .live {
@@ -287,7 +325,6 @@ a {
   color: var(--gold-primary);
   text-decoration: none;
   font-weight: 600;
-  display: inline-block;
 }
 
 .footer-links {
@@ -300,7 +337,6 @@ a {
 
 .footer-links a {
   color: #94a3b8;
-  font-weight: normal;
   margin: 0 8px;
 }
 </style>
@@ -308,7 +344,6 @@ a {
 
 <body>
 
-<!-- భాష మార్పిడి సెలెక్టర్ -->
 <div class="lang-selector-box">
   <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
     <option value="te">🇮🇳 తెలుగు</option>
@@ -323,17 +358,34 @@ a {
   <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
   <h1>LOGOS QUEST</h1>
   <h2>Live Bible Quiz</h2>
-  <p class="center" id="authSubTitle" style="font-size:14px; margin-bottom:20px;">పరీక్షల్లో పాల్గొనడానికి అకౌంట్ వివరాలు నమోదు చేయండి</p>
+  <p class="center" id="authSubTitle" style="font-size:14px; margin-bottom:16px;"></p>
 
   <div class="auth-tabs">
     <button type="button" class="tab-btn active" id="tabRegister" onclick="switchAuthTab('register')">ఖాతా సృష్టించండి</button>
     <button type="button" class="tab-btn" id="tabLogin" onclick="switchAuthTab('login')">లాగిన్</button>
+    <button type="button" class="tab-btn" id="tabAdmin" onclick="switchAuthTab('admin')">అడ్మిన్</button>
   </div>
 
   <form id="authForm" onsubmit="handleAuthSubmit(event)">
     <div class="input-group" id="nameGroup">
       <label id="lblFullName">మీ పూర్తి పేరు (Full Name)</label>
       <input type="text" id="authName" class="input-field" placeholder="Ex: Prasanth Kumar">
+    </div>
+
+    <!-- ఫోటో అప్‌లోడ్ / లైవ్ సెల్ఫీ సెక్షన్ -->
+    <div class="photo-upload-box" id="photoBox">
+      <img id="userPhotoPreview" class="preview-photo" alt="Profile Preview">
+      <p id="lblPhotoNotice" style="font-size:12px; margin:0 0 10px; color:var(--gold-primary);">
+        📸 Top 3 ర్యాంకర్ల ఫోటోలు లీడర్‌బోర్డ్‌లో ప్రదర్శించబడతాయి!
+      </p>
+      
+      <div class="photo-buttons">
+        <label for="cameraInput" class="btn-photo" id="btnCamera">📷 Take Selfie</label>
+        <input type="file" id="cameraInput" accept="image/*" capture="user" style="display:none;" onchange="handlePhotoUpload(event)">
+        
+        <label for="galleryInput" class="btn-photo" id="btnGallery">📁 Upload Photo</label>
+        <input type="file" id="galleryInput" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
+      </div>
     </div>
 
     <div class="input-group">
@@ -358,7 +410,8 @@ a {
   <div class="card" style="padding:16px 20px;">
     <div class="user-bar">
       <div class="user-info">
-        <span>👤 <span id="currentUserName">User</span></span>
+        <img id="dashUserAvatar" class="user-avatar" src="icon-512.png" alt="Avatar">
+        <span><span id="currentUserName">User</span></span>
       </div>
       <button type="button" class="btn-secondary" onclick="logoutUser()" id="btnLogout">🚪 లాగౌట్</button>
     </div>
@@ -396,7 +449,7 @@ a {
 
   <div class="footer-links">
     <a href="privacy.html">Privacy Policy</a> | 
-    <a href="admin.html">Admin</a>
+    <a href="admin.html">Admin Dashboard</a>
     <p style="margin-top:10px;">LOGOS QUEST &copy; 2026. All rights reserved.</p>
   </div>
 </div>
@@ -413,19 +466,23 @@ const $ = id => document.getElementById(id);
 let currentLang = localStorage.getItem("logos_quest_lang") || "te";
 let currentMode = "register";
 let currentUser = null;
+let userPhotoBase64 = null;
 let exams = [];
 
-/* --- బహుభాషా నిఘంటువు (Telugu, English, Tamil, Hindi) --- */
+/* --- 4 భాషల నిఘంటువు --- */
 const i18n = {
   te: {
     authSubTitle: "పరీక్షల్లో పాల్గొనడానికి అకౌంట్ వివరాలు నమోదు చేయండి",
     tabRegister: "ఖాతా సృష్టించండి",
     tabLogin: "లాగిన్",
+    tabAdmin: "అడ్మిన్",
     lblFullName: "మీ పూర్తి పేరు (Full Name)",
     lblIdentifier: "ఫోన్ నంబర్ లేదా ఈమెయిల్",
+    lblAdminIdentifier: "అడ్మిన్ ఈమెయిల్ (Admin Email)",
     lblPassword: "పాస్‌వర్డ్ (Password)",
     btnRegister: "ఖాతా సృష్టించండి (Sign Up)",
     btnLogin: "లాగిన్ అవ్వండి (Login)",
+    btnAdminLogin: "అడ్మిన్ లాగిన్ (Admin Login)",
     btnLogout: "🚪 లాగౌట్",
     dashSubtitle: "బైబిల్ క్విజ్ పోటీలకు స్వాగతం",
     dashExamsTitle: "📚 లైవ్ బైబిల్ పరీక్షలు",
@@ -447,17 +504,23 @@ const i18n = {
     examEndedAlert: "ఈ పరీక్ష సమయం ముగిసింది.",
     errName: "దయచేసి మీ పూర్తి పేరు నమోదు చేయండి.",
     errFields: "దయచేసి అన్ని వివరాలను నమోదు చేయండి.",
-    logoutConfirm: "మీరు నిజంగా లాగౌట్ కావాలనుకుంటున్నారా?"
+    logoutConfirm: "మీరు నిజంగా లాగౌట్ కావాలనుకుంటున్నారా?",
+    photoNotice: "📸 Top 3 ర్యాంకర్ల ఫోటోలు లీడర్‌బోర్డ్‌లో ప్రదర్శించబడతాయి!",
+    btnCamera: "📷 సెల్ఫీ తీసుకోండి",
+    btnGallery: "📁 ఫోటో అప్‌లోడ్"
   },
   en: {
     authSubTitle: "Enter your account details to participate in exams",
     tabRegister: "Create Account",
     tabLogin: "Login",
+    tabAdmin: "Admin",
     lblFullName: "Full Name",
     lblIdentifier: "Phone Number or Email",
+    lblAdminIdentifier: "Admin Email",
     lblPassword: "Password",
     btnRegister: "Create Account (Sign Up)",
     btnLogin: "Login to Account",
+    btnAdminLogin: "Admin Login",
     btnLogout: "🚪 Logout",
     dashSubtitle: "Welcome to Logos Quest Quiz Arena",
     dashExamsTitle: "📚 Live Bible Exams",
@@ -479,17 +542,23 @@ const i18n = {
     examEndedAlert: "This exam has already ended.",
     errName: "Please enter your full name.",
     errFields: "Please enter all required fields.",
-    logoutConfirm: "Are you sure you want to log out?"
+    logoutConfirm: "Are you sure you want to log out?",
+    photoNotice: "📸 Top 3 ranker photos will appear on the Leaderboard!",
+    btnCamera: "📷 Take Selfie",
+    btnGallery: "📁 Upload Photo"
   },
   ta: {
     authSubTitle: "தேர்வுகளில் பங்கேற்க உங்கள் கணக்கு விவரங்களை உள்ளிடவும்",
     tabRegister: "கணக்கை உருவாக்கவும்",
     tabLogin: "உள்நுழைக",
+    tabAdmin: "நிர்வாகி",
     lblFullName: "முழு பெயர் (Full Name)",
     lblIdentifier: "தொலைபேசி எண் அல்லது மின்னஞ்சல்",
+    lblAdminIdentifier: "நிர்வாகி மின்னஞ்சல் (Admin Email)",
     lblPassword: "கடவுச்சொல் (Password)",
     btnRegister: "கணக்கை உருவாக்கவும் (Sign Up)",
     btnLogin: "உள்நுழையவும் (Login)",
+    btnAdminLogin: "நிர்வாகி உள்நுழைவு (Admin Login)",
     btnLogout: "🚪 வெளியேறு",
     dashSubtitle: "பைபிள் வினாடி வினா போட்டிக்கு வரவேற்கிறோம்",
     dashExamsTitle: "📚 நேரலை பைபிள் தேர்வுகள்",
@@ -511,17 +580,23 @@ const i18n = {
     examEndedAlert: "இந்தத் தேர்வு முடிந்துவிட்டது.",
     errName: "தயவுசெய்து உங்கள் முழு பெயரை உள்ளிடவும்.",
     errFields: "தயவுசெய்து அனைத்து விவரங்களையும் உள்ளிடவும்.",
-    logoutConfirm: "நிச்சயமாக வெளியேற விரும்புகிறீர்களா?"
+    logoutConfirm: "நிச்சயமாக வெளியேற விரும்புகிறீர்களா?",
+    photoNotice: "📸 முதல் 3 வெற்றியாளர்களின் புகைப்படம் முன்னணி பலகையில் காட்டப்படும்!",
+    btnCamera: "📷 செல்ஃபி எடுக்கவும்",
+    btnGallery: "📁 படம் பதிவேற்றவும்"
   },
   hi: {
     authSubTitle: "परीक्षाओं में भाग लेने के लिए अपना खाता विवरण दर्ज करें",
     tabRegister: "खाता बनाएं",
     tabLogin: "लॉग इन",
+    tabAdmin: "व्यवस्थापक (Admin)",
     lblFullName: "पूरा नाम (Full Name)",
     lblIdentifier: "फ़ोन नंबर या ईमेल",
+    lblAdminIdentifier: "व्यवस्थापक ईमेल (Admin Email)",
     lblPassword: "पासवर्ड (Password)",
     btnRegister: "खाता बनाएं (Sign Up)",
     btnLogin: "लॉग इन करें (Login)",
+    btnAdminLogin: "व्यवस्थापक लॉगिन (Admin Login)",
     btnLogout: "🚪 लॉग आउट",
     dashSubtitle: "लोगोस क्वेस्ट क्विज़ में आपका स्वागत है",
     dashExamsTitle: "📚 लाइव बाइबिल परीक्षाएं",
@@ -543,7 +618,10 @@ const i18n = {
     examEndedAlert: "इस परीक्षा का समय समाप्त हो गया है।",
     errName: "कृपया अपना पूरा नाम दर्ज करें।",
     errFields: "कृपया सभी विवरण दर्ज करें।",
-    logoutConfirm: "क्या आप वाकई लॉग आउट करना चाहते हैं?"
+    logoutConfirm: "क्या आप वाकई लॉग आउट करना चाहते हैं?",
+    photoNotice: "📸 शीर्ष 3 विजेताओं की तस्वीरें लीडरबोर्ड पर दिखाई देंगी!",
+    btnCamera: "📷 सेल्फी लें",
+    btnGallery: "📁 फोटो अपलोड करें"
   }
 };
 
@@ -551,9 +629,7 @@ function changeLanguage(lang) {
   currentLang = lang;
   localStorage.setItem("logos_quest_lang", lang);
   applyTranslations();
-  if (currentUser) {
-    renderExams();
-  }
+  if (currentUser) renderExams();
 }
 
 function applyTranslations() {
@@ -569,11 +645,21 @@ function applyTranslations() {
   setTxt("authSubTitle", t.authSubTitle);
   setTxt("tabRegister", t.tabRegister);
   setTxt("tabLogin", t.tabLogin);
+  setTxt("tabAdmin", t.tabAdmin);
   setTxt("lblFullName", t.lblFullName);
-  setTxt("lblIdentifier", t.lblIdentifier);
-  setTxt("lblPassword", t.lblPassword);
-  setTxt("authSubmitBtn", currentMode === "register" ? t.btnRegister : t.btnLogin);
+  setTxt("lblPhotoNotice", t.photoNotice);
+  setTxt("btnCamera", t.btnCamera);
+  setTxt("btnGallery", t.btnGallery);
 
+  if (currentMode === "admin") {
+    setTxt("lblIdentifier", t.lblAdminIdentifier);
+    setTxt("authSubmitBtn", t.btnAdminLogin);
+  } else {
+    setTxt("lblIdentifier", t.lblIdentifier);
+    setTxt("authSubmitBtn", currentMode === "register" ? t.btnRegister : t.btnLogin);
+  }
+
+  setTxt("lblPassword", t.lblPassword);
   setTxt("btnLogout", t.btnLogout);
   setTxt("dashSubtitle", t.dashSubtitle);
   setTxt("dashExamsTitle", t.dashExamsTitle);
@@ -587,7 +673,33 @@ function applyTranslations() {
   setTxt("linkResults", t.linkResults);
 }
 
-/* --- అథెంటికేషన్ లాజిక్ --- */
+/* ఫోటో కంప్రెషన్ మరియు హ్యాండ్లింగ్ */
+function handlePhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      // ఇమేజ్‌ని 150x150 పిక్సెల్స్ పరిమాణానికి కుదించడం
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = 150;
+      canvas.height = 150;
+      ctx.drawImage(img, 0, 0, 150, 150);
+
+      userPhotoBase64 = canvas.toDataURL("image/jpeg", 0.7);
+      const preview = $("userPhotoPreview");
+      preview.src = userPhotoBase64;
+      preview.style.display = "block";
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* అథెంటికేషన్ లాజిక్ */
 function checkExistingSession() {
   applyTranslations();
   const saved = localStorage.getItem("logos_quest_user");
@@ -610,6 +722,9 @@ function showDashboard() {
   $("authContainer").style.display = "none";
   $("dashboardContainer").style.display = "block";
   $("currentUserName").textContent = currentUser.name || currentUser.identifier || "User";
+  if (currentUser.photo) {
+    $("dashUserAvatar").src = currentUser.photo;
+  }
   loadExams();
 }
 
@@ -617,16 +732,29 @@ function switchAuthTab(mode) {
   currentMode = mode;
   $("authMsg").style.display = "none";
   const t = i18n[currentLang] || i18n.te;
+
+  $("tabRegister").classList.toggle("active", mode === "register");
+  $("tabLogin").classList.toggle("active", mode === "login");
+  $("tabAdmin").classList.toggle("active", mode === "admin");
+
   if (mode === "register") {
-    $("tabRegister").classList.add("active");
-    $("tabLogin").classList.remove("active");
     $("nameGroup").style.display = "block";
+    $("photoBox").style.display = "flex";
+    $("lblIdentifier").textContent = t.lblIdentifier;
+    $("authIdentifier").placeholder = "Ex: 9876543210 / email@test.com";
     $("authSubmitBtn").textContent = t.btnRegister;
-  } else {
-    $("tabLogin").classList.add("active");
-    $("tabRegister").classList.remove("active");
+  } else if (mode === "login") {
     $("nameGroup").style.display = "none";
+    $("photoBox").style.display = "none";
+    $("lblIdentifier").textContent = t.lblIdentifier;
+    $("authIdentifier").placeholder = "Ex: 9876543210 / email@test.com";
     $("authSubmitBtn").textContent = t.btnLogin;
+  } else if (mode === "admin") {
+    $("nameGroup").style.display = "none";
+    $("photoBox").style.display = "none";
+    $("lblIdentifier").textContent = t.lblAdminIdentifier;
+    $("authIdentifier").placeholder = "admin@logosquest.com";
+    $("authSubmitBtn").textContent = t.btnAdminLogin;
   }
 }
 
@@ -645,6 +773,37 @@ async function handleAuthSubmit(e) {
     return;
   }
 
+  if (currentMode === "admin") {
+    $("authSubmitBtn").disabled = true;
+    $("authSubmitBtn").textContent = "Verifying Admin...";
+    try {
+      const { data, error } = await db.auth.signInWithPassword({
+        email: identifier,
+        password: password
+      });
+      if (error) throw error;
+
+      const { data: adminData, error: adminErr } = await db
+        .from("admin_users")
+        .select("user_id")
+        .eq("user_id", data.user.id)
+        .maybeSingle();
+
+      if (adminErr || !adminData) {
+        await db.auth.signOut();
+        throw new Error("Admin access not authorized.");
+      }
+
+      window.location.href = "admin.html";
+      return;
+    } catch (err) {
+      showMsg("❌ " + err.message);
+      $("authSubmitBtn").disabled = false;
+      $("authSubmitBtn").textContent = t.btnAdminLogin;
+      return;
+    }
+  }
+
   if (currentMode === "register" && !name) {
     showMsg(t.errName);
     return;
@@ -653,6 +812,7 @@ async function handleAuthSubmit(e) {
   const userObj = {
     name: name || identifier,
     identifier: identifier,
+    photo: userPhotoBase64 || null,
     lang: currentLang,
     updated_at: new Date().toISOString()
   };
@@ -677,7 +837,7 @@ function logoutUser() {
   }
 }
 
-/* --- పరీక్షల నిర్వహణ లాజిక్ --- */
+/* పరీక్ష నిర్వహణ */
 function formatIST(value){
   return new Intl.DateTimeFormat("en-IN",{
     timeZone:"Asia/Kolkata",
@@ -801,7 +961,6 @@ async function loadExams(){
   }
 }
 
-// ప్రారంభంలో లోడ్ చేయడం
 window.addEventListener("DOMContentLoaded", () => {
   checkExistingSession();
 });
