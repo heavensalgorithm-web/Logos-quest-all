@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="te">
 <head>
@@ -6,252 +5,569 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LOGOS QUEST - Leaderboard</title>
 
+<!-- PWA & Mobile App Settings -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1329">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="icon-512.png">
+
 <style>
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#101b38,#253e72);
-  min-height:100vh;
-  color:#222;
+:root {
+  --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
+  --card-bg: rgba(22, 33, 62, 0.78);
+  --card-border: rgba(234, 179, 8, 0.25);
+  --gold-primary: #facc15;
+  --gold-dark: #ca8a04;
+  --gold-glow: rgba(250, 204, 21, 0.35);
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --live-green: #10b981;
 }
 
-header{
-  background:#101a32;
-  color:#ffd76b;
-  text-align:center;
-  padding:25px 15px;
+*{
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-header h1{margin:0}
-header p{color:white}
-
-main{
-  max-width:950px;
-  margin:25px auto;
-  padding:15px;
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  margin: 0;
+  padding: 16px;
+  color: var(--text-main);
+  min-height: 100vh;
 }
 
-.card{
-  background:white;
-  padding:22px;
-  border-radius:15px;
-  margin-bottom:20px;
+/* టాప్ బార్ & లాంగ్వేజ్ సెలెక్టర్ */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 950px;
+  margin: 0 auto 12px;
 }
 
-h2{
-  text-align:center;
-  color:#203a70;
+.btn-back {
+  background: rgba(15, 23, 42, 0.85);
+  color: var(--gold-primary);
+  border: 1.5px solid var(--card-border);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease;
 }
 
-select,button{
-  width:100%;
-  padding:13px;
-  border-radius:8px;
-  font-size:16px;
-  margin:10px 0;
+.btn-back:hover {
+  background: rgba(234, 179, 8, 0.2);
+  border-color: var(--gold-primary);
 }
 
-select{
-  border:1px solid #ccc;
-  background:white;
+.lang-select {
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--gold-primary);
+  border: 1.5px solid var(--card-border);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-button{
-  background:#1749a2;
-  color:white;
-  border:none;
-  font-weight:bold;
-  cursor:pointer;
+.lang-select option {
+  background: #0f172a;
+  color: #f8fafc;
 }
 
-button:disabled{
-  background:#999;
-  cursor:not-allowed;
+/* హెడర్ */
+header {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.table-wrap{
-  overflow-x:auto;
+.logo-img {
+  width: 85px;
+  height: 85px;
+  border-radius: 20px;
+  margin: 0 auto 10px;
+  display: block;
+  box-shadow: 0 6px 20px var(--gold-glow);
+  border: 2px solid var(--gold-primary);
+  background: #0f172a;
 }
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:500px;
+header h1 {
+  color: var(--gold-primary);
+  margin: 0 0 4px 0;
+  font-size: 26px;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 10px var(--gold-glow);
 }
 
-th,td{
-  padding:13px 8px;
-  text-align:center;
-  border-bottom:1px solid #ddd;
+header p {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0;
 }
 
-th{
-  background:#edf3ff;
-  color:#203a70;
+main {
+  max-width: 950px;
+  margin: 0 auto;
 }
 
-tr.gold{background:#fff5cd}
-tr.silver{background:#f0f2f5}
-tr.bronze{background:#fff0e3}
-
-.status{
-  text-align:center;
-  color:#555;
-  padding:10px;
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  padding: 24px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(234, 179, 8, 0.08);
 }
 
-.error{color:#b42318}
-.success{color:#137547}
-
-.note{
-  text-align:center;
-  font-size:13px;
-  color:#666;
-  line-height:1.6;
+h2 {
+  text-align: center;
+  color: #ffffff;
+  font-size: 20px;
+  margin-top: 0;
+  font-weight: 700;
 }
 
-.notice{
-  background:#fff4d6;
-  border-radius:8px;
-  padding:12px;
-  margin:15px 0;
+.note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
 }
 
-.link-button{
-  display:block;
-  background:#1749a2;
-  color:white;
-  text-align:center;
-  text-decoration:none;
-  padding:14px;
-  border-radius:8px;
-  font-weight:bold;
-  margin-top:12px;
+label {
+  display: block;
+  font-size: 14px;
+  color: var(--gold-primary);
+  margin-bottom: 6px;
+  font-weight: 600;
 }
 
-.hidden{display:none}
+select {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 15px;
+  outline: none;
+  margin-bottom: 14px;
+  transition: border-color 0.2s;
+}
+
+select:focus {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+
+select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+/* గోల్డ్ బటన్లు */
+button {
+  width: 100%;
+  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  color: #0b1329 !important;
+  font-weight: 800;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px var(--gold-glow);
+  transition: all 0.25s ease;
+  margin-top: 14px;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(250, 204, 21, 0.5);
+  background: linear-gradient(135deg, #fef08a 0%, var(--gold-primary) 100%);
+}
+
+button:disabled {
+  background: #334155;
+  color: #64748b !important;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.notice {
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #fef08a;
+  border-radius: 10px;
+  padding: 12px;
+  margin: 14px 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.status {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+  padding: 8px;
+}
+
+.error {
+  color: #f87171 !important;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.success {
+  color: #34d399 !important;
+  font-weight: 600;
+}
+
+/* టేబుల్ స్టైలింగ్ */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 16px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+  background: rgba(15, 23, 42, 0.6);
+}
+
+th, td {
+  padding: 14px 12px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+}
+
+th {
+  background: rgba(30, 41, 59, 0.9);
+  color: var(--gold-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+/* మెడల్ రో హైలైట్స్ */
+tr.gold {
+  background: rgba(250, 204, 21, 0.18) !important;
+  color: #fef08a;
+  font-weight: 700;
+}
+
+tr.silver {
+  background: rgba(148, 163, 184, 0.15) !important;
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+tr.bronze {
+  background: rgba(180, 83, 9, 0.18) !important;
+  color: #fed7aa;
+  font-weight: 600;
+}
+
+tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* నావిగేషన్ లింక్స్ */
+.nav-grid {
+  display: flex;
+  gap: 12px;
+}
+
+.link-button {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.85);
+  color: var(--gold-primary);
+  border: 1.5px solid var(--card-border);
+  text-align: center;
+  text-decoration: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.link-button:hover {
+  background: rgba(234, 179, 8, 0.2);
+  border-color: var(--gold-primary);
+  color: #ffffff;
+}
+
+.hidden { display: none; }
 </style>
 </head>
 
 <body>
 
+<div class="top-bar">
+  <a href="index.html" class="btn-back" id="btnBack">← Home</a>
+  <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+    <option value="te">🇮🇳 తెలుగు</option>
+    <option value="en">🌐 English</option>
+    <option value="ta">🇮🇳 தமிழ்</option>
+    <option value="hi">🇮🇳 हिन्दी</option>
+  </select>
+</div>
+
 <header>
-  <h1>✝ LOGOS QUEST</h1>
-  <p>LIVE BIBLE QUIZ</p>
+  <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
+  <h1>LOGOS QUEST</h1>
+  <p id="hdrSubtitle">LIVE BIBLE QUIZ LEADERBOARD</p>
 </header>
 
 <main>
 
 <section class="card">
+  <h2 id="txtLiveTop10">🏆 LIVE EXAM TOP 10</h2>
 
-  <h2>🏆 LIVE EXAM TOP 10</h2>
-
-  <p class="note">
+  <p class="note" id="txtLiveNote">
     ప్రతి Exam ముగిసిన తర్వాత Top 10 Results కనిపిస్తాయి.
   </p>
 
-  <label for="examSelect">
-    <strong>Select Exam</strong>
-  </label>
-
+  <label for="examSelect" id="lblSelectExam">Select Exam</label>
   <select id="examSelect">
     <option value="">Loading Exams...</option>
   </select>
 
   <p id="examInfo" class="notice hidden"></p>
-
-  <p id="liveStatus" class="status" role="status">
-    Loading...
-  </p>
+  <p id="liveStatus" class="status" role="status">Loading...</p>
 
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
-          <th>Rank</th>
-          <th>Name</th>
-          <th>Town / State</th>
-          <th>Score</th>
-          <th>Time</th>
+          <th id="thRank1">Rank</th>
+          <th id="thName1">Name</th>
+          <th id="thLocation1">Town / State</th>
+          <th id="thScore1">Score</th>
+          <th id="thTime1">Time</th>
         </tr>
       </thead>
-
       <tbody id="liveLeaderboardBody"></tbody>
     </table>
   </div>
 
-  <button id="refreshLive" type="button">
-    🔄 Refresh Live Exam Results
-  </button>
+  <button id="refreshLive" type="button">🔄 Refresh Live Exam Results</button>
 
-  <p class="note">
-    Demo Results మాత్రమే. Prize Winners నిర్ణయించడానికి
-    Secure Scoring ఇంకా ఏర్పాటు చేయాలి.
+  <p class="note" style="margin-top:14px;" id="txtDemoNote">
+    Demo Results మాత్రమే. Prize Winners నిర్ణయించడానికి Secure Scoring ఇంకా ఏర్పాటు చేయాలి.
   </p>
-
 </section>
 
 <section class="card">
+  <h2 id="txtOldTop10">🏅 ALL-TIME / DEMO TOP 10</h2>
 
-  <h2>🏅 OLD DEMO TOP 10</h2>
-
-  <p id="oldStatus" class="status" role="status">
-    Loading leaderboard...
-  </p>
+  <p id="oldStatus" class="status" role="status">Loading leaderboard...</p>
 
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
-          <th>Rank</th>
-          <th>Name</th>
-          <th>Score</th>
-          <th>Time</th>
+          <th id="thRank2">Rank</th>
+          <th id="thName2">Name</th>
+          <th id="thScore2">Score</th>
+          <th id="thTime2">Time</th>
         </tr>
       </thead>
-
       <tbody id="oldLeaderboardBody"></tbody>
     </table>
   </div>
 
-  <button id="refreshOld" type="button">
-    🔄 Refresh Old Leaderboard
-  </button>
-
+  <button id="refreshOld" type="button">🔄 Refresh Old Leaderboard</button>
 </section>
 
 <section class="card">
-
-  <a class="link-button" href="quiz.html">
-    📝 Live Bible Exams
-  </a>
-
-  <a class="link-button" href="index.html">
-    🏠 Home Page
-  </a>
-
+  <div class="nav-grid">
+    <a class="link-button" href="index.html" id="btnNavExams">📝 Live Exams</a>
+    <a class="link-button" href="index.html" id="btnNavHome">🏠 Home Page</a>
+  </div>
 </section>
 
 </main>
 
 <script>
-
-const SUPABASE_URL =
-  "https://jfhlesmfgwxlqdccfgit.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
 const $ = id => document.getElementById(id);
-
 let exams = [];
 
 const headers = {
   apikey: SUPABASE_KEY,
   "Content-Type": "application/json"
 };
+
+let currentLang = localStorage.getItem("logos_quest_lang") || "te";
+
+/* --- 4 భాషల అనువాదాలు --- */
+const i18n = {
+  te: {
+    back: "← హోమ్",
+    hdrSub: "లైవ్ బైబిల్ క్విజ్ లీడర్‌బోర్డ్",
+    liveTop10: "🏆 లైవ్ ఎగ్జామ్ TOP 10",
+    liveNote: "ప్రతి Exam ముగిసిన తర్వాత Top 10 Results కనిపిస్తాయి.",
+    lblSelectExam: "పరీక్షను ఎంచుకోండి (Select Exam)",
+    loadingExams: "పరీక్షలు లోడ్ అవుతున్నాయి...",
+    noExams: "ప్రస్తుతం పరీక్షలు లేవు",
+    selectPrompt: "ముందుగా Exam Select చేయండి.",
+    noDetails: "Exam వివరాలు అందుబాటులో లేవు.",
+    examNotEnded: "⏳ Exam ఇంకా ముగియలేదు. Exam ముగిసిన తర్వాత Results కనిపిస్తాయి.",
+    loadingResults: "Top 10 Results లోడ్ అవుతున్నాయి...",
+    noResults: "ఈ Examకి ఇంకా Results లేవు.",
+    participantsCount: "🏆 Top {count} మంది విజేతలు",
+    refreshLive: "🔄 లైవ్ ఫలితాలను రీఫ్రెష్ చేయండి",
+    demoNote: "Demo Results మాత్రమే. Prize Winners నిర్ణయించడానికి Secure Scoring ఇంకా ఏర్పాటు చేయాలి.",
+    oldTop10: "🏅 ఆల్-టైమ్ / డెమో TOP 10",
+    refreshOld: "🔄 పాత లీడర్‌బోర్డ్ రీఫ్రెష్ చేయండి",
+    navExams: "📝 లైవ్ పరీక్షలు",
+    navHome: "🏠 హోమ్ పేజీ",
+    thRank: "ర్యాంక్",
+    thName: "పేరు",
+    thLocation: "ప్రాంతం / రాష్ట్రం",
+    thScore: "స్కోరు",
+    thTime: "సమయం"
+  },
+  en: {
+    back: "← Home",
+    hdrSub: "LIVE BIBLE QUIZ LEADERBOARD",
+    liveTop10: "🏆 LIVE EXAM TOP 10",
+    liveNote: "Top 10 rankings appear after each live exam ends.",
+    lblSelectExam: "Select Exam",
+    loadingExams: "Loading Exams...",
+    noExams: "No Exams Available",
+    selectPrompt: "Please select an exam first.",
+    noDetails: "Exam details not found.",
+    examNotEnded: "⏳ Exam has not ended yet. Rankings unlock after completion.",
+    loadingResults: "Loading Top 10 rankings...",
+    noResults: "No results submitted for this exam yet.",
+    participantsCount: "🏆 Top {count} Participants",
+    refreshLive: "🔄 Refresh Live Results",
+    demoNote: "Demo rankings. Secured anti-cheat scoring verifies prize winners.",
+    oldTop10: "🏅 ALL-TIME / DEMO TOP 10",
+    refreshOld: "🔄 Refresh Old Leaderboard",
+    navExams: "📝 Live Bible Exams",
+    navHome: "🏠 Home Page",
+    thRank: "Rank",
+    thName: "Name",
+    thLocation: "Town / State",
+    thScore: "Score",
+    thTime: "Time"
+  },
+  ta: {
+    back: "← முகப்பு",
+    hdrSub: "நேரலை பைபிள் வினாடி வினா முன்னணிப் பலகை",
+    liveTop10: "🏆 நேரலைத் தேர்வு TOP 10",
+    liveNote: "ஒவ்வொரு தேர்வு முடிந்த பிறகும் முதல் 10 முடிவுகள் தோன்றும்.",
+    lblSelectExam: "தேர்வைத் தேர்ந்தெடுக்கவும்",
+    loadingExams: "தேர்வுகள் ஏற்றப்படுகின்றன...",
+    noExams: "தேர்வுகள் எதுவும் இல்லை",
+    selectPrompt: "முதலில் ஒரு தேர்வைத் தேர்ந்தெடுக்கவும்.",
+    noDetails: "தேர்வு விவரங்கள் இல்லை.",
+    examNotEnded: "⏳ தேர்வு இன்னும் முடியவில்லை. தேர்வு முடிந்ததும் முடிவுகள் தோன்றும்.",
+    loadingResults: "முதல் 10 முடிவுகள் ஏற்றப்படுகின்றன...",
+    noResults: "இந்தத் தேர்வுக்கு இதுவரை முடிவுகள் இல்லை.",
+    participantsCount: "🏆 முதல் {count} வெற்றியாளர்கள்",
+    refreshLive: "🔄 நேரலை முடிவுகளைப் புதுப்பிக்கவும்",
+    demoNote: "டெமோ முடிவுகள் மட்டுமே.",
+    oldTop10: "🏅 பழைய / டெமோ TOP 10",
+    refreshOld: "🔄 பழைய பலகையைப் புதுப்பிக்கவும்",
+    navExams: "📝 நேரலைத் தேர்வுகள்",
+    navHome: "🏠 முகப்புப் பக்கம்",
+    thRank: "தரம்",
+    thName: "பெயர்",
+    thLocation: "ஊர் / மாநிலம்",
+    thScore: "மதிப்பெண்",
+    thTime: "நேரம்"
+  },
+  hi: {
+    back: "← होम",
+    hdrSub: "लाइव बाइबिल क्विज़ लीडरबोर्ड",
+    liveTop10: "🏆 लाइव परीक्षा TOP 10",
+    liveNote: "प्रत्येक परीक्षा समाप्त होने के बाद टॉप 10 परिणाम दिखाई देंगे।",
+    lblSelectExam: "परीक्षा चुनें (Select Exam)",
+    loadingExams: "परीक्षाएं लोड हो रही हैं...",
+    noExams: "कोई परीक्षा उपलब्ध नहीं है",
+    selectPrompt: "कृपया पहले परीक्षा चुनें।",
+    noDetails: "परीक्षा विवरण नहीं मिला।",
+    examNotEnded: "⏳ परीक्षा अभी समाप्त नहीं हुई है। परिणाम बाद में दिखाई देंगे।",
+    loadingResults: "शीर्ष 10 परिणाम लोड हो रहे हैं...",
+    noResults: "इस परीक्षा के लिए अभी तक कोई परिणाम नहीं है।",
+    participantsCount: "🏆 शीर्ष {count} प्रतिभागी",
+    refreshLive: "🔄 लाइव परिणाम रीफ्रेश करें",
+    demoNote: "केवल डेमो परिणाम।",
+    oldTop10: "🏅 ऑल-टाइम / डेमो TOP 10",
+    refreshOld: "🔄 पुराना लीडरबोर्ड रीफ्रेश करें",
+    navExams: "📝 लाइव परीक्षाएं",
+    navHome: "🏠 होम पेज",
+    thRank: "रैंक",
+    thName: "नाम",
+    thLocation: "शहर / राज्य",
+    thScore: "स्कोर",
+    thTime: "समय"
+  }
+};
+
+function changeLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("logos_quest_lang", lang);
+  applyTranslations();
+  loadLiveLeaderboard();
+}
+
+function applyTranslations() {
+  const t = i18n[currentLang] || i18n.te;
+  $("langSelect").value = currentLang;
+
+  $("btnBack").textContent = t.back;
+  $("hdrSubtitle").textContent = t.hdrSub;
+  $("txtLiveTop10").textContent = t.liveTop10;
+  $("txtLiveNote").textContent = t.liveNote;
+  $("lblSelectExam").textContent = t.lblSelectExam;
+  $("refreshLive").textContent = t.refreshLive;
+  $("txtDemoNote").textContent = t.demoNote;
+  $("txtOldTop10").textContent = t.oldTop10;
+  $("refreshOld").textContent = t.refreshOld;
+  $("btnNavExams").textContent = t.navExams;
+  $("btnNavHome").textContent = t.navHome;
+
+  $("thRank1").textContent = t.thRank;
+  $("thName1").textContent = t.thName;
+  $("thLocation1").textContent = t.thLocation;
+  $("thScore1").textContent = t.thScore;
+  $("thTime1").textContent = t.thTime;
+
+  $("thRank2").textContent = t.thRank;
+  $("thName2").textContent = t.thName;
+  $("thScore2").textContent = t.thScore;
+  $("thTime2").textContent = t.thTime;
+}
 
 function formatIST(value) {
   return new Intl.DateTimeFormat("en-IN", {
@@ -267,19 +583,10 @@ function formatIST(value) {
 
 function formatTime(seconds) {
   const value = Number(seconds);
-
-  if (!Number.isFinite(value) || value < 0) {
-    return "-";
-  }
-
+  if (!Number.isFinite(value) || value < 0) return "-";
   const min = Math.floor(value / 60);
   const sec = Math.floor(value % 60);
-
-  return (
-    String(min).padStart(2, "0") +
-    ":" +
-    String(sec).padStart(2, "0")
-  );
+  return String(min).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
 }
 
 function clearTable(id) {
@@ -288,10 +595,7 @@ function clearTable(id) {
 
 function addCell(row, value) {
   const td = document.createElement("td");
-
-  td.textContent =
-    value == null ? "" : String(value);
-
+  td.textContent = value == null ? "" : String(value);
   row.appendChild(td);
 }
 
@@ -302,251 +606,149 @@ function rowStyle(row, index) {
 }
 
 function medal(rank) {
-  if (rank === 1) return "🥇";
-  if (rank === 2) return "🥈";
-  if (rank === 3) return "🥉";
-
+  if (rank === 1) return "🥇 1";
+  if (rank === 2) return "🥈 2";
+  if (rank === 3) return "🥉 3";
   return String(rank);
 }
 
-// LOAD EXAM SCHEDULES
-
+// 1. ఎగ్జామ్ షెడ్యూల్స్ లోడ్ చేయడం
 async function loadExams() {
+  const t = i18n[currentLang] || i18n.te;
   const select = $("examSelect");
-
   select.replaceChildren();
 
   const loading = document.createElement("option");
   loading.value = "";
-  loading.textContent = "Loading Exams...";
+  loading.textContent = t.loadingExams;
   select.appendChild(loading);
 
-  $("liveStatus").textContent =
-    "Exam List లోడ్ అవుతోంది...";
+  $("liveStatus").textContent = t.loadingExams;
 
   try {
-    const url =
-      SUPABASE_URL +
-      "/rest/v1/exam_schedules" +
-      "?select=id,exam_name,start_time,end_time" +
-      "&order=start_time.desc&limit=100";
+    const url = SUPABASE_URL + "/rest/v1/exam_schedules?select=id,exam_name,start_time,end_time&order=start_time.desc&limit=100";
+    const response = await fetch(url, { headers: { apikey: SUPABASE_KEY } });
 
-    const response = await fetch(url, {
-      headers: {
-        apikey: SUPABASE_KEY
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        "HTTP " +
-        response.status +
-        ": " +
-        await response.text()
-      );
-    }
+    if (!response.ok) throw new Error("HTTP " + response.status);
 
     exams = await response.json();
-
     select.replaceChildren();
 
     if (!exams.length) {
       const option = document.createElement("option");
       option.value = "";
-      option.textContent = "No Exams Available";
+      option.textContent = t.noExams;
       select.appendChild(option);
-
-      $("liveStatus").textContent =
-        "ప్రస్తుతం Exams లేవు.";
-
+      $("liveStatus").textContent = t.noExams;
       return;
     }
 
     exams.forEach(exam => {
       const option = document.createElement("option");
-
       option.value = exam.id;
-
-      option.textContent =
-        exam.exam_name +
-        " - " +
-        formatIST(exam.start_time);
-
+      option.textContent = exam.exam_name + " - " + formatIST(exam.start_time);
       select.appendChild(option);
     });
 
     await loadLiveLeaderboard();
-
   } catch (error) {
-    $("liveStatus").textContent =
-      "Exam List Load కాలేదు: " + error.message;
-
+    $("liveStatus").textContent = "❌ " + error.message;
     $("liveStatus").className = "status error";
   }
 }
 
-// EXAM-WISE TOP 10
-
+// 2. లైవ్ ఎగ్జామ్ TOP 10 ర్యాంకింగ్స్
 async function loadLiveLeaderboard() {
+  const t = i18n[currentLang] || i18n.te;
   const examId = $("examSelect").value;
-
   clearTable("liveLeaderboardBody");
-
   $("liveStatus").className = "status";
 
   if (!examId) {
-    $("liveStatus").textContent =
-      "ముందుగా Exam Select చేయండి.";
+    $("liveStatus").textContent = t.selectPrompt;
     return;
   }
 
   const exam = exams.find(e => e.id === examId);
-
   if (!exam) {
-    $("liveStatus").textContent =
-      "Exam వివరాలు అందుబాటులో లేవు.";
+    $("liveStatus").textContent = t.noDetails;
     return;
   }
 
   $("examInfo").classList.remove("hidden");
-
-  $("examInfo").textContent =
-    "📅 " +
-    exam.exam_name +
-    " | Start: " +
-    formatIST(exam.start_time) +
-    " | End: " +
-    formatIST(exam.end_time);
+  $("examInfo").textContent = "📅 " + exam.exam_name + " | Start: " + formatIST(exam.start_time) + " | End: " + formatIST(exam.end_time);
 
   if (Date.now() < Date.parse(exam.end_time)) {
-    $("liveStatus").textContent =
-      "⏳ Exam ఇంకా ముగియలేదు. Exam ముగిసిన తర్వాత Results కనిపిస్తాయి.";
+    $("liveStatus").textContent = t.examNotEnded;
     return;
   }
 
-  $("liveStatus").textContent =
-    "Top 10 Results లోడ్ అవుతున్నాయి...";
+  $("liveStatus").textContent = t.loadingResults;
 
   try {
-    
-const response = await fetch(
-  SUPABASE_URL +
-  "/rest/v1/rpc/get_secure_exam_top10",
-  {
-    method: "POST",
-    headers,
-    body: JSON.stringify({
-      p_exam_id: examId
-    })
-  }
-);
-    
-    if (!response.ok) {
-      throw new Error(
-        "HTTP " +
-        response.status +
-        ": " +
-        await response.text()
-      );
-    }
+    const response = await fetch(SUPABASE_URL + "/rest/v1/rpc/get_secure_exam_top10", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ p_exam_id: examId })
+    });
 
+    if (!response.ok) throw new Error("HTTP " + response.status);
     const results = await response.json();
 
     if (!Array.isArray(results) || !results.length) {
-      $("liveStatus").textContent =
-        "ఈ Examకి ఇంకా Results లేవు.";
+      $("liveStatus").textContent = t.noResults;
       return;
     }
 
     results.forEach((student, index) => {
       const tr = document.createElement("tr");
-
       rowStyle(tr, index);
 
-      const rank =
-        Number(student.rank_position) || index + 1;
-
-      const location = [
-        student.student_town,
-        student.student_state
-      ].filter(Boolean).join(", ");
+      const rank = Number(student.rank_position) || index + 1;
+      const location = [student.student_town, student.student_state].filter(Boolean).join(", ");
 
       addCell(tr, medal(rank));
       addCell(tr, student.student_name);
       addCell(tr, location || "-");
-      addCell(
-        tr,
-        student.score + "/" + student.total_questions
-      );
-      addCell(
-        tr,
-        formatTime(student.time_seconds)
-      );
+      addCell(tr, student.score + "/" + student.total_questions);
+      addCell(tr, formatTime(student.time_seconds));
 
       $("liveLeaderboardBody").appendChild(tr);
     });
 
-    $("liveStatus").textContent =
-      "🏆 Top " +
-      results.length +
-      " Participants";
-
-    $("liveStatus").className =
-      "status success";
-
+    $("liveStatus").textContent = t.participantsCount.replace("{count}", results.length);
+    $("liveStatus").className = "status success";
   } catch (error) {
-    $("liveStatus").textContent =
-      "Leaderboard Load కాలేదు: " + error.message;
-
-    $("liveStatus").className =
-      "status error";
+    $("liveStatus").textContent = "❌ " + error.message;
+    $("liveStatus").className = "status error";
   }
 }
 
-// OLD DEMO LEADERBOARD
-
+// 3. ఓల్డ్ డెమో లీడర్‌బోర్డ్
 async function loadOldLeaderboard() {
   const status = $("oldStatus");
   const body = $("oldLeaderboardBody");
-
-  status.textContent =
-    "Loading Old Leaderboard...";
-
+  status.textContent = "Loading...";
   status.className = "status";
-
   body.replaceChildren();
 
   try {
-    const response = await fetch(
-      SUPABASE_URL +
-      "/rest/v1/rpc/get_top10_leaderboard",
-      {
-        method: "POST",
-        headers,
-        body: "{}"
-      }
-    );
+    const response = await fetch(SUPABASE_URL + "/rest/v1/rpc/get_top10_leaderboard", {
+      method: "POST",
+      headers,
+      body: "{}"
+    });
 
-    if (!response.ok) {
-      throw new Error(
-        "HTTP " +
-        response.status +
-        ": " +
-        await response.text()
-      );
-    }
-
+    if (!response.ok) throw new Error("HTTP " + response.status);
     const results = await response.json();
 
     if (!Array.isArray(results) || !results.length) {
-      status.textContent =
-        "No Old Demo Results Available.";
+      status.textContent = "No Results Available.";
       return;
     }
 
     results.forEach((student, index) => {
       const tr = document.createElement("tr");
-
       rowStyle(tr, index);
 
       addCell(tr, medal(index + 1));
@@ -557,43 +759,25 @@ async function loadOldLeaderboard() {
       body.appendChild(tr);
     });
 
-    status.textContent =
-      "Top " + results.length + " Participants";
-
+    status.textContent = "Top " + results.length + " Participants";
     status.className = "status success";
-
   } catch (error) {
-    status.textContent =
-      "Unable to load Old Leaderboard: " +
-      error.message;
-
+    status.textContent = "❌ " + error.message;
     status.className = "status error";
   }
 }
 
-// EVENTS
+// ఈవెంట్స్
+$("examSelect").addEventListener("change", loadLiveLeaderboard);
+$("refreshLive").addEventListener("click", loadLiveLeaderboard);
+$("refreshOld").addEventListener("click", loadOldLeaderboard);
 
-$("examSelect").addEventListener(
-  "change",
-  loadLiveLeaderboard
-);
-
-$("refreshLive").addEventListener(
-  "click",
-  loadLiveLeaderboard
-);
-
-$("refreshOld").addEventListener(
-  "click",
-  loadOldLeaderboard
-);
-
-// INITIAL LOAD
-
-loadExams();
-loadOldLeaderboard();
-
+// ఇనీషియలైజేషన్
+window.addEventListener("DOMContentLoaded", () => {
+  applyTranslations();
+  loadExams();
+  loadOldLeaderboard();
+});
 </script>
-
 </body>
 </html>
