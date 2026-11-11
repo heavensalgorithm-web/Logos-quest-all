@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOGOS QUEST - Admin Live Exam Monitor</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1329">
+<link rel="icon" type="image/png" href="icon-512.png">
+
+<style>
+:root {
+  --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
+  --card-bg: rgba(22, 33, 62, 0.82);
+  --card-border: rgba(234, 179, 8, 0.25);
+  --gold-primary: #facc15;
+  --gold-dark: #ca8a04;
+  --gold-glow: rgba(250, 204, 21, 0.35);
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --live-green: #10b981;
+  --ended-red: #ef4444;
+}
+
+*{box-sizing:border-box}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  margin: 0;
+  padding: 16px;
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-back {
+  background: rgba(15, 23, 42, 0.85);
+  color: var(--gold-primary);
+  border: 1.5px solid var(--card-border);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lang-select {
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--gold-primary);
+  border: 1.5px solid var(--card-border);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.lang-select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  padding: 22px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4), 0 0 15px rgba(234,179,8,0.08);
+}
+
+h1 {
+  color: var(--gold-primary);
+  text-align: center;
+  margin: 0 0 4px;
+  font-size: 26px;
+  letter-spacing: 1px;
+}
+
+h2 {
+  color: #ffffff;
+  font-size: 18px;
+  margin: 0 0 14px;
+}
+
+select.exam-dropdown {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 15px;
+  outline: none;
+  margin-bottom: 16px;
+}
+
+select.exam-dropdown option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+/* TOP 3 PODIUM */
+.top3-container {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 18px 0;
+  flex-wrap: wrap;
+}
+
+.podium-box {
+  background: rgba(15, 23, 42, 0.85);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  flex: 1;
+  min-width: 160px;
+  max-width: 220px;
+  border: 2px solid var(--card-border);
+}
+
+.podium-box.rank-1 {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 20px var(--gold-glow);
+  transform: scale(1.04);
+}
+
+.podium-photo-wrap {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 10px;
+}
+
+.podium-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid var(--gold-primary);
+}
+
+/* TABLE & STATUS LIGHTS */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+  background: rgba(15, 23, 42, 0.6);
+}
+
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+}
+
+th {
+  background: rgba(30, 41, 59, 0.9);
+  color: var(--gold-primary);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.student-col {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-container {
+  position: relative;
+  width: 44px;
+  height: 44px;
+}
+
+.student-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--card-border);
+  background: #0f172a;
+}
+
+.status-dot {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid #0b1329;
+}
+
+.dot-green {
+  background: var(--live-green);
+  box-shadow: 0 0 10px var(--live-green);
+  animation: pulseGreen 1.5s infinite;
+}
+
+.dot-red {
+  background: var(--ended-red);
+  box-shadow: 0 0 8px var(--ended-red);
+}
+
+@keyframes pulseGreen {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.badge-live {
+  color: var(--live-green);
+  background: rgba(16, 185, 129, 0.12);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.badge-ended {
+  color: var(--ended-red);
+  background: rgba(239, 68, 68, 0.12);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.btn-refresh {
+  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  color: #0b1329 !important;
+  font-weight: 800;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="top-bar">
+    <a href="admin.html" class="btn-back" id="btnBack">← Back to Admin Panel</a>
+    
+    <div style="display:flex; gap:10px; align-items:center;">
+      <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+        <option value="te">🇮🇳 తెలుగు</option>
+        <option value="en">🌐 English</option>
+        <option value="ta">🇮🇳 தமிழ்</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+      </select>
+      <button class="btn-refresh" onclick="loadLiveMonitor()" id="btnRefresh">🔄 Refresh Data</button>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center;">
+    <h1 id="txtHdrTitle">LOGOS QUEST - ADMIN LIVE MONITOR</h1>
+    <p style="color:var(--text-muted); margin:4px 0 16px;" id="txtHdrSub">విద్యార్థుల లైవ్ ఎగ్జామ్ స్టేటస్ & స్కోరు బోర్డ్</p>
+
+    <label style="display:block; text-align:left; font-size:13px; color:var(--gold-primary); font-weight:700; margin-bottom:6px;" id="lblSelectExam">Select Exam to Monitor:</label>
+    <select id="examSelect" class="exam-dropdown" onchange="loadLiveMonitor()">
+      <option value="">Loading Exams...</option>
+    </select>
+  </div>
+
+  <!-- TOP 3 PODIUM -->
+  <div class="card" id="top3Section" style="display:none;">
+    <h2 id="txtTop3Header">🏆 Current Top 3 Rankers</h2>
+    <div class="top3-container" id="top3Cards"></div>
+  </div>
+
+  <!-- CANDIDATES TABLE -->
+  <div class="card">
+    <h2><span id="txtCandidatesHeader">All Exam Candidates</span> (<span id="totalStudentsCount">0</span>)</h2>
+    <div style="margin-bottom:12px; font-size:13px;">
+      <span style="margin-right:15px;" id="legendGreen">🟢 <strong>Green:</strong> Writing Exam (Live)</span>
+      <span id="legendRed">🔴 <strong>Red:</strong> Completed Exam</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th id="thRank">Rank</th>
+            <th id="thCandidate">Candidate</th>
+            <th id="thContact">Phone / Email</th>
+            <th id="thStatus">Status</th>
+            <th id="thScore">Score</th>
+            <th id="thTime">Time</th>
+          </tr>
+        </thead>
+        <tbody id="studentMonitorBody">
+          <tr><td colspan="6" style="text-align:center;" id="txtPromptSelect">Select an exam to load candidates.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+let currentLang = localStorage.getItem("logos_quest_lang") || "te";
+
+const i18n = {
+  te: {
+    back: "← అడ్మిన్ ప్యానెల్‌కు తిరిగి వెళ్ళండి",
+    refresh: "🔄 డేటాను రీఫ్రెష్ చేయండి",
+    hdrTitle: "LOGOS QUEST - అడ్మిన్ లైవ్ మానిటర్",
+    hdrSub: "విద్యార్థుల లైవ్ ఎగ్జామ్ స్టేటస్ & స్కోరు బోర్డ్",
+    lblSelectExam: "మానిటర్ చేయాల్సిన పరీక్షను ఎంచుకోండి:",
+    top3Header: "🏆 ప్రస్తుత టాప్ 3 ర్యాంకర్లు",
+    candidatesHeader: "👥 మొత్తం అభ్యర్థులు",
+    legendGreen: "🟢 <strong>ఆకుపచ్చ:</strong> పరీక్ష రాస్తున్నారు (లైవ్)",
+    legendRed: "🔴 <strong>ఎరుపు:</strong> పరీక్ష పూర్తయింది",
+    thRank: "ర్యాంక్",
+    thCandidate: "అభ్యర్థి",
+    thContact: "ఫోన్ / ఈమెయిల్",
+    thStatus: "స్టేటస్",
+    thScore: "స్కోరు",
+    thTime: "సమయం",
+    writing: "🟢 రాస్తున్నారు...",
+    completed: "🔴 పూర్తయింది",
+    inProgress: "కొనసాగుతోంది",
+    noCandidates: "ఈ పరీక్షకు ఇంకా ఎవరూ రిజిస్టర్ కాలేదు.",
+    promptSelect: "అభ్యర్థుల వివరాలు చూడడానికి ఒక పరీక్షను ఎంచుకోండి.",
+    points: "పాయింట్లు",
+    seconds: "సె"
+  },
+  en: {
+    back: "← Back to Admin Panel",
+    refresh: "🔄 Refresh Data",
+    hdrTitle: "LOGOS QUEST - ADMIN LIVE MONITOR",
+    hdrSub: "Live Candidate Tracking & Examination Scoreboard",
+    lblSelectExam: "Select Exam to Monitor:",
+    top3Header: "🏆 Current Top 3 Rankers",
+    candidatesHeader: "👥 All Exam Candidates",
+    legendGreen: "🟢 <strong>Green:</strong> Writing Exam (Live)",
+    legendRed: "🔴 <strong>Red:</strong> Completed Exam",
+    thRank: "Rank",
+    thCandidate: "Candidate",
+    thContact: "Phone / Email",
+    thStatus: "Status",
+    thScore: "Score",
+    thTime: "Time",
+    writing: "🟢 Writing...",
+    completed: "🔴 Completed",
+    inProgress: "In Progress",
+    noCandidates: "No students registered for this exam yet.",
+    promptSelect: "Select an exam to load candidates.",
+    points: "Pts",
+    seconds: "s"
+  },
+  ta: {
+    back: "← நிர்வாக குழுவுக்குத் திரும்பு",
+    refresh: "🔄 புதுப்பிக்கவும்",
+    hdrTitle: "LOGOS QUEST - நேரலை தேர்வு கண்காணிப்பு",
+    hdrSub: "மாணவர்களின் நேரலை தேர்வு நிலை & மதிப்பெண் பலகை",
+    lblSelectExam: "கண்காணிக்க வேண்டிய தேர்வைத் தேர்ந்தெடுக்கவும்:",
+    top3Header: "🏆 தற்போதைய முதல் 3 வெற்றியாளர்கள்",
+    candidatesHeader: "👥 அனைத்து மாணவர்கள்",
+    legendGreen: "🟢 <strong>பச்சை:</strong> தேர்வு எழுதுகிறார் (நேரலை)",
+    legendRed: "🔴 <strong>சிவப்பு:</strong> தேர்வு முடிந்தது",
+    thRank: "தரம்",
+    thCandidate: "மாணவர்",
+    thContact: "தொலைபேசி / மின்னஞ்சல்",
+    thStatus: "நிலை",
+    thScore: "மதிப்பெண்",
+    thTime: "நேரம்",
+    writing: "🟢 எழுதுகிறார்...",
+    completed: "🔴 முடிந்தது",
+    inProgress: "நடைபெறுகிறது",
+    noCandidates: "இந்தத் தேர்வுக்கு மாணவர்கள் யாரும் பதிவு செய்யவில்லை.",
+    promptSelect: "மாணவர்களைக் காண ஒரு தேர்வைத் தேர்ந்தெடுக்கவும்.",
+    points: "புள்ளிகள்",
+    seconds: "வி"
+  },
+  hi: {
+    back: "← व्यवस्थापक पैनल पर वापस जाएं",
+    refresh: "🔄 डेटा रीफ़्रेश करें",
+    hdrTitle: "LOGOS QUEST - एडमिन लाइव मॉनिटर",
+    hdrSub: "छात्रों की लाइव परीक्षा स्थिति एवं स्कोरबोर्ड",
+    lblSelectExam: "निगरानी के लिए परीक्षा चुनें:",
+    top3Header: "🏆 वर्तमान शीर्ष 3 विजेता",
+    candidatesHeader: "👥 सभी परीक्षा उम्मीदवार",
+    legendGreen: "🟢 <strong>हरा:</strong> परीक्षा दे रहे हैं (लाइव)",
+    legendRed: "🔴 <strong>लाल:</strong> परीक्षा समाप्त",
+    thRank: "रैंक",
+    thCandidate: "उम्मीदवार",
+    thContact: "फ़ोन / ईमेल",
+    thStatus: "स्थिति",
+    thScore: "स्कोर",
+    thTime: "समय",
+    writing: "🟢 परीक्षा जारी...",
+    completed: "🔴 पूर्ण",
+    inProgress: "प्रगति पर है",
+    noCandidates: "इस परीक्षा के लिए अभी तक कोई छात्र पंजीकृत नहीं है।",
+    promptSelect: "उम्मीदवारों को देखने के लिए परीक्षा चुनें।",
+    points: "अंक",
+    seconds: "सेकंड"
+  }
+};
+
+function changeLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("logos_quest_lang", lang);
+  applyTranslations();
+  loadLiveMonitor();
+}
+
+function applyTranslations() {
+  const t = i18n[currentLang] || i18n.te;
+  $("langSelect").value = currentLang;
+
+  $("btnBack").textContent = t.back;
+  $("btnRefresh").textContent = t.refresh;
+  $("txtHdrTitle").textContent = t.hdrTitle;
+  $("txtHdrSub").textContent = t.hdrSub;
+  $("lblSelectExam").textContent = t.lblSelectExam;
+  $("txtTop3Header").textContent = t.top3Header;
+  $("txtCandidatesHeader").textContent = t.candidatesHeader;
+  $("legendGreen").innerHTML = t.legendGreen;
+  $("legendRed").innerHTML = t.legendRed;
+
+  $("thRank").textContent = t.thRank;
+  $("thCandidate").textContent = t.thCandidate;
+  $("thContact").textContent = t.thContact;
+  $("thStatus").textContent = t.thStatus;
+  $("thScore").textContent = t.thScore;
+  $("thTime").textContent = t.thTime;
+}
+
+async function loadExams() {
+  const { data } = await db.from("exam_schedules").select("id, exam_name, start_time").order("start_time", { ascending: false });
+  const select = $("examSelect");
+  select.innerHTML = "";
+  if (data && data.length) {
+    data.forEach(ex => {
+      const opt = document.createElement("option");
+      opt.value = ex.id;
+      opt.textContent = `${ex.exam_name} (${new Date(ex.start_time).toLocaleDateString()})`;
+      select.appendChild(opt);
+    });
+    loadLiveMonitor();
+  }
+}
+
+async function loadLiveMonitor() {
+  const examId = $("examSelect").value;
+  if (!examId) return;
+
+  const { data: attempts, error } = await db
+    .from("secure_exam_attempts")
+    .select("id, student_name, student_mobile, student_email, student_photo, score, total_questions, time_seconds, status, start_time, submitted_at")
+    .eq("exam_id", examId)
+    .order("score", { ascending: false, nullsFirst: false })
+    .order("time_seconds", { ascending: true, nullsFirst: false });
+
+  if (error || !attempts) return;
+
+  $("totalStudentsCount").textContent = attempts.length;
+  renderTop3(attempts);
+  renderCandidatesTable(attempts);
+}
+
+function renderTop3(attempts) {
+  const t = i18n[currentLang] || i18n.te;
+  const completed = attempts.filter(a => a.status === 'submitted' && a.score !== null);
+  const container = $("top3Cards");
+  container.innerHTML = "";
+
+  if (completed.length === 0) {
+    $("top3Section").style.display = "none";
+    return;
+  }
+
+  $("top3Section").style.display = "block";
+  const top3 = completed.slice(0, 3);
+
+  top3.forEach((s, idx) => {
+    const rank = idx + 1;
+    const medal = rank === 1 ? "🥇 1st" : rank === 2 ? "🥈 2nd" : "🥉 3rd";
+    const photo = s.student_photo || localStorage.getItem("logos_user_photo_" + (s.student_mobile || s.student_email || "").toLowerCase()) || "icon-512.png";
+
+    const box = document.createElement("div");
+    box.className = `podium-box rank-${rank}`;
+    box.innerHTML = `
+      <div class="podium-photo-wrap">
+        <img src="${photo}" class="podium-photo" alt="${s.student_name}">
+      </div>
+      <div style="font-weight:800; color:var(--gold-primary);">${medal}</div>
+      <div style="font-weight:700; color:#fff; margin:4px 0;">${s.student_name}</div>
+      <div style="font-size:13px; color:var(--gold-primary); font-weight:700;">${s.score}/${s.total_questions} ${t.points}</div>
+      <div style="font-size:12px; color:var(--text-muted);">${s.time_seconds || 0}${t.seconds}</div>
+    `;
+    container.appendChild(box);
+  });
+}
+
+function renderCandidatesTable(attempts) {
+  const t = i18n[currentLang] || i18n.te;
+  const tbody = $("studentMonitorBody");
+  tbody.innerHTML = "";
+
+  if (!attempts.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">${t.noCandidates}</td></tr>`;
+    return;
+  }
+
+  attempts.forEach((s, index) => {
+    const isWriting = (s.status !== 'submitted');
+    const photo = s.student_photo || localStorage.getItem("logos_user_photo_" + (s.student_mobile || s.student_email || "").toLowerCase()) || "icon-512.png";
+    const dotClass = isWriting ? "dot-green" : "dot-red";
+    const statusBadge = isWriting ? `<span class="badge-live">${t.writing}</span>` : `<span class="badge-ended">${t.completed}</span>`;
+    const rankDisplay = isWriting ? "-" : `#${index + 1}`;
+    const scoreDisplay = isWriting ? t.inProgress : `<strong>${s.score}/${s.total_questions}</strong>`;
+    const timeDisplay = isWriting ? "--" : `${s.time_seconds || 0}${t.seconds}`;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><strong>${rankDisplay}</strong></td>
+      <td>
+        <div class="student-col">
+          <div class="avatar-container">
+            <img src="${photo}" class="student-avatar" alt="Avatar">
+            <div class="status-dot ${dotClass}"></div>
+          </div>
+          <div>
+            <div style="font-weight:700; color:#fff;">${s.student_name}</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div>📱 ${s.student_mobile || "-"}</div>
+        <div style="font-size:12px; color:var(--text-muted);">📧 ${s.student_email || "-"}</div>
+      </td>
+      <td>${statusBadge}</td>
+      <td>${scoreDisplay}</td>
+      <td>${timeDisplay}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  applyTranslations();
+  loadExams();
+  setInterval(loadLiveMonitor, 5000);
+});
+</script>
+</body>
+</html>
