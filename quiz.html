@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="te">
 <head>
@@ -6,78 +5,257 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LOGOS QUEST - Live Bible Quiz</title>
 
+<!-- PWA & Mobile Settings -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1329">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="icon-512.png">
+
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  padding:18px;
-  font-family:Arial,sans-serif;
-  background:#f4f7fb;
-  color:#202938;
+:root {
+  --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
+  --card-bg: rgba(22, 33, 62, 0.78);
+  --card-border: rgba(234, 179, 8, 0.25);
+  --gold-primary: #facc15;
+  --gold-dark: #ca8a04;
+  --gold-glow: rgba(250, 204, 21, 0.35);
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --live-green: #10b981;
+  --upcoming-gold: #f59e0b;
 }
-.card{
-  background:white;
-  max-width:650px;
-  margin:16px auto;
-  padding:22px;
-  border-radius:15px;
-  box-shadow:0 2px 10px #dce3ee;
+
+*{
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
-h1{color:#174ea6;text-align:center}
-h2{text-align:center}
-.subtitle{text-align:center;color:#64748b}
-.exam{
-  border:1px solid #d9e4f5;
-  padding:16px;
-  border-radius:12px;
-  margin:14px 0;
+
+body {
+  margin: 0;
+  padding: 16px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
 }
-.exam h3{margin-top:0;color:#174ea6}
-.exam p{margin:9px 0}
-button{
-  background:#174ea6;
-  color:white;
-  padding:13px 18px;
-  border:0;
-  border-radius:9px;
-  font-size:16px;
-  cursor:pointer;
+
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 650px;
+  margin: 0 auto 12px;
 }
-button:disabled{
-  background:#9ca3af;
-  cursor:not-allowed;
+
+.lang-select {
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--gold-primary);
+  border: 1.5px solid var(--card-border);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-.refresh{background:#475569}
-.live{color:#15803d;font-weight:bold}
-.upcoming{color:#a16207;font-weight:bold}
-.ended{color:#64748b}
-.error{color:#b91c1c}
-.center{text-align:center}
-a{color:#174ea6}
+
+.lang-select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  max-width: 650px;
+  margin: 16px auto;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(234, 179, 8, 0.08);
+}
+
+.logo-img {
+  width: 85px;
+  height: 85px;
+  border-radius: 20px;
+  margin: 0 auto 10px;
+  display: block;
+  box-shadow: 0 6px 20px var(--gold-glow);
+  border: 2px solid var(--gold-primary);
+  background: #0f172a;
+}
+
+h1 {
+  color: var(--gold-primary);
+  text-align: center;
+  margin: 0 0 4px 0;
+  font-size: 26px;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 10px var(--gold-glow);
+}
+
+h2 {
+  text-align: center;
+  color: #ffffff;
+  font-size: 19px;
+  margin-top: 4px;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 6px 0 16px;
+}
+
+.exam {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 18px;
+  border-radius: 16px;
+  margin: 14px 0;
+  transition: all 0.2s ease;
+}
+
+.exam:hover {
+  border-color: var(--card-border);
+}
+
+.exam h3 {
+  margin: 0 0 8px 0;
+  color: #f8fafc;
+  font-size: 17px;
+}
+
+.exam p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+button {
+  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  color: #0b1329 !important;
+  font-weight: 800;
+  padding: 13px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px var(--gold-glow);
+  transition: all 0.25s ease;
+  width: 100%;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(250, 204, 21, 0.5);
+  background: linear-gradient(135deg, #fef08a 0%, var(--gold-primary) 100%);
+}
+
+button:disabled {
+  background: rgba(255, 255, 255, 0.08);
+  color: #64748b !important;
+  box-shadow: none;
+  cursor: not-allowed;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.refresh {
+  background: rgba(15, 23, 42, 0.85);
+  color: var(--gold-primary) !important;
+  border: 1.5px solid var(--card-border);
+  box-shadow: none;
+  max-width: 240px;
+}
+
+.refresh:hover {
+  background: rgba(234, 179, 8, 0.2);
+  border-color: var(--gold-primary);
+}
+
+.live {
+  color: var(--live-green);
+  font-weight: 700;
+  display: inline-block;
+  background: rgba(16, 185, 129, 0.12);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.upcoming {
+  color: var(--upcoming-gold);
+  font-weight: 700;
+  display: inline-block;
+  background: rgba(245, 158, 11, 0.12);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.error {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.center { text-align: center; }
+
+a {
+  color: var(--gold-primary);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 8px;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  text-shadow: 0 0 10px var(--gold-glow);
+}
 </style>
 </head>
 
 <body>
 
+<div class="top-bar">
+  <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+    <option value="te">🇮🇳 తెలుగు</option>
+    <option value="en">🌐 English</option>
+    <option value="ta">🇮🇳 தமிழ்</option>
+    <option value="hi">🇮🇳 हिन्दी</option>
+  </select>
+</div>
+
 <div class="card center">
-  <h1>📖 LOGOS QUEST</h1>
+  <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
+  <h1>LOGOS QUEST</h1>
   <h2>Live Bible Quiz</h2>
-  <p class="subtitle">Welcome to LOGOS QUEST</p>
+  <p class="subtitle" id="txtSub">Welcome to LOGOS QUEST</p>
 </div>
 
 <div class="card">
-  <h2>📚 లైవ్ బైబిల్ పరీక్షలు</h2>
-  <p class="subtitle center">
+  <h2 id="txtExamsHeader">📚 లైవ్ బైబిల్ పరీక్షలు</h2>
+  <p class="subtitle center" id="txtIstNotice">
     అన్ని పరీక్షల సమయాలు IST ప్రకారం
   </p>
 
-  <div class="center">
+  <div class="center" style="margin-bottom:14px;">
     <button class="refresh" id="refreshBtn">
       🔄 Refresh Exams
     </button>
   </div>
 
-  <p id="examStatus" class="center">
+  <p id="examStatus" class="center subtitle">
     పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...
   </p>
 
@@ -85,34 +263,149 @@ a{color:#174ea6}
 </div>
 
 <div class="card center">
-  <h2>🏆 విజేతలు</h2>
-  <p>ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
-  <a href="leaderboard.html">View Leaderboard</a>
+  <h2 id="txtWinnersHeader">🏆 విజేతలు</h2>
+  <p id="txtWinnersSub">ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
+  <a href="leaderboard.html" id="linkLeaderboard">View Leaderboard →</a>
 </div>
 
 <div class="card center">
-  <h2>📊 నా ఫలితాలు</h2>
-  <p>పరీక్ష ఫలితాలు Results Pageలో చూడవచ్చు.</p>
-  <a href="results.html">View Results</a>
+  <h2 id="txtResultsHeader">📊 నా ఫలితాలు</h2>
+  <p id="txtResultsSub">పరీక్ష ఫలితాలు Results Pageలో చూడవచ్చు.</p>
+  <a href="results.html" id="linkResults">View Results →</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const SUPABASE_URL =
-  "https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
-const SUPABASE_KEY =
-  "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
-
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = id => document.getElementById(id);
 
 let exams = [];
+let currentLang = localStorage.getItem("logos_quest_lang") || "te";
+
+const i18n = {
+  te: {
+    welcome: "LOGOS QUEST కు స్వాగతం",
+    examsHeader: "📚 లైవ్ బైబిల్ పరీక్షలు",
+    istNotice: "అన్ని పరీక్షల సమయాలు IST ప్రకారం",
+    refresh: "🔄 పరీక్షలను రిఫ్రెష్ చేయండి",
+    loading: "పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...",
+    noExams: "ప్రస్తుతం లైవ్ లేదా రాబోయే పరీక్షలు లేవు.",
+    liveCount: "🟢 {count} లైవ్ పరీక్ష(లు) అందుబాటులో ఉన్నాయి",
+    upcomingOnly: "రాబోయే పరీక్షలు క్రింద చూడండి.",
+    join: "▶ పరీక్షలో పాల్గొనండి",
+    notStarted: "⏳ ప్రారంభం కాలేదు",
+    winnersHeader: "🏆 విజేతలు",
+    winnersSub: "ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.",
+    viewLeaderboard: "లీడర్‌బోర్డ్ చూడండి →",
+    resultsHeader: "📊 నా ఫలితాలు",
+    resultsSub: "మీ పరీక్ష ఫలితాలు ఇక్కడ చూడవచ్చు.",
+    viewResults: "ఫలితాలు చూడండి →",
+    alertNotStarted: "ఈ పరీక్ష ఇంకా ప్రారంభం కాలేదు.",
+    alertEnded: "ఈ పరీక్ష సమయం ముగిసింది.",
+    start: "ప్రారంభం",
+    end: "ముగింపు",
+    questions: "ప్రశ్నలు",
+    attempts: "ప్రయత్నాలు"
+  },
+  en: {
+    welcome: "Welcome to LOGOS QUEST",
+    examsHeader: "📚 Live Bible Exams",
+    istNotice: "All exam timings are in IST",
+    refresh: "🔄 Refresh Exams",
+    loading: "Loading exam schedules...",
+    noExams: "No live or upcoming exams right now.",
+    liveCount: "🟢 {count} Live Exam(s) available",
+    upcomingOnly: "Check upcoming exams below.",
+    join: "▶ Join Exam",
+    notStarted: "⏳ Exam Not Started",
+    winnersHeader: "🏆 Winners",
+    winnersSub: "Weekly winners will appear here soon.",
+    viewLeaderboard: "View Leaderboard →",
+    resultsHeader: "📊 My Results",
+    resultsSub: "Check your submissions on Results Page.",
+    viewResults: "View Results →",
+    alertNotStarted: "This exam has not started yet.",
+    alertEnded: "This exam has already ended.",
+    start: "Start",
+    end: "End",
+    questions: "Questions",
+    attempts: "Attempts"
+  },
+  ta: {
+    welcome: "LOGOS QUEST க்கு வரவேற்கிறோம்",
+    examsHeader: "📚 நேரலை பைபிள் தேர்வுகள்",
+    istNotice: "தேர்வு நேரங்கள் அனைத்தும் IST படி",
+    refresh: "🔄 தேர்வுகளைப் புதுப்பிக்கவும்",
+    loading: "தேர்வு விவரங்கள் ஏற்றப்படுகின்றன...",
+    noExams: "தற்போது நேரலை அல்லது வரவிருக்கும் தேர்வுகள் இல்லை.",
+    liveCount: "🟢 {count} நேரலைத் தேர்வு(கள்) உள்ளன",
+    upcomingOnly: "வரவிருக்கும் தேர்வுகளை கீழே காண்க.",
+    join: "▶ தேர்வில் சேரவும்",
+    notStarted: "⏳ தொடங்கப்படவில்லை",
+    winnersHeader: "🏆 வெற்றியாளர்கள்",
+    winnersSub: "இந்த வார வெற்றியாளர்கள் விரைவில் தோன்றுவார்கள்.",
+    viewLeaderboard: "முன்னணிப் பலகையைப் பார்க்கவும் →",
+    resultsHeader: "📊 எனது முடிவுகள்",
+    resultsSub: "முடிவுகள் பக்கத்தில் உங்கள் முடிவுகளைக் காணலாம்.",
+    viewResults: "முடிவுகளைக் காண்க →",
+    alertNotStarted: "இந்தத் தேர்வு இன்னும் தொடங்கவில்லை.",
+    alertEnded: "இந்தத் தேர்வு முடிந்துவிட்டது.",
+    start: "தொடக்கம்",
+    end: "முடிவு",
+    questions: "கேள்விகள்",
+    attempts: "முயற்சிகள்"
+  },
+  hi: {
+    welcome: "LOGOS QUEST में आपका स्वागत है",
+    examsHeader: "📚 लाइव बाइबिल परीक्षाएं",
+    istNotice: "सभी परीक्षा समय IST के अनुसार हैं",
+    refresh: "🔄 परीक्षाएं रीफ्रेश करें",
+    loading: "परीक्षा विवरण लोड हो रहा है...",
+    noExams: "वर्तमान में कोई लाइव या आगामी परीक्षा नहीं है।",
+    liveCount: "🟢 {count} लाइव परीक्षा उपलब्ध है",
+    upcomingOnly: "आगामी परीक्षाएं नीचे देखें।",
+    join: "▶ परीक्षा में शामिल हों",
+    notStarted: "⏳ शुरू नहीं हुआ",
+    winnersHeader: "🏆 विजेता",
+    winnersSub: "इस सप्ताह के विजेता जल्द ही दिखाई देंगे।",
+    viewLeaderboard: "लीडरबोर्ड देखें →",
+    resultsHeader: "📊 मेरे परिणाम",
+    resultsSub: "परीक्षा परिणाम परिणाम पृष्ठ पर देख सकते हैं।",
+    viewResults: "परिणाम देखें →",
+    alertNotStarted: "यह परीक्षा अभी शुरू नहीं हुई है।",
+    alertEnded: "इस परीक्षा का समय समाप्त हो गया है।",
+    start: "प्रारंभ",
+    end: "समाप्त",
+    questions: "प्रश्न",
+    attempts: "प्रयास"
+  }
+};
+
+function changeLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("logos_quest_lang", lang);
+  applyTranslations();
+  renderExams();
+}
+
+function applyTranslations() {
+  const t = i18n[currentLang] || i18n.te;
+  $("langSelect").value = currentLang;
+  $("txtSub").textContent = t.welcome;
+  $("txtExamsHeader").textContent = t.examsHeader;
+  $("txtIstNotice").textContent = t.istNotice;
+  $("refreshBtn").textContent = t.refresh;
+  $("txtWinnersHeader").textContent = t.winnersHeader;
+  $("txtWinnersSub").textContent = t.winnersSub;
+  $("linkLeaderboard").textContent = t.viewLeaderboard;
+  $("txtResultsHeader").textContent = t.resultsHeader;
+  $("txtResultsSub").textContent = t.resultsSub;
+  $("linkResults").textContent = t.viewResults;
+}
 
 function formatIST(value){
   return new Intl.DateTimeFormat("en-IN",{
@@ -133,52 +426,48 @@ function makeText(tag,text){
 }
 
 function joinExam(exam){
+  const t = i18n[currentLang] || i18n.te;
   const now = Date.now();
   const start = new Date(exam.start_time).getTime();
   const end = new Date(exam.end_time).getTime();
 
   if(now < start){
-    alert("ఈ పరీక్ష ఇంకా ప్రారంభం కాలేదు.");
+    alert(t.alertNotStarted);
     return;
   }
 
   if(now >= end){
-    alert("ఈ పరీక్ష సమయం ముగిసింది.");
+    alert(t.alertEnded);
     return;
   }
 
+  // డైరెక్ట్‌గా quiz.html కి వెళ్లేలా కనెక్ట్ చేయడం
   const params = new URLSearchParams({
-    exam_id:String(exam.id)
+    exam_id: String(exam.id),
+    lang: currentLang
   });
 
-window.location.href =
-  "exam.html?" + params.toString();
+  window.location.href = "quiz.html?" + params.toString();
 }
 
 function renderExams(){
+  const t = i18n[currentLang] || i18n.te;
   const list = $("examList");
   list.replaceChildren();
 
   const now = Date.now();
-
-  const visible = exams.filter(exam =>
-    new Date(exam.end_time).getTime() > now
-  );
+  const visible = exams.filter(exam => new Date(exam.end_time).getTime() > now);
 
   if(!visible.length){
-    $("examStatus").textContent =
-      "ప్రస్తుతం లైవ్ లేదా రాబోయే పరీక్షలు లేవు.";
+    $("examStatus").textContent = t.noExams;
     return;
   }
 
-  const liveCount = visible.filter(exam =>
-    new Date(exam.start_time).getTime() <= now
-  ).length;
+  const liveCount = visible.filter(exam => new Date(exam.start_time).getTime() <= now).length;
 
-  $("examStatus").textContent =
-    liveCount
-      ? "🟢 " + liveCount + " Live Exam(s) available"
-      : "రాబోయే పరీక్షలు క్రింద చూడండి.";
+  $("examStatus").textContent = liveCount
+    ? t.liveCount.replace("{count}", liveCount)
+    : t.upcomingOnly;
 
   visible.forEach(exam=>{
     const start = new Date(exam.start_time).getTime();
@@ -188,38 +477,21 @@ function renderExams(){
     const card = document.createElement("div");
     card.className = "exam";
 
-    card.appendChild(
-      makeText("h3",exam.exam_name || "Bible Quiz")
-    );
+    card.appendChild(makeText("h3", exam.exam_name || "Bible Quiz"));
 
-    const state = makeText(
-      "p",
-      isLive ? "🟢 LIVE NOW" : "🟡 UPCOMING"
-    );
+    const state = makeText("p", isLive ? "🟢 LIVE NOW" : "🟡 UPCOMING");
     state.className = isLive ? "live" : "upcoming";
     card.appendChild(state);
 
-    card.appendChild(
-      makeText("p","📅 Start: " + formatIST(exam.start_time))
-    );
-    card.appendChild(
-      makeText("p","⏰ End: " + formatIST(exam.end_time))
-    );
-    card.appendChild(
-      makeText("p","📝 Questions: " + exam.question_count)
-    );
-
-    card.appendChild(
-      makeText("p","🔁 Attempts: " + exam.max_attempts)
-    );
+    card.appendChild(makeText("p", `📅 ${t.start}: ` + formatIST(exam.start_time)));
+    card.appendChild(makeText("p", `⏰ ${t.end}: ` + formatIST(exam.end_time)));
+    card.appendChild(makeText("p", `📝 ${t.questions}: ` + exam.question_count));
+    card.appendChild(makeText("p", `🔁 ${t.attempts}: ` + exam.max_attempts));
 
     const button = document.createElement("button");
-    button.textContent = isLive
-      ? "▶ Join Exam"
-      : "⏳ Exam Not Started";
-
+    button.textContent = isLive ? t.join : t.notStarted;
     button.disabled = !isLive;
-    button.addEventListener("click",()=>joinExam(exam));
+    button.addEventListener("click", () => joinExam(exam));
 
     card.appendChild(button);
     list.appendChild(card);
@@ -227,38 +499,36 @@ function renderExams(){
 }
 
 async function loadExams(){
-  $("examStatus").textContent =
-    "పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...";
+  const t = i18n[currentLang] || i18n.te;
+  $("examStatus").textContent = t.loading;
 
   try{
-    const {data,error} = await db
+    const {data, error} = await db
       .from("exam_schedules")
-      .select(
-        "id,exam_name,start_time,end_time,question_count,max_attempts"
-      )
-      .gt("end_time",new Date().toISOString())
-      .order("start_time",{ascending:true})
+      .select("id,exam_name,start_time,end_time,question_count,max_attempts")
+      .gt("end_time", new Date().toISOString())
+      .order("start_time", {ascending:true})
       .limit(50);
 
     if(error) throw error;
 
     exams = data || [];
     renderExams();
-
   }catch(error){
-    console.error("Exam loading error:",error);
-    $("examStatus").textContent =
-      "❌ Exams loading error: " + error.message;
+    $("examStatus").textContent = "❌ " + error.message;
     $("examStatus").className = "center error";
   }
 }
 
-$("refreshBtn").addEventListener("click",loadExams);
+$("refreshBtn").addEventListener("click", loadExams);
 
-loadExams();
+window.addEventListener("DOMContentLoaded", () => {
+  applyTranslations();
+  loadExams();
+});
 
-setInterval(renderExams,15000);
-setInterval(loadExams,60000);
+setInterval(renderExams, 15000);
+setInterval(loadExams, 60000);
 </script>
 
 </body>
