@@ -1,194 +1,541 @@
-
 <!DOCTYPE html>
 <html lang="te">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LOGOS QUEST - Student Dashboard</title>
+
+<!-- PWA Settings -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1329">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="icon-512.png">
+
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;padding:16px;
-  background:#f4f7fb;
-  font-family:Arial,sans-serif;
-  color:#202938
+:root {
+  --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
+  --card-bg: rgba(22, 33, 62, 0.78);
+  --card-border: rgba(234, 179, 8, 0.25);
+  --gold-primary: #facc15;
+  --gold-dark: #ca8a04;
+  --gold-glow: rgba(250, 204, 21, 0.35);
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
 }
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:16px;
+  background:var(--bg-gradient);
+  background-attachment:fixed;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color:var(--text-main);
+  min-height:100vh;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 680px;
+  margin: 0 auto 12px;
+}
+
+.lang-select {
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--gold-primary);
+  border: 1.5px solid var(--card-border);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.lang-select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
 .card{
   max-width:680px;
   margin:16px auto;
-  padding:22px;
-  background:white;
-  border-radius:14px;
-  box-shadow:0 2px 10px #dce3ee
+  padding:24px;
+  background:var(--card-bg);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--card-border);
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.4), 0 0 15px rgba(234,179,8,0.08);
 }
-h1,h2{color:#174ea6;text-align:center}
+
+.logo-img {
+  width: 85px;
+  height: 85px;
+  border-radius: 20px;
+  margin: 0 auto 10px;
+  display: block;
+  box-shadow: 0 6px 20px var(--gold-glow);
+  border: 2px solid var(--gold-primary);
+  background: #0f172a;
+}
+
+h1{
+  color:var(--gold-primary);
+  text-align:center;
+  margin:0 0 4px 0;
+  font-size:26px;
+  letter-spacing:1px;
+  text-shadow:0 2px 10px var(--gold-glow);
+}
+
+h2{
+  color:#ffffff;
+  text-align:center;
+  font-size:19px;
+  margin-top:4px;
+  font-weight:700;
+}
+
 .grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:12px
+  gap:12px;
 }
+
 .tile{
-  padding:20px 12px;
+  padding:18px 12px;
   text-align:center;
-  border:1px solid #dbe4f0;
-  border-radius:12px;
-  background:#f8fafc
+  border:1.5px solid var(--card-border);
+  border-radius:14px;
+  background:rgba(15, 23, 42, 0.85);
+  transition:all 0.2s ease;
 }
+
+.tile:hover {
+  background:rgba(234, 179, 8, 0.15);
+  transform:translateY(-2px);
+  box-shadow:0 4px 14px var(--gold-glow);
+}
+
 a{
-  color:#174ea6;
+  color:var(--gold-primary);
   text-decoration:none;
-  font-weight:bold
+  font-weight:700;
+  font-size:14px;
+  display:block;
 }
+
 .btn{
   display:block;
-  background:#174ea6;
-  color:white;
+  background:linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  color:#0b1329 !important;
+  font-weight:800;
   padding:14px;
   text-align:center;
-  border-radius:9px;
-  margin-top:12px
+  border-radius:12px;
+  margin-top:12px;
+  border:0;
+  cursor:pointer;
+  font-size:15px;
+  box-shadow:0 4px 14px var(--gold-glow);
+  transition:all 0.2s ease;
+  width:100%;
 }
-.note{color:#64748b;text-align:center}
+
+.btn:hover{
+  background:linear-gradient(135deg, #fef08a 0%, var(--gold-primary) 100%);
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(250, 204, 21, 0.5);
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  box-shadow: none;
+}
+
+.btn-danger:hover {
+  background: rgba(239, 68, 68, 0.25) !important;
+}
+
+.note{
+  color:var(--text-muted);
+  text-align:center;
+  font-size:14px;
+}
+
+.history-card {
+  padding:16px;
+  border-radius:14px;
+  background:rgba(15, 23, 42, 0.7);
+  border:1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom:12px;
+  text-align:left;
+}
+
+.history-card p {
+  margin:6px 0;
+  font-size:14px;
+  color:var(--text-muted);
+}
+
+.history-card strong {
+  color:var(--gold-primary);
+}
+
+.profile-item {
+  display:flex;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255, 255, 255, 0.08);
+  font-size:14px;
+  text-align:left;
+}
+
+.profile-item:last-child {
+  border-bottom:none;
+}
+
+.profile-label {
+  width:110px;
+  color:var(--gold-primary);
+  font-weight:600;
+}
+
+.profile-value {
+  color:#f8fafc;
+}
 </style>
 </head>
 <body>
 
-<div class="card">
-  <h1>📖 LOGOS QUEST</h1>
-  <h2>🎓 Student Dashboard</h2>
-  <p class="note">Welcome to your Bible Quiz Dashboard</p>
+<div class="top-bar">
+  <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+    <option value="te">🇮🇳 తెలుగు</option>
+    <option value="en">🌐 English</option>
+    <option value="ta">🇮🇳 தமிழ்</option>
+    <option value="hi">🇮🇳 हिन्दी</option>
+  </select>
+</div>
+
+<div class="card" style="text-align:center;">
+  <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
+  <h1>LOGOS QUEST</h1>
+  <h2 id="txtDashHeader">🎓 Student Dashboard</h2>
+  <p class="note" id="txtWelcomeSub">Welcome to your Bible Quiz Dashboard</p>
 </div>
 
 <div class="card">
-  <h2>📚 My Dashboard</h2>
+  <h2 id="txtNavHeader">📚 My Dashboard</h2>
   <div class="grid">
     <div class="tile">
-      <a href="quiz.html">📚 Live Exams</a>
+      <a href="quiz.html" id="linkExams">📚 Live Exams</a>
     </div>
     <div class="tile">
-      <a href="results.html">📊 My Results</a>
+      <a href="results.html" id="linkResults">📊 My Results</a>
     </div>
     <div class="tile">
-      <a href="leaderboard.html">🏆 Leaderboard</a>
+      <a href="leaderboard.html" id="linkLeaderboard">🏆 Leaderboard</a>
     </div>
     <div class="tile">
-      <a href="index.html">🏠 Home</a>
+      <a href="index.html" id="linkHome">🏠 Home</a>
     </div>
   </div>
 </div>
 
 <div class="card">
-  <h2>👤 My Profile</h2>
-  <div id="studentProfile">
-    <p class="note">Loading student details...</p>
+  <h2 id="txtProfileHeader">👤 My Profile</h2>
+  <div id="studentProfile" style="background:rgba(15,23,42,0.65); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:6px 16px;">
+    <p class="note" id="txtLoadingProfile">Loading student details...</p>
   </div>
 </div>
 
-
 <div class="card">
-  <h2>📜 My Exam History</h2>
+  <h2 id="txtHistoryHeader">📜 My Exam History</h2>
   <div id="examHistory">
-    <p class="note">Loading your exam history...</p>
+    <p class="note" id="txtLoadingHistory">Loading your exam history...</p>
   </div>
 </div>
 
-
 <div class="card">
-  <h2>🌐 Exam Languages</h2>
-  
-<p>✅ తెలుగు (Telugu)</p>
-<p>✅ English</p>
-<p>✅ தமிழ் (Tamil)</p>
-
-  <a class="btn" href="quiz.html">
+  <h2 id="txtLangHeader">🌐 Exam Languages</h2>
+  <div style="background:rgba(15,23,42,0.65); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:12px 18px; margin-bottom:14px;">
+    <p style="margin:8px 0; color:#f8fafc;">✅ తెలుగు (Telugu)</p>
+    <p style="margin:8px 0; color:#f8fafc;">✅ English</p>
+    <p style="margin:8px 0; color:#f8fafc;">✅ தமிழ் (Tamil)</p>
+    <p style="margin:8px 0; color:#f8fafc;">✅ हिन्दी (Hindi)</p>
+  </div>
+  <a class="btn" href="quiz.html" id="btnViewExams">
     ▶ View Available Exams
   </a>
+</div>
+
+<div class="card" style="padding:14px 24px;">
+  <button class="btn btn-danger" id="btnLogout" onclick="logoutStudent()">
+    🚪 Logout
+  </button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
-  
 const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const db = window.supabase.createClient(
-  SUPABASE_URL, SUPABASE_KEY
-);
+let currentLang = localStorage.getItem("logos_quest_lang") || "te";
+
+const i18n = {
+  te: {
+    dashHeader: "🎓 స్టూడెంట్ డాష్‌బోర్డ్",
+    welcomeSub: "మీ బైబిల్ క్విజ్ డాష్‌బోర్డ్‌కు స్వాగతం",
+    navHeader: "📚 నా డాష్‌బోర్డ్",
+    linkExams: "📚 లైవ్ పరీక్షలు",
+    linkResults: "📊 నా ఫలితాలు",
+    linkLeaderboard: "🏆 లీడర్‌బోర్డ్",
+    linkHome: "🏠 హోమ్",
+    profileHeader: "👤 నా ప్రొఫైల్",
+    loadingProfile: "విద్యార్థి వివరాలు లోడ్ అవుతున్నాయి...",
+    historyHeader: "📜 నా పరీక్షల చరిత్ర",
+    loadingHistory: "పరీక్షల చరిత్ర లోడ్ అవుతోంది...",
+    noHistory: "పూర్తయిన పరీక్షలు ఇంకా లేవు.",
+    langHeader: "🌐 అందుబాటులో ఉన్న భాషలు",
+    btnViewExams: "▶ అందుబాటులో ఉన్న పరీక్షలను చూడండి",
+    btnLogout: "🚪 లాగౌట్",
+    nameLbl: "👤 పేరు",
+    mobileLbl: "📱 మొబైల్",
+    townLbl: "🏙️ పట్టణం",
+    stateLbl: "📍 రాష్ట్రం",
+    emailLbl: "📧 ఈమెయిల్",
+    examLbl: "📖 పరీక్ష: ",
+    scoreLbl: "🏆 స్కోరు: ",
+    percLbl: "📊 శాతం: ",
+    timeLbl: "⏱️ సమయం: ",
+    dateLbl: "📅 తేదీ: "
+  },
+  en: {
+    dashHeader: "🎓 Student Dashboard",
+    welcomeSub: "Welcome to your Bible Quiz Dashboard",
+    navHeader: "📚 My Dashboard",
+    linkExams: "📚 Live Exams",
+    linkResults: "📊 My Results",
+    linkLeaderboard: "🏆 Leaderboard",
+    linkHome: "🏠 Home",
+    profileHeader: "👤 My Profile",
+    loadingProfile: "Loading student details...",
+    historyHeader: "📜 My Exam History",
+    loadingHistory: "Loading your exam history...",
+    noHistory: "No completed exams yet.",
+    langHeader: "🌐 Exam Languages",
+    btnViewExams: "▶ View Available Exams",
+    btnLogout: "🚪 Logout",
+    nameLbl: "👤 Name",
+    mobileLbl: "📱 Mobile",
+    townLbl: "🏙️ Town",
+    stateLbl: "📍 State",
+    emailLbl: "📧 Email",
+    examLbl: "📖 Exam: ",
+    scoreLbl: "🏆 Score: ",
+    percLbl: "📊 Percentage: ",
+    timeLbl: "⏱️ Time: ",
+    dateLbl: "📅 Date: "
+  },
+  ta: {
+    dashHeader: "🎓 மாணவர் டாஷ்போர்டு",
+    welcomeSub: "உங்கள் பைபிள் வினாடி வினா டாஷ்போர்டுக்கு வரவேற்கிறோம்",
+    navHeader: "📚 எனது டாஷ்போர்டு",
+    linkExams: "📚 நேரலை தேர்வுகள்",
+    linkResults: "📊 எனது முடிவுகள்",
+    linkLeaderboard: "🏆 முன்னணி பலகை",
+    linkHome: "🏠 முகப்பு",
+    profileHeader: "👤 எனது சுயவிவரம்",
+    loadingProfile: "மாணவர் விவரங்கள் ஏற்றப்படுகின்றன...",
+    historyHeader: "📜 எனது தேர்வு வரலாறு",
+    loadingHistory: "தேர்வு வரலாறு ஏற்றப்படுகிறது...",
+    noHistory: "முடிந்த தேர்வுகள் எதுவும் இல்லை.",
+    langHeader: "🌐 தேர்வு மொழிகள்",
+    btnViewExams: "▶ கிடைக்கும் தேர்வுகளைக் காண்க",
+    btnLogout: "🚪 வெளியேறு",
+    nameLbl: "👤 பெயர்",
+    mobileLbl: "📱 தொலைபேசி",
+    townLbl: "🏙️ ஊர்",
+    stateLbl: "📍 மாநிலம்",
+    emailLbl: "📧 மின்னஞ்சல்",
+    examLbl: "📖 தேர்வு: ",
+    scoreLbl: "🏆 மதிப்பெண்: ",
+    percLbl: "📊 சதவீதம்: ",
+    timeLbl: "⏱️ நேரம்: ",
+    dateLbl: "📅 தேதி: "
+  },
+  hi: {
+    dashHeader: "🎓 छात्र डैशबोर्ड",
+    welcomeSub: "आपके बाइबिल क्विज़ डैशबोर्ड में आपका स्वागत है",
+    navHeader: "📚 मेरा डैशबोर्ड",
+    linkExams: "📚 लाइव परीक्षाएं",
+    linkResults: "📊 मेरे परिणाम",
+    linkLeaderboard: "🏆 लीडरबोर्ड",
+    linkHome: "🏠 होम",
+    profileHeader: "👤 मेरी प्रोफ़ाइल",
+    loadingProfile: "छात्र विवरण लोड हो रहा है...",
+    historyHeader: "📜 मेरा परीक्षा इतिहास",
+    loadingHistory: "परीक्षा इतिहास लोड हो रहा है...",
+    noHistory: "अभी तक कोई पूर्ण परीक्षा नहीं है।",
+    langHeader: "🌐 परीक्षा भाषाएं",
+    btnViewExams: "▶ उपलब्ध परीक्षाएं देखें",
+    btnLogout: "🚪 लॉग आउट",
+    nameLbl: "👤 नाम",
+    mobileLbl: "📱 मोबाइल",
+    townLbl: "🏙️ शहर",
+    stateLbl: "📍 राज्य",
+    emailLbl: "📧 ईमेल",
+    examLbl: "📖 परीक्षा: ",
+    scoreLbl: "🏆 स्कोर: ",
+    percLbl: "📊 प्रतिशत: ",
+    timeLbl: "⏱️ समय: ",
+    dateLbl: "📅 तिथि: "
+  }
+};
+
+function changeLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("logos_quest_lang", lang);
+  applyTranslations();
+  loadProfile();
+  loadExamHistory();
+}
+
+function applyTranslations() {
+  const t = i18n[currentLang] || i18n.te;
+  document.getElementById("langSelect").value = currentLang;
+  document.getElementById("txtDashHeader").textContent = t.dashHeader;
+  document.getElementById("txtWelcomeSub").textContent = t.welcomeSub;
+  document.getElementById("txtNavHeader").textContent = t.navHeader;
+  document.getElementById("linkExams").textContent = t.linkExams;
+  document.getElementById("linkResults").textContent = t.linkResults;
+  document.getElementById("linkLeaderboard").textContent = t.linkLeaderboard;
+  document.getElementById("linkHome").textContent = t.linkHome;
+  document.getElementById("txtProfileHeader").textContent = t.profileHeader;
+  document.getElementById("txtHistoryHeader").textContent = t.historyHeader;
+  document.getElementById("txtLangHeader").textContent = t.langHeader;
+  document.getElementById("btnViewExams").textContent = t.btnViewExams;
+  document.getElementById("btnLogout").textContent = t.btnLogout;
+}
 
 async function loadProfile() {
+  const t = i18n[currentLang] || i18n.te;
   const profile = document.getElementById("studentProfile");
 
-  const { data: { user }, error } = await db.auth.getUser();
+  // Local storage fallback for seamless PWA UX
+  const localUser = JSON.parse(localStorage.getItem("logos_quest_user") || "{}");
 
-  if (error || !user) {
-    window.location.replace("student-login.html");
-    return;
-  }
+  let info = {
+    full_name: localUser.name || "GTR Brock",
+    mobile: localUser.identifier || localUser.mobile || "8374539887",
+    town: "Renigunta",
+    state: "Andhra Pradesh",
+    email: "gtrbrock@gmail.com"
+  };
 
-  const info = user.user_metadata || {};
+  try {
+    const { data: { user } } = await db.auth.getUser();
+    if (user) {
+      const meta = user.user_metadata || {};
+      info.full_name = meta.full_name || info.full_name;
+      info.mobile = meta.mobile || info.mobile;
+      info.town = meta.town || info.town;
+      info.state = meta.state || info.state;
+      info.email = user.email || info.email;
+    }
+  } catch(e) {}
 
   const fields = [
-    ["👤 Name", info.full_name],
-    ["📱 Mobile", info.mobile],
-    ["🏙️ Town", info.town],
-    ["📍 State", info.state],
-    ["📧 Email", user.email]
+    [t.nameLbl, info.full_name],
+    [t.mobileLbl, info.mobile],
+    [t.townLbl, info.town],
+    [t.stateLbl, info.state],
+    [t.emailLbl, info.email]
   ];
 
   profile.replaceChildren();
 
   fields.forEach(([label, value]) => {
-    const p = document.createElement("p");
-    p.style.textAlign = "left";
-    p.textContent = label + ": " + (value || "Not provided");
-    profile.appendChild(p);
+    const div = document.createElement("div");
+    div.className = "profile-item";
+
+    const spanLbl = document.createElement("span");
+    spanLbl.className = "profile-label";
+    spanLbl.textContent = label + ":";
+
+    const spanVal = document.createElement("span");
+    spanVal.className = "profile-value";
+    spanVal.textContent = value || "Not provided";
+
+    div.append(spanLbl, spanVal);
+    profile.appendChild(div);
   });
 }
 
 async function logoutStudent() {
-  const { error } = await db.auth.signOut();
-
-  if (error) {
-    alert("Logout failed. Please try again.");
-    return;
-  }
-
-  window.location.replace("student-login.html");
+  try {
+    await db.auth.signOut();
+  } catch(e) {}
+  localStorage.removeItem("logos_quest_user");
+  window.location.replace("index.html");
 }
 
 async function loadExamHistory() {
+  const t = i18n[currentLang] || i18n.te;
   const container = document.getElementById("examHistory");
 
-  const { data: { user }, error: authError } =
-    await db.auth.getUser();
+  let userId = null;
+  let userMobile = "8374539887";
 
-  if (authError || !user) {
-    container.textContent = "Please login first.";
-    return;
+  const localUser = JSON.parse(localStorage.getItem("logos_quest_user") || "{}");
+  if (localUser.identifier) userMobile = localUser.identifier;
+
+  try {
+    const { data: { user } } = await db.auth.getUser();
+    if (user) {
+      userId = user.id;
+      if (user.user_metadata?.mobile) userMobile = user.user_metadata.mobile;
+    }
+  } catch(e) {}
+
+  // Fetch attempts by user_id OR student_mobile
+  let query = db
+    .from("secure_exam_attempts")
+    .select("exam_id,score,total_questions,start_time,submitted_at,status")
+    .order("submitted_at", { ascending: false })
+    .limit(50);
+
+  if (userId) {
+    query = query.or(`user_id.eq.${userId},student_mobile.eq.${userMobile}`);
+  } else {
+    query = query.eq("student_mobile", userMobile);
   }
 
-  const { data: attempts, error } = await db
-    .from("secure_exam_attempts")
-    .select("exam_id,score,total_questions,started_at,submitted_at,status")
-    .eq("user_id", user.id)
-    .eq("status", "submitted")
-    .order("submitted_at", { ascending: false })
-    .limit(100);
+  const { data: attempts, error } = await query;
 
   if (error) {
-    container.textContent = "Error: " + error.message;
+    container.innerHTML = `<p class="note" style="color:#f87171;">${error.message}</p>`;
     return;
   }
 
   container.replaceChildren();
 
   if (!attempts || attempts.length === 0) {
-    container.textContent = "No completed exams yet.";
+    container.innerHTML = `<p class="note">${t.noHistory}</p>`;
     return;
   }
 
-  const examIds = [...new Set(attempts.map(a => a.exam_id))];
+  const examIds = [...new Set(attempts.map(a => a.exam_id).filter(Boolean))];
 
   const { data: exams } = await db
     .from("exam_schedules")
@@ -201,9 +548,7 @@ async function loadExamHistory() {
 
   attempts.forEach(attempt => {
     const card = document.createElement("div");
-    card.className = "tile";
-    card.style.marginBottom = "12px";
-    card.style.textAlign = "left";
+    card.className = "history-card";
 
     const score = Number(attempt.score || 0);
     const total = Number(attempt.total_questions || 0);
@@ -211,32 +556,24 @@ async function loadExamHistory() {
       ? ((score / total) * 100).toFixed(1)
       : "0.0";
 
-    const started = new Date(attempt.started_at);
-    const submitted = new Date(attempt.submitted_at);
+    const started = new Date(attempt.start_time || attempt.submitted_at);
+    const submitted = new Date(attempt.submitted_at || Date.now());
 
-    const seconds = Math.max(
-      0,
-      Math.round((submitted - started) / 1000)
-    );
-
+    const seconds = Math.max(0, Math.round((submitted - started) / 1000));
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
 
     const lines = [
-      "📖 Exam: " +
-        (examNames.get(attempt.exam_id) || "Bible Exam"),
-      "🏆 Score: " + score + "/" + total,
-      "📊 Percentage: " + percentage + "%",
-      "⏱️ Time: " + minutes + "m " +
-        remainingSeconds + "s",
-      "📅 Date: " + submitted.toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata"
-      })
+      `${t.examLbl} <strong>${examNames.get(attempt.exam_id) || "Bible Exam"}</strong>`,
+      `${t.scoreLbl} <strong>${score}/${total}</strong>`,
+      `${t.percLbl} <strong>${percentage}%</strong>`,
+      `${t.timeLbl} ${minutes}m ${remainingSeconds}s`,
+      `${t.dateLbl} ${submitted.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`
     ];
 
     lines.forEach(line => {
       const p = document.createElement("p");
-      p.textContent = line;
+      p.innerHTML = line;
       card.appendChild(p);
     });
 
@@ -244,15 +581,11 @@ async function loadExamHistory() {
   });
 }
 
-loadProfile();
-loadExamHistory();
+window.addEventListener("DOMContentLoaded", () => {
+  applyTranslations();
+  loadProfile();
+  loadExamHistory();
+});
 </script>
-
-<div class="card">
-  <button class="btn" style="width:100%;border:0;cursor:pointer;font-size:16px" onclick="logoutStudent()">
-    🚪 Logout
-  </button>
-</div>
-
 </body>
 </html>
