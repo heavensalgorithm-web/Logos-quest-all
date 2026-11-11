@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LOGOS QUEST - Live Bible Quiz</title>
 
-<!-- PWA & Mobile App Settings for Play Store -->
+<!-- PWA Settings -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0b1329">
 <meta name="mobile-web-app-capable" content="yes">
@@ -16,7 +16,7 @@
 <style>
 :root {
   --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
-  --card-bg: rgba(22, 33, 62, 0.75);
+  --card-bg: rgba(22, 33, 62, 0.78);
   --card-border: rgba(234, 179, 8, 0.25);
   --gold-primary: #facc15;
   --gold-dark: #ca8a04;
@@ -80,10 +80,10 @@ body {
 }
 
 .logo-img {
-  width: 95px;
-  height: 95px;
+  width: 90px;
+  height: 90px;
   border-radius: 22px;
-  margin: 0 auto 12px;
+  margin: 0 auto 10px;
   display: block;
   box-shadow: 0 8px 24px var(--gold-glow);
   border: 2px solid var(--gold-primary);
@@ -115,6 +115,40 @@ p {
   margin: 8px 0;
 }
 
+.auth-tabs {
+  display: flex;
+  background: rgba(15, 23, 42, 0.85);
+  border-radius: 14px;
+  padding: 4px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  gap: 4px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: none;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  color: #0b1329 !important;
+  font-weight: 800;
+  box-shadow: 0 2px 8px var(--gold-glow);
+}
+
 .input-group {
   margin-bottom: 14px;
   text-align: left;
@@ -123,8 +157,9 @@ p {
 .input-group label {
   display: block;
   font-size: 13px;
-  color: var(--text-muted);
+  color: var(--gold-primary);
   margin-bottom: 6px;
+  font-weight: 600;
 }
 
 .input-field {
@@ -144,15 +179,14 @@ p {
   box-shadow: 0 0 10px var(--gold-glow);
 }
 
-/* ఫోటో అప్‌లోడ్ / కెమెరా స్టైలింగ్ */
 .photo-upload-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 16px 0;
+  margin: 14px 0 18px;
   padding: 16px;
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(15, 23, 42, 0.65);
   border: 2px dashed rgba(234, 179, 8, 0.4);
   border-radius: 16px;
 }
@@ -163,7 +197,7 @@ p {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--gold-primary);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: none;
   box-shadow: 0 4px 15px var(--gold-glow);
 }
@@ -179,48 +213,18 @@ p {
   background: rgba(255, 255, 255, 0.08);
   color: var(--gold-primary);
   border: 1px solid var(--card-border);
-  padding: 10px;
+  padding: 10px 6px;
   border-radius: 10px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   text-align: center;
+  transition: all 0.2s;
 }
 
 .btn-photo:hover {
   background: rgba(234, 179, 8, 0.2);
-}
-
-.auth-tabs {
-  display: flex;
-  background: rgba(15, 23, 42, 0.8);
-  border-radius: 12px;
-  padding: 4px;
-  margin-bottom: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  gap: 4px;
-}
-
-.tab-btn {
-  flex: 1;
-  padding: 10px 4px;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-weight: 600;
-  font-size: 13px;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: none;
-  margin: 0;
-  text-align: center;
-}
-
-.tab-btn.active {
-  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
-  color: #0b1329 !important;
-  font-weight: 800;
-  box-shadow: 0 2px 8px var(--gold-glow);
+  border-color: var(--gold-primary);
 }
 
 .btn-action {
@@ -230,7 +234,7 @@ p {
   padding: 14px 24px;
   border: none;
   border-radius: 12px;
-  margin: 10px 0;
+  margin: 12px 0;
   font-size: 15px;
   cursor: pointer;
   box-shadow: 0 4px 14px var(--gold-glow);
@@ -253,8 +257,6 @@ p {
   font-size: 13px;
   border-radius: 8px;
   cursor: pointer;
-  width: auto;
-  margin: 0;
 }
 
 .user-bar {
@@ -273,16 +275,18 @@ p {
   align-items: center;
   gap: 12px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--gold-primary);
 }
 
 .user-avatar {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--gold-primary);
+  box-shadow: 0 2px 10px var(--gold-glow);
+  background: #0f172a;
 }
 
 .exam {
@@ -363,19 +367,19 @@ a {
   <div class="auth-tabs">
     <button type="button" class="tab-btn active" id="tabRegister" onclick="switchAuthTab('register')">ఖాతా సృష్టించండి</button>
     <button type="button" class="tab-btn" id="tabLogin" onclick="switchAuthTab('login')">లాగిన్</button>
-    <button type="button" class="tab-btn" id="tabAdmin" onclick="switchAuthTab('admin')">అడ్మిన్</button>
+    <button type="button" class="tab-btn" id="tabAdmin" onclick="switchAuthTab('admin')">అడ్మిన్ లాగిన్</button>
   </div>
 
   <form id="authForm" onsubmit="handleAuthSubmit(event)">
+    
     <div class="input-group" id="nameGroup">
       <label id="lblFullName">మీ పూర్తి పేరు (Full Name)</label>
       <input type="text" id="authName" class="input-field" placeholder="Ex: Prasanth Kumar">
     </div>
 
-    <!-- ఫోటో అప్‌లోడ్ / లైవ్ సెల్ఫీ సెక్షన్ -->
     <div class="photo-upload-box" id="photoBox">
       <img id="userPhotoPreview" class="preview-photo" alt="Profile Preview">
-      <p id="lblPhotoNotice" style="font-size:12px; margin:0 0 10px; color:var(--gold-primary);">
+      <p id="lblPhotoNotice" style="font-size:12px; margin:0 0 10px; color:var(--gold-primary); text-align:center;">
         📸 Top 3 ర్యాంకర్ల ఫోటోలు లీడర్‌బోర్డ్‌లో ప్రదర్శించబడతాయి!
       </p>
       
@@ -390,7 +394,7 @@ a {
 
     <div class="input-group">
       <label id="lblIdentifier">ఫోన్ నంబర్ లేదా ఈమెయిల్</label>
-      <input type="text" id="authIdentifier" class="input-field" placeholder="Ex: 9876543210 / email@test.com" required>
+      <input type="text" id="authIdentifier" class="input-field" placeholder="Ex: 8374539887 / email@test.com" required>
     </div>
 
     <div class="input-group">
@@ -411,7 +415,7 @@ a {
     <div class="user-bar">
       <div class="user-info">
         <img id="dashUserAvatar" class="user-avatar" src="icon-512.png" alt="Avatar">
-        <span><span id="currentUserName">User</span></span>
+        <span id="currentUserName">User</span>
       </div>
       <button type="button" class="btn-secondary" onclick="logoutUser()" id="btnLogout">🚪 లాగౌట్</button>
     </div>
@@ -469,13 +473,12 @@ let currentUser = null;
 let userPhotoBase64 = null;
 let exams = [];
 
-/* --- 4 భాషల నిఘంటువు --- */
 const i18n = {
   te: {
     authSubTitle: "పరీక్షల్లో పాల్గొనడానికి అకౌంట్ వివరాలు నమోదు చేయండి",
     tabRegister: "ఖాతా సృష్టించండి",
     tabLogin: "లాగిన్",
-    tabAdmin: "అడ్మిన్",
+    tabAdmin: "అడ్మిన్ లాగిన్",
     lblFullName: "మీ పూర్తి పేరు (Full Name)",
     lblIdentifier: "ఫోన్ నంబర్ లేదా ఈమెయిల్",
     lblAdminIdentifier: "అడ్మిన్ ఈమెయిల్ (Admin Email)",
@@ -513,7 +516,7 @@ const i18n = {
     authSubTitle: "Enter your account details to participate in exams",
     tabRegister: "Create Account",
     tabLogin: "Login",
-    tabAdmin: "Admin",
+    tabAdmin: "Admin Login",
     lblFullName: "Full Name",
     lblIdentifier: "Phone Number or Email",
     lblAdminIdentifier: "Admin Email",
@@ -551,7 +554,7 @@ const i18n = {
     authSubTitle: "தேர்வுகளில் பங்கேற்க உங்கள் கணக்கு விவரங்களை உள்ளிடவும்",
     tabRegister: "கணக்கை உருவாக்கவும்",
     tabLogin: "உள்நுழைக",
-    tabAdmin: "நிர்வாகி",
+    tabAdmin: "நிர்வாகி உள்நுழைவு",
     lblFullName: "முழு பெயர் (Full Name)",
     lblIdentifier: "தொலைபேசி எண் அல்லது மின்னஞ்சல்",
     lblAdminIdentifier: "நிர்வாகி மின்னஞ்சல் (Admin Email)",
@@ -589,7 +592,7 @@ const i18n = {
     authSubTitle: "परीक्षाओं में भाग लेने के लिए अपना खाता विवरण दर्ज करें",
     tabRegister: "खाता बनाएं",
     tabLogin: "लॉग इन",
-    tabAdmin: "व्यवस्थापक (Admin)",
+    tabAdmin: "व्यवस्थापक लॉगिन",
     lblFullName: "पूरा नाम (Full Name)",
     lblIdentifier: "फ़ोन नंबर या ईमेल",
     lblAdminIdentifier: "व्यवस्थापक ईमेल (Admin Email)",
@@ -673,7 +676,6 @@ function applyTranslations() {
   setTxt("linkResults", t.linkResults);
 }
 
-/* ఫోటో కంప్రెషన్ మరియు హ్యాండ్లింగ్ */
 function handlePhotoUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -682,12 +684,11 @@ function handlePhotoUpload(event) {
   reader.onload = function(e) {
     const img = new Image();
     img.onload = function() {
-      // ఇమేజ్‌ని 150x150 పిక్సెల్స్ పరిమాణానికి కుదించడం
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-      canvas.width = 150;
-      canvas.height = 150;
-      ctx.drawImage(img, 0, 0, 150, 150);
+      canvas.width = 160;
+      canvas.height = 160;
+      ctx.drawImage(img, 0, 0, 160, 160);
 
       userPhotoBase64 = canvas.toDataURL("image/jpeg", 0.7);
       const preview = $("userPhotoPreview");
@@ -699,7 +700,6 @@ function handlePhotoUpload(event) {
   reader.readAsDataURL(file);
 }
 
-/* అథెంటికేషన్ లాజిక్ */
 function checkExistingSession() {
   applyTranslations();
   const saved = localStorage.getItem("logos_quest_user");
@@ -722,8 +722,14 @@ function showDashboard() {
   $("authContainer").style.display = "none";
   $("dashboardContainer").style.display = "block";
   $("currentUserName").textContent = currentUser.name || currentUser.identifier || "User";
-  if (currentUser.photo) {
-    $("dashUserAvatar").src = currentUser.photo;
+
+  const keyId = (currentUser.identifier || "").toLowerCase();
+  const permanentPhoto = currentUser.photo || localStorage.getItem("logos_user_photo_" + keyId);
+  
+  if (permanentPhoto) {
+    $("dashUserAvatar").src = permanentPhoto;
+  } else {
+    $("dashUserAvatar").src = "icon-512.png";
   }
   loadExams();
 }
@@ -741,13 +747,13 @@ function switchAuthTab(mode) {
     $("nameGroup").style.display = "block";
     $("photoBox").style.display = "flex";
     $("lblIdentifier").textContent = t.lblIdentifier;
-    $("authIdentifier").placeholder = "Ex: 9876543210 / email@test.com";
+    $("authIdentifier").placeholder = "Ex: 8374539887 / email@test.com";
     $("authSubmitBtn").textContent = t.btnRegister;
   } else if (mode === "login") {
     $("nameGroup").style.display = "none";
     $("photoBox").style.display = "none";
     $("lblIdentifier").textContent = t.lblIdentifier;
-    $("authIdentifier").placeholder = "Ex: 9876543210 / email@test.com";
+    $("authIdentifier").placeholder = "Ex: 8374539887 / email@test.com";
     $("authSubmitBtn").textContent = t.btnLogin;
   } else if (mode === "admin") {
     $("nameGroup").style.display = "none";
@@ -764,7 +770,7 @@ async function handleAuthSubmit(e) {
   const msgEl = $("authMsg");
   msgEl.style.display = "none";
 
-  const identifier = $("authIdentifier").value.trim();
+  const identifier = $("authIdentifier").value.trim().toLowerCase();
   const password = $("authPassword").value.trim();
   const name = $("authName").value.trim();
 
@@ -804,15 +810,24 @@ async function handleAuthSubmit(e) {
     }
   }
 
-  if (currentMode === "register" && !name) {
-    showMsg(t.errName);
-    return;
+  if (currentMode === "register") {
+    if (!name) {
+      showMsg(t.errName);
+      return;
+    }
+    if (userPhotoBase64) {
+      localStorage.setItem("logos_user_photo_" + identifier, userPhotoBase64);
+      localStorage.setItem("logos_user_name_" + identifier, name);
+    }
   }
 
+  const savedPhoto = localStorage.getItem("logos_user_photo_" + identifier);
+  const savedName = localStorage.getItem("logos_user_name_" + identifier);
+
   const userObj = {
-    name: name || identifier,
+    name: name || savedName || identifier,
     identifier: identifier,
-    photo: userPhotoBase64 || null,
+    photo: userPhotoBase64 || savedPhoto || null,
     lang: currentLang,
     updated_at: new Date().toISOString()
   };
@@ -833,11 +848,16 @@ function logoutUser() {
   if (confirm(t.logoutConfirm)) {
     localStorage.removeItem("logos_quest_user");
     currentUser = null;
+    userPhotoBase64 = null;
+    const preview = $("userPhotoPreview");
+    if (preview) {
+      preview.src = "";
+      preview.style.display = "none";
+    }
     showAuth();
   }
 }
 
-/* పరీక్ష నిర్వహణ */
 function formatIST(value){
   return new Intl.DateTimeFormat("en-IN",{
     timeZone:"Asia/Kolkata",
@@ -872,13 +892,17 @@ function joinExam(exam){
     return;
   }
 
+  const keyId = (currentUser && currentUser.identifier ? currentUser.identifier : "").toLowerCase();
+  const photo = currentUser?.photo || localStorage.getItem("logos_user_photo_" + keyId) || "";
+
   const params = new URLSearchParams({
     exam_id: String(exam.id),
     lang: currentLang,
-    user_name: encodeURIComponent(currentUser ? currentUser.name : "Student")
+    user_name: encodeURIComponent(currentUser ? currentUser.name : "Student"),
+    mobile: keyId
   });
 
-  window.location.href = "exam.html?" + params.toString();
+  window.location.href = "quiz.html?" + params.toString();
 }
 
 function renderExams(){
