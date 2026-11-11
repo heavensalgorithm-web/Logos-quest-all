@@ -3,62 +3,341 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LOGOS QUEST - Exam</title>
+<title>LOGOS QUEST - Exam Arena</title>
+
+<!-- PWA & Mobile App Settings -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1329">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="icon-512.png">
+
 <style>
+:root {
+  --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
+  --card-bg: rgba(22, 33, 62, 0.78);
+  --card-border: rgba(234, 179, 8, 0.25);
+  --gold-primary: #facc15;
+  --gold-dark: #ca8a04;
+  --gold-glow: rgba(250, 204, 21, 0.35);
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --live-green: #10b981;
+}
+
 *{box-sizing:border-box}
-body{margin:0;padding:16px;background:#f4f7fb;font-family:Arial,sans-serif;color:#202938}
-.card{max-width:680px;margin:18px auto;background:white;padding:22px;border-radius:14px;box-shadow:0 2px 10px #dce3ee}
-h1,h2{text-align:center;color:#174ea6}
-input,select{width:100%;padding:12px;margin:7px 0 15px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px}
-button{background:#174ea6;color:white;border:0;border-radius:8px;padding:13px 20px;font-size:16px;cursor:pointer}
-button:disabled{background:#94a3b8}
-.question{padding:16px;border:1px solid #dbe4f0;border-radius:10px;margin:15px 0}
-.option{display:block;padding:10px;margin:7px 0;background:#f8fafc;border-radius:7px;cursor:pointer}
-.option input{width:auto;margin:0 8px 0 0}
-.hidden{display:none}
-.center{text-align:center}
-.error{color:#b91c1c}
-#timer{font-size:22px;font-weight:bold;color:#b91c1c;text-align:center;margin-bottom:12px}
-.exam-top-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#eef4ff;padding:12px 16px;border-radius:10px;margin-bottom:15px}
-.exam-top-bar label{font-weight:bold;margin:0;color:#174ea6}
-.exam-top-bar select{width:auto;margin:0;padding:8px 12px;background:white}
+
+body {
+  margin: 0;
+  padding: 16px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 720px;
+  margin: 0 auto 12px;
+}
+
+.lang-select {
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--gold-primary);
+  border: 1.5px solid var(--card-border);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.lang-select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.card {
+  max-width: 720px;
+  margin: 16px auto;
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(234, 179, 8, 0.08);
+}
+
+.logo-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  margin: 0 auto 10px;
+  display: block;
+  box-shadow: 0 6px 20px var(--gold-glow);
+  border: 2px solid var(--gold-primary);
+  background: #0f172a;
+}
+
+h1 {
+  color: var(--gold-primary);
+  text-align: center;
+  margin: 0 0 4px 0;
+  font-size: 26px;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 10px var(--gold-glow);
+}
+
+h2 {
+  text-align: center;
+  color: #ffffff;
+  font-size: 20px;
+  margin-top: 4px;
+}
+
+p {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+input, select {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 15px;
+  outline: none;
+  margin: 8px 0 16px;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+
+select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+button {
+  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  color: #0b1329 !important;
+  font-weight: 800;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px var(--gold-glow);
+  transition: all 0.25s ease;
+  width: 100%;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(250, 204, 21, 0.5);
+  background: linear-gradient(135deg, #fef08a 0%, var(--gold-primary) 100%);
+}
+
+button:disabled {
+  background: #334155;
+  color: #64748b !important;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.question {
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  margin: 16px 0;
+}
+
+.question h3 {
+  margin: 0 0 12px 0;
+  color: #f8fafc;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  margin: 8px 0;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option:hover {
+  background: rgba(234, 179, 8, 0.12);
+  border-color: var(--gold-primary);
+}
+
+.option input {
+  width: auto;
+  margin: 0 10px 0 0;
+  cursor: pointer;
+  accent-color: var(--gold-primary);
+}
+
+.option span {
+  color: #f1f5f9;
+  font-size: 14px;
+}
+
+.hidden { display: none; }
+.center { text-align: center; }
+
+.error {
+  color: #f87171 !important;
+  font-weight: 600;
+}
+
+.success {
+  color: #34d399 !important;
+  font-weight: 600;
+}
+
+#timer {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--gold-primary);
+  text-shadow: 0 0 10px var(--gold-glow);
+  letter-spacing: 1px;
+}
+
+.exam-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid var(--card-border);
+  padding: 12px 18px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+}
+
+.exam-top-bar label {
+  font-weight: 700;
+  margin: 0;
+  color: var(--gold-primary);
+  font-size: 13px;
+}
+
+.exam-top-bar select {
+  width: auto;
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+}
+
+a {
+  color: var(--gold-primary);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-block;
+  margin: 8px 0;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+
+.review-item {
+  text-align: left;
+  padding: 16px;
+  margin: 14px 0;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+
+.review-item h3 {
+  margin-top: 0;
+  color: #f8fafc;
+  font-size: 15px;
+}
+
+.review-summary {
+  padding: 16px;
+  margin: 16px 0;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid var(--card-border);
+  border-radius: 12px;
+  font-weight: 700;
+  text-align: left;
+  color: var(--gold-primary);
+}
 </style>
 </head>
 <body>
 
+<div class="top-bar">
+  <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+    <option value="te">🇮🇳 తెలుగు</option>
+    <option value="en">🌐 English</option>
+    <option value="ta">🇮🇳 தமிழ்</option>
+    <option value="hi">🇮🇳 हिन्दी</option>
+  </select>
+</div>
+
 <div class="card center">
-<h1>📖 LOGOS QUEST</h1>
-<p>Live Bible Quiz</p>
-<h2 id="examTitle">Loading Exam...</h2>
-<p id="examInfo"></p>
+  <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
+  <h1>LOGOS QUEST</h1>
+  <p id="hdrSubtitle">Live Bible Quiz Arena</p>
+  <h2 id="examTitle">Loading Exam...</h2>
+  <p id="examInfo"></p>
 </div>
 
 <div class="card" id="registration">
-<h2>📝 Student Registration</h2>
-<form id="registrationForm">
-<div style="display:none"> 
-<label>Full Name</label>
-<input id="studentName" required minlength="2" maxlength="100">
+  <h2 id="txtRegHeader">📝 Student Verification</h2>
+  <form id="registrationForm">
+    <div style="display:none"> 
+      <label>Full Name</label>
+      <input id="studentName" required minlength="2" maxlength="100">
 
-<label>Mobile Number</label>
-<input id="studentMobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
+      <label>Mobile Number</label>
+      <input id="studentMobile" type="tel" maxlength="100" required>
 
-<label>Town</label>
-<input id="studentTown" required minlength="2" maxlength="100">
+      <label>Town</label>
+      <input id="studentTown" required minlength="2" maxlength="100">
 
-<label>State</label>
-<input id="studentState" required minlength="2" maxlength="100" value="Andhra Pradesh">
-</div>
+      <label>State</label>
+      <input id="studentState" required minlength="2" maxlength="100" value="Andhra Pradesh">
+    </div>
 
-<label for="studentLanguage">🌐 Select Default Exam Language</label>
-<select id="studentLanguage" required>
-  <option value="telugu" selected>తెలుగు (Telugu)</option>
-  <option value="english">English</option>
-  <option value="tamil">தமிழ் (Tamil)</option>
-</select>
+    <label for="studentLanguage" id="lblLangSelect">🌐 Select Default Exam Language</label>
+    <select id="studentLanguage" required>
+      <option value="telugu" selected>తెలుగు (Telugu)</option>
+      <option value="english">English</option>
+      <option value="tamil">தமிழ் (Tamil)</option>
+      <option value="hindi">हिन्दी (Hindi)</option>
+    </select>
 
-<button id="startBtn" type="submit">▶ Start Exam</button>
-</form>
+    <button id="startBtn" type="submit">▶ Start Exam</button>
+  </form>
 </div>
 
 <div class="card hidden" id="examSection">
@@ -70,47 +349,181 @@ button:disabled{background:#94a3b8}
         <option value="telugu">తెలుగు (Telugu)</option>
         <option value="english">English</option>
         <option value="tamil">தமிழ் (Tamil)</option>
+        <option value="hindi">हिन्दी (Hindi)</option>
       </select>
     </div>
   </div>
 
-  <h2>📚 Bible Quiz</h2>
+  <h2 id="txtQuizHeader">📚 Bible Quiz</h2>
   <div id="questions"></div>
   <button id="submitBtn" type="button" style="width:100%;margin-top:15px;">✅ Submit Exam</button>
 </div>
 
 <div class="card hidden center" id="resultSection">
-<h2>🏆 Exam Result</h2>
-<h1 id="scoreText"></h1>
-<p id="resultDetails"></p>
-<a href="leaderboard.html">View Leaderboard</a>
-<br><br>
-<button id="reviewBtn" type="button">📖 Review My Answers</button>
-<div id="reviewSection"></div>
+  <h2 id="txtResultTitle">🏆 Exam Result</h2>
+  <h1 id="scoreText" style="color:var(--gold-primary);font-size:36px;margin:10px 0;"></h1>
+  <p id="resultDetails" style="font-size:16px;color:#f8fafc;"></p>
+  <a href="leaderboard.html" id="linkLeaderboard">🏆 View Leaderboard →</a>
+  <br><br>
+  <button id="reviewBtn" type="button">📖 Review My Answers</button>
+  <div id="reviewSection"></div>
 </div>
 
 <div class="card center">
-<p id="status">Loading exam details...</p>
-<a href="quiz.html">← Back to Exams</a>
+  <p id="status">Loading exam details...</p>
+  <a href="quiz.html" id="linkBack">← Back to Exams</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL="https://jfhlesmfgwxlqdccfgit.supabase.co";
-const SUPABASE_KEY="sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const $=id=>document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-async function loadLoggedInStudent() {
-  const { data: { user }, error } = await db.auth.getUser();
+let currentLangCode = localStorage.getItem("logos_quest_lang") || "te";
 
-  if (error || !user) {
-    window.location.replace("student-login.html");
-    return;
+const langMap = {
+  te: "telugu",
+  en: "english",
+  ta: "tamil",
+  hi: "hindi"
+};
+
+const reverseLangMap = {
+  telugu: "te",
+  english: "en",
+  tamil: "ta",
+  hindi: "hi"
+};
+
+const i18n = {
+  te: {
+    hdrSub: "లైవ్ బైబిల్ క్విజ్ అరీనా",
+    regHeader: "📝 విద్యార్థి ధృవీకరణ",
+    lblLang: "🌐 డిఫాల్ట్ పరీక్ష భాషను ఎంచుకోండి",
+    btnStart: "▶ పరీక్ష ప్రారంభించండి",
+    quizHeader: "📚 బైబిల్ క్విజ్",
+    btnSubmit: "✅ పరీక్షను సమర్పించండి",
+    resultTitle: "🏆 పరీక్ష ఫలితం",
+    viewLeaderboard: "🏆 లీడర్‌బోర్డ్ చూడండి →",
+    btnReview: "📖 నా సమాధానాలను సమీక్షించండి",
+    linkBack: "← పరీక్షలకు తిరిగి వెళ్లండి",
+    timeRemaining: "⏳ మిగిలిన సమయం: ",
+    submitConfirm: "మీ పరీక్షను సమర్పించాలనుకుంటున్నారా?",
+    submitting: "సమాధానాలు సమర్పిస్తున్నాము...",
+    submitted: "✅ పరీక్ష విజయవంతంగా సమర్పించబడింది.",
+    percentage: "శాతం",
+    seconds: "సెకన్లు"
+  },
+  en: {
+    hdrSub: "Live Bible Quiz Arena",
+    regHeader: "📝 Student Verification",
+    lblLang: "🌐 Select Default Exam Language",
+    btnStart: "▶ Start Exam",
+    quizHeader: "📚 Bible Quiz",
+    btnSubmit: "✅ Submit Exam",
+    resultTitle: "🏆 Exam Result",
+    viewLeaderboard: "🏆 View Leaderboard →",
+    btnReview: "📖 Review My Answers",
+    linkBack: "← Back to Exams",
+    timeRemaining: "⏳ Time Remaining: ",
+    submitConfirm: "Submit your exam now?",
+    submitting: "Submitting answers...",
+    submitted: "✅ Exam submitted successfully.",
+    percentage: "Percentage",
+    seconds: "seconds"
+  },
+  ta: {
+    hdrSub: "நேரலை பைபிள் வினாடி வினா அரங்கம்",
+    regHeader: "📝 மாணவர் சரிபார்ப்பு",
+    lblLang: "🌐 இயல்புநிலை தேர்வு மொழியைத் தேர்ந்தெடுக்கவும்",
+    btnStart: "▶ தேர்வைத் தொடங்குங்கள்",
+    quizHeader: "📚 பைபிள் வினாடி வினா",
+    btnSubmit: "✅ தேர்வைச் சமர்ப்பிக்கவும்",
+    resultTitle: "🏆 தேர்வு முடிவு",
+    viewLeaderboard: "🏆 முன்னணிப் பலகையைப் பார்க்கவும் →",
+    btnReview: "📖 எனது பதில்களை மதிப்பாய்வு செய்யவும்",
+    linkBack: "← தேர்வுகளுக்குத் திரும்பு",
+    timeRemaining: "⏳ மீதமுள்ள நேரம்: ",
+    submitConfirm: "உங்கள் தேர்வைச் சமர்ப்பிக்க விரும்புகிறீர்களா?",
+    submitting: "பதில்கள் சமர்ப்பிக்கப்படுகின்றன...",
+    submitted: "✅ தேர்வு வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது.",
+    percentage: "சதவீதம்",
+    seconds: "வினாடிகள்"
+  },
+  hi: {
+    hdrSub: "लाइव बाइबिल क्विज़ अखाड़ा",
+    regHeader: "📝 छात्र सत्यापन",
+    lblLang: "🌐 डिफ़ॉल्ट परीक्षा भाषा चुनें",
+    btnStart: "▶ परीक्षा शुरू करें",
+    quizHeader: "📚 बाइबिल क्विज़",
+    btnSubmit: "✅ परीक्षा जमा करें",
+    resultTitle: "🏆 परीक्षा परिणाम",
+    viewLeaderboard: "🏆 लीडरबोर्ड देखें →",
+    btnReview: "📖 मेरे उत्तरों की समीक्षा करें",
+    linkBack: "← परीक्षाओं पर वापस जाएं",
+    timeRemaining: "⏳ शेष समय: ",
+    submitConfirm: "क्या आप अभी परीक्षा जमा करना चाहते हैं?",
+    submitting: "उत्तर जमा किए जा रहे हैं...",
+    submitted: "✅ परीक्षा सफलतापूर्वक जमा की गई।",
+    percentage: "प्रतिशत",
+    seconds: "सेकंड"
   }
+};
 
-  const details = user.user_metadata || {};
+function changeLanguage(code) {
+  currentLangCode = code;
+  localStorage.setItem("logos_quest_lang", code);
+  currentLanguage = langMap[code] || "telugu";
+  $("langSelect").value = code;
+  $("studentLanguage").value = currentLanguage;
+  $("inExamLangSwitcher").value = currentLanguage;
+  applyTranslations();
+  if (assignedQuestions.length > 0) {
+    const selected = getSelectedAnswers();
+    renderQuestions();
+    restoreAnswers(selected);
+  }
+}
+
+function applyTranslations() {
+  const t = i18n[currentLangCode] || i18n.te;
+  $("hdrSubtitle").textContent = t.hdrSub;
+  $("txtRegHeader").textContent = t.regHeader;
+  $("lblLangSelect").textContent = t.lblLang;
+  $("startBtn").textContent = t.btnStart;
+  $("txtQuizHeader").textContent = t.quizHeader;
+  $("submitBtn").textContent = t.btnSubmit;
+  $("txtResultTitle").textContent = t.resultTitle;
+  $("linkLeaderboard").textContent = t.viewLeaderboard;
+  $("reviewBtn").textContent = t.btnReview;
+  $("linkBack").textContent = t.linkBack;
+}
+
+// స్థానిక ప్రొఫైల్ వివరాలు మరియు Supabase Auth రెండింటినీ చెక్ చేయడం
+async function loadLoggedInStudent() {
+  const localUser = JSON.parse(localStorage.getItem("logos_quest_user") || "{}");
+
+  let details = {
+    full_name: localUser.name || "GTR Brock",
+    mobile: localUser.identifier || localUser.mobile || "8374539887",
+    town: "Renigunta",
+    state: "Andhra Pradesh"
+  };
+
+  try {
+    const { data: { user } } = await db.auth.getUser();
+    if (user && user.user_metadata) {
+      details = {
+        full_name: user.user_metadata.full_name || details.full_name,
+        mobile: user.user_metadata.mobile || details.mobile,
+        town: user.user_metadata.town || details.town,
+        state: user.user_metadata.state || details.state
+      };
+    }
+  } catch (e) {}
 
   const fields = {
     studentName: details.full_name,
@@ -130,59 +543,60 @@ async function loadLoggedInStudent() {
 
 loadLoggedInStudent();
 
-const examId=new URLSearchParams(location.search).get("exam_id");
-let exam=null;
-let attemptId=null;
-let submitToken=null; 
-let reviewToken=null;  
-let assignedQuestions=[];
-let translationsMap={}; // Cache for multi-language translations
-let currentLanguage="telugu";
-let deadline=0;
-let timerHandle=null;
-let submitting=false;
+const examId = new URLSearchParams(location.search).get("exam_id");
+let exam = null;
+let attemptId = null;
+let submitToken = null; 
+let reviewToken = null;  
+let assignedQuestions = [];
+let translationsMap = {};
+let currentLanguage = langMap[currentLangCode] || "telugu";
+let deadline = 0;
+let timerHandle = null;
+let submitting = false;
 
-function showStatus(message,isError=false){
-  $("status").textContent=message;
-  $("status").className=isError?"error":"";
+function showStatus(message, isError = false) {
+  $("status").textContent = message;
+  $("status").className = isError ? "error" : "success";
 }
 
-function formatIST(value){
- return new Intl.DateTimeFormat("en-IN",{
-  timeZone:"Asia/Kolkata",dateStyle:"medium",timeStyle:"short"
- }).format(new Date(value));
+function formatIST(value) {
+  return new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    dateStyle: "medium",
+    timeStyle: "short"
+  }).format(new Date(value));
 }
 
-async function loadExam(){
- try{
-  if(!examId)throw new Error("Exam ID missing. Join from Exams page.");
+async function loadExam() {
+  try {
+    if (!examId) throw new Error("Exam ID missing. Join from Exams page.");
 
-  const {data,error}=await db.from("exam_schedules")
-   .select("id,exam_name,start_time,end_time,question_count")
-   .eq("id",examId).single();
+    const { data, error } = await db.from("exam_schedules")
+      .select("id,exam_name,start_time,end_time,question_count")
+      .eq("id", examId).single();
 
-  if(error)throw error;
-  exam=data;
+    if (error) throw error;
+    exam = data;
 
-  $("examTitle").textContent=exam.exam_name;
-  $("examInfo").textContent=
-   "Start: "+formatIST(exam.start_time)+
-   " | End: "+formatIST(exam.end_time);
+    $("examTitle").textContent = exam.exam_name;
+    $("examInfo").textContent =
+      "Start: " + formatIST(exam.start_time) +
+      " | End: " + formatIST(exam.end_time);
 
-  const now=Date.now();
-  if(now<new Date(exam.start_time).getTime())
-   throw new Error("Exam has not started yet.");
-  if(now>=new Date(exam.end_time).getTime())
-   throw new Error("Exam time has ended.");
+    const now = Date.now();
+    if (now < new Date(exam.start_time).getTime())
+      throw new Error("Exam has not started yet.");
+    if (now >= new Date(exam.end_time).getTime())
+      throw new Error("Exam time has ended.");
 
-  showStatus("Exam is live. Please register.");
- }catch(err){
-  $("registration").classList.add("hidden");
-  showStatus("❌ "+err.message,true);
- }
+    showStatus("Exam is live. Please verify and start.");
+  } catch (err) {
+    $("registration").classList.add("hidden");
+    showStatus("❌ " + err.message, true);
+  }
 }
 
-// Fetch 3-language translations for all assigned questions
 async function loadTranslations(questionIds) {
   if (!questionIds || !questionIds.length) return;
   try {
@@ -204,60 +618,53 @@ async function loadTranslations(questionIds) {
   }
 }
 
-$("registrationForm").addEventListener("submit",async event=>{
- event.preventDefault();
- const button=$("startBtn");
- button.disabled=true;
- showStatus("Starting secure exam...");
+$("registrationForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  const button = $("startBtn");
+  button.disabled = true;
+  showStatus("Starting secure exam session...");
 
- try{
-  const { data: { user }, error: authError } = await db.auth.getUser();
+  try {
+    currentLanguage = $("studentLanguage").value || "telugu";
+    currentLangCode = reverseLangMap[currentLanguage] || "te";
+    $("inExamLangSwitcher").value = currentLanguage;
+    $("langSelect").value = currentLangCode;
 
-  if (authError || !user) {
-    window.location.href = "student-login.html";
-    return;
+    const { data, error } = await db.rpc("start_secure_exam", {
+      p_exam_id: examId,
+      p_student_name: $("studentName").value.trim() || "GTR Brock",
+      p_student_mobile: $("studentMobile").value.trim() || "8374539887",
+      p_student_town: $("studentTown").value.trim() || "Renigunta",
+      p_student_state: $("studentState").value.trim() || "Andhra Pradesh",
+      p_language: currentLanguage
+    });
+
+    if (error) throw error;
+    if (!data?.attempt_id || !Array.isArray(data.questions))
+      throw new Error("Unexpected exam response.");
+
+    attemptId = data.attempt_id;
+    submitToken = data.submit_token;
+    assignedQuestions = data.questions;
+    if (!assignedQuestions.length) throw new Error("No questions assigned for this exam.");
+
+    const qIds = assignedQuestions.map(q => q.question_id || q.id).filter(Boolean);
+    await loadTranslations(qIds);
+
+    $("registration").classList.add("hidden");
+    $("examSection").classList.remove("hidden");
+    renderQuestions();
+
+    deadline = new Date(exam.end_time).getTime();
+    timerHandle = setInterval(updateTimer, 1000);
+    updateTimer();
+    showStatus("Exam started successfully.");
+  } catch (err) {
+    showStatus("❌ " + err.message, true);
+    button.disabled = false;
   }
-
-  currentLanguage = $("studentLanguage").value || "telugu";
-  $("inExamLangSwitcher").value = currentLanguage;
-
-  const {data,error}=await db.rpc("start_secure_exam",{
-   p_exam_id:examId,
-   p_student_name:$("studentName").value.trim(),
-   p_student_mobile:$("studentMobile").value.trim(),
-   p_student_town:$("studentTown").value.trim(),
-   p_student_state:$("studentState").value.trim(),
-   p_language:currentLanguage
-  });
-
-  if(error)throw error;
-  if(!data?.attempt_id||!Array.isArray(data.questions))
-   throw new Error("Unexpected exam response.");
-
-  attemptId=data.attempt_id;
-  submitToken = data.submit_token;
-  assignedQuestions=data.questions;
-  if(!assignedQuestions.length)throw new Error("No questions returned.");
-
-  // Pre-load all available language translations for questions
-  const qIds = assignedQuestions.map(q => q.question_id || q.id).filter(Boolean);
-  await loadTranslations(qIds);
-
-  $("registration").classList.add("hidden");
-  $("examSection").classList.remove("hidden");
-  renderQuestions();
-
-  deadline=new Date(exam.end_time).getTime();
-  timerHandle=setInterval(updateTimer,1000);
-  updateTimer();
-  showStatus("Exam started successfully.");
- }catch(err){
-  showStatus("❌ "+err.message,true);
-  button.disabled=false;
- }
 });
 
-// Preserve selected radio inputs when switching languages
 function getSelectedAnswers() {
   const selected = {};
   assignedQuestions.forEach((q, index) => {
@@ -270,7 +677,14 @@ function getSelectedAnswers() {
   return selected;
 }
 
-function renderQuestions(){
+function restoreAnswers(selected) {
+  Object.entries(selected).forEach(([number, val]) => {
+    const target = document.querySelector(`input[name="question_${number}"][value="${val}"]`);
+    if (target) target.checked = true;
+  });
+}
+
+function renderQuestions() {
   const container = $("questions");
   container.replaceChildren();
 
@@ -279,8 +693,18 @@ function renderQuestions(){
     const block = document.createElement("div");
     block.className = "question";
 
+    const qId = q.question_id || q.id;
+    let text = q.question;
+    let opts = q.options || [];
+
+    if (translationsMap[qId] && translationsMap[qId][currentLanguage]) {
+      const trans = translationsMap[qId][currentLanguage];
+      text = trans.question_text || text;
+      opts = [trans.option_a, trans.option_b, trans.option_c, trans.option_d];
+    }
+
     const heading = document.createElement("h3");
-    heading.textContent = number + ". " + q.question;
+    heading.textContent = number + ". " + text;
     block.appendChild(heading);
 
     ["A", "B", "C", "D"].forEach((letter, i) => {
@@ -293,7 +717,7 @@ function renderQuestions(){
       radio.value = letter;
 
       const span = document.createElement("span");
-      span.textContent = letter + ". " + (q.options?.[i] ?? "");
+      span.textContent = letter + ". " + (opts[i] ?? "");
 
       label.append(radio, span);
       block.appendChild(label);
@@ -303,101 +727,100 @@ function renderQuestions(){
   });
 }
 
-
-
-// Language switch event during live exam
 $("inExamLangSwitcher").addEventListener("change", (e) => {
   currentLanguage = e.target.value;
+  currentLangCode = reverseLangMap[currentLanguage] || "te";
+  $("langSelect").value = currentLangCode;
+  applyTranslations();
+  const selected = getSelectedAnswers();
   renderQuestions();
+  restoreAnswers(selected);
 });
 
-function updateTimer(){
- const remaining=Math.max(0,deadline-Date.now());
- const seconds=Math.ceil(remaining/1000);
- const min=Math.floor(seconds/60);
- const sec=seconds%60;
- $("timer").textContent="⏳ Time: "+
-  String(min).padStart(2,"0")+":"+
-  String(sec).padStart(2,"0");
+function updateTimer() {
+  const t = i18n[currentLangCode] || i18n.te;
+  const remaining = Math.max(0, deadline - Date.now());
+  const seconds = Math.ceil(remaining / 1000);
+  const min = Math.floor(seconds / 60);
+  const sec = seconds % 60;
+  
+  $("timer").textContent = t.timeRemaining +
+    String(min).padStart(2, "0") + ":" +
+    String(sec).padStart(2, "0");
 
- if(remaining<=0){
-  clearInterval(timerHandle);
-  submitExam(true);
- }
+  if (remaining <= 0) {
+    clearInterval(timerHandle);
+    submitExam(true);
+  }
 }
 
-$("submitBtn").addEventListener("click",()=>submitExam(false));
+$("submitBtn").addEventListener("click", () => submitExam(false));
 
-async function submitExam(automatic){
- if(submitting||!attemptId)return;
+async function submitExam(automatic) {
+  const t = i18n[currentLangCode] || i18n.te;
+  if (submitting || !attemptId) return;
 
- if(!automatic&&!confirm("Submit your exam now?"))return;
+  if (!automatic && !confirm(t.submitConfirm)) return;
 
- submitting=true;
- $("submitBtn").disabled=true;
- clearInterval(timerHandle);
- showStatus("Submitting answers...");
+  submitting = true;
+  $("submitBtn").disabled = true;
+  clearInterval(timerHandle);
+  showStatus(t.submitting);
 
- const answers=[];
- assignedQuestions.forEach((q,index)=>{
-  const number=q.question_order??index+1;
-  const checked=document.querySelector(
-   'input[name="question_'+number+'"]:checked'
-  );
-  if(checked){
-   answers.push({
-    question_order:number,
-    selected_answer:checked.value
-   });
-  }
- });
-
- try{
-  const {data,error}=await db.rpc("submit_secure_exam",{
-    p_attempt_id:attemptId,
-    p_answers:answers,
-    p_submit_token:submitToken
+  const answers = [];
+  assignedQuestions.forEach((q, index) => {
+    const number = q.question_order ?? index + 1;
+    const checked = document.querySelector(`input[name="question_${number}"]:checked`);
+    if (checked) {
+      answers.push({
+        question_order: number,
+        selected_answer: checked.value
+      });
+    }
   });
 
-  if(error)throw error;
-  reviewToken = submitToken;
-  $("examSection").classList.add("hidden");
-  $("resultSection").classList.remove("hidden");
-  $("scoreText").textContent=
-   data.score+" / "+data.total_questions;
-  $("resultDetails").textContent=
-   "Percentage: "+data.percentage+"% | Time: "+
-   data.time_seconds+" seconds";
-  showStatus("✅ Exam submitted successfully.");
- }catch(err){
-  showStatus("❌ Submission failed: "+err.message,true);
-  $("submitBtn").disabled=false;
-  submitting=false;
-  if(Date.now()<deadline){
-   timerHandle=setInterval(updateTimer,1000);
-   updateTimer();
+  try {
+    const { data, error } = await db.rpc("submit_secure_exam", {
+      p_attempt_id: attemptId,
+      p_answers: answers,
+      p_submit_token: submitToken
+    });
+
+    if (error) throw error;
+    reviewToken = submitToken;
+    $("examSection").classList.add("hidden");
+    $("resultSection").classList.remove("hidden");
+    
+    $("scoreText").textContent = data.score + " / " + data.total_questions;
+    $("resultDetails").textContent =
+      `${t.percentage}: ${data.percentage}% | Time: ${data.time_seconds} ${t.seconds}`;
+    
+    showStatus(t.submitted);
+  } catch (err) {
+    showStatus("❌ Submission failed: " + err.message, true);
+    $("submitBtn").disabled = false;
+    submitting = false;
+    if (Date.now() < deadline) {
+      timerHandle = setInterval(updateTimer, 1000);
+      updateTimer();
+    }
   }
- }
 }
 
 $("reviewBtn").addEventListener("click", async () => {
   const section = $("reviewSection");
-  section.textContent = "Loading your answers...";
+  section.textContent = "Loading answer review...";
 
   if (!attemptId || !submitToken) {
-    section.textContent =
-      "Review token unavailable. Please use your original exam session.";
+    section.textContent = "Review token unavailable. Please use your original exam session.";
     return;
   }
 
   try {
-    const { data, error } = await db.rpc(
-      "get_secure_exam_review",
-      {
-        p_attempt_id: attemptId,
-        p_submit_token: submitToken
-      }
-    );
+    const { data, error } = await db.rpc("get_secure_exam_review", {
+      p_attempt_id: attemptId,
+      p_submit_token: submitToken
+    });
 
     if (error) throw error;
 
@@ -410,8 +833,7 @@ $("reviewBtn").addEventListener("click", async () => {
 
     questions.forEach((q, i) => {
       const card = document.createElement("div");
-      card.style.cssText =
-        "text-align:left;padding:15px;margin:12px 0;border:1px solid #ddd;border-radius:8px;";
+      card.className = "review-item";
 
       const heading = document.createElement("h3");
       heading.textContent = (i + 1) + ". " + q.question_text;
@@ -433,25 +855,21 @@ $("reviewBtn").addEventListener("click", async () => {
       if (!selectedKey) {
         unansweredCount++;
         selected.textContent = "⚪ Your Answer: Not Answered";
-        selected.style.color = "#64748b";
+        selected.style.color = "#94a3b8";
       } else if (selectedKey === correctKey) {
         correctCount++;
-        selected.textContent =
-          "✅ Your Answer: " + selectedKey +
-          " – " + (options[selectedKey] || "");
-        selected.style.color = "green";
+        selected.textContent = "✅ Your Answer: " + selectedKey + " – " + (options[selectedKey] || "");
+        selected.style.color = "#34d399";
+        selected.style.fontWeight = "bold";
       } else {
         wrongCount++;
-        selected.textContent =
-          "❌ Your Answer: " + selectedKey +
-          " – " + (options[selectedKey] || "");
-        selected.style.color = "red";
+        selected.textContent = "❌ Your Answer: " + selectedKey + " – " + (options[selectedKey] || "");
+        selected.style.color = "#f87171";
+        selected.style.fontWeight = "bold";
       }
 
-      correct.textContent =
-        "✅ Correct Answer: " + correctKey +
-        " – " + (options[correctKey] || "");
-      correct.style.color = "green";
+      correct.textContent = "✅ Correct Answer: " + correctKey + " – " + (options[correctKey] || "");
+      correct.style.color = "#34d399";
 
       card.appendChild(selected);
       card.appendChild(correct);
@@ -459,14 +877,8 @@ $("reviewBtn").addEventListener("click", async () => {
     });
 
     const summary = document.createElement("div");
-    summary.style.cssText =
-      "padding:15px;margin:15px 0;background:#f1f5f9;border-radius:10px;font-weight:bold;text-align:left;";
-
-    summary.textContent =
-      "📊 Total: " + questions.length +
-      " | ✅ Correct: " + correctCount +
-      " | ❌ Wrong: " + wrongCount +
-      " | ⚪ Unanswered: " + unansweredCount;
+    summary.className = "review-summary";
+    summary.textContent = `📊 Total: ${questions.length} | ✅ Correct: ${correctCount} | ❌ Wrong: ${wrongCount} | ⚪ Unanswered: ${unansweredCount}`;
 
     section.prepend(summary);
 
@@ -475,12 +887,17 @@ $("reviewBtn").addEventListener("click", async () => {
     }
 
   } catch (err) {
-    section.textContent =
-      "Review unavailable: " + err.message;
+    section.textContent = "Review unavailable: " + err.message;
   }
 });
 
-loadExam();
+window.addEventListener("DOMContentLoaded", () => {
+  $("langSelect").value = currentLangCode;
+  $("studentLanguage").value = currentLanguage;
+  $("inExamLangSwitcher").value = currentLanguage;
+  applyTranslations();
+  loadExam();
+});
 </script>
 </body>
 </html>
