@@ -234,7 +234,7 @@ p {
   padding: 14px 24px;
   border: none;
   border-radius: 12px;
-  margin: 12px 0;
+  margin: 14px 0 8px;
   font-size: 15px;
   cursor: pointer;
   box-shadow: 0 4px 14px var(--gold-glow);
@@ -247,6 +247,24 @@ p {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(250, 204, 21, 0.5);
   background: linear-gradient(135deg, #fef08a 0%, var(--gold-primary) 100%);
+}
+
+.btn-action:disabled {
+  background: #334155;
+  color: #64748b !important;
+  cursor: not-allowed;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--gold-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 8px;
+  display: inline-block;
 }
 
 .btn-secondary {
@@ -325,6 +343,14 @@ p {
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
+.success-msg {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
 a {
   color: var(--gold-primary);
   text-decoration: none;
@@ -372,11 +398,13 @@ a {
 
   <form id="authForm" onsubmit="handleAuthSubmit(event)">
     
+    <!-- 1. Full Name (Register Only) -->
     <div class="input-group" id="nameGroup">
       <label id="lblFullName">మీ పూర్తి పేరు (Full Name)</label>
       <input type="text" id="authName" class="input-field" placeholder="Ex: Prasanth Kumar">
     </div>
 
+    <!-- 2. Photo Upload (Register Only) -->
     <div class="photo-upload-box" id="photoBox">
       <img id="userPhotoPreview" class="preview-photo" alt="Profile Preview">
       <p id="lblPhotoNotice" style="font-size:12px; margin:0 0 10px; color:var(--gold-primary); text-align:center;">
@@ -392,11 +420,19 @@ a {
       </div>
     </div>
 
+    <!-- 3. Email ID (Mandatory in Register, Login, Change Password) -->
     <div class="input-group">
-      <label id="lblIdentifier">ఫోన్ నంబర్ లేదా ఈమెయిల్</label>
-      <input type="text" id="authIdentifier" class="input-field" placeholder="Ex: 8374539887 / email@test.com" required>
+      <label id="lblEmail">ఈమెయిల్ ఐడీ (Email ID - Mandatory)</label>
+      <input type="email" id="authEmail" class="input-field" placeholder="Ex: candidate@gmail.com" required>
     </div>
 
+    <!-- 4. Phone Number (Separate Field in Register & Change Password) -->
+    <div class="input-group" id="phoneGroup">
+      <label id="lblPhone">ఫోన్ నంబర్ (Phone Number)</label>
+      <input type="tel" id="authPhone" class="input-field" placeholder="Ex: 8374539887" inputmode="numeric">
+    </div>
+
+    <!-- 5. Password -->
     <div class="input-group">
       <label id="lblPassword">పాస్‌వర్డ్ (Password)</label>
       <input type="password" id="authPassword" class="input-field" placeholder="••••••••" required>
@@ -405,6 +441,11 @@ a {
     <p id="authMsg" class="center error" style="display:none;"></p>
 
     <button type="submit" class="btn-action" id="authSubmitBtn">ఖాతా సృష్టించండి (Sign Up)</button>
+
+    <!-- Change Password Toggle Link -->
+    <div class="center" id="changePwdLinkWrap">
+      <button type="button" class="btn-link" id="btnChangePwdMode" onclick="switchAuthTab('change_pwd')">🔑 పాస్‌వర్డ్ మార్చుకోండి (Change Password)</button>
+    </div>
   </form>
 </div>
 
@@ -480,12 +521,18 @@ const i18n = {
     tabLogin: "లాగిన్",
     tabAdmin: "అడ్మిన్ లాగిన్",
     lblFullName: "మీ పూర్తి పేరు (Full Name)",
-    lblIdentifier: "ఫోన్ నంబర్ లేదా ఈమెయిల్",
-    lblAdminIdentifier: "అడ్మిన్ ఈమెయిల్ (Admin Email)",
+    lblPhone: "ఫోన్ నంబర్ (Phone Number - Separate)",
+    lblVerifyPhone: "రిజిస్టర్ చేసిన ఫోన్ నంబర్ (Verify Phone)",
+    lblEmail: "ఈమెయిల్ ఐడీ (Email ID - Mandatory)",
+    lblAdminEmail: "అడ్మిన్ ఈమెయిల్ (Admin Email)",
     lblPassword: "పాస్‌వర్డ్ (Password)",
+    lblNewPassword: "కొత్త పాస్‌వర్డ్ (New Password)",
     btnRegister: "ఖాతా సృష్టించండి (Sign Up)",
     btnLogin: "లాగిన్ అవ్వండి (Login)",
     btnAdminLogin: "అడ్మిన్ లాగిన్ (Admin Login)",
+    btnUpdatePwd: "పాస్‌వర్డ్ అప్‌డేట్ చేయండి",
+    btnChangePwdLink: "🔑 పాస్‌వర్డ్ మార్చుకోండి (Change Password)",
+    btnBackLoginLink: "← లాగిన్ కు తిరిగి వెళ్ళండి",
     btnLogout: "🚪 లాగౌట్",
     dashSubtitle: "బైబిల్ క్విజ్ పోటీలకు స్వాగతం",
     dashExamsTitle: "📚 లైవ్ బైబిల్ పరీక్షలు",
@@ -506,7 +553,9 @@ const i18n = {
     examNotStartedAlert: "ఈ పరీక్ష ఇంకా ప్రారంభం కాలేదు.",
     examEndedAlert: "ఈ పరీక్ష సమయం ముగిసింది.",
     errName: "దయచేసి మీ పూర్తి పేరు నమోదు చేయండి.",
-    errFields: "దయచేసి అన్ని వివరాలను నమోదు చేయండి.",
+    errPhone: "దయచేసి సరైన ఫోన్ నంబర్ (10 అంకెలు) నమోదు చేయండి.",
+    errFields: "దయచేసి Email ID మరియు Password తప్పనిసరిగా నమోదు చేయండి.",
+    pwdChangedSuccess: "✅ పాస్‌వర్డ్ విజయవంతంగా మార్చబడింది! కొత్త పాస్‌వర్డ్‌తో లాగిన్ అవ్వండి.",
     logoutConfirm: "మీరు నిజంగా లాగౌట్ కావాలనుకుంటున్నారా?",
     photoNotice: "📸 Top 3 ర్యాంకర్ల ఫోటోలు లీడర్‌బోర్డ్‌లో ప్రదర్శించబడతాయి!",
     btnCamera: "📷 సెల్ఫీ తీసుకోండి",
@@ -518,12 +567,18 @@ const i18n = {
     tabLogin: "Login",
     tabAdmin: "Admin Login",
     lblFullName: "Full Name",
-    lblIdentifier: "Phone Number or Email",
-    lblAdminIdentifier: "Admin Email",
+    lblPhone: "Phone Number (Separate)",
+    lblVerifyPhone: "Registered Phone Number (To Verify)",
+    lblEmail: "Email ID (Mandatory)",
+    lblAdminEmail: "Admin Email",
     lblPassword: "Password",
+    lblNewPassword: "New Password",
     btnRegister: "Create Account (Sign Up)",
     btnLogin: "Login to Account",
     btnAdminLogin: "Admin Login",
+    btnUpdatePwd: "Update Password",
+    btnChangePwdLink: "🔑 Change Password",
+    btnBackLoginLink: "← Back to Login",
     btnLogout: "🚪 Logout",
     dashSubtitle: "Welcome to Logos Quest Quiz Arena",
     dashExamsTitle: "📚 Live Bible Exams",
@@ -544,7 +599,9 @@ const i18n = {
     examNotStartedAlert: "This exam has not started yet.",
     examEndedAlert: "This exam has already ended.",
     errName: "Please enter your full name.",
-    errFields: "Please enter all required fields.",
+    errPhone: "Please enter a valid 10-digit phone number.",
+    errFields: "Please enter Email ID and Password.",
+    pwdChangedSuccess: "✅ Password updated successfully! Please login with your new password.",
     logoutConfirm: "Are you sure you want to log out?",
     photoNotice: "📸 Top 3 ranker photos will appear on the Leaderboard!",
     btnCamera: "📷 Take Selfie",
@@ -556,12 +613,18 @@ const i18n = {
     tabLogin: "உள்நுழைக",
     tabAdmin: "நிர்வாகி உள்நுழைவு",
     lblFullName: "முழு பெயர் (Full Name)",
-    lblIdentifier: "தொலைபேசி எண் அல்லது மின்னஞ்சல்",
-    lblAdminIdentifier: "நிர்வாகி மின்னஞ்சல் (Admin Email)",
+    lblPhone: "தொலைபேசி எண் (Phone Number)",
+    lblVerifyPhone: "பதிவு செய்யப்பட்ட தொலைபேசி எண்",
+    lblEmail: "மின்னஞ்சல் முகவரி (Email ID - Mandatory)",
+    lblAdminEmail: "நிர்வாகி மின்னஞ்சல் (Admin Email)",
     lblPassword: "கடவுச்சொல் (Password)",
+    lblNewPassword: "புதிய கடவுச்சொல் (New Password)",
     btnRegister: "கணக்கை உருவாக்கவும் (Sign Up)",
     btnLogin: "உள்நுழையவும் (Login)",
     btnAdminLogin: "நிர்வாகி உள்நுழைவு (Admin Login)",
+    btnUpdatePwd: "கடவுச்சொல்லை புதுப்பிக்கவும்",
+    btnChangePwdLink: "🔑 கடவுச்சொல்லை மாற்றவும் (Change Password)",
+    btnBackLoginLink: "← உள்நுழைவுக்குத் திரும்புக",
     btnLogout: "🚪 வெளியேறு",
     dashSubtitle: "பைபிள் வினாடி வினா போட்டிக்கு வரவேற்கிறோம்",
     dashExamsTitle: "📚 நேரலை பைபிள் தேர்வுகள்",
@@ -582,7 +645,9 @@ const i18n = {
     examNotStartedAlert: "இந்தத் தேர்வு இன்னும் தொடங்கவில்லை.",
     examEndedAlert: "இந்தத் தேர்வு முடிந்துவிட்டது.",
     errName: "தயவுசெய்து உங்கள் முழு பெயரை உள்ளிடவும்.",
-    errFields: "தயவுசெய்து அனைத்து விவரங்களையும் உள்ளிடவும்.",
+    errPhone: "சரியான 10 இலக்க தொலைபேசி எண்ணை உள்ளிடவும்.",
+    errFields: "மின்னஞ்சல் மற்றும் கடவுச்சொல்லை உள்ளிடவும்.",
+    pwdChangedSuccess: "✅ கடவுச்சொல் வெற்றிகரமாக மாற்றப்பட்டது! புதிய கடவுச்சொல்லுடன் உள்நுழையவும்.",
     logoutConfirm: "நிச்சயமாக வெளியேற விரும்புகிறீர்களா?",
     photoNotice: "📸 முதல் 3 வெற்றியாளர்களின் புகைப்படம் முன்னணி பலகையில் காட்டப்படும்!",
     btnCamera: "📷 செல்ஃபி எடுக்கவும்",
@@ -594,12 +659,18 @@ const i18n = {
     tabLogin: "लॉग इन",
     tabAdmin: "व्यवस्थापक लॉगिन",
     lblFullName: "पूरा नाम (Full Name)",
-    lblIdentifier: "फ़ोन नंबर या ईमेल",
-    lblAdminIdentifier: "व्यवस्थापक ईमेल (Admin Email)",
+    lblPhone: "फ़ोन नंबर (Phone Number)",
+    lblVerifyPhone: "पंजीकृत फ़ोन नंबर (Verify Phone)",
+    lblEmail: "ईमेल आईडी (Email ID - Mandatory)",
+    lblAdminEmail: "व्यवस्थापक ईमेल (Admin Email)",
     lblPassword: "पासवर्ड (Password)",
+    lblNewPassword: "नया पासवर्ड (New Password)",
     btnRegister: "खाता बनाएं (Sign Up)",
     btnLogin: "लॉग इन करें (Login)",
     btnAdminLogin: "व्यवस्थापक लॉगिन (Admin Login)",
+    btnUpdatePwd: "पासवर्ड अपडेट करें",
+    btnChangePwdLink: "🔑 पासवर्ड बदलें (Change Password)",
+    btnBackLoginLink: "← लॉगिन पर वापस जाएं",
     btnLogout: "🚪 लॉग आउट",
     dashSubtitle: "लोगोस क्वेस्ट क्विज़ में आपका स्वागत है",
     dashExamsTitle: "📚 लाइव बाइबिल परीक्षाएं",
@@ -620,7 +691,9 @@ const i18n = {
     examNotStartedAlert: "यह परीक्षा अभी शुरू नहीं हुई है।",
     examEndedAlert: "इस परीक्षा का समय समाप्त हो गया है।",
     errName: "कृपया अपना पूरा नाम दर्ज करें।",
-    errFields: "कृपया सभी विवरण दर्ज करें।",
+    errPhone: "कृपया सही 10 अंकों का फ़ोन नंबर दर्ज करें।",
+    errFields: "कृपया ईमेल आईडी और पासवर्ड दर्ज करें।",
+    pwdChangedSuccess: "✅ पासवर्ड सफलतापूर्वक बदल दिया गया! नए पासवर्ड से लॉग इन करें।",
     logoutConfirm: "क्या आप वाकई लॉग आउट करना चाहते हैं?",
     photoNotice: "📸 शीर्ष 3 विजेताओं की तस्वीरें लीडरबोर्ड पर दिखाई देंगी!",
     btnCamera: "📷 सेल्फी लें",
@@ -655,14 +728,28 @@ function applyTranslations() {
   setTxt("btnGallery", t.btnGallery);
 
   if (currentMode === "admin") {
-    setTxt("lblIdentifier", t.lblAdminIdentifier);
+    setTxt("lblEmail", t.lblAdminEmail);
+    setTxt("lblPassword", t.lblPassword);
     setTxt("authSubmitBtn", t.btnAdminLogin);
+    $("changePwdLinkWrap").style.display = "none";
+  } else if (currentMode === "change_pwd") {
+    setTxt("lblEmail", t.lblEmail);
+    setTxt("lblPhone", t.lblVerifyPhone);
+    setTxt("lblPassword", t.lblNewPassword);
+    setTxt("authSubmitBtn", t.btnUpdatePwd);
+    $("changePwdLinkWrap").style.display = "block";
+    setTxt("btnChangePwdMode", t.btnBackLoginLink);
+    $("btnChangePwdMode").onclick = () => switchAuthTab("login");
   } else {
-    setTxt("lblIdentifier", t.lblIdentifier);
+    setTxt("lblEmail", t.lblEmail);
+    setTxt("lblPhone", t.lblPhone);
+    setTxt("lblPassword", t.lblPassword);
     setTxt("authSubmitBtn", currentMode === "register" ? t.btnRegister : t.btnLogin);
+    $("changePwdLinkWrap").style.display = "block";
+    setTxt("btnChangePwdMode", t.btnChangePwdLink);
+    $("btnChangePwdMode").onclick = () => switchAuthTab("change_pwd");
   }
 
-  setTxt("lblPassword", t.lblPassword);
   setTxt("btnLogout", t.btnLogout);
   setTxt("dashSubtitle", t.dashSubtitle);
   setTxt("dashExamsTitle", t.dashExamsTitle);
@@ -721,10 +808,10 @@ function showAuth() {
 function showDashboard() {
   $("authContainer").style.display = "none";
   $("dashboardContainer").style.display = "block";
-  $("currentUserName").textContent = currentUser.name || currentUser.identifier || "User";
+  $("currentUserName").textContent = currentUser.name || currentUser.email || "User";
 
-  const keyId = (currentUser.identifier || "").toLowerCase();
-  const permanentPhoto = currentUser.photo || localStorage.getItem("logos_user_photo_" + keyId);
+  const keyEmail = (currentUser.email || "").toLowerCase();
+  const permanentPhoto = currentUser.photo || localStorage.getItem("logos_user_photo_" + keyEmail);
   
   if (permanentPhoto) {
     $("dashUserAvatar").src = permanentPhoto;
@@ -736,32 +823,29 @@ function showDashboard() {
 
 function switchAuthTab(mode) {
   currentMode = mode;
-  $("authMsg").style.display = "none";
-  const t = i18n[currentLang] || i18n.te;
+  const msgEl = $("authMsg");
+  msgEl.style.display = "none";
+  msgEl.className = "center error";
 
   $("tabRegister").classList.toggle("active", mode === "register");
-  $("tabLogin").classList.toggle("active", mode === "login");
+  $("tabLogin").classList.toggle("active", mode === "login" || mode === "change_pwd");
   $("tabAdmin").classList.toggle("active", mode === "admin");
 
   if (mode === "register") {
     $("nameGroup").style.display = "block";
     $("photoBox").style.display = "flex";
-    $("lblIdentifier").textContent = t.lblIdentifier;
-    $("authIdentifier").placeholder = "Ex: 8374539887 / email@test.com";
-    $("authSubmitBtn").textContent = t.btnRegister;
-  } else if (mode === "login") {
+    $("phoneGroup").style.display = "block";
+  } else if (mode === "change_pwd") {
     $("nameGroup").style.display = "none";
     $("photoBox").style.display = "none";
-    $("lblIdentifier").textContent = t.lblIdentifier;
-    $("authIdentifier").placeholder = "Ex: 8374539887 / email@test.com";
-    $("authSubmitBtn").textContent = t.btnLogin;
-  } else if (mode === "admin") {
+    $("phoneGroup").style.display = "block";
+  } else {
     $("nameGroup").style.display = "none";
     $("photoBox").style.display = "none";
-    $("lblIdentifier").textContent = t.lblAdminIdentifier;
-    $("authIdentifier").placeholder = "admin@logosquest.com";
-    $("authSubmitBtn").textContent = t.btnAdminLogin;
+    $("phoneGroup").style.display = "none";
   }
+
+  applyTranslations();
 }
 
 async function handleAuthSubmit(e) {
@@ -769,22 +853,25 @@ async function handleAuthSubmit(e) {
   const t = i18n[currentLang] || i18n.te;
   const msgEl = $("authMsg");
   msgEl.style.display = "none";
+  msgEl.className = "center error";
 
-  const identifier = $("authIdentifier").value.trim().toLowerCase();
+  const email = $("authEmail").value.trim().toLowerCase();
   const password = $("authPassword").value.trim();
   const name = $("authName").value.trim();
+  const phone = $("authPhone").value.trim();
 
-  if (!identifier || !password) {
+  if (!email || !password) {
     showMsg(t.errFields);
     return;
   }
 
+  // 1. అడ్మిన్ లాగిన్
   if (currentMode === "admin") {
     $("authSubmitBtn").disabled = true;
     $("authSubmitBtn").textContent = "Verifying Admin...";
     try {
       const { data, error } = await db.auth.signInWithPassword({
-        email: identifier,
+        email: email,
         password: password
       });
       if (error) throw error;
@@ -805,41 +892,176 @@ async function handleAuthSubmit(e) {
     } catch (err) {
       showMsg("❌ " + err.message);
       $("authSubmitBtn").disabled = false;
-      $("authSubmitBtn").textContent = t.btnAdminLogin;
+      applyTranslations();
       return;
     }
   }
 
+  // 2. పాస్‌వర్డ్ మార్చుకోవడం (Change Password)
+  if (currentMode === "change_pwd") {
+    if (!phone || phone.length < 10) {
+      showMsg(t.errPhone);
+      return;
+    }
+
+    $("authSubmitBtn").disabled = true;
+    $("authSubmitBtn").textContent = "Updating...";
+
+    try {
+      const { data: record, error: fetchErr } = await db
+        .from("student_accounts")
+        .select("email, phone")
+        .eq("email", email)
+        .eq("phone", phone)
+        .maybeSingle();
+
+      if (fetchErr || !record) {
+        throw new Error("ఈ Email ID మరియు Phone Number జత సరిపోలలేదు! సరైన వివరాలు ఇవ్వండి.");
+      }
+
+      const { error: updErr } = await db
+        .from("student_accounts")
+        .update({ password: password })
+        .eq("email", email)
+        .eq("phone", phone);
+
+      if (updErr) throw updErr;
+
+      localStorage.setItem("logos_user_pwd_" + email, password);
+      $("authSubmitBtn").disabled = false;
+      $("authPassword").value = "";
+      switchAuthTab("login");
+      showMsg(t.pwdChangedSuccess, true);
+      return;
+    } catch (err) {
+      showMsg("❌ " + err.message);
+      $("authSubmitBtn").disabled = false;
+      applyTranslations();
+      return;
+    }
+  }
+
+  // 3. విద్యార్థి రిజిస్ట్రేషన్ (Create Account)
   if (currentMode === "register") {
     if (!name) {
       showMsg(t.errName);
       return;
     }
-    if (userPhotoBase64) {
-      localStorage.setItem("logos_user_photo_" + identifier, userPhotoBase64);
-      localStorage.setItem("logos_user_name_" + identifier, name);
+    if (!phone || phone.length < 10) {
+      showMsg(t.errPhone);
+      return;
+    }
+
+    $("authSubmitBtn").disabled = true;
+    $("authSubmitBtn").textContent = "Creating account...";
+
+    try {
+      const { data: existingEmail } = await db
+        .from("student_accounts")
+        .select("email, phone")
+        .eq("email", email)
+        .maybeSingle();
+
+      if (existingEmail) {
+        throw new Error("ఈ Email ID ఇప్పటికే రిజిస్టర్ చేయబడింది! వేరే నంబర్‌తో వాడలేరు.");
+      }
+
+      const { data: existingPhone } = await db
+        .from("student_accounts")
+        .select("email, phone")
+        .eq("phone", phone)
+        .maybeSingle();
+
+      if (existingPhone) {
+        throw new Error("ఈ Phone Number ఇప్పటికే వేరే Email ID తో రిజిస్టర్ అయి ఉంది!");
+      }
+
+      const { error: insertErr } = await db
+        .from("student_accounts")
+        .insert({
+          full_name: name,
+          email: email,
+          phone: phone,
+          password: password,
+          photo_url: userPhotoBase64 || null
+        });
+
+      if (insertErr) throw insertErr;
+
+      if (userPhotoBase64) {
+        localStorage.setItem("logos_user_photo_" + email, userPhotoBase64);
+        localStorage.setItem("logos_user_photo_" + phone, userPhotoBase64);
+      }
+      localStorage.setItem("logos_user_name_" + email, name);
+      localStorage.setItem("logos_user_phone_" + email, phone);
+      localStorage.setItem("logos_user_pwd_" + email, password);
+
+    } catch (err) {
+      showMsg("❌ " + err.message);
+      $("authSubmitBtn").disabled = false;
+      applyTranslations();
+      return;
     }
   }
 
-  const savedPhoto = localStorage.getItem("logos_user_photo_" + identifier);
-  const savedName = localStorage.getItem("logos_user_name_" + identifier);
+  // 4. విద్యార్థి లాగిన్ (Login Verification)
+  $("authSubmitBtn").disabled = true;
+  $("authSubmitBtn").textContent = "Logging in...";
+
+  let linkedPhone = localStorage.getItem("logos_user_phone_" + email) || phone || "";
+  let linkedName = localStorage.getItem("logos_user_name_" + email) || name;
+  let linkedPhoto = userPhotoBase64 || localStorage.getItem("logos_user_photo_" + email) || null;
+
+  try {
+    const { data: studentRecord } = await db
+      .from("student_accounts")
+      .select("full_name, phone, password, photo_url")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (studentRecord) {
+      if (studentRecord.password && studentRecord.password !== password) {
+        throw new Error("తప్పు పాస్‌వర్డ్! (Incorrect Password)");
+      }
+      linkedName = studentRecord.full_name || linkedName;
+      linkedPhone = studentRecord.phone || linkedPhone;
+      linkedPhoto = studentRecord.photo_url || linkedPhoto;
+    } else if (currentMode === "login") {
+      const localPwd = localStorage.getItem("logos_user_pwd_" + email);
+      if (localPwd && localPwd !== password) {
+        throw new Error("తప్పు పాస్‌వర్డ్! (Incorrect Password)");
+      }
+    }
+  } catch(err) {
+    if (err.message.includes("Password") || err.message.includes("పాస్‌వర్డ్")) {
+      showMsg("❌ " + err.message);
+      $("authSubmitBtn").disabled = false;
+      applyTranslations();
+      return;
+    }
+  }
 
   const userObj = {
-    name: name || savedName || identifier,
-    identifier: identifier,
-    photo: userPhotoBase64 || savedPhoto || null,
+    name: linkedName || email.split("@")[0],
+    email: email,
+    phone: linkedPhone,
+    identifier: linkedPhone || email,
+    photo: linkedPhoto,
     lang: currentLang,
     updated_at: new Date().toISOString()
   };
 
   localStorage.setItem("logos_quest_user", JSON.stringify(userObj));
   currentUser = userObj;
+  $("authSubmitBtn").disabled = false;
+  applyTranslations();
   showDashboard();
 }
 
-function showMsg(text) {
+function showMsg(text, isSuccess = false) {
   const el = $("authMsg");
   el.textContent = text;
+  el.className = isSuccess ? "center success-msg" : "center error";
   el.style.display = "block";
 }
 
@@ -854,6 +1076,8 @@ function logoutUser() {
       preview.src = "";
       preview.style.display = "none";
     }
+    $("authForm").reset();
+    switchAuthTab("login");
     showAuth();
   }
 }
@@ -892,14 +1116,14 @@ function joinExam(exam){
     return;
   }
 
-  const keyId = (currentUser && currentUser.identifier ? currentUser.identifier : "").toLowerCase();
-  const photo = currentUser?.photo || localStorage.getItem("logos_user_photo_" + keyId) || "";
+  const keyEmail = (currentUser && currentUser.email ? currentUser.email : "").toLowerCase();
 
   const params = new URLSearchParams({
     exam_id: String(exam.id),
     lang: currentLang,
     user_name: encodeURIComponent(currentUser ? currentUser.name : "Student"),
-    mobile: keyId
+    email: keyEmail,
+    mobile: currentUser?.phone || currentUser?.identifier || "00000"
   });
 
   window.location.href = "quiz.html?" + params.toString();
