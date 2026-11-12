@@ -772,7 +772,11 @@ const i18n = {
     lblStatTotal: "మొత్తం పాయింట్లు",
     lblProfDetailsTitle: "📋 నా ఖాతా వివరాలు",
     btnSaveProfile: "💾 ప్రొఫైల్ సేవ్ చేయండి",
-    profSavedMsg: "✅ మీ ప్రొఫైల్ వివరాలు & ఫోటో విజయవంతంగా సేవ్ అయ్యాయి!"
+    profSavedMsg: "✅ మీ ప్రొఫైల్ వివరాలు & ఫోటో విజయవంతంగా సేవ్ అయ్యాయి!",
+    start: "ప్రారంభం",
+    end: "ముగింపు",
+    questions: "ప్రశ్నలు",
+    attempts: "ప్రయత్నాలు"
   },
   en: {
     authSubTitle: "Enter your account details to participate in exams",
@@ -825,7 +829,11 @@ const i18n = {
     lblStatTotal: "Total Points",
     lblProfDetailsTitle: "📋 Account Details",
     btnSaveProfile: "💾 Save Profile",
-    profSavedMsg: "✅ Your profile details & photo have been saved!"
+    profSavedMsg: "✅ Your profile details & photo have been saved!",
+    start: "Start",
+    end: "End",
+    questions: "Questions",
+    attempts: "Attempts"
   },
   ta: {
     authSubTitle: "தேர்வுகளில் பங்கேற்க உங்கள் கணக்கு விவரங்களை உள்ளிடவும்",
@@ -878,7 +886,11 @@ const i18n = {
     lblStatTotal: "மொத்த புள்ளிகள்",
     lblProfDetailsTitle: "📋 கணக்கு விவரங்கள்",
     btnSaveProfile: "💾 சுயவிவரத்தை சேமி",
-    profSavedMsg: "✅ உங்கள் சுயவிவரம் வெற்றிகரமாக சேமிக்கப்பட்டது!"
+    profSavedMsg: "✅ உங்கள் சுயவிவரம் வெற்றிகரமாக சேமிக்கப்பட்டது!",
+    start: "தொடக்கம்",
+    end: "முடிவு",
+    questions: "கேள்விகள்",
+    attempts: "முயற்சிகள்"
   },
   hi: {
     authSubTitle: "परीक्षाओं में भाग लेने के लिए अपना खाता विवरण दर्ज करें",
@@ -931,7 +943,11 @@ const i18n = {
     lblStatTotal: "कुल अंक",
     lblProfDetailsTitle: "📋 खाता विवरण",
     btnSaveProfile: "💾 प्रोफ़ाइल सहेजें",
-    profSavedMsg: "✅ आपकी प्रोफ़ाइल सफलतापूर्वक सहेजी गई है!"
+    profSavedMsg: "✅ आपकी प्रोफ़ाइल सफलतापूर्वक सहेजी गई है!",
+    start: "प्रारंभ",
+    end: "समाप्त",
+    questions: "प्रश्न",
+    attempts: "प्रयास"
   }
 };
 
@@ -1063,7 +1079,6 @@ async function openProfileModal() {
 
   $("profileModal").style.display = "flex";
 
-  // Load Student's Exam Stats from Supabase
   try {
     let query = db.from("secure_exam_attempts").select("score").eq("status", "submitted");
     if (currentUser.phone && currentUser.phone.length >= 10) {
@@ -1110,7 +1125,6 @@ async function saveProfileChanges() {
   const finalPhoto = profileNewPhotoBase64 || currentUser.photo || localStorage.getItem("logos_user_photo_" + email) || null;
 
   try {
-    // Check if phone is used by another email
     if (newPhone && newPhone !== currentUser.phone) {
       const { data: conflict } = await db
         .from("student_accounts")
@@ -1124,7 +1138,6 @@ async function saveProfileChanges() {
       }
     }
 
-    // Update or Insert in student_accounts
     await db
       .from("student_accounts")
       .upsert({
@@ -1134,7 +1147,6 @@ async function saveProfileChanges() {
         photo_url: finalPhoto
       }, { onConflict: "email" });
 
-    // Update Local Storage & Session
     if (finalPhoto) {
       localStorage.setItem("logos_user_photo_" + email, finalPhoto);
       if (newPhone) localStorage.setItem("logos_user_photo_" + newPhone, finalPhoto);
@@ -1571,10 +1583,10 @@ function renderExams(){
     state.className = isLive ? "live" : "upcoming";
     card.appendChild(state);
 
-    card.appendChild(makeText("p","📅 Start: " + formatIST(exam.start_time)));
-    card.appendChild(makeText("p","⏰ End: " + formatIST(exam.end_time)));
-    card.appendChild(makeText("p","📝 Questions: " + exam.question_count));
-    card.appendChild(makeText("p","🔁 Attempts: " + exam.max_attempts));
+    card.appendChild(makeText("p", `📅 ${t.start}: ` + formatIST(exam.start_time)));
+    card.appendChild(makeText("p", `⏰ ${t.end}: ` + formatIST(exam.end_time)));
+    card.appendChild(makeText("p", `📝 ${t.questions}: ` + exam.question_count));
+    card.appendChild(makeText("p", `🔁 ${t.attempts}: ` + exam.max_attempts));
 
     const button = document.createElement("button");
     button.type = "button";
@@ -1596,32 +1608,29 @@ async function loadExams(){
   status.className = "center";
   status.textContent = t.loadingExams;
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
-
   try {
     const {data, error} = await db
       .from("exam_schedules")
       .select("id,exam_name,start_time,end_time,question_count,max_attempts")
       .gt("end_time",new Date().toISOString())
       .order("start_time",{ascending:true})
-      .limit(50)
-      .abortSignal(controller.signal);
+      .limit(50);
 
     if (error) throw error;
     exams = data || [];
     renderExams();
   } catch (error) {
-    status.textContent = "❌ " + (controller.signal.aborted ? "Connection timed out" : error.message);
+    status.textContent = "❌ " + error.message;
     status.className = "center error";
-  } finally {
-    clearTimeout(timeout);
   }
 }
 
 window.addEventListener("DOMContentLoaded", () => {
   checkExistingSession();
 });
+
+setInterval(renderExams, 15000);
+setInterval(loadExams, 60000);
 </script>
 </body>
 </html>
