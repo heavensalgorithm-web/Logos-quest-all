@@ -57,6 +57,29 @@ body {
   margin-bottom: 16px;
 }
 
+.top-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.exam-lang-select {
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--gold-primary);
+  border: 1.5px solid var(--card-border);
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+}
+
+.exam-lang-select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
 .exam-title {
   color: var(--gold-primary);
   font-size: 18px;
@@ -69,9 +92,10 @@ body {
   border: 1px solid rgba(239, 68, 68, 0.45);
   color: #fca5a5;
   font-weight: 800;
-  padding: 6px 14px;
+  padding: 6px 12px;
   border-radius: 10px;
-  font-size: 15px;
+  font-size: 14px;
+  white-space: nowrap;
 }
 
 .q-counter {
@@ -207,7 +231,15 @@ body {
         <h1 class="exam-title" id="examTitleDisplay">LOGOS QUEST</h1>
         <span style="font-size:12px; color:var(--text-muted);" id="studentBadge">Student</span>
       </div>
-      <div class="timer-badge" id="timerDisplay">⏱ 00:00</div>
+      <div class="top-right-controls">
+        <select id="examLangSelect" class="exam-lang-select" onchange="switchExamLanguage(this.value)" title="Change Exam Language">
+          <option value="te">తెలుగు</option>
+          <option value="en">English</option>
+          <option value="ta">தமிழ்</option>
+          <option value="hi">हिन्दी</option>
+        </select>
+        <div class="timer-badge" id="timerDisplay">⏱ 00:00</div>
+      </div>
     </div>
 
     <div class="q-counter" id="questionCounter">Question 1 of 10</div>
@@ -242,7 +274,7 @@ const $ = id => document.getElementById(id);
 
 const urlParams = new URLSearchParams(window.location.search);
 const examId = urlParams.get("exam_id");
-const lang = urlParams.get("lang") || localStorage.getItem("logos_quest_lang") || "te";
+let lang = urlParams.get("lang") || localStorage.getItem("logos_quest_lang") || "te";
 
 let savedUser = {};
 try {
@@ -254,6 +286,8 @@ const studentEmail = (urlParams.get("email") || savedUser.email || "").toLowerCa
 const studentMobile = urlParams.get("mobile") || savedUser.phone || studentEmail || "00000";
 
 let examData = null;
+let rawQuestions = [];
+let allTranslations = {}; // { langCode: { questionId: translationRow } }
 let questions = [];
 let currentIndex = 0;
 let userAnswers = {};
@@ -262,10 +296,10 @@ let timerInterval = null;
 let isSubmitted = false;
 
 const labels = {
-  te: { prev: "← వెనుకకు", next: "తదుపరి →", submit: "✅ సబ్మిట్ చేయండి", qOf: "ప్రశ్న {c} / {t}", done: "పరీక్ష పూర్తయింది!", score: "మీ స్కోర్: {s} / {t}" },
-  en: { prev: "← Previous", next: "Next →", submit: "✅ Submit Exam", qOf: "Question {c} of {t}", done: "Exam Completed!", score: "Your Score: {s} / {t}" },
-  ta: { prev: "← முந்தைய", next: "அடுத்து →", submit: "✅ சமர்ப்பிக்கவும்", qOf: "கேள்வி {c} / {t}", done: "தேர்வு முடிந்தது!", score: "உங்கள் மதிப்பெண்: {s} / {t}" },
-  hi: { prev: "← पिछला", next: "अगला →", submit: "✅ सबमिट करें", qOf: "प्रश्न {c} / {t}", done: "परीक्षा पूर्ण हुई!", score: "आपका स्कोर: {s} / {t}" }
+  te: { prev: "← వెనుకకు", next: "తదుపరి →", submit: "✅ సబ్మిట్ చేయండి", qOf: "ప్రశ్న {c} / {t}", done: "పరీక్ష పూర్తయింది!", score: "మీ స్కోర్: {s} / {t}", confirmSub: "మీరు పరీక్షను సబ్మిట్ చేయాలనుకుంటున్నారా?" },
+  en: { prev: "← Previous", next: "Next →", submit: "✅ Submit Exam", qOf: "Question {c} of {t}", done: "Exam Completed!", score: "Your Score: {s} / {t}", confirmSub: "Do you want to submit the exam?" },
+  ta: { prev: "← முந்தைய", next: "அடுத்து →", submit: "✅ சமர்ப்பிக்கவும்", qOf: "கேள்வி {c} / {t}", done: "தேர்வு முடிந்தது!", score: "உங்கள் மதிப்பெண்: {s} / {t}", confirmSub: "தேர்வைச் சமர்ப்பிக்க விரும்புகிறீர்களா?" },
+  hi: { prev: "← पिछला", next: "अगला →", submit: "✅ सबमिट करें", qOf: "प्रश्न {c} / {t}", done: "परीक्षा पूर्ण हुई!", score: "आपका स्कोर: {s} / {t}", confirmSub: "क्या आप परीक्षा सबमिट करना चाहते हैं?" }
 };
 
 function showError(msg) {
@@ -277,6 +311,35 @@ function showError(msg) {
   `;
 }
 
+function buildLocalizedQuestions() {
+  const transMap = allTranslations[lang] || {};
+  questions = rawQuestions.map(q => {
+    const tr = transMap[q.id] || {};
+    return {
+      id: q.id,
+      question: tr.question_text || q.question_text || q.question || "",
+      options: [
+        tr.option_a || q.option_a || "",
+        tr.option_b || q.option_b || "",
+        tr.option_c || q.option_c || "",
+        tr.option_d || q.option_d || ""
+      ],
+      correct: (q.correct_option || q.correct_answer || "A").toString().trim().toUpperCase()
+    };
+  });
+}
+
+function switchExamLanguage(newLang) {
+  lang = newLang;
+  localStorage.setItem("logos_quest_lang", newLang);
+  const t = labels[lang] || labels.te;
+  $("prevBtn").textContent = t.prev;
+  $("nextBtn").textContent = t.next;
+  $("submitBtn").textContent = t.submit;
+  buildLocalizedQuestions();
+  renderQuestion();
+}
+
 async function initExam() {
   if (!examId) {
     showError("Exam ID కనుగొనబడలేదు. దయచేసి హోమ్ పేజీ నుండి పరీక్షలో చేరండి.");
@@ -284,6 +347,7 @@ async function initExam() {
   }
 
   const t = labels[lang] || labels.te;
+  $("examLangSelect").value = lang;
   $("prevBtn").textContent = t.prev;
   $("nextBtn").textContent = t.next;
   $("submitBtn").textContent = t.submit;
@@ -334,7 +398,7 @@ async function initExam() {
       throw new Error(`మీరు ఇప్పటికే గరిష్టంగా (${maxAttempts}) సార్లు ఈ పరీక్ష రాశారు.`);
     }
 
-    // 3. Load Questions
+    // 3. Load Questions & ALL 4 Language Translations at once (for instant mid-exam switching)
     const qLimit = Number(exam.question_count) || 10;
     const { data: qList, error: qErr } = await db
       .from("bible_questions")
@@ -345,37 +409,24 @@ async function initExam() {
       throw new Error("ఈ పరీక్షకు ప్రశ్నలు ఇంకా జతచేయబడలేదు.");
     }
 
-    // Load Translations if needed
-    let transMap = {};
-    if (lang !== "en") {
-      const qIds = qList.map(q => q.id);
-      const { data: transRows } = await db
-        .from("bible_question_translations")
-        .select("*")
-        .in("question_id", qIds)
-        .eq("lang", lang);
+    rawQuestions = qList;
+    const qIds = qList.map(q => q.id);
 
-      if (transRows) {
-        transRows.forEach(tr => {
-          transMap[tr.question_id] = tr;
-        });
-      }
+    const { data: transRows } = await db
+      .from("bible_question_translations")
+      .select("*")
+      .in("question_id", qIds);
+
+    allTranslations = { te: {}, en: {}, ta: {}, hi: {} };
+    if (transRows) {
+      transRows.forEach(tr => {
+        const lCode = (tr.lang || "").toLowerCase();
+        if (!allTranslations[lCode]) allTranslations[lCode] = {};
+        allTranslations[lCode][tr.question_id] = tr;
+      });
     }
 
-    questions = qList.map(q => {
-      const tr = transMap[q.id] || {};
-      return {
-        id: q.id,
-        question: tr.question_text || q.question_text || q.question || "",
-        options: [
-          tr.option_a || q.option_a || "",
-          tr.option_b || q.option_b || "",
-          tr.option_c || q.option_c || "",
-          tr.option_d || q.option_d || ""
-        ],
-        correct: (q.correct_option || q.correct_answer || "A").toString().trim().toUpperCase()
-      };
-    });
+    buildLocalizedQuestions();
 
     // 4. Create Active Attempt Record (For Admin Live Monitoring)
     const { data: newAttempt, error: attErr } = await db
@@ -472,7 +523,8 @@ function nextQuestion() {
 
 async function submitExam(isAuto) {
   if (isSubmitted) return;
-  if (!isAuto && !confirm("మీరు పరీక్షను సబ్మిట్ చేయాలనుకుంటున్నారా?")) return;
+  const t = labels[lang] || labels.te;
+  if (!isAuto && !confirm(t.confirmSub)) return;
 
   isSubmitted = true;
   clearInterval(timerInterval);
@@ -512,7 +564,6 @@ async function submitExam(isAuto) {
     }
   } catch(e) {}
 
-  const t = labels[lang] || labels.te;
   $("quizView").style.display = "none";
   $("resultView").style.display = "block";
   $("resHeading").textContent = t.done;
