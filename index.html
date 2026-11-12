@@ -179,6 +179,11 @@ p {
   box-shadow: 0 0 10px var(--gold-glow);
 }
 
+.input-field:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .photo-upload-box {
   display: flex;
   flex-direction: column;
@@ -295,6 +300,14 @@ p {
   font-size: 14px;
   font-weight: 700;
   color: var(--gold-primary);
+  cursor: pointer;
+  padding: 4px 10px 4px 4px;
+  border-radius: 30px;
+  transition: background 0.2s;
+}
+
+.user-info:hover {
+  background: rgba(250, 204, 21, 0.12);
 }
 
 .user-avatar {
@@ -305,6 +318,117 @@ p {
   border: 2px solid var(--gold-primary);
   box-shadow: 0 2px 10px var(--gold-glow);
   background: #0f172a;
+}
+
+.profile-badge-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  display: block;
+}
+
+/* ================= PROFILE MODAL ================= */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 10, 24, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  padding: 16px;
+  overflow-y: auto;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.modal-card {
+  background: linear-gradient(160deg, #16213e 0%, #0b1329 100%);
+  border: 1.5px solid var(--gold-primary);
+  border-radius: 22px;
+  max-width: 460px;
+  width: 100%;
+  padding: 24px;
+  margin: 20px auto;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 25px var(--gold-glow);
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-hero {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.profile-big-avatar {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--gold-primary);
+  box-shadow: 0 0 20px var(--gold-glow);
+  background: #0f172a;
+  margin-bottom: 10px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.stat-box {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(250, 204, 21, 0.2);
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.stat-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--gold-primary);
+  display: block;
+}
+
+.stat-lbl {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  display: block;
+}
+
+.profile-section {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 14px;
+}
+
+.profile-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold-primary);
+  margin: 0 0 12px 0;
 }
 
 .exam {
@@ -420,13 +544,13 @@ a {
       </div>
     </div>
 
-    <!-- 3. Email ID (Mandatory in Register, Login, Change Password) -->
+    <!-- 3. Email ID (Mandatory) -->
     <div class="input-group">
       <label id="lblEmail">ఈమెయిల్ ఐడీ (Email ID - Mandatory)</label>
       <input type="email" id="authEmail" class="input-field" placeholder="Ex: candidate@gmail.com" required>
     </div>
 
-    <!-- 4. Phone Number (Separate Field in Register & Change Password) -->
+    <!-- 4. Phone Number -->
     <div class="input-group" id="phoneGroup">
       <label id="lblPhone">ఫోన్ నంబర్ (Phone Number)</label>
       <input type="tel" id="authPhone" class="input-field" placeholder="Ex: 8374539887" inputmode="numeric">
@@ -442,7 +566,6 @@ a {
 
     <button type="submit" class="btn-action" id="authSubmitBtn">ఖాతా సృష్టించండి (Sign Up)</button>
 
-    <!-- Change Password Toggle Link -->
     <div class="center" id="changePwdLinkWrap">
       <button type="button" class="btn-link" id="btnChangePwdMode" onclick="switchAuthTab('change_pwd')">🔑 పాస్‌వర్డ్ మార్చుకోండి (Change Password)</button>
     </div>
@@ -454,9 +577,12 @@ a {
 
   <div class="card" style="padding:16px 20px;">
     <div class="user-bar">
-      <div class="user-info">
+      <div class="user-info" onclick="openProfileModal()" title="View Full Profile">
         <img id="dashUserAvatar" class="user-avatar" src="icon-512.png" alt="Avatar">
-        <span id="currentUserName">User</span>
+        <div>
+          <span id="currentUserName">User</span>
+          <span class="profile-badge-hint" id="lblTapProfile">👤 ప్రొఫైల్ చూడండి</span>
+        </div>
       </div>
       <button type="button" class="btn-secondary" onclick="logoutUser()" id="btnLogout">🚪 లాగౌట్</button>
     </div>
@@ -499,6 +625,85 @@ a {
   </div>
 </div>
 
+<!-- ================= STUDENT FULL PROFILE MODAL ================= -->
+<div id="profileModal" class="modal-overlay" onclick="if(event.target === this) closeProfileModal()">
+  <div class="modal-card">
+    <button type="button" class="modal-close" onclick="closeProfileModal()">✕</button>
+    
+    <div class="profile-hero">
+      <img id="profBigAvatar" class="profile-big-avatar" src="icon-512.png" alt="Student Photo">
+      <h2 id="profDisplayName" style="margin:0; color:var(--gold-primary); font-size:20px;">Student Name</h2>
+      <p id="profJoinedDate" style="font-size:12px; margin:4px 0 10px;">LOGOS QUEST Verified Participant</p>
+
+      <div class="photo-buttons" style="max-width:280px; margin:0 auto;">
+        <label for="profCameraInput" class="btn-photo" id="btnProfCamera">📷 New Selfie</label>
+        <input type="file" id="profCameraInput" accept="image/*" capture="user" style="display:none;" onchange="handleProfilePhotoChange(event)">
+        
+        <label for="profGalleryInput" class="btn-photo" id="btnProfGallery">📁 Change Photo</label>
+        <input type="file" id="profGalleryInput" accept="image/*" style="display:none;" onchange="handleProfilePhotoChange(event)">
+      </div>
+    </div>
+
+    <!-- Quick Exam Stats -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <span class="stat-val" id="statExamsCount">0</span>
+        <span class="stat-lbl" id="lblStatExams">పరీక్షలు</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val" id="statBestScore">0</span>
+        <span class="stat-lbl" id="lblStatBest">బెస్ట్ స్కోర్</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val" id="statTotalScore">0</span>
+        <span class="stat-lbl" id="lblStatTotal">మొత్తం పాయింట్లు</span>
+      </div>
+    </div>
+
+    <!-- Account Details & Edit -->
+    <div class="profile-section">
+      <h3 class="profile-section-title" id="lblProfDetailsTitle">📋 నా ఖాతా వివరాలు (Account Details)</h3>
+      
+      <div class="input-group">
+        <label id="lblProfName">పూర్తి పేరు (Full Name)</label>
+        <input type="text" id="profEditName" class="input-field">
+      </div>
+
+      <div class="input-group">
+        <label id="lblProfEmail">ఈమెయిల్ ఐడీ (Email ID - Locked)</label>
+        <input type="email" id="profEditEmail" class="input-field" disabled>
+      </div>
+
+      <div class="input-group">
+        <label id="lblProfPhone">ఫోన్ నంబర్ (Phone Number)</label>
+        <input type="tel" id="profEditPhone" class="input-field" inputmode="numeric">
+      </div>
+
+      <p id="profMsg" class="center success-msg" style="display:none;"></p>
+
+      <button type="button" class="btn-action" id="btnSaveProfile" onclick="saveProfileChanges()">💾 ప్రొఫైల్ సేవ్ చేయండి (Save Profile)</button>
+    </div>
+
+    <!-- Quick Change Password inside Profile -->
+    <div class="profile-section">
+      <h3 class="profile-section-title" id="lblProfPwdTitle">🔑 పాస్‌వర్డ్ మార్చండి (Change Password)</h3>
+      <div class="input-group" style="margin-bottom:8px;">
+        <input type="password" id="profNewPassword" class="input-field" placeholder="కొత్త పాస్‌వర్డ్ (New Password)">
+      </div>
+      <button type="button" class="btn-secondary" style="width:100%; padding:11px; font-weight:700; color:var(--gold-primary); border-color:var(--card-border);" id="btnProfUpdatePwd" onclick="updatePasswordFromProfile()">
+        🔒 పాస్‌వర్డ్ అప్‌డేట్ చేయండి
+      </button>
+    </div>
+
+    <!-- Quick Navigation Links -->
+    <div style="display:flex; gap:10px; margin-top:16px;">
+      <a href="results.html" class="btn-photo" style="padding:12px;" id="btnProfMyResults">📊 నా ఫలితాలు</a>
+      <a href="leaderboard.html" class="btn-photo" style="padding:12px;" id="btnProfLeaderboard">🏆 లీడర్‌బోర్డ్</a>
+    </div>
+
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -512,6 +717,7 @@ let currentLang = localStorage.getItem("logos_quest_lang") || "te";
 let currentMode = "register";
 let currentUser = null;
 let userPhotoBase64 = null;
+let profileNewPhotoBase64 = null;
 let exams = [];
 
 const i18n = {
@@ -534,6 +740,7 @@ const i18n = {
     btnChangePwdLink: "🔑 పాస్‌వర్డ్ మార్చుకోండి (Change Password)",
     btnBackLoginLink: "← లాగిన్ కు తిరిగి వెళ్ళండి",
     btnLogout: "🚪 లాగౌట్",
+    lblTapProfile: "👤 ప్రొఫైల్ చూడండి",
     dashSubtitle: "బైబిల్ క్విజ్ పోటీలకు స్వాగతం",
     dashExamsTitle: "📚 లైవ్ బైబిల్ పరీక్షలు",
     dashIstNotice: "పరీక్షల సమయాలు IST ప్రకారం",
@@ -559,7 +766,13 @@ const i18n = {
     logoutConfirm: "మీరు నిజంగా లాగౌట్ కావాలనుకుంటున్నారా?",
     photoNotice: "📸 Top 3 ర్యాంకర్ల ఫోటోలు లీడర్‌బోర్డ్‌లో ప్రదర్శించబడతాయి!",
     btnCamera: "📷 సెల్ఫీ తీసుకోండి",
-    btnGallery: "📁 ఫోటో అప్‌లోడ్"
+    btnGallery: "📁 ఫోటో అప్‌లోడ్",
+    lblStatExams: "పరీక్షలు",
+    lblStatBest: "బెస్ట్ స్కోర్",
+    lblStatTotal: "మొత్తం పాయింట్లు",
+    lblProfDetailsTitle: "📋 నా ఖాతా వివరాలు",
+    btnSaveProfile: "💾 ప్రొఫైల్ సేవ్ చేయండి",
+    profSavedMsg: "✅ మీ ప్రొఫైల్ వివరాలు & ఫోటో విజయవంతంగా సేవ్ అయ్యాయి!"
   },
   en: {
     authSubTitle: "Enter your account details to participate in exams",
@@ -580,6 +793,7 @@ const i18n = {
     btnChangePwdLink: "🔑 Change Password",
     btnBackLoginLink: "← Back to Login",
     btnLogout: "🚪 Logout",
+    lblTapProfile: "👤 View Profile",
     dashSubtitle: "Welcome to Logos Quest Quiz Arena",
     dashExamsTitle: "📚 Live Bible Exams",
     dashIstNotice: "All exam timings are in IST",
@@ -605,7 +819,13 @@ const i18n = {
     logoutConfirm: "Are you sure you want to log out?",
     photoNotice: "📸 Top 3 ranker photos will appear on the Leaderboard!",
     btnCamera: "📷 Take Selfie",
-    btnGallery: "📁 Upload Photo"
+    btnGallery: "📁 Upload Photo",
+    lblStatExams: "Exams",
+    lblStatBest: "Best Score",
+    lblStatTotal: "Total Points",
+    lblProfDetailsTitle: "📋 Account Details",
+    btnSaveProfile: "💾 Save Profile",
+    profSavedMsg: "✅ Your profile details & photo have been saved!"
   },
   ta: {
     authSubTitle: "தேர்வுகளில் பங்கேற்க உங்கள் கணக்கு விவரங்களை உள்ளிடவும்",
@@ -626,6 +846,7 @@ const i18n = {
     btnChangePwdLink: "🔑 கடவுச்சொல்லை மாற்றவும் (Change Password)",
     btnBackLoginLink: "← உள்நுழைவுக்குத் திரும்புக",
     btnLogout: "🚪 வெளியேறு",
+    lblTapProfile: "👤 சுயவிவரம் காண்க",
     dashSubtitle: "பைபிள் வினாடி வினா போட்டிக்கு வரவேற்கிறோம்",
     dashExamsTitle: "📚 நேரலை பைபிள் தேர்வுகள்",
     dashIstNotice: "தேர்வு நேரங்கள் IST படி அமைக்கப்பட்டவை",
@@ -651,7 +872,13 @@ const i18n = {
     logoutConfirm: "நிச்சயமாக வெளியேற விரும்புகிறீர்களா?",
     photoNotice: "📸 முதல் 3 வெற்றியாளர்களின் புகைப்படம் முன்னணி பலகையில் காட்டப்படும்!",
     btnCamera: "📷 செல்ஃபி எடுக்கவும்",
-    btnGallery: "📁 படம் பதிவேற்றவும்"
+    btnGallery: "📁 படம் பதிவேற்றவும்",
+    lblStatExams: "தேர்வுகள்",
+    lblStatBest: "சிறந்த மதிப்பெண்",
+    lblStatTotal: "மொத்த புள்ளிகள்",
+    lblProfDetailsTitle: "📋 கணக்கு விவரங்கள்",
+    btnSaveProfile: "💾 சுயவிவரத்தை சேமி",
+    profSavedMsg: "✅ உங்கள் சுயவிவரம் வெற்றிகரமாக சேமிக்கப்பட்டது!"
   },
   hi: {
     authSubTitle: "परीक्षाओं में भाग लेने के लिए अपना खाता विवरण दर्ज करें",
@@ -672,6 +899,7 @@ const i18n = {
     btnChangePwdLink: "🔑 पासवर्ड बदलें (Change Password)",
     btnBackLoginLink: "← लॉगिन पर वापस जाएं",
     btnLogout: "🚪 लॉग आउट",
+    lblTapProfile: "👤 प्रोफ़ाइल देखें",
     dashSubtitle: "लोगोस क्वेस्ट क्विज़ में आपका स्वागत है",
     dashExamsTitle: "📚 लाइव बाइबिल परीक्षाएं",
     dashIstNotice: "परीक्षा का समय IST के अनुसार है",
@@ -697,7 +925,13 @@ const i18n = {
     logoutConfirm: "क्या आप वाकई लॉग आउट करना चाहते हैं?",
     photoNotice: "📸 शीर्ष 3 विजेताओं की तस्वीरें लीडरबोर्ड पर दिखाई देंगी!",
     btnCamera: "📷 सेल्फी लें",
-    btnGallery: "📁 फोटो अपलोड करें"
+    btnGallery: "📁 फोटो अपलोड करें",
+    lblStatExams: "परीक्षाएं",
+    lblStatBest: "सर्वश्रेष्ठ स्कोर",
+    lblStatTotal: "कुल अंक",
+    lblProfDetailsTitle: "📋 खाता विवरण",
+    btnSaveProfile: "💾 प्रोफ़ाइल सहेजें",
+    profSavedMsg: "✅ आपकी प्रोफ़ाइल सफलतापूर्वक सहेजी गई है!"
   }
 };
 
@@ -750,6 +984,7 @@ function applyTranslations() {
     $("btnChangePwdMode").onclick = () => switchAuthTab("change_pwd");
   }
 
+  setTxt("lblTapProfile", t.lblTapProfile);
   setTxt("btnLogout", t.btnLogout);
   setTxt("dashSubtitle", t.dashSubtitle);
   setTxt("dashExamsTitle", t.dashExamsTitle);
@@ -761,32 +996,211 @@ function applyTranslations() {
   setTxt("dashResultsTitle", t.dashResultsTitle);
   setTxt("dashResultsDesc", t.dashResultsDesc);
   setTxt("linkResults", t.linkResults);
+
+  // Profile Modal Translations
+  setTxt("lblStatExams", t.lblStatExams);
+  setTxt("lblStatBest", t.lblStatBest);
+  setTxt("lblStatTotal", t.lblStatTotal);
+  setTxt("lblProfDetailsTitle", t.lblProfDetailsTitle);
+  setTxt("btnSaveProfile", t.btnSaveProfile);
+  setTxt("btnProfMyResults", t.dashResultsTitle);
+  setTxt("btnProfLeaderboard", t.linkLeaderboard);
 }
 
-function handlePhotoUpload(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
+function compressImageToBase64(file, callback) {
   const reader = new FileReader();
   reader.onload = function(e) {
     const img = new Image();
     img.onload = function() {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-      canvas.width = 160;
-      canvas.height = 160;
-      ctx.drawImage(img, 0, 0, 160, 160);
-
-      userPhotoBase64 = canvas.toDataURL("image/jpeg", 0.7);
-      const preview = $("userPhotoPreview");
-      preview.src = userPhotoBase64;
-      preview.style.display = "block";
+      canvas.width = 180;
+      canvas.height = 180;
+      ctx.drawImage(img, 0, 0, 180, 180);
+      callback(canvas.toDataURL("image/jpeg", 0.75));
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
 
+function handlePhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  compressImageToBase64(file, (base64) => {
+    userPhotoBase64 = base64;
+    const preview = $("userPhotoPreview");
+    preview.src = base64;
+    preview.style.display = "block";
+  });
+}
+
+function handleProfilePhotoChange(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  compressImageToBase64(file, (base64) => {
+    profileNewPhotoBase64 = base64;
+    $("profBigAvatar").src = base64;
+    $("dashUserAvatar").src = base64;
+  });
+}
+
+/* ================= FULL PROFILE MODAL LOGIC ================= */
+async function openProfileModal() {
+  if (!currentUser) return;
+  profileNewPhotoBase64 = null;
+  $("profMsg").style.display = "none";
+
+  const keyEmail = (currentUser.email || "").toLowerCase();
+  const activePhoto = currentUser.photo || localStorage.getItem("logos_user_photo_" + keyEmail) || "icon-512.png";
+
+  $("profBigAvatar").src = activePhoto;
+  $("profDisplayName").textContent = currentUser.name || keyEmail.split("@")[0];
+  $("profEditName").value = currentUser.name || "";
+  $("profEditEmail").value = keyEmail;
+  $("profEditPhone").value = currentUser.phone || "";
+  $("profNewPassword").value = "";
+
+  $("profileModal").style.display = "flex";
+
+  // Load Student's Exam Stats from Supabase
+  try {
+    let query = db.from("secure_exam_attempts").select("score").eq("status", "submitted");
+    if (currentUser.phone && currentUser.phone.length >= 10) {
+      query = query.or(`student_email.eq.${keyEmail},student_mobile.eq.${currentUser.phone}`);
+    } else {
+      query = query.eq("student_email", keyEmail);
+    }
+
+    const { data: attempts } = await query;
+    if (attempts && attempts.length > 0) {
+      const scores = attempts.map(a => Number(a.score) || 0);
+      const best = Math.max(...scores);
+      const total = scores.reduce((sum, val) => sum + val, 0);
+      $("statExamsCount").textContent = attempts.length;
+      $("statBestScore").textContent = best;
+      $("statTotalScore").textContent = total;
+    } else {
+      $("statExamsCount").textContent = "0";
+      $("statBestScore").textContent = "0";
+      $("statTotalScore").textContent = "0";
+    }
+  } catch(e) {}
+}
+
+function closeProfileModal() {
+  $("profileModal").style.display = "none";
+}
+
+async function saveProfileChanges() {
+  const t = i18n[currentLang] || i18n.te;
+  const newName = $("profEditName").value.trim();
+  const newPhone = $("profEditPhone").value.trim();
+  const email = (currentUser.email || "").toLowerCase();
+
+  if (!newName) {
+    alert(t.errName);
+    return;
+  }
+
+  const btn = $("btnSaveProfile");
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+
+  const finalPhoto = profileNewPhotoBase64 || currentUser.photo || localStorage.getItem("logos_user_photo_" + email) || null;
+
+  try {
+    // Check if phone is used by another email
+    if (newPhone && newPhone !== currentUser.phone) {
+      const { data: conflict } = await db
+        .from("student_accounts")
+        .select("email")
+        .eq("phone", newPhone)
+        .neq("email", email)
+        .maybeSingle();
+
+      if (conflict) {
+        throw new Error("ఈ Phone Number ఇప్పటికే వేరే ఖాతాతో లింక్ అయి ఉంది!");
+      }
+    }
+
+    // Update or Insert in student_accounts
+    await db
+      .from("student_accounts")
+      .upsert({
+        full_name: newName,
+        email: email,
+        phone: newPhone || null,
+        photo_url: finalPhoto
+      }, { onConflict: "email" });
+
+    // Update Local Storage & Session
+    if (finalPhoto) {
+      localStorage.setItem("logos_user_photo_" + email, finalPhoto);
+      if (newPhone) localStorage.setItem("logos_user_photo_" + newPhone, finalPhoto);
+    }
+    localStorage.setItem("logos_user_name_" + email, newName);
+    if (newPhone) localStorage.setItem("logos_user_phone_" + email, newPhone);
+
+    currentUser.name = newName;
+    currentUser.phone = newPhone;
+    currentUser.identifier = newPhone || email;
+    currentUser.photo = finalPhoto;
+    localStorage.setItem("logos_quest_user", JSON.stringify(currentUser));
+
+    $("currentUserName").textContent = newName;
+    $("profDisplayName").textContent = newName;
+    if (finalPhoto) $("dashUserAvatar").src = finalPhoto;
+
+    const msg = $("profMsg");
+    msg.className = "center success-msg";
+    msg.textContent = t.profSavedMsg;
+    msg.style.display = "block";
+  } catch (err) {
+    const msg = $("profMsg");
+    msg.className = "center error";
+    msg.textContent = "❌ " + err.message;
+    msg.style.display = "block";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = t.btnSaveProfile;
+  }
+}
+
+async function updatePasswordFromProfile() {
+  const t = i18n[currentLang] || i18n.te;
+  const newPwd = $("profNewPassword").value.trim();
+  const email = (currentUser.email || "").toLowerCase();
+
+  if (!newPwd || newPwd.length < 4) {
+    alert("దయచేసి కనీసం 4 అక్షరాల కొత్త పాస్‌వర్డ్ నమోదు చేయండి.");
+    return;
+  }
+
+  const btn = $("btnProfUpdatePwd");
+  btn.disabled = true;
+
+  try {
+    await db
+      .from("student_accounts")
+      .update({ password: newPwd })
+      .eq("email", email);
+
+    localStorage.setItem("logos_user_pwd_" + email, newPwd);
+    $("profNewPassword").value = "";
+
+    const msg = $("profMsg");
+    msg.className = "center success-msg";
+    msg.textContent = t.pwdChangedSuccess;
+    msg.style.display = "block";
+  } catch(e) {
+    alert("Error: " + e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+/* ================= SESSION & AUTH ================= */
 function checkExistingSession() {
   applyTranslations();
   const saved = localStorage.getItem("logos_quest_user");
@@ -865,7 +1279,6 @@ async function handleAuthSubmit(e) {
     return;
   }
 
-  // 1. అడ్మిన్ లాగిన్
   if (currentMode === "admin") {
     $("authSubmitBtn").disabled = true;
     $("authSubmitBtn").textContent = "Verifying Admin...";
@@ -897,7 +1310,6 @@ async function handleAuthSubmit(e) {
     }
   }
 
-  // 2. పాస్‌వర్డ్ మార్చుకోవడం (Change Password)
   if (currentMode === "change_pwd") {
     if (!phone || phone.length < 10) {
       showMsg(t.errPhone);
@@ -941,7 +1353,6 @@ async function handleAuthSubmit(e) {
     }
   }
 
-  // 3. విద్యార్థి రిజిస్ట్రేషన్ (Create Account)
   if (currentMode === "register") {
     if (!name) {
       showMsg(t.errName);
@@ -1004,7 +1415,6 @@ async function handleAuthSubmit(e) {
     }
   }
 
-  // 4. విద్యార్థి లాగిన్ (Login Verification)
   $("authSubmitBtn").disabled = true;
   $("authSubmitBtn").textContent = "Logging in...";
 
