@@ -287,7 +287,7 @@ const studentMobile = urlParams.get("mobile") || savedUser.phone || studentEmail
 
 let examData = null;
 let rawQuestions = [];
-let allTranslations = {}; // { langCode: { questionId: translationRow } }
+let allTranslations = { te: {}, en: {}, ta: {}, hi: {} };
 let questions = [];
 let currentIndex = 0;
 let userAnswers = {};
@@ -301,6 +301,15 @@ const labels = {
   ta: { prev: "← முந்தைய", next: "அடுத்து →", submit: "✅ சமர்ப்பிக்கவும்", qOf: "கேள்வி {c} / {t}", done: "தேர்வு முடிந்தது!", score: "உங்கள் மதிப்பெண்: {s} / {t}", confirmSub: "தேர்வைச் சமர்ப்பிக்க விரும்புகிறீர்களா?" },
   hi: { prev: "← पिछला", next: "अगला →", submit: "✅ सबमिट करें", qOf: "प्रश्न {c} / {t}", done: "परीक्षा पूर्ण हुई!", score: "आपका स्कोर: {s} / {t}", confirmSub: "क्या आप परीक्षा सबमिट करना चाहते हैं?" }
 };
+
+function normalizeLangCode(val) {
+  const v = (val || "").toString().trim().toLowerCase();
+  if (v === "telugu" || v === "te") return "te";
+  if (v === "english" || v === "en") return "en";
+  if (v === "tamil" || v === "ta") return "ta";
+  if (v === "hindi" || v === "hi") return "hi";
+  return v;
+}
 
 function showError(msg) {
   $("loadingView").innerHTML = `
@@ -317,7 +326,7 @@ function buildLocalizedQuestions() {
     const tr = transMap[q.id] || {};
     return {
       id: q.id,
-      question: tr.question_text || q.question_text || q.question || "",
+      question: tr.question || tr.question_text || q.question || q.question_text || "",
       options: [
         tr.option_a || q.option_a || "",
         tr.option_b || q.option_b || "",
@@ -398,7 +407,7 @@ async function initExam() {
       throw new Error(`మీరు ఇప్పటికే గరిష్టంగా (${maxAttempts}) సార్లు ఈ పరీక్ష రాశారు.`);
     }
 
-    // 3. Load Questions & ALL 4 Language Translations at once (for instant mid-exam switching)
+    // 3. Load Questions & ALL 4 Language Translations
     const qLimit = Number(exam.question_count) || 10;
     const { data: qList, error: qErr } = await db
       .from("bible_questions")
@@ -420,7 +429,7 @@ async function initExam() {
     allTranslations = { te: {}, en: {}, ta: {}, hi: {} };
     if (transRows) {
       transRows.forEach(tr => {
-        const lCode = (tr.lang || "").toLowerCase();
+        const lCode = normalizeLangCode(tr.language || tr.lang);
         if (!allTranslations[lCode]) allTranslations[lCode] = {};
         allTranslations[lCode][tr.question_id] = tr;
       });
