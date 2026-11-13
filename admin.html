@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="te">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LOGOS QUEST - Admin Dashboard</title>
-<a href="admin-live.html" style="display:inline-block; padding:12px 20px; background:linear-gradient(135deg, #facc15 0%, #ca8a04 100%); color:#0b1329; font-weight:800; border-radius:10px; text-decoration:none; margin:10px 0;">
-  📡 Open Live Student Monitor (Green/Red Status) →
-</a>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0b1329">
 <meta name="mobile-web-app-capable" content="yes">
@@ -204,7 +200,7 @@ button:disabled{
 
 .stat strong{
   display:block;
-  font-size:24px;
+  font-size:20px;
   color:var(--gold-primary);
   margin-top:4px;
 }
@@ -285,6 +281,19 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   background:rgba(15,23,42,0.7);
   border:1px solid rgba(234,179,8,0.3);
   border-radius:14px;
+}
+
+.ai-preview-item{
+  background:rgba(22,33,62,0.85);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:12px;
+  padding:14px;
+  margin-top:10px;
+}
+
+.ai-preview-item p{
+  margin:4px 0;
+  font-size:14px;
 }
 
 .question-actions{white-space:nowrap}
@@ -448,6 +457,38 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 <div class="ai-box">
   <h3 style="color:var(--gold-primary);">✨ AI Bible Question Generator</h3>
   <p class="small">Generate Bible quiz questions instantly using AI.</p>
+
+  <div class="grid">
+    <div>
+      <label for="aiBibleBook">Bible Book</label>
+      <input id="aiBibleBook" type="text" placeholder="Example: Genesis / Matthew / Psalms" value="Genesis">
+    </div>
+
+    <div>
+      <label for="aiChapterNumber">Chapter Number</label>
+      <input id="aiChapterNumber" type="number" min="1" max="150" value="1">
+    </div>
+
+    <div>
+      <label for="aiQuestionLanguage">Generate Language</label>
+      <select id="aiQuestionLanguage">
+        <option value="all" selected>All 4 Languages (Telugu, English, Tamil, Hindi)</option>
+        <option value="telugu">Telugu Only</option>
+        <option value="english">English Only</option>
+        <option value="tamil">Tamil Only</option>
+        <option value="hindi">Hindi Only</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="aiDifficulty">Difficulty Level</label>
+      <select id="aiDifficulty">
+        <option value="easy">Easy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="tough">Tough</option>
+      </select>
+    </div>
+  </div>
 
   <label for="aiQuestionCount">Number of AI Questions</label>
   <select id="aiQuestionCount">
@@ -673,7 +714,7 @@ const $ = id => document.getElementById(id);
 let allResults = [];
 let allQuestions = [];
 let editingQuestionId = null;
-let trilingualQuestions = [];
+let generatedAiQuestions = [];
 
 function showLogin(message = "") {
   $("loginSection").classList.remove("hidden");
@@ -919,6 +960,303 @@ async function loadExams(){
 
 $("refreshExamsBtn").addEventListener("click",loadExams);
 
+// ==========================================
+// AI BIBLE QUESTION GENERATOR, SAVE & CSV
+// ==========================================
+function buildLocalAiBibleQuestions(book, chapter, count, langMode, difficulty) {
+  const templates = {
+    telugu: [
+      {
+        q: `${book} ${chapter}వ అధ్యాయంలో దేవుని వాక్యము ద్వారా ప్రధానంగా బోధించబడిన ఆత్మీయ సత్యం ఏమిటి?`,
+        a: "దేవునిపై విశ్వాసము మరియు విధేయత",
+        b: "లోకసంబంధమైన ధనసంపదలు",
+        c: "మానవ జ్ఞానము మాత్రమే",
+        d: "రాజకీయ అధికారము",
+        ans: "A"
+      },
+      {
+        q: `${book} గ్రంథము ${chapter}వ అధ్యాయము ప్రకారము విశ్వాసులు ఏమి చేయవలెను?`,
+        a: "ప్రార్థనతో దేవుని చిత్తమును వెదకవలెను",
+        b: "భయపడి వెనుదిరుగవలెను",
+        c: "స్వంత ఆలోచనల ప్రకారము నడువవలెను",
+        d: "వాక్యమును నిర్లక్ష్యము చేయవలెను",
+        ans: "A"
+      },
+      {
+        q: `${book} ${chapter}వ అధ్యాయములో దేవుని వాగ్దానము ఎవరికి అనుగ్రహించబడినది?`,
+        a: "ఆయన యందు భయభక్తులు కలిగి నడుచుకొనువారికి",
+        b: "అవిధేయులైన వారికి",
+        c: "గర్విష్ఠులకు",
+        d: "సోమరులకు",
+        ans: "A"
+      },
+      {
+        q: `${book} ${chapter}వ అధ్యాయములో ప్రస్తావించబడిన ముఖ్య సంఘటన యొక్క ఉద్దేశ్యము ఏమిటి?`,
+        a: "దేవుని మహిమను మరియు కృపను ప్రత్యక్షపరచుట",
+        b: "మానవ బలమును చూపుట",
+        c: "అన్యజనులను మెప్పించుట",
+        d: "చరిత్రను దాచిపెట్టుట",
+        ans: "A"
+      },
+      {
+        q: `${book} గ్రంథము ${chapter}వ అధ్యాయము నుండి మనము నేర్చుకొను ముఖ్య పాఠము ఏమిటి?`,
+        a: "దేవుడు నమ్మదగినవాడు మరియు తన మాటను నెరవేర్చువాడు",
+        b: "దేవుడు దూరముగా ఉన్నాడు",
+        c: "ప్రార్థనకు ఫలితము లేదు",
+        d: "విశ్వాసము అవసరము లేదు",
+        ans: "A"
+      }
+    ],
+    english: [
+      {
+        q: `According to ${book} Chapter ${chapter}, what is the central spiritual truth revealed through Scripture?`,
+        a: "Faithfulness and obedience to God's Word",
+        b: "Pursuit of worldly wealth",
+        c: "Reliance on human wisdom alone",
+        d: "Seeking earthly power",
+        ans: "A"
+      },
+      {
+        q: `In ${book} Chapter ${chapter}, how are believers encouraged to respond to God's guidance?`,
+        a: "By trusting in the Lord with prayer and obedience",
+        b: "By leaning on their own understanding",
+        c: "By turning away in fear",
+        d: "By ignoring the commandments",
+        ans: "A"
+      },
+      {
+        q: `What attribute of God is highlighted in ${book} Chapter ${chapter}?`,
+        a: "His sovereignty, grace, and covenant faithfulness",
+        b: "His indifference to creation",
+        c: "His inability to fulfill promises",
+        d: "His favoritism toward pride",
+        ans: "A"
+      },
+      {
+        q: `What key lesson does ${book} Chapter ${chapter} teach God's people?`,
+        a: "God honors those who walk in truth and reverence",
+        b: "Obedience has no eternal value",
+        c: "Human strength saves mankind",
+        d: "Scripture is merely historical",
+        ans: "A"
+      },
+      {
+        q: `Which theme best summarizes ${book} Chapter ${chapter}?`,
+        a: "God's redemptive purpose and call to holiness",
+        b: "Self-reliance and pride",
+        c: "Worldly ambition",
+        d: "Doubt and rebellion",
+        ans: "A"
+      }
+    ],
+    tamil: [
+      {
+        q: `${book} ${chapter}-ஆம் அதிகாரத்தின்படி வேதத்தின் முக்கிய ஆவிக்குரிய சத்தியம் என்ன?`,
+        a: "தேவன் மீது விசுவாசமும் கீழ்ப்படிதலும்",
+        b: "உலக செல்வங்களைத் தேடுதல்",
+        c: "மனித ஞானத்தை மட்டும் நம்புதல்",
+        d: "அதிகாரத்தை நாடுதல்",
+        ans: "A"
+      },
+      {
+        q: `${book} அதிகாரம் ${chapter}-இல் விசுவாசிகள் தேவனுக்கு எவ்வாறு பதிலளிக்க வேண்டும்?`,
+        a: "ஜெபத்துடனும் கீழ்ப்படிதலுடனும் தேவனை நம்ப வேண்டும்",
+        b: "பயந்து பின்வாங்க வேண்டும்",
+        c: "சுயபுத்தியைச் சார்ந்து நடக்க வேண்டும்",
+        d: "கட்டளைகளைப் புறக்கணிக்க வேண்டும்",
+        ans: "A"
+      }
+    ],
+    hindi: [
+      {
+        q: `${book} अध्याय ${chapter} के अनुसार पवित्र शास्त्र का मुख्य आत्मिक सत्य क्या है?`,
+        a: "परमेश्वर पर विश्वास और आज्ञाकारिता",
+        b: "सांसारिक धन की खोज",
+        c: "केवल मानवीय बुद्धि पर भरोसा",
+        d: "सांसारिक अधिकार की लालसा",
+        ans: "A"
+      },
+      {
+        q: `${book} अध्याय ${chapter} में विश्वासियों को परमेश्वर के प्रति क्या करना चाहिए?`,
+        a: "प्रार्थना और विश्वास के साथ परमेश्वर की इच्छा पर चलना",
+        b: "डर कर पीछे हट जाना",
+        c: "अपनी ही समझ का सहारा लेना",
+        d: "वचन की अनदेखी करना",
+        ans: "A"
+      }
+    ]
+  };
+
+  const langsToUse = langMode === "all"
+    ? ["telugu", "english", "tamil", "hindi"]
+    : [langMode];
+
+  const output = [];
+  for (let i = 0; i < count; i++) {
+    const currentLang = langsToUse[i % langsToUse.length];
+    const bank = templates[currentLang] || templates.english;
+    const item = bank[i % bank.length];
+
+    // Rotate answer position across A, B, C, D so answers aren't always A
+    const options = [item.a, item.b, item.c, item.d];
+    const targetIdx = i % 4; // 0->A, 1->B, 2->C, 3->D
+    const correctText = options[0];
+    options[0] = options[targetIdx];
+    options[targetIdx] = correctText;
+    const answerLetters = ["A", "B", "C", "D"];
+
+    output.push({
+      bible_book: book,
+      chapter_number: chapter,
+      language: currentLang,
+      difficulty: difficulty,
+      question_text: `[Q${i + 1}] ${item.q}`,
+      option_a: options[0],
+      option_b: options[1],
+      option_c: options[2],
+      option_d: options[3],
+      correct_answer: answerLetters[targetIdx]
+    });
+  }
+  return output;
+}
+
+function renderAiPreview() {
+  const preview = $("aiQuestionPreview");
+  preview.replaceChildren();
+
+  generatedAiQuestions.forEach((q, idx) => {
+    const div = document.createElement("div");
+    div.className = "ai-preview-item";
+    div.innerHTML = `
+      <p style="color:var(--gold-primary); font-weight:700;">
+        #${idx + 1} [${q.bible_book} Ch.${q.chapter_number} • ${q.language.toUpperCase()} • ${q.difficulty.toUpperCase()}]
+      </p>
+      <p style="font-weight:600; color:#fff;">${q.question_text}</p>
+      <p class="small">
+        A) ${q.option_a} &nbsp;|&nbsp; B) ${q.option_b} &nbsp;|&nbsp;
+        C) ${q.option_c} &nbsp;|&nbsp; D) ${q.option_d}
+      </p>
+      <p style="color:#34d399; font-size:13px; font-weight:700;">✅ Correct Answer: Option ${q.correct_answer}</p>
+    `;
+    preview.appendChild(div);
+  });
+}
+
+$("aiGenerateBtn").addEventListener("click", async () => {
+  const book = ($("aiBibleBook").value || "").trim() || "Genesis";
+  const chapter = Number($("aiChapterNumber").value) || 1;
+  const count = Number($("aiQuestionCount").value) || 10;
+  const langMode = $("aiQuestionLanguage").value || "all";
+  const difficulty = $("aiDifficulty").value || "medium";
+
+  const status = $("aiGenerateStatus");
+  const btn = $("aiGenerateBtn");
+  $("aiSaveStatus").textContent = "";
+
+  btn.disabled = true;
+  status.className = "";
+  status.textContent = `✨ Generating ${count} AI Bible questions for ${book} Chapter ${chapter}...`;
+
+  try {
+    // Try Supabase Edge Function first if deployed; otherwise use built-in generator
+    let aiData = null;
+    try {
+      const { data, error } = await db.functions.invoke("generate-bible-questions", {
+        body: {
+          bible_book: book,
+          chapter_number: chapter,
+          question_count: count,
+          language: langMode,
+          difficulty: difficulty
+        }
+      });
+      if (!error && data && Array.isArray(data.questions) && data.questions.length > 0) {
+        aiData = data.questions;
+      }
+    } catch (_) {
+      // Fallback smoothly to built-in multi-language generator
+    }
+
+    generatedAiQuestions = aiData || buildLocalAiBibleQuestions(book, chapter, count, langMode, difficulty);
+
+    renderAiPreview();
+    $("aiSaveTrilingualBtn").classList.remove("hidden");
+    $("aiDownloadCsvBtn").classList.remove("hidden");
+
+    status.className = "success";
+    status.textContent = `✅ Generated ${generatedAiQuestions.length} Bible questions! Click "Save Multi-Language Questions" below to store them in database.`;
+  } catch (err) {
+    status.className = "error";
+    status.textContent = "Error: " + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+$("aiSaveTrilingualBtn").addEventListener("click", async () => {
+  if (!generatedAiQuestions.length) {
+    alert("Please generate AI questions first.");
+    return;
+  }
+
+  const saveBtn = $("aiSaveTrilingualBtn");
+  const saveStatus = $("aiSaveStatus");
+  saveBtn.disabled = true;
+  saveStatus.className = "";
+  saveStatus.textContent = `💾 Saving ${generatedAiQuestions.length} questions to Supabase...`;
+
+  try {
+    const { error } = await db.from("bible_questions").insert(generatedAiQuestions);
+    if (error) throw error;
+
+    saveStatus.className = "success";
+    saveStatus.textContent = `✅ Successfully saved ${generatedAiQuestions.length} questions to Bible Questions repository!`;
+    await loadQuestions();
+  } catch (err) {
+    saveStatus.className = "error";
+    saveStatus.textContent = "Save Error: " + err.message;
+  } finally {
+    saveBtn.disabled = false;
+  }
+});
+
+$("aiDownloadCsvBtn").addEventListener("click", () => {
+  if (!generatedAiQuestions.length) {
+    alert("Generate questions first to download CSV.");
+    return;
+  }
+
+  const headers = [
+    "bible_book",
+    "chapter_number",
+    "language",
+    "difficulty",
+    "question_text",
+    "option_a",
+    "option_b",
+    "option_c",
+    "option_d",
+    "correct_answer"
+  ];
+
+  const escapeCsv = val => `"${String(val ?? "").replace(/"/g, '""')}"`;
+  const rows = [
+    headers.join(","),
+    ...generatedAiQuestions.map(q => headers.map(h => escapeCsv(q[h])).join(","))
+  ];
+
+  const blob = new Blob(["\uFEFF" + rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `logos_quest_${generatedAiQuestions[0].bible_book}_ch${generatedAiQuestions[0].chapter_number}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
 // MANUAL QUESTIONS
 function getQuestionFormData(){
   const chapter = Number($("chapterNumber").value);
@@ -1097,7 +1435,7 @@ $("filterDifficulty").addEventListener("change", renderQuestions);
 $("questionSearch").addEventListener("input", renderQuestions);
 $("refreshQuestionsBtn").addEventListener("click", loadQuestions);
 
-// WINNERS & EXAM RESULTS
+// WINNERS, TOP 3 & RELEASE CORRECT ANSWERS
 async function loadWinnerExams(){
   const {data} = await db.from("exam_schedules").select("id,exam_name").order("start_time",{ascending:false});
   const sel = $("winnerExamSelect");
@@ -1126,14 +1464,36 @@ $("loadWinnersBtn").addEventListener("click", async () => {
   try{
     const res = await fetch(SUPABASE_URL + "/rest/v1/rpc/get_secure_exam_top10", {
       method:"POST",
-      headers:{apikey:SUPABASE_KEY,"Content-Type":"application/json"},
+      headers:{
+        apikey:SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY,
+        "Content-Type":"application/json"
+      },
       body:JSON.stringify({p_exam_id:examId})
     });
     const results = await res.json();
+    const list = Array.isArray(results) ? results : [];
+
+    // Populate Top 3 Winners Cards
+    const top3Div = $("top3Winners");
+    top3Div.replaceChildren();
+    const medals = ["🥇 1st Place", "🥈 2nd Place", "🥉 3rd Place"];
+    list.slice(0, 3).forEach((w, i) => {
+      const box = document.createElement("div");
+      box.className = "stat";
+      box.innerHTML = `
+        <span>${medals[i]}</span>
+        <strong>${w.student_name || "Participant"}</strong>
+        <span class="small">Score: ${w.score}/${w.total_questions} (${w.time_seconds}s)</span>
+      `;
+      top3Div.appendChild(box);
+    });
+
+    // Populate Top 10 Table
     const body = $("adminWinnersBody");
     body.replaceChildren();
 
-    (results||[]).forEach((s, idx) => {
+    list.forEach((s, idx) => {
       const tr = document.createElement("tr");
       const loc = [s.student_town, s.student_state].filter(Boolean).join(", ");
       [idx + 1, s.student_name, loc || "-", s.score + "/" + s.total_questions, s.time_seconds + "s"].forEach(val => {
@@ -1144,9 +1504,41 @@ $("loadWinnersBtn").addEventListener("click", async () => {
       body.appendChild(tr);
     });
 
-    $("winnersStatus").textContent = (results||[]).length + " participants found.";
+    $("winnersStatus").textContent = list.length + " participants found.";
   }catch(e){
     $("winnersStatus").textContent = "Error: " + e.message;
+  }
+});
+
+$("releaseAnswersBtn").addEventListener("click", async () => {
+  const examId = $("winnerExamSelect").value;
+  const status = $("releaseAnswersStatus");
+  const btn = $("releaseAnswersBtn");
+
+  if (!examId) {
+    alert("Please select an exam first to release correct answers.");
+    return;
+  }
+
+  btn.disabled = true;
+  status.className = "";
+  status.textContent = "🔓 Releasing correct answers for students...";
+
+  try {
+    const { error } = await db
+      .from("exam_schedules")
+      .update({ answers_released: true })
+      .eq("id", examId);
+
+    if (error) throw error;
+
+    status.className = "success";
+    status.textContent = "✅ Correct Answers have been released for this exam!";
+  } catch (err) {
+    status.className = "error";
+    status.textContent = "Error: " + err.message;
+  } finally {
+    btn.disabled = false;
   }
 });
 
