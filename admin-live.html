@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOGOS QUEST - Admin Candidate Gallery</title>
+<title>LOGOS QUEST - Live Exam Monitor & Candidate Gallery</title>
 <link rel="icon" type="image/png" href="icon-512.png">
 
 <style>
 :root {
   --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
-  --card-bg: rgba(22, 33, 62, 0.85);
-  --card-border: rgba(234, 179, 8, 0.3);
+  --card-bg: rgba(22, 33, 62, 0.88);
+  --card-border: rgba(234, 179, 8, 0.32);
   --gold-primary: #facc15;
   --gold-dark: #ca8a04;
   --gold-glow: rgba(250, 204, 21, 0.35);
@@ -39,14 +39,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1040px;
+  max-width: 1080px;
   margin: 0 auto 14px;
   gap: 10px;
   flex-wrap: wrap;
 }
 
 .btn-back {
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(15, 23, 42, 0.92);
   color: var(--gold-primary);
   border: 1.5px solid var(--card-border);
   padding: 9px 16px;
@@ -77,16 +77,21 @@ body {
   cursor: pointer;
 }
 
-.btn-refresh {
+.btn-gold {
   background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
   color: #0b1329;
   border: none;
-  padding: 9px 16px;
+  padding: 10px 18px;
   border-radius: 10px;
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 4px 12px var(--gold-glow);
+  box-shadow: 0 4px 14px var(--gold-glow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-gold:active {
+  transform: scale(0.98);
 }
 
 .card {
@@ -97,7 +102,7 @@ body {
   padding: 22px;
   margin: 14px auto;
   border-radius: 20px;
-  max-width: 1040px;
+  max-width: 1080px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
 }
 
@@ -105,7 +110,7 @@ h1 {
   color: var(--gold-primary);
   text-align: center;
   margin: 0 0 6px;
-  font-size: 24px;
+  font-size: 22px;
   letter-spacing: 0.8px;
   text-shadow: 0 2px 10px var(--gold-glow);
 }
@@ -113,25 +118,33 @@ h1 {
 .subtitle {
   text-align: center;
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 13.5px;
   margin: 0 0 18px;
 }
 
-.filter-grid {
+/* ================= EXAM SELECTION FORM ================= */
+.selection-grid {
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 14px;
+  grid-template-columns: 1fr 1.6fr 1fr auto;
+  gap: 12px;
+  align-items: end;
 }
 
-@media (max-width: 640px) {
-  .filter-grid {
+@media (max-width: 820px) {
+  .selection-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .selection-grid {
     grid-template-columns: 1fr;
   }
 }
 
 .filter-label {
   display: block;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--gold-primary);
   margin-bottom: 6px;
@@ -139,8 +152,8 @@ h1 {
 
 .filter-input {
   width: 100%;
-  padding: 12px 14px;
-  background: rgba(15, 23, 42, 0.9);
+  padding: 11px 13px;
+  background: rgba(15, 23, 42, 0.92);
   border: 1.5px solid rgba(255, 255, 255, 0.16);
   border-radius: 12px;
   color: #ffffff;
@@ -152,35 +165,117 @@ h1 {
   border-color: var(--gold-primary);
 }
 
-.legend-row {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
-  font-size: 13px;
-  margin-bottom: 18px;
-  color: var(--text-muted);
+.btn-submit-exam {
+  width: 100%;
+  padding: 12px 22px;
+  font-size: 14px;
+  border-radius: 12px;
+  white-space: nowrap;
 }
 
-/* ================= PHOTO GALLERY GRID ================= */
+/* ================= LIVE STATS BAR ================= */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 560px) {
+  .stats-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-box {
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--gold-primary);
+}
+
+/* ================= TOOLBAR (SEARCH & STATUS FILTER) ================= */
+.toolbar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.pill-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  background: rgba(15, 23, 42, 0.85);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 7px 13px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filter-pill.active {
+  background: rgba(250, 204, 21, 0.18);
+  color: var(--gold-primary);
+  border-color: var(--gold-primary);
+}
+
+.search-box {
+  padding: 9px 14px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 13px;
+  min-width: 220px;
+  outline: none;
+}
+
+.search-box:focus {
+  border-color: var(--gold-primary);
+}
+
+/* ================= CANDIDATE PHOTO GRID ================= */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 14px;
 }
 
 @media (max-width: 480px) {
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 11px;
   }
 }
 
 .gallery-item {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.88);
   border: 1.5px solid rgba(250, 204, 21, 0.25);
   border-radius: 18px;
-  padding: 14px 10px;
+  padding: 14px 12px;
   text-align: center;
   cursor: pointer;
   position: relative;
@@ -198,7 +293,7 @@ h1 {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: rgba(11, 19, 41, 0.9);
+  background: rgba(11, 19, 41, 0.92);
   color: var(--gold-primary);
   border: 1px solid var(--card-border);
   font-size: 11px;
@@ -209,10 +304,10 @@ h1 {
 
 .status-dot {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 14px;
-  height: 14px;
+  top: 11px;
+  right: 11px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   border: 2px solid #0b1329;
 }
@@ -228,8 +323,8 @@ h1 {
 }
 
 .gallery-photo {
-  width: 96px;
-  height: 96px;
+  width: 92px;
+  height: 92px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--gold-primary);
@@ -240,7 +335,7 @@ h1 {
 }
 
 .gallery-name {
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 700;
   color: #ffffff;
   margin: 0 0 4px;
@@ -249,14 +344,47 @@ h1 {
   text-overflow: ellipsis;
 }
 
+.gallery-meta {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin: 0 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gallery-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
 .gallery-score {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--gold-primary);
   background: rgba(250, 204, 21, 0.12);
-  display: inline-block;
-  padding: 3px 10px;
+  padding: 3px 9px;
   border-radius: 12px;
+}
+
+.status-mini {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.status-mini.live {
+  background: rgba(16, 185, 129, 0.16);
+  color: #34d399;
+}
+
+.status-mini.done {
+  background: rgba(239, 68, 68, 0.16);
+  color: #f87171;
 }
 
 /* ================= FULL DETAILS MODAL ================= */
@@ -279,7 +407,7 @@ h1 {
   border: 2px solid var(--gold-primary);
   border-radius: 24px;
   padding: 24px;
-  max-width: 400px;
+  max-width: 410px;
   width: 100%;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 25px var(--gold-glow);
   position: relative;
@@ -301,8 +429,8 @@ h1 {
 }
 
 .modal-big-photo {
-  width: 150px;
-  height: 150px;
+  width: 145px;
+  height: 145px;
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid var(--gold-primary);
@@ -312,7 +440,7 @@ h1 {
 }
 
 .detail-list {
-  background: rgba(15, 23, 42, 0.75);
+  background: rgba(15, 23, 42, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 14px 16px;
@@ -343,25 +471,27 @@ h1 {
   color: #ffffff;
   font-weight: 700;
   text-align: right;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .badge-live {
   background: rgba(16, 185, 129, 0.18);
   color: #34d399;
   border: 1px solid rgba(16, 185, 129, 0.4);
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;
+  font-weight: 700;
 }
 
 .badge-done {
   background: rgba(239, 68, 68, 0.18);
   color: #f87171;
   border: 1px solid rgba(239, 68, 68, 0.4);
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;
+  font-weight: 700;
 }
 </style>
 </head>
@@ -376,42 +506,83 @@ h1 {
       <option value="ta">🇮🇳 தமிழ்</option>
       <option value="hi">🇮🇳 हिन्दी</option>
     </select>
-    <button type="button" class="btn-refresh" onclick="loadCandidatesForSelectedExam()">🔄 Refresh</button>
+    <button type="button" class="btn-gold" onclick="loadCandidatesForSelectedExam()">🔄 Refresh</button>
   </div>
 </div>
 
+<!-- Exam Date, Exam & Time Selection Card -->
 <div class="card">
-  <h1>LOGOS QUEST - CANDIDATE GALLERY</h1>
-  <p class="subtitle">Tap on any candidate photo to view complete details</p>
+  <h1>LOGOS QUEST - LIVE EXAM CANDIDATE MONITOR</h1>
+  <p class="subtitle">Select Exam Date, Exam Name & Time, then click Submit to view all joined candidates' photos & details</p>
 
-  <div class="filter-grid">
+  <div class="selection-grid">
     <div>
       <label class="filter-label" for="dateFilter">📅 Exam Date:</label>
-      <input type="date" id="dateFilter" class="filter-input" onchange="filterExamsByDate()">
+      <input type="date" id="dateFilter" class="filter-input" onchange="onDateChanged()">
     </div>
+
     <div>
       <label class="filter-label" for="examSelect">📚 Select Exam:</label>
-      <select id="examSelect" class="filter-input" onchange="loadCandidatesForSelectedExam()">
+      <select id="examSelect" class="filter-input" onchange="onExamChanged()">
         <option value="">Loading exams...</option>
       </select>
     </div>
+
+    <div>
+      <label class="filter-label" for="timeSelect">🕒 Exam Time (IST):</label>
+      <select id="timeSelect" class="filter-input" onchange="onTimeChanged()">
+        <option value="">Select time slot</option>
+      </select>
+    </div>
+
+    <div>
+      <button type="button" class="btn-gold btn-submit-exam" onclick="submitExamSelection()">
+        ✅ Submit & View All
+      </button>
+    </div>
   </div>
 </div>
 
+<!-- Results & Photo Gallery Card -->
 <div class="card">
-  <h2 style="margin:0 0 10px; font-size:18px; color:#fff;">
-    🖼️ Exam Participants (<span id="candidateCount">0</span>)
-  </h2>
+  <div class="stats-strip">
+    <div class="stat-box">
+      <span class="stat-label">👥 Total Joined</span>
+      <span class="stat-value" id="totalCount">0</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">🟢 Writing Live</span>
+      <span class="stat-value" id="liveCount" style="color:#34d399;">0</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">🔴 Completed</span>
+      <span class="stat-value" id="doneCount" style="color:#f87171;">0</span>
+    </div>
+  </div>
 
-  <div class="legend-row">
-    <span>🟢 Green Dot: Writing Exam (Live)</span>
-    <span>🔴 Red Dot: Completed Exam</span>
-    <span style="color:var(--gold-primary);">👆 Tap any photo for full details</span>
+  <div class="toolbar-row">
+    <div class="pill-group">
+      <button type="button" class="filter-pill active" id="pill-all" onclick="setStatusFilter('all')">All Candidates</button>
+      <button type="button" class="filter-pill" id="pill-live" onclick="setStatusFilter('live')">🟢 Live Only</button>
+      <button type="button" class="filter-pill" id="pill-done" onclick="setStatusFilter('done')">🔴 Completed</button>
+    </div>
+
+    <input
+      type="text"
+      id="searchCandidate"
+      class="search-box"
+      placeholder="🔍 Search name or phone..."
+      oninput="renderFilteredGallery()"
+    >
+  </div>
+
+  <div id="selectedExamBanner" style="font-size:13px; color:var(--gold-primary); font-weight:700; margin-bottom:14px;">
+    Select Exam Date & Time and click Submit to view participants.
   </div>
 
   <div id="candidateGallery" class="gallery-grid">
     <p style="grid-column:1/-1; text-align:center; padding:24px; color:var(--text-muted);">
-      Loading candidate photos...
+      Loading scheduled exams...
     </p>
   </div>
 </div>
@@ -422,7 +593,7 @@ h1 {
     <button type="button" class="modal-close-btn" onclick="closeDetailModal()">✕</button>
 
     <img id="detPhoto" class="modal-big-photo" src="icon-512.png" alt="Student Photo">
-    <h2 id="detName" style="color:var(--gold-primary); margin:0 0 6px; font-size:20px;">Student Name</h2>
+    <h2 id="detName" style="color:var(--gold-primary); margin:0 0 8px; font-size:20px;">Student Name</h2>
     <div id="detStatusBadge"></div>
 
     <div class="detail-list">
@@ -432,7 +603,7 @@ h1 {
       </div>
       <div class="detail-row">
         <span class="detail-key">🎯 Score</span>
-        <span class="detail-val" id="detScore" style="color:var(--gold-primary);">0</span>
+        <span class="detail-val" id="detScore" style="color:var(--gold-primary);">0 pts</span>
       </div>
       <div class="detail-row">
         <span class="detail-key">📞 Phone Number</span>
@@ -447,12 +618,16 @@ h1 {
         <span class="detail-val" id="detExam">-</span>
       </div>
       <div class="detail-row">
-        <span class="detail-key">🕒 Time (IST)</span>
+        <span class="detail-key">📅 Exam Date & Time</span>
+        <span class="detail-val" id="detSchedule">-</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key">🕒 Joined / Submitted</span>
         <span class="detail-val" id="detTime">-</span>
       </div>
     </div>
 
-    <button type="button" class="btn-refresh" style="width:100%; padding:12px;" onclick="closeDetailModal()">Close Details</button>
+    <button type="button" class="btn-gold" style="width:100%; padding:12px;" onclick="closeDetailModal()">Close Details</button>
   </div>
 </div>
 
@@ -464,20 +639,44 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = id => document.getElementById(id);
 
 let allExams = [];
+let filteredExams = [];
 let photoDirectory = {};
 let accountDirectory = {};
-let renderedCandidates = [];
+let allLoadedCandidates = [];
+let currentStatusFilter = "all";
+let activeExamId = "";
 
 function changeLanguage(lang) {
   localStorage.setItem("logos_quest_lang", lang);
 }
 
 function getISTDateString(isoStr) {
+  if (!isoStr) return "";
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Kolkata",
     year: "numeric",
     month: "2-digit",
     day: "2-digit"
+  }).format(new Date(isoStr));
+}
+
+function formatISTDateLabel(isoStr) {
+  if (!isoStr) return "-";
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  }).format(new Date(isoStr));
+}
+
+function formatISTTimeOnly(isoStr) {
+  if (!isoStr) return "";
+  return new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
   }).format(new Date(isoStr));
 }
 
@@ -492,6 +691,13 @@ function formatISTDisplay(isoStr) {
     minute: "2-digit",
     hour12: true
   }).format(new Date(isoStr));
+}
+
+function getTimeRangeText(ex) {
+  if (!ex || !ex.start_time) return "Any Time";
+  const start = formatISTTimeOnly(ex.start_time);
+  const end = ex.end_time ? formatISTTimeOnly(ex.end_time) : "";
+  return end ? `${start} - ${end}` : start;
 }
 
 async function preloadStudentDirectory() {
@@ -527,57 +733,106 @@ async function initMonitor() {
     .from("exam_schedules")
     .select("id, exam_name, start_time, end_time")
     .order("start_time", { ascending: false })
-    .limit(100);
+    .limit(150);
 
   if (error || !exams || exams.length === 0) {
     $("examSelect").innerHTML = `<option value="">No exams found</option>`;
+    $("timeSelect").innerHTML = `<option value="">No time slots</option>`;
     $("candidateGallery").innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:24px;">No scheduled exams found.</p>`;
     return;
   }
 
   allExams = exams;
-  populateExamDropdown(allExams);
-  await loadCandidatesForSelectedExam();
+  filteredExams = [...allExams];
+  populateExamAndTimeDropdowns(filteredExams);
+
+  // Auto-load latest exam on initial open
+  if (filteredExams.length > 0) {
+    activeExamId = String(filteredExams[0].id);
+    await loadCandidatesForSelectedExam();
+  }
 }
 
-function populateExamDropdown(list) {
-  const sel = $("examSelect");
-  sel.innerHTML = "";
+function populateExamAndTimeDropdowns(list) {
+  const examSel = $("examSelect");
+  const timeSel = $("timeSelect");
+  examSel.innerHTML = "";
+  timeSel.innerHTML = "";
+
   if (!list.length) {
-    sel.innerHTML = `<option value="">No exams on selected date</option>`;
+    examSel.innerHTML = `<option value="">No exams on this date</option>`;
+    timeSel.innerHTML = `<option value="">No time available</option>`;
     return;
   }
 
   list.forEach(ex => {
-    const dateLabel = new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Asia/Kolkata",
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
-    }).format(new Date(ex.start_time));
+    const dateLabel = formatISTDateLabel(ex.start_time);
+    const timeRange = getTimeRangeText(ex);
 
-    const opt = document.createElement("option");
-    opt.value = ex.id;
-    opt.textContent = `${ex.exam_name || "Bible Quiz"} (${dateLabel})`;
-    sel.appendChild(opt);
+    const optExam = document.createElement("option");
+    optExam.value = ex.id;
+    optExam.textContent = `${ex.exam_name || "Bible Quiz"} (${dateLabel})`;
+    examSel.appendChild(optExam);
+
+    const optTime = document.createElement("option");
+    optTime.value = ex.id;
+    optTime.textContent = `🕒 ${timeRange} (${ex.exam_name || "Quiz"})`;
+    timeSel.appendChild(optTime);
   });
 }
 
-function filterExamsByDate() {
+function onDateChanged() {
   const pickedDate = $("dateFilter").value;
   if (!pickedDate) {
-    populateExamDropdown(allExams);
-    loadCandidatesForSelectedExam();
-    return;
+    filteredExams = [...allExams];
+  } else {
+    filteredExams = allExams.filter(ex => getISTDateString(ex.start_time) === pickedDate);
   }
-
-  const filtered = allExams.filter(ex => getISTDateString(ex.start_time) === pickedDate);
-  populateExamDropdown(filtered);
-  loadCandidatesForSelectedExam();
+  populateExamAndTimeDropdowns(filteredExams);
 }
 
-function openCandidateDetails(idx) {
-  const item = renderedCandidates[idx];
+function onExamChanged() {
+  const val = $("examSelect").value;
+  if (val) {
+    $("timeSelect").value = val;
+    const matched = allExams.find(e => String(e.id) === String(val));
+    if (matched && matched.start_time) {
+      $("dateFilter").value = getISTDateString(matched.start_time);
+    }
+  }
+}
+
+function onTimeChanged() {
+  const val = $("timeSelect").value;
+  if (val) {
+    $("examSelect").value = val;
+    const matched = allExams.find(e => String(e.id) === String(val));
+    if (matched && matched.start_time) {
+      $("dateFilter").value = getISTDateString(matched.start_time);
+    }
+  }
+}
+
+async function submitExamSelection() {
+  const chosenId = $("examSelect").value || $("timeSelect").value;
+  if (!chosenId) {
+    alert("Please select a valid Exam Date, Exam Name, and Time.");
+    return;
+  }
+  activeExamId = String(chosenId);
+  await loadCandidatesForSelectedExam();
+}
+
+function setStatusFilter(mode) {
+  currentStatusFilter = mode;
+  ["all", "live", "done"].forEach(m => {
+    $("pill-" + m).classList.toggle("active", m === mode);
+  });
+  renderFilteredGallery();
+}
+
+function openCandidateDetails(indexInAll) {
+  const item = allLoadedCandidates[indexInAll];
   if (!item) return;
 
   $("detPhoto").src = item.photo;
@@ -587,6 +842,7 @@ function openCandidateDetails(idx) {
   $("detPhone").textContent = item.phone || "Not provided";
   $("detEmail").textContent = item.email || "Not provided";
   $("detExam").textContent = item.examName;
+  $("detSchedule").textContent = item.scheduleText;
   $("detTime").textContent = item.time;
 
   $("detStatusBadge").innerHTML = item.isLive
@@ -601,11 +857,13 @@ function closeDetailModal() {
 }
 
 async function loadCandidatesForSelectedExam() {
-  const examId = $("examSelect").value;
+  const examId = activeExamId || $("examSelect").value;
   const gallery = $("candidateGallery");
 
   if (!examId) {
-    $("candidateCount").textContent = "0";
+    $("totalCount").textContent = "0";
+    $("liveCount").textContent = "0";
+    $("doneCount").textContent = "0";
     gallery.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:24px; color:var(--text-muted);">No exam selected.</p>`;
     return;
   }
@@ -613,7 +871,12 @@ async function loadCandidatesForSelectedExam() {
   await preloadStudentDirectory();
 
   const selectedExamObj = allExams.find(e => String(e.id) === String(examId));
-  const examTitle = selectedExamObj ? selectedExamObj.exam_name : "Bible Quiz";
+  const examTitle = selectedExamObj ? (selectedExamObj.exam_name || "Bible Quiz") : "Bible Quiz";
+  const scheduleInfo = selectedExamObj
+    ? `${formatISTDateLabel(selectedExamObj.start_time)} | ${getTimeRangeText(selectedExamObj)} IST`
+    : "-";
+
+  $("selectedExamBanner").textContent = `📌 Showing Candidates for: ${examTitle} (${scheduleInfo})`;
 
   const { data: attempts, error } = await db
     .from("secure_exam_attempts")
@@ -628,14 +891,17 @@ async function loadCandidatesForSelectedExam() {
   }
 
   if (!attempts || attempts.length === 0) {
-    $("candidateCount").textContent = "0";
-    gallery.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:24px; color:var(--text-muted);">No candidates have joined this exam yet.</p>`;
+    allLoadedCandidates = [];
+    $("totalCount").textContent = "0";
+    $("liveCount").textContent = "0";
+    $("doneCount").textContent = "0";
+    gallery.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:28px; color:var(--text-muted);">No candidates have joined this exam slot yet.</p>`;
     return;
   }
 
-  $("candidateCount").textContent = attempts.length;
-  gallery.innerHTML = "";
-  renderedCandidates = [];
+  let liveTotal = 0;
+  let doneTotal = 0;
+  allLoadedCandidates = [];
 
   attempts.forEach((row, index) => {
     const email = (row.student_email || "").toLowerCase().trim();
@@ -655,10 +921,14 @@ async function loadCandidatesForSelectedExam() {
       "icon-512.png";
 
     const isLive = row.status !== "submitted";
+    if (isLive) liveTotal++;
+    else doneTotal++;
+
     const timeText = formatISTDisplay(row.submitted_at || row.started_at || row.created_at);
     const scoreVal = row.score ?? 0;
 
-    renderedCandidates.push({
+    allLoadedCandidates.push({
+      originalIndex: index,
       rank: index + 1,
       name: name,
       photo: photoSrc,
@@ -667,19 +937,54 @@ async function loadCandidatesForSelectedExam() {
       score: scoreVal,
       isLive: isLive,
       examName: examTitle,
+      scheduleText: scheduleInfo,
       time: timeText
     });
+  });
 
+  $("totalCount").textContent = attempts.length;
+  $("liveCount").textContent = liveTotal;
+  $("doneCount").textContent = doneTotal;
+
+  renderFilteredGallery();
+}
+
+function renderFilteredGallery() {
+  const gallery = $("candidateGallery");
+  const query = ($("searchCandidate").value || "").toLowerCase().trim();
+
+  const visible = allLoadedCandidates.filter(item => {
+    if (currentStatusFilter === "live" && !item.isLive) return false;
+    if (currentStatusFilter === "done" && item.isLive) return false;
+    if (query) {
+      const hay = `${item.name} ${item.phone} ${item.email}`.toLowerCase();
+      if (!hay.includes(query)) return false;
+    }
+    return true;
+  });
+
+  if (visible.length === 0) {
+    gallery.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:24px; color:var(--text-muted);">No matching candidates found.</p>`;
+    return;
+  }
+
+  gallery.innerHTML = "";
+
+  visible.forEach(item => {
     const card = document.createElement("div");
     card.className = "gallery-item";
-    card.onclick = () => openCandidateDetails(index);
+    card.onclick = () => openCandidateDetails(item.originalIndex);
 
     card.innerHTML = `
-      <span class="rank-tag">#${index + 1}</span>
-      <span class="status-dot ${isLive ? 'dot-live' : 'dot-done'}" title="${isLive ? 'Writing Live' : 'Completed'}"></span>
-      <img src="${photoSrc}" class="gallery-photo" alt="${name}">
-      <p class="gallery-name">${name}</p>
-      <span class="gallery-score">🎯 ${scoreVal} pts</span>
+      <span class="rank-tag">#${item.rank}</span>
+      <span class="status-dot ${item.isLive ? 'dot-live' : 'dot-done'}" title="${item.isLive ? 'Writing Live' : 'Completed'}"></span>
+      <img src="${item.photo}" class="gallery-photo" alt="${item.name}">
+      <p class="gallery-name">${item.name}</p>
+      <p class="gallery-meta">📞 ${item.phone}</p>
+      <div class="gallery-footer">
+        <span class="gallery-score">🎯 ${item.score} pts</span>
+        <span class="status-mini ${item.isLive ? 'live' : 'done'}">${item.isLive ? 'Live' : 'Done'}</span>
+      </div>
     `;
 
     gallery.appendChild(card);
@@ -687,7 +992,9 @@ async function loadCandidatesForSelectedExam() {
 }
 
 window.addEventListener("DOMContentLoaded", initMonitor);
-setInterval(loadCandidatesForSelectedExam, 10000);
+setInterval(() => {
+  if (activeExamId) loadCandidatesForSelectedExam();
+}, 10000);
 </script>
 </body>
 </html>
