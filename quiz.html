@@ -282,8 +282,10 @@ try {
 } catch(e) {}
 
 const studentName = decodeURIComponent(urlParams.get("user_name") || savedUser.name || "Student");
-const studentEmail = (urlParams.get("email") || savedUser.email || "").toLowerCase();
-const studentMobile = urlParams.get("mobile") || savedUser.phone || studentEmail || "00000";
+const studentEmail = (urlParams.get("email") || savedUser.email || "").toLowerCase().trim();
+const studentMobile = (urlParams.get("mobile") || savedUser.phone || studentEmail || "00000").trim();
+const studentTown = savedUser.town || savedUser.city || "India";
+const studentState = savedUser.state || "India";
 
 let examData = null;
 let rawQuestions = [];
@@ -294,6 +296,7 @@ let userAnswers = {};
 let attemptId = null;
 let timerInterval = null;
 let isSubmitted = false;
+let examStartTimeMs = Date.now();
 
 const labels = {
   te: { prev: "← వెనుకకు", next: "తదుపరి →", submit: "✅ సబ్మిట్ చేయండి", qOf: "ప్రశ్న {c} / {t}", done: "పరీక్ష పూర్తయింది!", score: "మీ స్కోర్: {s} / {t}", confirmSub: "మీరు పరీక్షను సబ్మిట్ చేయాలనుకుంటున్నారా?" },
@@ -349,41 +352,52 @@ function switchExamLanguage(newLang) {
   renderQuestion();
 }
 
-async function createAttemptRecord() {
-  // Primary insert with full details
-  const { data: res1, error: err1 } = await db
+async function resolveStudentPhoto() {
+  if (savedUser.photo && savedUser.photo !== "icon-512.png") return savedUser.photo;
+  const localEmailPhoto = studentEmail ? localStorage.getItem("logos_user_photo_" + studentEmail) : null;
+  if (localEmailPhoto) return localEmailPhoto;
+
+  try {
+    if (studentEmail) {
+      const { data } = await db.from("student_accounts").select("photo_url").eq("email", studentEmail).maybeSingle();
+      if (data && data.photo_url) return data.photo_url;
+    }
+    if (studentMobile && studentMobile !== "00000") {
+      const { data } = await db.from("student_accounts").select("photo_url").eq("phone", studentMobile).maybeSingle();
+      if (data && data.photo_url) return data.photo_url;
+    }
+  } catch (e) {}
+  return "icon-512.png";
+}
+
+async function createAttemptRecord(totalQ) {
+  const photoUrl = await resolveStudentPhoto();
+  const nowIso = new Date().toISOString();
+
+  const { data, error } = await db
     .from("secure_exam_attempts")
     .insert({
       exam_id: examId,
       student_name: studentName,
-      student_email: studentEmail || null,
       student_mobile: studentMobile,
+      student_email: studentEmail || null,
+      student_town: studentTown,
+      student_state: studentState,
+      started_at: nowIso,
       status: "in_progress",
-      score: 0
+      score: 0,
+      total_questions: totalQ,
+      language: lang,
+      student_photo: photoUrl,
+      photo_url: photoUrl
     })
     .select("id")
     .single();
 
-  if (!err1 && res1) {
-    attemptId = res1.id;
-    return;
-  }
-
-  // Fallback insert if student_email column doesn't exist in schema
-  const { data: res2, error: err2 } = await db
-    .from("secure_exam_attempts")
-    .insert({
-      exam_id: examId,
-      student_name: studentName,
-      student_mobile: studentMobile || studentEmail,
-      status: "in_progress",
-      score: 0
-    })
-    .select("id")
-    .single();
-
-  if (!err2 && res2) {
-    attemptId = res2.id;
+  if (!error && data) {
+    attemptId = data.id;
+  } else if (error) {
+    console.error("Attempt insert error:", error.message);
   }
 }
 
@@ -464,8 +478,9 @@ async function initExam() {
 
     buildLocalizedQuestions();
 
-    // Register Live Participation in DB
-    await createAttemptRecord();
+    // Register Live Participation in DB with all required NOT NULL columns
+    examStartTimeMs = Date.now();
+    await createAttemptRecord(questions.length);
 
     $("loadingView").style.display = "none";
     $("quizView").style.display = "block";
@@ -558,14 +573,23 @@ async function submitExam(isAuto) {
     }
   });
 
+  const timeTakenSec = Math.max(1, Math.floor((Date.now() - examStartTimeMs) / 1000));
+  const pct = questions.length > 0 ? Number(((score / questions.length) * 100).toFixed(2)) : 0;
+  const photoUrl = await resolveStudentPhoto();
+
   try {
     if (attemptId) {
       await db
         .from("secure_exam_attempts")
         .update({
           score: score,
+          total_questions: questions.length,
+          percentage: pct,
+          time_seconds: timeTakenSec,
           status: "submitted",
-          submitted_at: new Date().toISOString()
+          submitted_at: new Date().toISOString(),
+          student_photo: photoUrl,
+          photo_url: photoUrl
         })
         .eq("id", attemptId);
     } else {
@@ -574,9 +598,20 @@ async function submitExam(isAuto) {
         .insert({
           exam_id: examId,
           student_name: studentName,
-          student_mobile: studentMobile || studentEmail,
+          student_mobile: studentMobile,
+          student_email: studentEmail || null,
+          student_town: studentTown,
+          student_state: studentState,
+          started_at: new Date(examStartTimeMs).toISOString(),
+          submitted_at: new Date().toISOString(),
           score: score,
-          status: "submitted"
+          total_questions: questions.length,
+          percentage: pct,
+          time_seconds: timeTakenSec,
+          status: "submitted",
+          language: lang,
+          student_photo: photoUrl,
+          photo_url: photoUrl
         });
     }
   } catch(e) {}
