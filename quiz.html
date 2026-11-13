@@ -16,7 +16,6 @@
   --gold-glow: rgba(250, 204, 21, 0.35);
   --text-main: #f8fafc;
   --text-muted: #cbd5e1;
-  --live-green: #10b981;
 }
 
 * {
@@ -284,8 +283,8 @@ try {
 const studentName = decodeURIComponent(urlParams.get("user_name") || savedUser.name || "Student");
 const studentEmail = (urlParams.get("email") || savedUser.email || "").toLowerCase().trim();
 const studentMobile = (urlParams.get("mobile") || savedUser.phone || studentEmail || "00000").trim();
-const studentTown = savedUser.town || savedUser.city || "India";
-const studentState = savedUser.state || "India";
+const studentTown = savedUser.town || savedUser.city || "Renigunta";
+const studentState = savedUser.state || "Andhra Pradesh";
 
 let examData = null;
 let rawQuestions = [];
@@ -399,10 +398,8 @@ async function createAttemptRecord(totalQ) {
   if (!error && data) {
     attemptId = data.id;
   } else if (error) {
-    alert("DB Error: " + error.message);
+    console.warn("DB Insert Notice:", error.message);
   }
-}
-
 }
 
 async function initExam() {
@@ -439,7 +436,6 @@ async function initExam() {
     if (now < start) throw new Error("ఈ పరీక్ష ఇంకా ప్రారంభం కాలేదు.");
     if (now >= end) throw new Error("ఈ పరీక్ష సమయం ముగిసింది.");
 
-    // Check Attempts Limit
     const { data: prevAttempts } = await db
       .from("secure_exam_attempts")
       .select("id, status")
@@ -452,7 +448,6 @@ async function initExam() {
       throw new Error(`మీరు ఇప్పటికే గరిష్టంగా (${maxAttempts}) సార్లు ఈ పరీక్ష రాశారు.`);
     }
 
-    // Load Questions & Translations
     const qLimit = Number(exam.question_count) || 10;
     const { data: qList, error: qErr } = await db
       .from("bible_questions")
@@ -482,7 +477,6 @@ async function initExam() {
 
     buildLocalizedQuestions();
 
-    // Register Live Participation in DB with all required NOT NULL columns
     examStartTimeMs = Date.now();
     await createAttemptRecord(questions.length);
 
