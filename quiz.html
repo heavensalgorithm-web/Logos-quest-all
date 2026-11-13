@@ -232,7 +232,7 @@ body {
         <span style="font-size:12px; color:var(--text-muted);" id="studentBadge">Student</span>
       </div>
       <div class="top-right-controls">
-        <select id="examLangSelect" class="exam-lang-select" onchange="switchExamLanguage(this.value)" title="Change Exam Language">
+        <select id="examLangSelect" class="exam-lang-select" onchange="switchExamLanguage(this.value)">
           <option value="te">తెలుగు</option>
           <option value="en">English</option>
           <option value="ta">தமிழ்</option>
@@ -326,7 +326,7 @@ function buildLocalizedQuestions() {
     const tr = transMap[q.id] || {};
     return {
       id: q.id,
-      question: tr.question || tr.question_text || q.question || q.question_text || "",
+      question: tr.question_text || tr.question || q.question_text || q.question || "",
       options: [
         tr.option_a || q.option_a || "",
         tr.option_b || q.option_b || "",
@@ -349,6 +349,44 @@ function switchExamLanguage(newLang) {
   renderQuestion();
 }
 
+async function createAttemptRecord() {
+  // Primary insert with full details
+  const { data: res1, error: err1 } = await db
+    .from("secure_exam_attempts")
+    .insert({
+      exam_id: examId,
+      student_name: studentName,
+      student_email: studentEmail || null,
+      student_mobile: studentMobile,
+      status: "in_progress",
+      score: 0
+    })
+    .select("id")
+    .single();
+
+  if (!err1 && res1) {
+    attemptId = res1.id;
+    return;
+  }
+
+  // Fallback insert if student_email column doesn't exist in schema
+  const { data: res2, error: err2 } = await db
+    .from("secure_exam_attempts")
+    .insert({
+      exam_id: examId,
+      student_name: studentName,
+      student_mobile: studentMobile || studentEmail,
+      status: "in_progress",
+      score: 0
+    })
+    .select("id")
+    .single();
+
+  if (!err2 && res2) {
+    attemptId = res2.id;
+  }
+}
+
 async function initExam() {
   if (!examId) {
     showError("Exam ID కనుగొనబడలేదు. దయచేసి హోమ్ పేజీ నుండి పరీక్షలో చేరండి.");
@@ -363,7 +401,6 @@ async function initExam() {
   $("studentBadge").textContent = "👤 " + studentName;
 
   try {
-    // 1. Fetch Exam Schedule
     const { data: exam, error: examErr } = await db
       .from("exam_schedules")
       .select("*")
@@ -381,33 +418,23 @@ async function initExam() {
     const start = new Date(exam.start_time).getTime();
     const end = new Date(exam.end_time).getTime();
 
-    if (now < start) {
-      throw new Error("ఈ పరీక్ష ఇంకా ప్రారంభం కాలేదు.");
-    }
-    if (now >= end) {
-      throw new Error("ఈ పరీక్ష సమయం ముగిసింది.");
-    }
+    if (now < start) throw new Error("ఈ పరీక్ష ఇంకా ప్రారంభం కాలేదు.");
+    if (now >= end) throw new Error("ఈ పరీక్ష సమయం ముగిసింది.");
 
-    // 2. Check Attempts Limit
-    let attemptQuery = db
+    // Check Attempts Limit
+    const { data: prevAttempts } = await db
       .from("secure_exam_attempts")
       .select("id, status")
       .eq("exam_id", examId)
-      .eq("status", "submitted");
+      .eq("status", "submitted")
+      .eq("student_mobile", studentMobile);
 
-    if (studentEmail) {
-      attemptQuery = attemptQuery.or(`student_email.eq.${studentEmail},student_mobile.eq.${studentMobile}`);
-    } else {
-      attemptQuery = attemptQuery.eq("student_mobile", studentMobile);
-    }
-
-    const { data: prevAttempts } = await attemptQuery;
     const maxAttempts = Number(exam.max_attempts) || 1;
     if (prevAttempts && prevAttempts.length >= maxAttempts) {
       throw new Error(`మీరు ఇప్పటికే గరిష్టంగా (${maxAttempts}) సార్లు ఈ పరీక్ష రాశారు.`);
     }
 
-    // 3. Load Questions & ALL 4 Language Translations
+    // Load Questions & Translations
     const qLimit = Number(exam.question_count) || 10;
     const { data: qList, error: qErr } = await db
       .from("bible_questions")
@@ -437,26 +464,9 @@ async function initExam() {
 
     buildLocalizedQuestions();
 
-    // 4. Create Active Attempt Record (For Admin Live Monitoring)
-    const { data: newAttempt, error: attErr } = await db
-      .from("secure_exam_attempts")
-      .insert({
-        exam_id: examId,
-        student_name: studentName,
-        student_email: studentEmail || null,
-        student_mobile: studentMobile,
-        status: "in_progress",
-        score: 0,
-        started_at: new Date().toISOString()
-      })
-      .select("id")
-      .single();
+    // Register Live Participation in DB
+    await createAttemptRecord();
 
-    if (!attErr && newAttempt) {
-      attemptId = newAttempt.id;
-    }
-
-    // 5. Start Exam UI & Timer
     $("loadingView").style.display = "none";
     $("quizView").style.display = "block";
     startTimer(end);
@@ -564,11 +574,9 @@ async function submitExam(isAuto) {
         .insert({
           exam_id: examId,
           student_name: studentName,
-          student_email: studentEmail || null,
-          student_mobile: studentMobile,
+          student_mobile: studentMobile || studentEmail,
           score: score,
-          status: "submitted",
-          submitted_at: new Date().toISOString()
+          status: "submitted"
         });
     }
   } catch(e) {}
