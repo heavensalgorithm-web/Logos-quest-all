@@ -373,6 +373,8 @@ async function resolveStudentPhoto() {
 async function createAttemptRecord(totalQ) {
   const photoUrl = await resolveStudentPhoto();
   const nowIso = new Date().toISOString();
+  const fullLangMap = { te: "telugu", en: "english", ta: "tamil", hi: "hindi" };
+  const dbLang = fullLangMap[lang] || "telugu";
 
   const { data, error } = await db
     .from("secure_exam_attempts")
@@ -384,10 +386,10 @@ async function createAttemptRecord(totalQ) {
       student_town: studentTown,
       student_state: studentState,
       started_at: nowIso,
-      status: "in_progress",
+      status: "started",
       score: 0,
       total_questions: totalQ,
-      language: lang,
+      language: dbLang,
       student_photo: photoUrl,
       photo_url: photoUrl
     })
@@ -397,8 +399,10 @@ async function createAttemptRecord(totalQ) {
   if (!error && data) {
     attemptId = data.id;
   } else if (error) {
-    console.error("Attempt insert error:", error.message);
+    alert("DB Error: " + error.message);
   }
+}
+
 }
 
 async function initExam() {
