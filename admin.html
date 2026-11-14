@@ -1456,48 +1456,69 @@ async function loadWinnerExams(){
 
 $("loadWinnersBtn").addEventListener("click", async () => {
   const examId = $("winnerExamSelect").value;
-  if(!examId){
+  if (!examId) {
     alert("Please select an exam first.");
     return;
   }
 
-  $("winnersStatus").textContent = "Loading winners...";
-  try{
-    const res = await fetch(SUPABASE_URL + "/rest/v1/rpc/get_secure_exam_top10", {
-      method:"POST",
-      headers:{
-        apikey:SUPABASE_KEY,
-        Authorization: "Bearer " + SUPABASE_KEY,
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({p_exam_id:examId})
-    });
-    const results = await res.json();
-    const list = Array.isArray(results) ? results : [];
+  const btn = $("loadWinnersBtn");
+  const statusEl = $("winnersStatus");
+  const top3Div = $("top3Winners");
+  const body = $("adminWinnersBody");
 
-    // Populate Top 3 Winners Cards
-    const top3Div = $("top3Winners");
-    top3Div.replaceChildren();
+  btn.disabled = true;
+  statusEl.className = "";
+  statusEl.textContent = "⏳ Loading exam winners...";
+  top3Div.replaceChildren();
+  body.replaceChildren();
+
+  try {
+    const { data, error } = await db
+      .from("secure_exam_attempts")
+      .select("*")
+      .eq("exam_id", examId)
+      .eq("status", "submitted")
+      .order("score", { ascending: false })
+      .order("time_seconds", { ascending: true })
+      .order("submitted_at", { ascending: true })
+      .limit(10);
+
+    if (error) throw error;
+
+    const list = data || [];
+
+    if (list.length === 0) {
+      statusEl.className = "error";
+      statusEl.textContent = "⚠️ No submitted attempts found for this exam yet.";
+      top3Div.innerHTML = `<div class="stat"><span>Status</span><strong>0 Participants</strong><span class="small">Students haven't submitted this exam slot yet.</span></div>`;
+      return;
+    }
+
+    // Populate Top 3 Winners Gold Cards
     const medals = ["🥇 1st Place", "🥈 2nd Place", "🥉 3rd Place"];
     list.slice(0, 3).forEach((w, i) => {
       const box = document.createElement("div");
       box.className = "stat";
+      const name = w.student_name || "Participant";
+      const totalQ = w.total_questions || 10;
+      const timeSec = w.time_seconds != null ? `${w.time_seconds}s` : "-";
       box.innerHTML = `
         <span>${medals[i]}</span>
-        <strong>${w.student_name || "Participant"}</strong>
-        <span class="small">Score: ${w.score}/${w.total_questions} (${w.time_seconds}s)</span>
+        <strong>${name}</strong>
+        <span class="small">Score: ${w.score ?? 0}/${totalQ} • Time: ${timeSec}</span>
       `;
       top3Div.appendChild(box);
     });
 
-    // Populate Top 10 Table
-    const body = $("adminWinnersBody");
-    body.replaceChildren();
-
+    // Populate Top 10 Participants Table
     list.forEach((s, idx) => {
       const tr = document.createElement("tr");
+      const name = s.student_name || "Participant";
       const loc = [s.student_town, s.student_state].filter(Boolean).join(", ");
-      [idx + 1, s.student_name, loc || "-", s.score + "/" + s.total_questions, s.time_seconds + "s"].forEach(val => {
+      const totalQ = s.total_questions || 10;
+      const timeSec = s.time_seconds != null ? `${s.time_seconds}s` : "-";
+
+      [idx + 1, name, loc || "-", `${s.score ?? 0}/${totalQ}`, timeSec].forEach(val => {
         const td = document.createElement("td");
         td.textContent = String(val);
         tr.appendChild(td);
@@ -1505,11 +1526,16 @@ $("loadWinnersBtn").addEventListener("click", async () => {
       body.appendChild(tr);
     });
 
-    $("winnersStatus").textContent = list.length + " participants found.";
-  }catch(e){
-    $("winnersStatus").textContent = "Error: " + e.message;
+    statusEl.className = "success";
+    statusEl.textContent = `✅ Loaded ${list.length} winner(s) successfully!`;
+  } catch (e) {
+    statusEl.className = "error";
+    statusEl.textContent = "❌ Error loading winners: " + e.message;
+  } finally {
+    btn.disabled = false;
   }
 });
+
 
 $("releaseAnswersBtn").addEventListener("click", async () => {
   const examId = $("winnerExamSelect").value;
