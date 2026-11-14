@@ -287,7 +287,7 @@ const studentTown = savedUser.town || savedUser.city || "Renigunta";
 const studentState = savedUser.state || "Andhra Pradesh";
 
 let examData = null;
-let rawQuestions = [];
+let allChapterQuestions = [];
 let allTranslations = { te: {}, en: {}, ta: {}, hi: {} };
 let questions = [];
 let currentIndex = 0;
@@ -323,11 +323,52 @@ function showError(msg) {
 }
 
 function buildLocalizedQuestions() {
+  const qLimit = Number(examData?.question_count) || 10;
   const transMap = allTranslations[lang] || {};
-  questions = rawQuestions.map(q => {
+
+  // 1. Check if bible_questions already has rows directly in the selected language (e.g., AI generated rows)
+  const directLangRows = allChapterQuestions.filter(q => normalizeLangCode(q.language) === lang);
+
+  let selectedRows = [];
+  if (directLangRows.length >= qLimit) {
+    selectedRows = directLangRows.slice(0, qLimit);
+  } else if (directLangRows.length > 0) {
+    // Combine selected language rows + remaining rows from same chapter
+    const usedIds = new Set(directLangRows.map(r => r.id));
+    const others = allChapterQuestions.filter(q => !usedIds.has(q.id));
+    selectedRows = [...directLangRows, ...others].slice(0, qLimit);
+  } else {
+    selectedRows = allChapterQuestions.slice(0, qLimit);
+  }
+
+  // Preserve already answered question IDs if switching language mid-exam
+  if (questions.length > 0 && Object.keys(userAnswers).length > 0) {
+    // Keep same question slots if possible
+    questions = questions.map((existingQ, idx) => {
+      const tr = transMap[existingQ.id] || {};
+      const matchingDirect = directLangRows[idx];
+      const source = (tr.question_text || tr.question) ? tr : (matchingDirect || existingQ._raw);
+      return {
+        id: existingQ.id,
+        _raw: existingQ._raw,
+        question: source.question_text || source.question || existingQ.question,
+        options: [
+          source.option_a || existingQ.options[0] || "",
+          source.option_b || existingQ.options[1] || "",
+          source.option_c || existingQ.options[2] || "",
+          source.option_d || existingQ.options[3] || ""
+        ],
+        correct: (source.correct_option || source.correct_answer || existingQ.correct || "A").toString().trim().toUpperCase()
+      };
+    });
+    return;
+  }
+
+  questions = selectedRows.map(q => {
     const tr = transMap[q.id] || {};
     return {
       id: q.id,
+      _raw: q,
       question: tr.question_text || tr.question || q.question_text || q.question || "",
       options: [
         tr.option_a || q.option_a || "",
@@ -448,17 +489,29 @@ async function initExam() {
       throw new Error(`మీరు ఇప్పటికే గరిష్టంగా (${maxAttempts}) సార్లు ఈ పరీక్ష రాశారు.`);
     }
 
-    const qLimit = Number(exam.question_count) || 10;
-    const { data: qList, error: qErr } = await db
-      .from("bible_questions")
-      .select("*")
-      .limit(qLimit);
+    // Strictly filter by scheduled Bible Book & Chapter Number!
+    let query = db.from("bible_questions").select("*");
+    const bookFilter = (exam.bible_book || "").trim();
+    const chapterFilter = exam.chapter_number;
 
-    if (qErr || !qList || qList.length === 0) {
-      throw new Error("ఈ పరీక్షకు ప్రశ్నలు ఇంకా జతచేయబడలేదు.");
+    if (bookFilter) {
+      query = query.ilike("bible_book", bookFilter);
+    }
+    if (chapterFilter !== null && chapterFilter !== undefined && chapterFilter !== "") {
+      query = query.eq("chapter_number", Number(chapterFilter));
     }
 
-    rawQuestions = qList;
+    const { data: qList, error: qErr } = await query.limit(500);
+
+    if (qErr) {
+      throw new Error("ప్రశ్నలు లోడ్ చేయడంలో లోపం: " + qErr.message);
+    }
+
+    if (!qList || qList.length === 0) {
+      throw new Error(`${bookFilter || "Selected Book"} Chapter ${chapterFilter || ""} కోసం ప్రశ్నలు డేటాబేస్‌లో లేవు.`);
+    }
+
+    allChapterQuestions = qList;
     const qIds = qList.map(q => q.id);
 
     const { data: transRows } = await db
