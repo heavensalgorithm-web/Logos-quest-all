@@ -680,55 +680,7 @@ async function submitExam(isAuto) {
 }
 
 
-  const timeTakenSec = Math.max(1, Math.floor((Date.now() - examStartTimeMs) / 1000));
-  const pct = questions.length > 0 ? Number(((score / questions.length) * 100).toFixed(2)) : 0;
-  const photoUrl = await resolveStudentPhoto();
-
-  try {
-    if (attemptId) {
-      await db
-        .from("secure_exam_attempts")
-        .update({
-          score: score,
-          total_questions: questions.length,
-          percentage: pct,
-          time_seconds: timeTakenSec,
-          status: "submitted",
-          submitted_at: new Date().toISOString(),
-          student_photo: photoUrl,
-          photo_url: photoUrl
-        })
-        .eq("id", attemptId);
-    } else {
-      await db
-        .from("secure_exam_attempts")
-        .insert({
-          exam_id: examId,
-          student_name: studentName,
-          student_mobile: studentMobile,
-          student_email: studentEmail || null,
-          student_town: studentTown,
-          student_state: studentState,
-          started_at: new Date(examStartTimeMs).toISOString(),
-          submitted_at: new Date().toISOString(),
-          score: score,
-          total_questions: questions.length,
-          percentage: pct,
-          time_seconds: timeTakenSec,
-          status: "submitted",
-          language: lang,
-          student_photo: photoUrl,
-          photo_url: photoUrl
-        });
-    }
-  } catch(e) {}
-
-  $("quizView").style.display = "none";
-  $("resultView").style.display = "block";
-  $("resHeading").textContent = t.done;
-  $("resScoreText").textContent = t.score.replace("{s}", score).replace("{t}", questions.length);
-  $("resSubText").textContent = isAuto ? "సమయం ముగియడంతో పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ చేయబడింది." : "మీ సమాధానాలు విజయవంతంగా నమోదు చేయబడ్డాయి.";
-}
+  
 
 window.addEventListener("DOMContentLoaded", initExam);
 </script>
