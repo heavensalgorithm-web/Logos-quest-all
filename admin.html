@@ -1437,7 +1437,7 @@ $("refreshQuestionsBtn").addEventListener("click", loadQuestions);
 
 // WINNERS, TOP 3 & RELEASE CORRECT ANSWERS
 async function loadWinnerExams(){
-  const {data} = await db.from("exam_schedules").select("id,exam_name").order("start_time",{ascending:false});
+  const {data} = await db.from("exam_schedules").select("id,exam_name,start_time").order("start_time",{ascending:false});
   const sel = $("winnerExamSelect");
   sel.replaceChildren();
   const def = document.createElement("option");
@@ -1448,10 +1448,11 @@ async function loadWinnerExams(){
   (data||[]).forEach(e => {
     const opt = document.createElement("option");
     opt.value = e.id;
-    opt.textContent = e.exam_name;
+    opt.textContent = e.exam_name + (e.start_time ? " - " + formatIST(e.start_time) : "");
     sel.appendChild(opt);
   });
 }
+
 
 $("loadWinnersBtn").addEventListener("click", async () => {
   const examId = $("winnerExamSelect").value;
