@@ -628,6 +628,62 @@ async function submitExam(isAuto) {
   const pct = questions.length > 0 ? Number(((score / questions.length) * 100).toFixed(2)) : 0;
   const photoUrl = await resolveStudentPhoto();
 
+  let saveMsg = "";
+  try {
+    const payload = {
+      exam_id: examId,
+      student_name: studentName,
+      student_mobile: studentMobile,
+      student_email: studentEmail || null,
+      student_town: studentTown,
+      student_state: studentState,
+      submitted_at: new Date().toISOString(),
+      score: score,
+      total_questions: questions.length,
+      percentage: pct,
+      time_seconds: timeTakenSec,
+      status: "submitted",
+      language: lang,
+      student_photo: photoUrl,
+      photo_url: photoUrl
+    };
+
+    let dbError = null;
+    if (attemptId) {
+      const { error } = await db
+        .from("secure_exam_attempts")
+        .update(payload)
+        .eq("id", attemptId);
+      dbError = error;
+    } else {
+      payload.started_at = new Date(examStartTimeMs).toISOString();
+      const { error } = await db
+        .from("secure_exam_attempts")
+        .insert(payload);
+      dbError = error;
+    }
+
+    if (dbError) {
+      saveMsg = "⚠️ DB Save Error: " + dbError.message;
+    } else {
+      saveMsg = "✅ మీ ఫలితం & ర్యాంక్ లీడర్‌బోర్డ్‌లో నమోదయ్యాయి!";
+    }
+  } catch (e) {
+    saveMsg = "⚠️ Save Error: " + e.message;
+  }
+
+  $("quizView").style.display = "none";
+  $("resultView").style.display = "block";
+  $("resHeading").textContent = t.done;
+  $("resScoreText").textContent = t.score.replace("{s}", score).replace("{t}", questions.length);
+  $("resSubText").textContent = saveMsg;
+}
+
+
+  const timeTakenSec = Math.max(1, Math.floor((Date.now() - examStartTimeMs) / 1000));
+  const pct = questions.length > 0 ? Number(((score / questions.length) * 100).toFixed(2)) : 0;
+  const photoUrl = await resolveStudentPhoto();
+
   try {
     if (attemptId) {
       await db
