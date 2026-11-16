@@ -333,7 +333,79 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <a class="link-button" href="leaderboard.html">🏆 View Leaderboard</a>
 </div>
 
-<!-- LIVE EXAM SCHEDULING -->
+<!-- 1. LIVE EXAM WINNERS DASHBOARD (FIRST PRIORITY SECTION) -->
+
+<div class="card">
+  <h2>🏆 Live Exam Results & Winners</h2>
+
+  <label for="winnerExamSelect">Select Exam</label>
+  <select id="winnerExamSelect">
+    <option value="">Select Exam</option>
+  </select>
+
+  <button id="loadWinnersBtn" type="button">🔄 View Exam Winners</button>
+  <button id="releaseAnswersBtn" type="button" class="secondary">🔓 Release Correct Answers</button>
+
+  <p id="releaseAnswersStatus" role="status"></p>
+  <p id="winnersStatus" role="status"></p>
+
+  <h3>🥇 Top 3 Winners</h3>
+  <div id="top3Winners" class="stats"></div>
+
+  <h3>🏅 Top 10 Participants</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Town / State</th>
+          <th>Score</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody id="adminWinnersBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 2. EXISTING RESULTS & STUDENT HISTORY -->
+
+<div class="card stats">
+<div class="stat">
+Total Attempts
+<strong id="attempts">0</strong>
+</div>
+<div class="stat">
+Average Score
+<strong id="average">0</strong>
+</div>
+<div class="stat">
+Highest Score
+<strong id="highest">0</strong>
+</div>
+</div>
+
+<div class="card">
+<h2>Student Results History</h2>
+<input id="search" placeholder="Search by name or mobile number">
+<p id="status" class="small"></p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Mobile</th>
+<th>Score</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody id="resultsBody"></tbody>
+</table>
+</div>
+</div>
+
+<!-- 3. LIVE EXAM SCHEDULING -->
 
 <div class="card">
 <h2>📅 Schedule Live Bible Exam</h2>
@@ -446,7 +518,7 @@ Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule �
 </div>
 </div>
 
-<!-- BIBLE QUESTION MANAGEMENT -->
+<!-- 4. BIBLE QUESTION MANAGEMENT -->
 
 <div class="card" id="questionManager">
 <h2>📖 Bible Question Management</h2>
@@ -456,7 +528,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 
 <div class="ai-box">
   <h3 style="color:var(--gold-primary);">✨ AI Bible Question Generator</h3>
-  <p class="small">Generate Bible quiz questions instantly using AI.</p>
+  <p class="small">Generate unique Bible quiz questions based on Scripture verses & events with randomized A/B/C/D options.</p>
 
   <div class="grid">
     <div>
@@ -626,78 +698,6 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 </table>
 </div>
 <p class="small">Showing questions from Bible questions repository.</p>
-</div>
-
-<!-- LIVE EXAM WINNERS DASHBOARD -->
-
-<div class="card">
-  <h2>🏆 Live Exam Results & Winners</h2>
-
-  <label for="winnerExamSelect">Select Exam</label>
-  <select id="winnerExamSelect">
-    <option value="">Select Exam</option>
-  </select>
-
-  <button id="loadWinnersBtn" type="button">🔄 View Exam Winners</button>
-  <button id="releaseAnswersBtn" type="button" class="secondary">🔓 Release Correct Answers</button>
-
-  <p id="releaseAnswersStatus" role="status"></p>
-  <p id="winnersStatus" role="status"></p>
-
-  <h3>🥇 Top 3 Winners</h3>
-  <div id="top3Winners" class="stats"></div>
-
-  <h3>🏅 Top 10 Participants</h3>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Name</th>
-          <th>Town / State</th>
-          <th>Score</th>
-          <th>Time</th>
-        </tr>
-      </thead>
-      <tbody id="adminWinnersBody"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- EXISTING RESULTS -->
-
-<div class="card stats">
-<div class="stat">
-Total Attempts
-<strong id="attempts">0</strong>
-</div>
-<div class="stat">
-Average Score
-<strong id="average">0</strong>
-</div>
-<div class="stat">
-Highest Score
-<strong id="highest">0</strong>
-</div>
-</div>
-
-<div class="card">
-<h2>Student Results History</h2>
-<input id="search" placeholder="Search by name or mobile number">
-<p id="status" class="small"></p>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Mobile</th>
-<th>Score</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody id="resultsBody"></tbody>
-</table>
-</div>
 </div>
 
 </section>
@@ -961,129 +961,111 @@ async function loadExams(){
 $("refreshExamsBtn").addEventListener("click",loadExams);
 
 // ==========================================
-// AI BIBLE QUESTION GENERATOR, SAVE & CSV
+// AI BIBLE QUESTION GENERATOR (VERSE-SPECIFIC & SHUFFLED)
 // ==========================================
-function buildLocalAiBibleQuestions(book, chapter, count, langMode, difficulty) {
-  const templates = {
+const VERSE_BANK = {
+  "genesis_1": {
     telugu: [
-      {
-        q: `${book} ${chapter}వ అధ్యాయంలో దేవుని వాక్యము ద్వారా ప్రధానంగా బోధించబడిన ఆత్మీయ సత్యం ఏమిటి?`,
-        a: "దేవునిపై విశ్వాసము మరియు విధేయత",
-        b: "లోకసంబంధమైన ధనసంపదలు",
-        c: "మానవ జ్ఞానము మాత్రమే",
-        d: "రాజకీయ అధికారము",
-        ans: "A"
-      },
-      {
-        q: `${book} గ్రంథము ${chapter}వ అధ్యాయము ప్రకారము విశ్వాసులు ఏమి చేయవలెను?`,
-        a: "ప్రార్థనతో దేవుని చిత్తమును వెదకవలెను",
-        b: "భయపడి వెనుదిరుగవలెను",
-        c: "స్వంత ఆలోచనల ప్రకారము నడువవలెను",
-        d: "వాక్యమును నిర్లక్ష్యము చేయవలెను",
-        ans: "A"
-      },
-      {
-        q: `${book} ${chapter}వ అధ్యాయములో దేవుని వాగ్దానము ఎవరికి అనుగ్రహించబడినది?`,
-        a: "ఆయన యందు భయభక్తులు కలిగి నడుచుకొనువారికి",
-        b: "అవిధేయులైన వారికి",
-        c: "గర్విష్ఠులకు",
-        d: "సోమరులకు",
-        ans: "A"
-      },
-      {
-        q: `${book} ${chapter}వ అధ్యాయములో ప్రస్తావించబడిన ముఖ్య సంఘటన యొక్క ఉద్దేశ్యము ఏమిటి?`,
-        a: "దేవుని మహిమను మరియు కృపను ప్రత్యక్షపరచుట",
-        b: "మానవ బలమును చూపుట",
-        c: "అన్యజనులను మెప్పించుట",
-        d: "చరిత్రను దాచిపెట్టుట",
-        ans: "A"
-      },
-      {
-        q: `${book} గ్రంథము ${chapter}వ అధ్యాయము నుండి మనము నేర్చుకొను ముఖ్య పాఠము ఏమిటి?`,
-        a: "దేవుడు నమ్మదగినవాడు మరియు తన మాటను నెరవేర్చువాడు",
-        b: "దేవుడు దూరముగా ఉన్నాడు",
-        c: "ప్రార్థనకు ఫలితము లేదు",
-        d: "విశ్వాసము అవసరము లేదు",
-        ans: "A"
-      }
+      { q: "ఆదికాండము 1:1 ప్రకారము ఆదియందు దేవుడు వేటిని సృజించెను?", a: "భూమ్యాకాశములను", b: "సూర్యచంద్రులను", c: "సముద్రజీవులను", d: "పక్షులను" },
+      { q: "దేవుడు మొదటి దినమున ఏమి కలుగజేసెను?", a: "వెలుగును", b: "ఆకాశవిశాలమును", c: "చెట్లను", d: "నక్షత్రములను" },
+      { q: "దేవుడు ఆకాశవిశాలమును ఏ దినమున కలుగజేసెను?", a: "రెండవ దినమున", b: "మొదటి దినమున", c: "మూడవ దినమున", d: "నాల్గవ దినమున" },
+      { q: "భూమి మీద గడ్డిని, విత్తనములిచ్చు చెట్లను దేవుడు ఏ దినమున సృష్టించెను?", a: "మూడవ దినమున", b: "రెండవ దినమున", c: "నాల్గవ దినమున", d: "ఐదవ దినమున" },
+      { q: "సూర్యుడు, చంద్రుడు మరియు నక్షత్రములను దేవుడు ఏ దినమున సృష్టించెను?", a: "నాల్గవ దినమున", b: "మూడవ దినమున", c: "ఐదవ దినమున", d: "ఆరవ దినమున" },
+      { q: "జలచరములను మరియు ఆకాశపక్షులను దేవుడు ఏ దినమున సృజించెను?", a: "ఐదవ దినమున", b: "నాల్గవ దినమున", c: "ఆరవ దినమున", d: "మూడవ దినమున" },
+      { q: "దేవుడు తన స్వరూపమందు నరుని ఏ దినమున సృజించెను?", a: "ఆరవ దినమున", b: "ఐదవ దినమున", c: "ఏడవ దినమున", d: "నాల్గవ దినమున" },
+      { q: "ఆదికాండము 1:2 ప్రకారము దేవుని ఆత్మ దేనిపైన అల్లాడుచుండెను?", a: "జలములపైన", b: "పర్వతములపైన", c: "అరణ్యముపైన", d: "ఆకాశముపైన" },
+      { q: "దేవుడు వెలుగునకు ఏమని పేరు పెట్టెను?", a: "పగలు", b: "ఉదయము", c: "తేజస్సు", d: "కిరణము" },
+      { q: "దేవుడు తాను చేసినది యావత్తును చూచినప్పుడు అది ఎలా ఉండెను?", a: "చాలా మంచిదిగా ఉండెను", b: "సాధారణముగా ఉండెను", c: "అసంపూర్ణముగా ఉండెను", d: "చీకటిగా ఉండెను" }
     ],
     english: [
-      {
-        q: `According to ${book} Chapter ${chapter}, what is the central spiritual truth revealed through Scripture?`,
-        a: "Faithfulness and obedience to God's Word",
-        b: "Pursuit of worldly wealth",
-        c: "Reliance on human wisdom alone",
-        d: "Seeking earthly power",
-        ans: "A"
-      },
-      {
-        q: `In ${book} Chapter ${chapter}, how are believers encouraged to respond to God's guidance?`,
-        a: "By trusting in the Lord with prayer and obedience",
-        b: "By leaning on their own understanding",
-        c: "By turning away in fear",
-        d: "By ignoring the commandments",
-        ans: "A"
-      },
-      {
-        q: `What attribute of God is highlighted in ${book} Chapter ${chapter}?`,
-        a: "His sovereignty, grace, and covenant faithfulness",
-        b: "His indifference to creation",
-        c: "His inability to fulfill promises",
-        d: "His favoritism toward pride",
-        ans: "A"
-      },
-      {
-        q: `What key lesson does ${book} Chapter ${chapter} teach God's people?`,
-        a: "God honors those who walk in truth and reverence",
-        b: "Obedience has no eternal value",
-        c: "Human strength saves mankind",
-        d: "Scripture is merely historical",
-        ans: "A"
-      },
-      {
-        q: `Which theme best summarizes ${book} Chapter ${chapter}?`,
-        a: "God's redemptive purpose and call to holiness",
-        b: "Self-reliance and pride",
-        c: "Worldly ambition",
-        d: "Doubt and rebellion",
-        ans: "A"
-      }
+      { q: "According to Genesis 1:1, what did God create in the beginning?", a: "The heavens and the earth", b: "The sun and the moon", c: "The sea creatures", d: "The garden of Eden" },
+      { q: "What did God create on the first day?", a: "Light", b: "The firmament", c: "Dry land and plants", d: "Birds and fish" },
+      { q: "On which day did God create the expanse (sky) to separate the waters?", a: "Second day", b: "First day", c: "Third day", d: "Fourth day" },
+      { q: "On which day did God create dry land, seas, and vegetation?", a: "Third day", b: "Second day", c: "Fourth day", d: "Fifth day" },
+      { q: "On which day did God make the sun, moon, and stars?", a: "Fourth day", b: "Third day", c: "Fifth day", d: "Sixth day" },
+      { q: "On which day did God create sea creatures and birds?", a: "Fifth day", b: "Fourth day", c: "Sixth day", d: "Third day" },
+      { q: "On which day did God create mankind in His own image?", a: "Sixth day", b: "Fifth day", c: "Seventh day", d: "Fourth day" },
+      { q: "According to Genesis 1:2, what was hovering over the face of the waters?", a: "The Spirit of God", b: "A mighty wind", c: "Angels of light", d: "Clouds of glory" },
+      { q: "What name did God give to the darkness in Genesis 1:5?", a: "Night", b: "Evening", c: "Shadow", d: "Deep" },
+      { q: "How did God describe everything He had made at the end of Chapter 1?", a: "Very good", b: "Acceptable", c: "Complete", d: "Mighty" }
+    ]
+  },
+  "proverbs_16": {
+    telugu: [
+      { q: "సామెతలు 16:1 ప్రకారము హృదయములోని ఆలోచనలు ఎవరివి, అయితే నోటి ప్రత్యుత్తరము ఎవరివలన కలుగును?", a: "ఆలోచనలు నరునివి, ప్రత్యుత్తరము యెహోవా వలన కలుగును", b: "రెండూ రాజు వలన కలుగును", c: "రెండూ జ్ఞానుల వలన కలుగును", d: "ఆలోచనలు దేవునివి, ప్రత్యుత్తరము మనుష్యునిది" },
+      { q: "సామెతలు 16:3 ప్రకారము నీ పనుల భారము యెహోవా మీద మోపినయెడల ఏమి జరుగును?", a: "నీ ఉద్దేశములు సఫలమగును", b: "నీకు ఐశ్వర్యము కలుగును", c: "నీకు శత్రువులు ఉండరు", d: "నీకు దీర్ఘాయువు కలుగును" },
+      { q: "సామెతలు 16:9 ప్రకారము ఒకని హృదయము తన మార్గమును యోచించుకొనును గాని వాని నడతను స్థిరపరచువాడు ఎవరు?", a: "యెహోవా", b: "రాజు", c: "తండ్రి", d: "స్నేహితుడు" },
+      { q: "సామెతలు 16:18 ప్రకారము నాశనమునకు ముందు ఏమి నడుచును?", a: "గర్వము", b: "భయము", c: "కోపము", d: "సోమరితనము" },
+      { q: "సామెతలు 16:18 ప్రకారము పడిపోవుటకు ముందు ఏమి నడుచును?", a: "అహంకారమైన మనస్సు", b: "అవిశ్వాసము", c: "అజ్ఞానము", d: "దురాశ" },
+      { q: "సామెతలు 16:24 ప్రకారము ఇంపైన మాటలు దేనితో సమానము?", a: "తేనెపట్టుతో సమానము", b: "బంగారముతో సమానము", c: "వెండితో సమానము", d: "ముత్యములతో సమానము" },
+      { q: "సామెతలు 16:31 ప్రకారము నెరసిన వెండ్రుకలు దేనికి కిరీటము?", a: "నీతిమార్గమునందు నడుచువారికి సొగసైన కిరీటము", b: "రాజులకు కిరీటము", c: "ధనవంతులకు కిరీటము", d: "బలవంతులకు కిరీటము" },
+      { q: "సామెతలు 16:32 ప్రకారము పరాక్రమశాలి కంటే ఎవరు శ్రేష్ఠులు?", a: "దీర్ఘశాంతము గలవాడు", b: "ధనవంతుడు", c: "జ్ఞాని", d: "రాజు" },
+      { q: "సామెతలు 16:32 ప్రకారము పట్టణమును పట్టుకొనువాని కంటే ఎవరు శ్రేష్ఠులు?", a: "తన మనస్సును స్వాధీనపరచుకొనువాడు", b: "సైన్యాధిపతి", c: "న్యాయాధిపతి", d: "ప్రవక్త" },
+      { q: "సామెతలు 16:7 ప్రకారము ఒకని ప్రవర్తన యెహోవాకు ప్రీతికరమైనప్పుడు ఆయన ఎవరిని సమాధానపరచును?", a: "వాని శత్రువులను సైతము వానితో సమాధానపరచును", b: "వాని పొరుగువారిని", c: "వాని బంధువులను", d: "వాని సేవకులను" }
+    ],
+    english: [
+      { q: "According to Proverbs 16:1, to whom belong the plans of the heart, and from whom comes the answer of the tongue?", a: "Plans belong to man, but the answer is from the LORD", b: "Both belong to the king", c: "Both belong to the wise", d: "Plans are from God, the answer from man" },
+      { q: "According to Proverbs 16:3, what happens when you commit your works to the LORD?", a: "Your plans will be established", b: "You will gain great riches", c: "You will rule over nations", d: "You will never face trials" },
+      { q: "According to Proverbs 16:9, a man's heart plans his way, but who directs his steps?", a: "The LORD", b: "His father", c: "The king", d: "His counselors" },
+      { q: "According to Proverbs 16:18, what goes before destruction?", a: "Pride", b: "Anger", c: "Fear", d: "Sloth" },
+      { q: "According to Proverbs 16:18, what goes before a fall?", a: "A haughty spirit", b: "Ignorance", c: "Greed", d: "Doubt" },
+      { q: "According to Proverbs 16:24, pleasant words are compared to what?", a: "A honeycomb", b: "Pure gold", c: "Fine silver", d: "Precious rubies" },
+      { q: "According to Proverbs 16:31, what is a crown of glory when found in the way of righteousness?", a: "The silver-haired head (gray hair)", b: "A golden diadem", c: "Royal authority", d: "Great wealth" },
+      { q: "According to Proverbs 16:32, who is better than the mighty?", a: "He who is slow to anger", b: "He who possesses gold", c: "He who speaks eloquently", d: "He who commands armies" },
+      { q: "According to Proverbs 16:32, who is better than he who takes a city?", a: "He who rules his own spirit", b: "He who builds a fortress", c: "He who judges nations", d: "He who gathers treasure" },
+      { q: "According to Proverbs 16:7, when a man's ways please the LORD, what does God do with his enemies?", a: "He makes even his enemies to be at peace with him", b: "He scatters them far away", c: "He removes their wealth", d: "He silences their speech" }
+    ]
+  }
+};
+
+function shuffleOptions(item) {
+  const opts = [
+    { text: item.a, isCorrect: true },
+    { text: item.b, isCorrect: false },
+    { text: item.c, isCorrect: false },
+    { text: item.d, isCorrect: false }
+  ];
+  for (let i = opts.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [opts[i], opts[j]] = [opts[j], opts[i]];
+  }
+  const letters = ["A", "B", "C", "D"];
+  const correctIdx = opts.findIndex(o => o.isCorrect);
+  return {
+    option_a: opts[0].text,
+    option_b: opts[1].text,
+    option_c: opts[2].text,
+    option_d: opts[3].text,
+    correct_answer: letters[correctIdx >= 0 ? correctIdx : 0]
+  };
+}
+
+function buildLocalAiBibleQuestions(book, chapter, count, langMode, difficulty) {
+  const key = `${book.trim().toLowerCase()}_${chapter}`;
+  const specificBank = VERSE_BANK[key];
+
+  const fallbackTemplates = {
+    telugu: [
+      { q: `${book} ${chapter}వ అధ్యాయంలో ప్రస్తావించబడిన ముఖ్య ఆత్మీయ సందేశము ఏమిటి?`, a: "దేవుని వాక్యమునకు విధేయత మరియు విశ్వాసము", b: "లోకసంబంధమైన ఆస్తులు సంపాదించుట", c: "మానవ బలముపై ఆధారపడుట", d: "స్వంత జ్ఞానముతో నడుచుట" },
+      { q: `${book} గ్రంథము ${chapter}వ అధ్యాయములో దేవుని స్వభావము ఎలా ప్రత్యక్షపరచబడింది?`, a: "నమ్మదగినవాడు, కృపాసత్యసంపన్నుడు", b: "మనుష్యులను మరచిపోవువాడు", c: "అన్యాయము చేయువాడు", d: "ప్రార్థన విననివాడు" },
+      { q: `${book} ${chapter}వ అధ్యాయము ప్రకారము నీతిమంతులకు కలిగే ఆశీర్వాదము ఏమిటి?`, a: "దేవుని కృప మరియు కాపుదల", b: "లోకమంతటిపై అధికారము", c: "ఎలాంటి శ్రమలు లేకుండుట", d: "ధనధాన్యముల సమృద్ధి మాత్రమే" },
+      { q: `${book} గ్రంథము ${chapter}వ అధ్యాయములో విశ్వాసులకు ఇవ్వబడిన హెచ్చరిక ఏమిటి?`, a: "గర్వమును విడిచి దేవునికి లోబడవలెను", b: "భయపడి వెనుకకు తిరుగవలెను", c: "ఇతరులను తీర్పు తీర్చవలెను", d: "వాక్యమును నిర్లక్ష్యము చేయవలెను" },
+      { q: `${book} ${chapter}వ అధ్యాయము ద్వారా మన విశ్వాస జీవితానికి లభించే బోధ ఏమిటి?`, a: "ప్రతి పరిస్థితిలో దేవుని చిత్తమును వెదకవలెను", b: "స్వంత ఆలోచనల ప్రకారము జీవించవలెను", c: "లోకముతో స్నేహము చేయవలెను", d: "ప్రార్థన అవసరము లేదు" }
+    ],
+    english: [
+      { q: `In ${book} Chapter ${chapter}, what is the core spiritual message emphasized in the passage?`, a: "Faithfulness and obedience to God's Word", b: "Accumulating earthly possessions", c: "Relying solely on human strength", d: "Following one's own desires" },
+      { q: `How is God's character revealed in ${book} Chapter ${chapter}?`, a: "Faithful, sovereign, and full of grace", b: "Distant from His creation", c: "Unconcerned with righteousness", d: "Slow to keep His promises" },
+      { q: `According to ${book} Chapter ${chapter}, what blessing accompanies those who walk in truth?`, a: "God's favor, guidance, and protection", b: "Freedom from all earthly trials", c: "Political power over nations", d: "Material wealth alone" },
+      { q: `What warning or instruction is given to believers in ${book} Chapter ${chapter}?`, a: "Turn away from pride and submit to the Lord", b: "Lean on human understanding", c: "Retreat in fear during trials", d: "Neglect prayer and worship" },
+      { q: `What practical lesson for daily Christian living comes from ${book} Chapter ${chapter}?`, a: "Seek God's will in all things through prayer", b: "Trust in self-sufficiency", c: "Conform to worldly standards", d: "Avoid accountability" }
     ],
     tamil: [
-      {
-        q: `${book} ${chapter}-ஆம் அதிகாரத்தின்படி வேதத்தின் முக்கிய ஆவிக்குரிய சத்தியம் என்ன?`,
-        a: "தேவன் மீது விசுவாசமும் கீழ்ப்படிதலும்",
-        b: "உலக செல்வங்களைத் தேடுதல்",
-        c: "மனித ஞானத்தை மட்டும் நம்புதல்",
-        d: "அதிகாரத்தை நாடுதல்",
-        ans: "A"
-      },
-      {
-        q: `${book} அதிகாரம் ${chapter}-இல் விசுவாசிகள் தேவனுக்கு எவ்வாறு பதிலளிக்க வேண்டும்?`,
-        a: "ஜெபத்துடனும் கீழ்ப்படிதலுடனும் தேவனை நம்ப வேண்டும்",
-        b: "பயந்து பின்வாங்க வேண்டும்",
-        c: "சுயபுத்தியைச் சார்ந்து நடக்க வேண்டும்",
-        d: "கட்டளைகளைப் புறக்கணிக்க வேண்டும்",
-        ans: "A"
-      }
+      { q: `${book} ${chapter}-ஆம் அதிகாரத்தில் வலியுறுத்தப்படும் முக்கிய ஆவிக்குரிய சத்தியம் என்ன?`, a: "தேவனுடைய வார்த்தைக்கு கீழ்ப்படிதலும் விசுவாசமும்", b: "உலக செல்வங்களை சேர்த்தல்", c: "மனித பலத்தை நம்புதல்", d: "சுய விருப்பப்படி நடத்தல்" },
+      { q: `${book} அதிகாரம் ${chapter}-இல் தேவனுடைய குணாதிசயம் எவ்வாறு வெளிப்படுத்தப்பட்டுள்ளது?`, a: "உண்மையுள்ளவரும் கிருபையுள்ளவரும்", b: "மனிதர்களை மறப்பவர்", c: "ஜெபத்தைக் கேளாதவர்", d: "தூரமாக இருப்பவர்" }
     ],
     hindi: [
-      {
-        q: `${book} अध्याय ${chapter} के अनुसार पवित्र शास्त्र का मुख्य आत्मिक सत्य क्या है?`,
-        a: "परमेश्वर पर विश्वास और आज्ञाकारिता",
-        b: "सांसारिक धन की खोज",
-        c: "केवल मानवीय बुद्धि पर भरोसा",
-        d: "सांसारिक अधिकार की लालसा",
-        ans: "A"
-      },
-      {
-        q: `${book} अध्याय ${chapter} में विश्वासियों को परमेश्वर के प्रति क्या करना चाहिए?`,
-        a: "प्रार्थना और विश्वास के साथ परमेश्वर की इच्छा पर चलना",
-        b: "डर कर पीछे हट जाना",
-        c: "अपनी ही समझ का सहारा लेना",
-        d: "वचन की अनदेखी करना",
-        ans: "A"
-      }
+      { q: `${book} अध्याय ${chapter} में दिया गया मुख्य आत्मिक संदेश क्या है?`, a: "परमेश्वर के वचन के प्रति विश्वास और आज्ञाकारिता", b: "सांसारिक धन संचय करना", c: "केवल मानवीय शक्ति पर भरोसा", d: "अपनी इच्छा के अनुसार चलना" },
+      { q: `${book} अध्याय ${chapter} में परमेश्वर का स्वभाव कैसे प्रकट किया गया है?`, a: "विश्वासयोग्य और अनुग्रह से भरपूर", b: "सृष्टि से दूर रहने वाला", c: "प्रार्थना न सुनने वाला", d: "प्रतिज्ञाओं को भूलने वाला" }
     ]
   };
 
@@ -1094,28 +1076,24 @@ function buildLocalAiBibleQuestions(book, chapter, count, langMode, difficulty) 
   const output = [];
   for (let i = 0; i < count; i++) {
     const currentLang = langsToUse[i % langsToUse.length];
-    const bank = templates[currentLang] || templates.english;
-    const item = bank[i % bank.length];
+    const bank = (specificBank && specificBank[currentLang])
+      ? specificBank[currentLang]
+      : (fallbackTemplates[currentLang] || fallbackTemplates.english);
 
-    // Rotate answer position across A, B, C, D so answers aren't always A
-    const options = [item.a, item.b, item.c, item.d];
-    const targetIdx = i % 4; // 0->A, 1->B, 2->C, 3->D
-    const correctText = options[0];
-    options[0] = options[targetIdx];
-    options[targetIdx] = correctText;
-    const answerLetters = ["A", "B", "C", "D"];
+    const item = bank[Math.floor(i / langsToUse.length) % bank.length];
+    const shuffled = shuffleOptions(item);
 
     output.push({
       bible_book: book,
       chapter_number: chapter,
       language: currentLang,
       difficulty: difficulty,
-      question_text: `[Q${i + 1}] ${item.q}`,
-      option_a: options[0],
-      option_b: options[1],
-      option_c: options[2],
-      option_d: options[3],
-      correct_answer: answerLetters[targetIdx]
+      question_text: item.q,
+      option_a: shuffled.option_a,
+      option_b: shuffled.option_b,
+      option_c: shuffled.option_c,
+      option_d: shuffled.option_d,
+      correct_answer: shuffled.correct_answer
     });
   }
   return output;
@@ -1159,7 +1137,6 @@ $("aiGenerateBtn").addEventListener("click", async () => {
   status.textContent = `✨ Generating ${count} AI Bible questions for ${book} Chapter ${chapter}...`;
 
   try {
-    // Try Supabase Edge Function first if deployed; otherwise use built-in generator
     let aiData = null;
     try {
       const { data, error } = await db.functions.invoke("generate-bible-questions", {
@@ -1172,10 +1149,23 @@ $("aiGenerateBtn").addEventListener("click", async () => {
         }
       });
       if (!error && data && Array.isArray(data.questions) && data.questions.length > 0) {
-        aiData = data.questions;
+        aiData = data.questions.map(q => {
+          const cleanText = String(q.question_text || "").replace(/^\[Q\d+\]\s*/i, "");
+          const shuffled = shuffleOptions({
+            a: q.option_a,
+            b: q.option_b,
+            c: q.option_c,
+            d: q.option_d
+          });
+          return {
+            ...q,
+            question_text: cleanText,
+            ...shuffled
+          };
+        });
       }
     } catch (_) {
-      // Fallback smoothly to built-in multi-language generator
+      // Fallback smoothly to built-in verse-based generator
     }
 
     generatedAiQuestions = aiData || buildLocalAiBibleQuestions(book, chapter, count, langMode, difficulty);
@@ -1185,7 +1175,7 @@ $("aiGenerateBtn").addEventListener("click", async () => {
     $("aiDownloadCsvBtn").classList.remove("hidden");
 
     status.className = "success";
-    status.textContent = `✅ Generated ${generatedAiQuestions.length} Bible questions! Click "Save Multi-Language Questions" below to store them in database.`;
+    status.textContent = `✅ Generated ${generatedAiQuestions.length} Bible questions with shuffled options! Click "Save Multi-Language Questions" below to store them.`;
   } catch (err) {
     status.className = "error";
     status.textContent = "Error: " + err.message;
@@ -1451,15 +1441,16 @@ async function loadWinnerExams(){
     opt.textContent = e.exam_name + (e.start_time ? " - " + formatIST(e.start_time) : "");
     sel.appendChild(opt);
   });
+
+  // Auto-select the latest exam and load its winners immediately
+  if (data && data.length > 0) {
+    sel.value = data[0].id;
+    await fetchExamWinners(data[0].id);
+  }
 }
 
-
-$("loadWinnersBtn").addEventListener("click", async () => {
-  const examId = $("winnerExamSelect").value;
-  if (!examId) {
-    alert("Please select an exam first.");
-    return;
-  }
+async function fetchExamWinners(examId) {
+  if (!examId) return;
 
   const btn = $("loadWinnersBtn");
   const statusEl = $("winnersStatus");
@@ -1494,7 +1485,6 @@ $("loadWinnersBtn").addEventListener("click", async () => {
       return;
     }
 
-    // Populate Top 3 Winners Gold Cards
     const medals = ["🥇 1st Place", "🥈 2nd Place", "🥉 3rd Place"];
     list.slice(0, 3).forEach((w, i) => {
       const box = document.createElement("div");
@@ -1510,7 +1500,6 @@ $("loadWinnersBtn").addEventListener("click", async () => {
       top3Div.appendChild(box);
     });
 
-    // Populate Top 10 Participants Table
     list.forEach((s, idx) => {
       const tr = document.createElement("tr");
       const name = s.student_name || "Participant";
@@ -1534,8 +1523,21 @@ $("loadWinnersBtn").addEventListener("click", async () => {
   } finally {
     btn.disabled = false;
   }
+}
+
+$("winnerExamSelect").addEventListener("change", () => {
+  const examId = $("winnerExamSelect").value;
+  if (examId) fetchExamWinners(examId);
 });
 
+$("loadWinnersBtn").addEventListener("click", async () => {
+  const examId = $("winnerExamSelect").value;
+  if (!examId) {
+    alert("Please select an exam first.");
+    return;
+  }
+  await fetchExamWinners(examId);
+});
 
 $("releaseAnswersBtn").addEventListener("click", async () => {
   const examId = $("winnerExamSelect").value;
