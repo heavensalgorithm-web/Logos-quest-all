@@ -179,7 +179,7 @@ button:disabled{
   box-shadow:none;
 }
 
-.hidden{display:none}
+.hidden{display:none !important}
 
 .stats{
   display:flex;
@@ -297,6 +297,88 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 }
 
 .question-actions{white-space:nowrap}
+
+/* CANDIDATE PHOTO & GALLERY STYLES */
+.cand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(250, 204, 21, 0.15);
+  color: var(--gold-primary);
+  border: 1px solid rgba(250, 204, 21, 0.35);
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.btn-sm {
+  padding: 7px 12px;
+  font-size: 13px;
+  margin: 0;
+}
+
+.cand-drawer {
+  margin-top: 18px;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid var(--gold-primary);
+  border-radius: 16px;
+}
+
+.cand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.cand-card {
+  background: rgba(22, 33, 62, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  position: relative;
+}
+
+.cand-photo {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid var(--gold-primary);
+  margin: 0 auto 10px;
+  display: block;
+  background: #0f172a;
+  cursor: pointer;
+}
+
+.cand-avatar-fallback {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  border: 2.5px solid var(--gold-primary);
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1e293b;
+  color: var(--gold-primary);
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.dot-green { background: #10b981; box-shadow: 0 0 8px #10b981; }
+.dot-red { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+
 @media(max-width:600px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -405,7 +487,7 @@ Highest Score
 </div>
 </div>
 
-<!-- 3. BIBLE QUESTION MANAGEMENT & AI GENERATOR (ABOVE SCHEDULED EXAMS) -->
+<!-- 3. BIBLE QUESTION MANAGEMENT & AI GENERATOR -->
 
 <div class="card" id="questionManager">
 <h2>📖 Bible Question Management</h2>
@@ -679,10 +761,24 @@ Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule �
 <p id="scheduleStatus" role="status"></p>
 </div>
 
-<div class="card">
-<h2>📋 Scheduled Exams</h2>
-<button id="refreshExamsBtn" type="button">Refresh Exams</button>
+<!-- 5. SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS -->
+
+<div class="card" id="scheduledExamsCard">
+<h2>📋 Scheduled Exams & Participants</h2>
+<p class="small">ప్రతి ఎగ్జామ్‌కి ఎంతమంది హాజరయ్యారో చూడండి మరియు "👁️ View Details & Photos" క్లిక్ చేసి వారి పేరు, వివరాలు & ఫోటో చూడండి.</p>
+<button id="refreshExamsBtn" type="button">🔄 Refresh Exams</button>
 <p id="examListStatus" class="small"></p>
+
+<!-- EXAM CANDIDATES PHOTO & DETAILS VIEWER DRAWER -->
+<div id="examCandidatesDrawer" class="cand-drawer hidden">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+    <h3 id="candDrawerTitle" style="color:var(--gold-primary); margin:0;">👥 Exam Participants</h3>
+    <button type="button" id="closeCandDrawerBtn" class="secondary btn-sm">✖ Close</button>
+  </div>
+  <p id="candDrawerSummary" class="small" style="margin-top:6px;"></p>
+  <div id="candPhotoGrid" class="cand-grid"></div>
+</div>
+
 <div class="table-wrap">
 <table>
 <thead>
@@ -691,8 +787,8 @@ Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule �
 <th>Start (IST)</th>
 <th>End (IST)</th>
 <th>Questions</th>
-<th>Attempts</th>
-<th>Ranking</th>
+<th>Participants</th>
+<th>Details & Photos</th>
 </tr>
 </thead>
 <tbody id="examsBody"></tbody>
@@ -921,41 +1017,170 @@ $("scheduleForm").addEventListener("submit",async event=>{
   }
 });
 
-async function loadExams(){
-  $("examListStatus").textContent = "Loading exams...";
+// ==========================================
+// SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS
+// ==========================================
+$("closeCandDrawerBtn").addEventListener("click", () => {
+  $("examCandidatesDrawer").classList.add("hidden");
+});
 
-  const {data,error} = await db
-    .from("exam_schedules")
-    .select("id,exam_name,start_time,end_time,question_count,max_attempts,ranking_method")
-    .order("start_time",{ascending:true})
-    .limit(200);
+async function openExamCandidates(exam, attemptsForExam) {
+  const drawer = $("examCandidatesDrawer");
+  const title = $("candDrawerTitle");
+  const summary = $("candDrawerSummary");
+  const grid = $("candPhotoGrid");
 
-  if(error){
-    $("examListStatus").textContent = "Error: "+error.message;
+  drawer.classList.remove("hidden");
+  title.textContent = `👥 ${exam.exam_name} (${formatIST(exam.start_time)})`;
+  grid.replaceChildren();
+
+  if (!attemptsForExam || attemptsForExam.length === 0) {
+    summary.textContent = "⚠️ ఈ ఎగ్జామ్ ఇంకా ఎవరూ రాయలేదు (0 Participants).";
     return;
   }
+
+  const submittedCount = attemptsForExam.filter(a => a.status === "submitted").length;
+  const activeCount = attemptsForExam.length - submittedCount;
+  summary.innerHTML = `మొత్తం రాసినవారు: <strong>${attemptsForExam.length}</strong> &nbsp;|&nbsp; 🔴 Submitted: <strong>${submittedCount}</strong> &nbsp;|&nbsp; 🟢 Active: <strong>${activeCount}</strong>`;
+
+  // Fetch matching student photos from students / registrations table if not already in attempt row
+  const mobiles = [...new Set(attemptsForExam.map(a => a.student_mobile || a.mobile).filter(Boolean))];
+  const photoByMobile = {};
+  const detailsByMobile = {};
+
+  if (mobiles.length > 0) {
+    try {
+      const { data: stuData } = await db
+        .from("students")
+        .select("*")
+        .in("mobile", mobiles);
+      (stuData || []).forEach(s => {
+        const m = s.mobile || s.phone;
+        if (m) {
+          photoByMobile[m] = s.photo_url || s.selfie_url || s.avatar_url || s.photo || "";
+          detailsByMobile[m] = s;
+        }
+      });
+    } catch (_) {
+      // Ignore if students table schema differs; fallback to attempt fields
+    }
+  }
+
+  // Sort by score descending, then time ascending
+  const sorted = [...attemptsForExam].sort((a, b) => {
+    const sc = (Number(b.score) || 0) - (Number(a.score) || 0);
+    if (sc !== 0) return sc;
+    return (Number(a.time_seconds) || 999999) - (Number(b.time_seconds) || 999999);
+  });
+
+  sorted.forEach((cand, idx) => {
+    const mobile = cand.student_mobile || cand.mobile || "";
+    const stu = detailsByMobile[mobile] || {};
+    const name = cand.student_name || stu.full_name || stu.name || "Participant";
+    const town = cand.student_town || stu.town || stu.city || "";
+    const state = cand.student_state || stu.state || "";
+    const church = cand.church_name || stu.church_name || stu.church || "";
+    const loc = [town, state].filter(Boolean).join(", ");
+    const photoUrl = cand.photo_url || cand.selfie_url || cand.student_photo || photoByMobile[mobile] || "";
+    const isSubmitted = cand.status === "submitted";
+    const totalQ = cand.total_questions || exam.question_count || 10;
+    const scoreTxt = isSubmitted ? `${cand.score ?? 0} / ${totalQ}` : "In Progress";
+    const timeTxt = cand.time_seconds != null ? `${cand.time_seconds}s` : "-";
+
+    const card = document.createElement("div");
+    card.className = "cand-card";
+
+    const initial = String(name).trim().charAt(0).toUpperCase() || "?";
+    const photoHtml = photoUrl
+      ? `<img src="${photoUrl}" alt="${name}" class="cand-photo" onclick="window.open('${photoUrl}','_blank')" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+         <div class="cand-avatar-fallback" style="display:none;">${initial}</div>`
+      : `<div class="cand-avatar-fallback">${initial}</div>`;
+
+    card.innerHTML = `
+      ${photoHtml}
+      <div style="font-weight:700; font-size:16px; color:#fff;">#${idx + 1} ${name}</div>
+      <div style="font-size:12px; margin:4px 0;">
+        <span class="status-dot ${isSubmitted ? 'dot-red' : 'dot-green'}"></span>
+        <span>${isSubmitted ? 'Completed' : 'Active'}</span>
+      </div>
+      ${mobile ? `<div class="small">📱 ${mobile}</div>` : ""}
+      ${loc ? `<div class="small">📍 ${loc}</div>` : ""}
+      ${church ? `<div class="small">⛪ ${church}</div>` : ""}
+      <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1); font-size:13px; color:var(--gold-primary); font-weight:700;">
+        🏆 Score: ${scoreTxt} • ⏱️ ${timeTxt}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  drawer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+async function loadExams(){
+  $("examListStatus").textContent = "Loading exams & participant counts...";
+
+  const [examsRes, attemptsRes] = await Promise.all([
+    db.from("exam_schedules")
+      .select("id,exam_name,start_time,end_time,question_count,max_attempts,ranking_method")
+      .order("start_time", { ascending: false })
+      .limit(200),
+    db.from("secure_exam_attempts")
+      .select("*")
+      .limit(5000)
+  ]);
+
+  if(examsRes.error){
+    $("examListStatus").textContent = "Error: " + examsRes.error.message;
+    return;
+  }
+
+  const attemptsByExam = {};
+  (attemptsRes.data || []).forEach(att => {
+    if (!att.exam_id) return;
+    if (!attemptsByExam[att.exam_id]) attemptsByExam[att.exam_id] = [];
+    attemptsByExam[att.exam_id].push(att);
+  });
 
   const body = $("examsBody");
   body.replaceChildren();
 
-  (data||[]).forEach(exam=>{
+  const examsList = examsRes.data || [];
+  examsList.forEach(exam => {
     const tr = document.createElement("tr");
+    const examAttempts = attemptsByExam[exam.id] || [];
+
     [
       exam.exam_name,
       formatIST(exam.start_time),
       formatIST(exam.end_time),
-      exam.question_count,
-      exam.max_attempts,
-      exam.ranking_method
-    ].forEach(value=>{
+      exam.question_count
+    ].forEach(value => {
       const td = document.createElement("td");
       td.textContent = String(value ?? "");
       tr.appendChild(td);
     });
+
+    // Participant count badge column
+    const countTd = document.createElement("td");
+    countTd.innerHTML = `<span class="cand-badge">👥 ${examAttempts.length} Students</span>`;
+    tr.appendChild(countTd);
+
+    // View Details & Photos button column
+    const actionTd = document.createElement("td");
+    const viewBtn = document.createElement("button");
+    viewBtn.type = "button";
+    viewBtn.className = "btn-sm";
+    viewBtn.textContent = examAttempts.length > 0
+      ? `👁️ View Details & Photos (${examAttempts.length})`
+      : "👁️ View (0)";
+    viewBtn.onclick = () => openExamCandidates(exam, examAttempts);
+    actionTd.appendChild(viewBtn);
+    tr.appendChild(actionTd);
+
     body.appendChild(tr);
   });
 
-  $("examListStatus").textContent = (data||[]).length+" scheduled exams displayed.";
+  $("examListStatus").textContent = examsList.length + " scheduled exams displayed (latest first).";
 }
 
 $("refreshExamsBtn").addEventListener("click",loadExams);
@@ -1442,7 +1667,6 @@ async function loadWinnerExams(){
     sel.appendChild(opt);
   });
 
-  // Auto-select the latest exam and load its winners immediately
   if (data && data.length > 0) {
     sel.value = data[0].id;
     await fetchExamWinners(data[0].id);
