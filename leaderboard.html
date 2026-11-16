@@ -151,7 +151,7 @@ label {
   font-weight: 600;
 }
 
-select {
+select, input[type="text"] {
   width: 100%;
   padding: 13px 16px;
   background: rgba(15, 23, 42, 0.85);
@@ -164,7 +164,7 @@ select {
   transition: border-color 0.2s;
 }
 
-select:focus {
+select:focus, input[type="text"]:focus {
   border-color: var(--gold-primary);
   box-shadow: 0 0 10px var(--gold-glow);
 }
@@ -381,6 +381,27 @@ tr.silver { background: rgba(148, 163, 184, 0.12) !important; font-weight: 600; 
 tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; color: #fed7aa; }
 
 /* ================= ANSWER KEY SECTION ================= */
+.ak-lookup-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0 14px;
+  flex-wrap: wrap;
+}
+
+.ak-lookup-box input {
+  flex: 1;
+  min-width: 210px;
+  margin: 0;
+}
+
+.ak-lookup-box button {
+  width: auto;
+  margin: 0;
+  padding: 13px 18px;
+  white-space: nowrap;
+}
+
 .ak-list {
   display: flex;
   flex-direction: column;
@@ -395,12 +416,26 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
   padding: 14px 16px;
 }
 
+.ak-item.ak-correct-card {
+  border-color: rgba(52, 211, 153, 0.45);
+}
+
+.ak-item.ak-wrong-card {
+  border-color: rgba(248, 113, 113, 0.45);
+}
+
 .ak-q {
   font-weight: 600;
   font-size: 15px;
   color: #ffffff;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   line-height: 1.5;
+}
+
+.ak-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .ak-ans {
@@ -410,6 +445,39 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
   color: #6ee7b7;
   font-weight: 700;
   font-size: 14px;
+  padding: 7px 12px;
+  border-radius: 10px;
+}
+
+.ak-selected-right {
+  display: inline-block;
+  background: rgba(16, 185, 129, 0.22);
+  border: 1px solid #10b981;
+  color: #a7f3d0;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 7px 12px;
+  border-radius: 10px;
+}
+
+.ak-selected-wrong {
+  display: inline-block;
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(248, 113, 113, 0.55);
+  color: #fca5a5;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 7px 12px;
+  border-radius: 10px;
+}
+
+.ak-selected-none {
+  display: inline-block;
+  background: rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #cbd5e1;
+  font-weight: 600;
+  font-size: 13px;
   padding: 6px 12px;
   border-radius: 10px;
 }
@@ -501,6 +569,12 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
 <!-- RELEASED CORRECT ANSWERS SECTION -->
 <section class="card" id="answerKeyCard">
   <h2 id="txtAnswerKeyTitle">📖 Exam Correct Answers (Answer Key)</h2>
+
+  <div class="ak-lookup-box">
+    <input type="text" id="studentMobileInput" placeholder="మీ Mobile Number / Email నమోదు చేసి మీ Answers చూడండి">
+    <button type="button" id="checkMyAnswersBtn">🔍 నా Answers చూపించు</button>
+  </div>
+
   <p id="answerKeyStatus" class="status">Select an exam to view released answers.</p>
   <div id="answerKeyList" class="ak-list"></div>
 </section>
@@ -530,6 +604,30 @@ const headers = {
 
 let currentLang = localStorage.getItem("logos_quest_lang") || "te";
 
+function getStoredStudentIdentity() {
+  const keys = [
+    "logos_quest_mobile",
+    "student_mobile",
+    "user_mobile",
+    "logos_quest_email",
+    "student_email",
+    "user_email"
+  ];
+  for (const k of keys) {
+    const val = localStorage.getItem(k);
+    if (val && val.trim()) return val.trim();
+  }
+  try {
+    const profileRaw = localStorage.getItem("logos_quest_student") || localStorage.getItem("student_profile");
+    if (profileRaw) {
+      const parsed = JSON.parse(profileRaw);
+      if (parsed.mobile) return String(parsed.mobile).trim();
+      if (parsed.email) return String(parsed.email).trim();
+    }
+  } catch (_) {}
+  return "";
+}
+
 const i18n = {
   te: {
     back: "← హోమ్",
@@ -557,7 +655,13 @@ const i18n = {
     akLocked: "🔒 Admin ఇంకా ఈ పరీక్షకు Correct Answers విడుదల చేయలేదు.",
     akLoading: "సరైన సమాధానాలు లోడ్ అవుతున్నాయి...",
     akEmpty: "ఈ పరీక్షకు ప్రశ్నలు కనుగొనబడలేదు.",
-    akLabel: "✅ సరైన సమాధానం"
+    akLabel: "✅ సరైన సమాధానం",
+    akYourChoice: "👉 మీరు ఎంచుకున్నది",
+    akRightTag: "సరైనది!",
+    akWrongTag: "తప్పు",
+    akNotAnswered: "⚪ మీరు ఈ ప్రశ్నకు సమాధానం ఇవ్వలేదు",
+    akLookupPlaceholder: "మీ Mobile Number / Email నమోదు చేసి మీ Answers చూడండి",
+    akLookupBtn: "🔍 నా Answers చూపించు"
   },
   en: {
     back: "← Home",
@@ -585,7 +689,13 @@ const i18n = {
     akLocked: "🔒 Admin has not released the correct answers for this exam yet.",
     akLoading: "Loading correct answers...",
     akEmpty: "No questions found for this exam.",
-    akLabel: "✅ Correct Answer"
+    akLabel: "✅ Correct Answer",
+    akYourChoice: "👉 Your Selected Option",
+    akRightTag: "Correct!",
+    akWrongTag: "Wrong",
+    akNotAnswered: "⚪ You did not answer this question",
+    akLookupPlaceholder: "Enter your Mobile Number / Email to see your selected options",
+    akLookupBtn: "🔍 Show My Answers"
   },
   ta: {
     back: "← முகப்பு",
@@ -613,7 +723,13 @@ const i18n = {
     akLocked: "🔒 நிர்வாகி இன்னும் இந்தத் தேர்விற்கான சரியான பதில்களை வெளியிடவில்லை.",
     akLoading: "சரியான பதில்கள் ஏற்றப்படுகின்றன...",
     akEmpty: "இந்தத் தேர்விற்கான கேள்விகள் இல்லை.",
-    akLabel: "✅ சரியான பதில்"
+    akLabel: "✅ சரியான பதில்",
+    akYourChoice: "👉 நீங்கள் தேர்ந்தெடுத்தது",
+    akRightTag: "சரி!",
+    akWrongTag: "தவறு",
+    akNotAnswered: "⚪ நீங்கள் இதற்கு பதிலளிக்கவில்லை",
+    akLookupPlaceholder: "உங்கள் பதில்களைப் பார்க்க Mobile Number / Email உள்ளிடவும்",
+    akLookupBtn: "🔍 என் பதில்களைக் காட்டு"
   },
   hi: {
     back: "← होम",
@@ -641,7 +757,13 @@ const i18n = {
     akLocked: "🔒 एडमिन ने अभी तक इस परीक्षा के सही उत्तर जारी नहीं किए हैं।",
     akLoading: "सही उत्तर लोड हो रहे हैं...",
     akEmpty: "इस परीक्षा के लिए कोई प्रश्न नहीं मिला।",
-    akLabel: "✅ सही उत्तर"
+    akLabel: "✅ सही उत्तर",
+    akYourChoice: "👉 आपका चुना हुआ विकल्प",
+    akRightTag: "सही!",
+    akWrongTag: "गलत",
+    akNotAnswered: "⚪ आपने इस प्रश्न का उत्तर नहीं दिया",
+    akLookupPlaceholder: "अपने उत्तर देखने के लिए Mobile Number / Email दर्ज करें",
+    akLookupBtn: "🔍 मेरे उत्तर दिखाएं"
   }
 };
 
@@ -665,6 +787,8 @@ function applyTranslations() {
   $("btnNavExams").textContent = t.navExams;
   $("btnNavHome").textContent = t.navHome;
   $("txtAnswerKeyTitle").textContent = t.akTitle;
+  $("studentMobileInput").placeholder = t.akLookupPlaceholder;
+  $("checkMyAnswersBtn").textContent = t.akLookupBtn;
 
   $("thRank1").textContent = t.thRank;
   $("thName1").textContent = t.thName;
@@ -704,16 +828,7 @@ function medal(rank) {
   return String(rank);
 }
 
-function normalizeLangCode(val) {
-  const v = (val || "").toString().trim().toLowerCase();
-  if (v === "telugu" || v === "te") return "te";
-  if (v === "english" || v === "en") return "en";
-  if (v === "tamil" || v === "ta") return "ta";
-  if (v === "hindi" || v === "hi") return "hi";
-  return v;
-}
-
-// 1. ఎగ్జామ్స్ లోడ్ చేయడం (answers_released, bible_book, chapter_number, question_count తో సహా)
+// 1. ఎగ్జామ్స్ లోడ్ చేయడం
 async function loadExams() {
   const t = i18n[currentLang] || i18n.te;
   const select = $("examSelect");
@@ -755,7 +870,7 @@ async function loadExams() {
   }
 }
 
-// 2. విడుదలైన సరైన సమాధానాలు (Answer Key) లోడ్ చేయడం
+// 2. విడుదలైన సరైన సమాధానాలు + విద్యార్థి సెలెక్ట్ చేసిన ఆప్షన్ లోడ్ చేయడం
 async function loadReleasedAnswerKey(exam) {
   const t = i18n[currentLang] || i18n.te;
   const statusEl = $("answerKeyStatus");
@@ -771,11 +886,23 @@ async function loadReleasedAnswerKey(exam) {
   statusEl.className = "status";
   statusEl.textContent = t.akLoading;
 
+  const studentIdentifier = ($("studentMobileInput").value || "").trim() || getStoredStudentIdentity();
+  if (studentIdentifier && !$("studentMobileInput").value) {
+    $("studentMobileInput").value = studentIdentifier;
+  }
+  if (studentIdentifier) {
+    localStorage.setItem("logos_quest_mobile", studentIdentifier);
+  }
+
   try {
     const res = await fetch(SUPABASE_URL + "/rest/v1/rpc/get_released_exam_answers", {
       method: "POST",
       headers,
-      body: JSON.stringify({ p_exam_id: exam.id, p_lang: currentLang })
+      body: JSON.stringify({
+        p_exam_id: exam.id,
+        p_lang: currentLang,
+        p_student_mobile: studentIdentifier || null
+      })
     });
 
     if (!res.ok) throw new Error("HTTP " + res.status);
@@ -786,8 +913,15 @@ async function loadReleasedAnswerKey(exam) {
       return;
     }
 
+    const hasStudentAttempt = rows.some(r => r.selected_option !== null && r.selected_option !== undefined);
+    const correctCount = hasStudentAttempt
+      ? rows.filter(r => (r.selected_option || "").trim().toUpperCase() === (r.correct_option || "").trim().toUpperCase()).length
+      : 0;
+
     statusEl.className = "status success";
-    statusEl.textContent = `✅ ${rows.length} Questions & Answers`;
+    statusEl.textContent = hasStudentAttempt
+      ? `✅ ${rows.length} Questions & Answers • మీ స్కోరు: ${correctCount}/${rows.length}`
+      : `✅ ${rows.length} Questions & Answers`;
 
     rows.forEach((q, idx) => {
       const optMap = {
@@ -799,11 +933,33 @@ async function loadReleasedAnswerKey(exam) {
       const correctLetter = (q.correct_option || "A").toString().trim().toUpperCase();
       const correctText = optMap[correctLetter] || "";
 
+      const rawSelected = q.selected_option;
+      const selectedLetter = rawSelected ? rawSelected.toString().trim().toUpperCase() : "";
+      const selectedText = selectedLetter ? (optMap[selectedLetter] || "") : "";
+
+      let cardStateClass = "";
+      let selectedHtml = "";
+
+      if (rawSelected !== null && rawSelected !== undefined) {
+        if (!selectedLetter) {
+          selectedHtml = `<div class="ak-selected-none">${t.akNotAnswered}</div>`;
+        } else if (selectedLetter === correctLetter) {
+          cardStateClass = "ak-correct-card";
+          selectedHtml = `<div class="ak-selected-right">${t.akYourChoice}: ${selectedLetter}${selectedText ? " — " + selectedText : ""} (${t.akRightTag})</div>`;
+        } else {
+          cardStateClass = "ak-wrong-card";
+          selectedHtml = `<div class="ak-selected-wrong">${t.akYourChoice}: ${selectedLetter}${selectedText ? " — " + selectedText : ""} (❌ ${t.akWrongTag})</div>`;
+        }
+      }
+
       const item = document.createElement("div");
-      item.className = "ak-item";
+      item.className = `ak-item ${cardStateClass}`;
       item.innerHTML = `
         <div class="ak-q">${idx + 1}. ${q.question_text || ""}</div>
-        <div class="ak-ans">${t.akLabel}: ${correctLetter}${correctText ? " — " + correctText : ""}</div>
+        <div class="ak-badges">
+          <div class="ak-ans">${t.akLabel}: ${correctLetter}${correctText ? " — " + correctText : ""}</div>
+          ${selectedHtml}
+        </div>
       `;
       listEl.appendChild(item);
     });
@@ -812,7 +968,6 @@ async function loadReleasedAnswerKey(exam) {
     statusEl.textContent = "❌ " + err.message;
   }
 }
-
 
 // 3. లైవ్ లీడర్‌బోర్డ్ మరియు టాప్ 3 పోడియం రెండరింగ్
 async function loadLiveLeaderboard() {
@@ -834,7 +989,6 @@ async function loadLiveLeaderboard() {
     return;
   }
 
-  // Load Answer Key status regardless of exam end time
   loadReleasedAnswerKey(exam);
 
   $("examInfo").classList.remove("hidden");
@@ -862,7 +1016,6 @@ async function loadLiveLeaderboard() {
       return;
     }
 
-    // TOP 3 విజేతల పోడియం సెక్షన్
     const top3 = results.slice(0, 3);
     const podiumEl = $("top3Podium");
     podiumEl.classList.remove("hidden");
@@ -887,7 +1040,6 @@ async function loadLiveLeaderboard() {
       podiumEl.appendChild(card);
     });
 
-    // పూర్తి టేబుల్ రెండరింగ్
     results.forEach((student, index) => {
       const tr = document.createElement("tr");
       if (index === 0) tr.className = "gold";
@@ -923,6 +1075,11 @@ async function loadLiveLeaderboard() {
 }
 
 $("examSelect").addEventListener("change", loadLiveLeaderboard);
+$("checkMyAnswersBtn").addEventListener("click", () => {
+  const examId = $("examSelect").value;
+  const exam = exams.find(e => e.id === examId);
+  if (exam) loadReleasedAnswerKey(exam);
+});
 $("refreshLive").addEventListener("click", async () => {
   const currentId = $("examSelect").value;
   await loadExams();
@@ -933,6 +1090,8 @@ $("refreshLive").addEventListener("click", async () => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
+  const savedId = getStoredStudentIdentity();
+  if (savedId) $("studentMobileInput").value = savedId;
   applyTranslations();
   loadExams();
 });
