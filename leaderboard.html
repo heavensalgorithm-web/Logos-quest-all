@@ -523,8 +523,10 @@ let exams = [];
 
 const headers = {
   apikey: SUPABASE_KEY,
+  Authorization: "Bearer " + SUPABASE_KEY,
   "Content-Type": "application/json"
 };
+
 
 let currentLang = localStorage.getItem("logos_quest_lang") || "te";
 
