@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOGOS QUEST - Leaderboard</title>
+<title>LOGOS QUEST - Leaderboard & Certificates</title>
 
 <!-- PWA Settings -->
 <link rel="manifest" href="manifest.json">
@@ -328,6 +328,35 @@ button:hover:not(:disabled) {
   color: var(--gold-primary);
 }
 
+/* ================= DIGITAL CERTIFICATE SECTION ================= */
+.cert-preview-wrap {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.cert-canvas {
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  border-radius: 14px;
+  border: 2px solid var(--gold-primary);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 20px var(--gold-glow);
+  background: #090d16;
+}
+
+.btn-download-cert {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff !important;
+  max-width: 340px;
+  margin: 14px auto 0;
+  display: block;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+}
+
+.btn-download-cert:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+}
+
 /* ================= టేబుల్ స్టైలింగ్ ================= */
 .table-wrap {
   overflow-x: auto;
@@ -566,6 +595,26 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
   <button id="refreshLive" type="button">🔄 Refresh Live Exam Results</button>
 </section>
 
+<!-- DIGITAL CERTIFICATE GENERATOR SECTION -->
+<section class="card" id="certificateCard">
+  <h2 id="txtCertTitle">📜 డిజిటల్ సర్టిఫికెట్ (Digital Certificate)</h2>
+  <p class="note" id="txtCertDesc">
+    పరీక్ష ముగిసిన తర్వాత మీ Mobile Number లేదా Email నమోదు చేసి మీ అధికారిక LOGOS QUEST సర్టిఫికెట్‌ను డౌన్‌లోడ్ చేసుకోండి.
+  </p>
+
+  <div class="ak-lookup-box">
+    <input type="text" id="certIdentityInput" placeholder="మీ Mobile Number / Email నమోదు చేయండి">
+    <button type="button" id="generateCertBtn">🎓 సర్టిఫికెట్ తయారుచేయి</button>
+  </div>
+
+  <p id="certStatus" class="status"></p>
+
+  <div id="certPreviewContainer" class="cert-preview-wrap hidden">
+    <canvas id="certificateCanvas" width="1200" height="850" class="cert-canvas"></canvas>
+    <button type="button" id="downloadCertBtn" class="btn-download-cert">⬇️ సర్టిఫికెట్ డౌన్‌లోడ్ (Download PNG)</button>
+  </div>
+</section>
+
 <!-- RELEASED CORRECT ANSWERS SECTION -->
 <section class="card" id="answerKeyCard">
   <h2 id="txtAnswerKeyTitle">📖 Exam Correct Answers (Answer Key)</h2>
@@ -595,6 +644,7 @@ const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 const $ = id => document.getElementById(id);
 let exams = [];
 let akRequestSeq = 0;
+let lastGeneratedCertName = "LOGOS_QUEST_Certificate.png";
 
 function getAuthHeaders() {
   let token = SUPABASE_KEY;
@@ -633,9 +683,10 @@ function getStoredStudentIdentity() {
     if (val && val.trim()) return val.trim();
   }
   try {
-    const profileRaw = localStorage.getItem("logos_quest_student") || localStorage.getItem("student_profile");
+    const profileRaw = localStorage.getItem("logos_quest_user") || localStorage.getItem("logos_quest_student") || localStorage.getItem("student_profile");
     if (profileRaw) {
       const parsed = JSON.parse(profileRaw);
+      if (parsed.phone) return String(parsed.phone).trim();
       if (parsed.mobile) return String(parsed.mobile).trim();
       if (parsed.email) return String(parsed.email).trim();
     }
@@ -666,6 +717,14 @@ const i18n = {
     thLocation: "ప్రాంతం / రాష్ట్రం",
     thScore: "స్కోరు",
     thTime: "సమయం",
+    certTitle: "📜 డిజిటల్ సర్టిఫికెట్ (Digital Certificate)",
+    certDesc: "పరీక్ష ముగిసిన తర్వాత మీ Mobile Number లేదా Email నమోదు చేసి మీ అధికారిక LOGOS QUEST సర్టిఫికెట్‌ను డౌన్‌లోడ్ చేసుకోండి.",
+    certPlaceholder: "మీ Mobile Number / Email నమోదు చేయండి",
+    certGenBtn: "🎓 సర్టిఫికెట్ తయారుచేయి",
+    certDownBtn: "⬇️ సర్టిఫికెట్ డౌన్‌లోడ్ (Download PNG)",
+    certNotEnded: "⏳ పరీక్ష సమయం ముగిసిన తర్వాత సర్టిఫికెట్ అందుబాటులోకి వస్తుంది.",
+    certNotFound: "❌ ఈ పరీక్షకు మీ రికార్డ్ కనుగొనబడలేదు. సరైన Mobile Number / Email ఇవ్వండి.",
+    certReady: "✅ మీ సర్టిఫికెట్ సిద్ధంగా ఉంది! కింద డౌన్‌లోడ్ చేసుకోండి.",
     akTitle: "📖 పరీక్ష సరైన సమాధానాలు (Answer Key)",
     akLocked: "🔒 Admin ఇంకా ఈ పరీక్షకు Correct Answers విడుదల చేయలేదు.",
     akLoading: "సరైన సమాధానాలు లోడ్ అవుతున్నాయి...",
@@ -700,6 +759,14 @@ const i18n = {
     thLocation: "Town / State",
     thScore: "Score",
     thTime: "Time",
+    certTitle: "📜 Digital Certificate",
+    certDesc: "After the exam ends, enter your Mobile Number or Email to generate and download your official LOGOS QUEST certificate.",
+    certPlaceholder: "Enter your Mobile Number / Email",
+    certGenBtn: "🎓 Generate Certificate",
+    certDownBtn: "⬇️ Download Certificate (PNG)",
+    certNotEnded: "⏳ Certificate unlocks after the exam ends.",
+    certNotFound: "❌ No completed attempt found for this exam with that Mobile / Email.",
+    certReady: "✅ Your Digital Certificate is ready! Click Download below.",
     akTitle: "📖 Exam Correct Answers (Answer Key)",
     akLocked: "🔒 Admin has not released the correct answers for this exam yet.",
     akLoading: "Loading correct answers...",
@@ -734,6 +801,14 @@ const i18n = {
     thLocation: "ஊர் / மாநிலம்",
     thScore: "மதிப்பெண்",
     thTime: "நேரம்",
+    certTitle: "📜 டிஜிட்டல் சான்றிதழ் (Digital Certificate)",
+    certDesc: "தேர்வு முடிந்ததும் உங்கள் Mobile Number அல்லது Email உள்ளிட்டு சான்றிதழைப் பதிவிறக்கவும்.",
+    certPlaceholder: "Mobile Number / Email உள்ளிடவும்",
+    certGenBtn: "🎓 சான்றிதழ் உருவாக்கு",
+    certDownBtn: "⬇️ சான்றிதழைப் பதிவிறக்கவும் (PNG)",
+    certNotEnded: "⏳ தேர்வு முடிந்த பிறகே சான்றிதழ் கிடைக்கும்.",
+    certNotFound: "❌ இந்தத் தேர்விற்கான பதிவு கிடைக்கவில்லை.",
+    certReady: "✅ உங்கள் சான்றிதழ் தயாராக உள்ளது!",
     akTitle: "📖 தேர்வு சரியான பதில்கள் (Answer Key)",
     akLocked: "🔒 நிர்வாகி இன்னும் இந்தத் தேர்விற்கான சரியான பதில்களை வெளியிடவில்லை.",
     akLoading: "சரியான பதில்கள் ஏற்றப்படுகின்றன...",
@@ -768,6 +843,14 @@ const i18n = {
     thLocation: "शहर / राज्य",
     thScore: "स्कोर",
     thTime: "समय",
+    certTitle: "📜 डिजिटल प्रमाण पत्र (Digital Certificate)",
+    certDesc: "परीक्षा समाप्त होने के बाद अपना Mobile Number या Email दर्ज करके प्रमाण पत्र डाउनलोड करें।",
+    certPlaceholder: "अपना Mobile Number / Email दर्ज करें",
+    certGenBtn: "🎓 प्रमाण पत्र बनाएं",
+    certDownBtn: "⬇️ प्रमाण पत्र डाउनलोड करें (PNG)",
+    certNotEnded: "⏳ परीक्षा समाप्त होने के बाद प्रमाण पत्र उपलब्ध होगा।",
+    certNotFound: "❌ इस परीक्षा के लिए आपका रिकॉर्ड नहीं मिला।",
+    certReady: "✅ आपका प्रमाण पत्र तैयार है!",
     akTitle: "📖 परीक्षा के सही उत्तर (Answer Key)",
     akLocked: "🔒 एडमिन ने अभी तक इस परीक्षा के सही उत्तर जारी नहीं किए हैं।",
     akLoading: "सही उत्तर लोड हो रहे हैं...",
@@ -801,6 +884,11 @@ function applyTranslations() {
   $("refreshLive").textContent = t.refreshLive;
   $("btnNavExams").textContent = t.navExams;
   $("btnNavHome").textContent = t.navHome;
+  $("txtCertTitle").textContent = t.certTitle;
+  $("txtCertDesc").textContent = t.certDesc;
+  $("certIdentityInput").placeholder = t.certPlaceholder;
+  $("generateCertBtn").textContent = t.certGenBtn;
+  $("downloadCertBtn").textContent = t.certDownBtn;
   $("txtAnswerKeyTitle").textContent = t.akTitle;
   $("studentMobileInput").placeholder = t.akLookupPlaceholder;
   $("checkMyAnswersBtn").textContent = t.akLookupBtn;
@@ -824,6 +912,15 @@ function formatIST(value) {
   }).format(new Date(value));
 }
 
+function formatDateOnlyIST(value) {
+  return new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  }).format(new Date(value));
+}
+
 function formatTime(seconds) {
   const value = Number(seconds);
   if (!Number.isFinite(value) || value < 0) return "-";
@@ -841,6 +938,315 @@ function medal(rank) {
   if (rank === 2) return "🥈 2";
   if (rank === 3) return "🥉 3";
   return String(rank);
+}
+
+// ================= DIGITAL CERTIFICATE RENDERER =================
+function loadImageSafe(src) {
+  return new Promise(resolve => {
+    if (!src) return resolve(null);
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+async function generateDigitalCertificate() {
+  const t = i18n[currentLang] || i18n.te;
+  const statusEl = $("certStatus");
+  const previewWrap = $("certPreviewContainer");
+  previewWrap.classList.add("hidden");
+
+  const examId = $("examSelect").value;
+  const exam = exams.find(e => e.id === examId);
+  if (!exam) {
+    statusEl.className = "status error";
+    statusEl.textContent = t.noDetails;
+    return;
+  }
+
+  if (Date.now() < Date.parse(exam.end_time)) {
+    statusEl.className = "status";
+    statusEl.textContent = t.certNotEnded;
+    return;
+  }
+
+  const rawInput = ($("certIdentityInput").value || "").trim() || getStoredStudentIdentity();
+  if (!rawInput) {
+    statusEl.className = "status error";
+    statusEl.textContent = t.certPlaceholder;
+    return;
+  }
+
+  $("certIdentityInput").value = rawInput;
+  $("studentMobileInput").value = rawInput;
+  localStorage.setItem("logos_quest_mobile", rawInput);
+
+  statusEl.className = "status";
+  statusEl.textContent = "⏳ Generating Certificate...";
+
+  try {
+    // Fetch all submitted attempts for this exam ordered by score DESC, time_seconds ASC to determine exact rank
+    const url = `${SUPABASE_URL}/rest/v1/secure_exam_attempts?select=id,student_name,student_mobile,student_email,student_town,student_state,score,total_questions,time_seconds,photo_url,student_photo,submitted_at&exam_id=eq.${exam.id}&status=eq.submitted&order=score.desc,time_seconds.asc&limit=500`;
+    const res = await fetch(url, { headers: getAuthHeaders() });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    const attempts = await res.json();
+    const cleanNeedle = rawInput.toLowerCase();
+    const digitsNeedle = rawInput.replace(/\D/g, "").slice(-10);
+
+    let matchedIdx = -1;
+    for (let i = 0; i < attempts.length; i++) {
+      const a = attempts[i];
+      const mob = (a.student_mobile || "").toLowerCase().trim();
+      const eml = (a.student_email || "").toLowerCase().trim();
+      const mobDigits = mob.replace(/\D/g, "").slice(-10);
+
+      if (
+        mob === cleanNeedle ||
+        eml === cleanNeedle ||
+        (digitsNeedle.length >= 8 && mobDigits === digitsNeedle)
+      ) {
+        matchedIdx = i;
+        break;
+      }
+    }
+
+    if (matchedIdx === -1) {
+      statusEl.className = "status error";
+      statusEl.textContent = t.certNotFound;
+      return;
+    }
+
+    const student = attempts[matchedIdx];
+    const rank = matchedIdx + 1;
+    await drawCertificateOnCanvas(exam, student, rank, attempts.length);
+
+    lastGeneratedCertName = `LOGOS_QUEST_${(student.student_name || "Participant").replace(/\s+/g, "_")}_Rank${rank}.png`;
+    statusEl.className = "status success";
+    statusEl.textContent = t.certReady;
+    previewWrap.classList.remove("hidden");
+  } catch (err) {
+    statusEl.className = "status error";
+    statusEl.textContent = "❌ " + err.message;
+  }
+}
+
+async function drawCertificateOnCanvas(exam, student, rank, totalParticipants) {
+  const canvas = $("certificateCanvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width;
+  const H = canvas.height;
+
+  // 1. Royal Navy & Obsidian Background Gradient
+  const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 80, W / 2, H / 2, W * 0.72);
+  bgGrad.addColorStop(0, "#1e3a8a");
+  bgGrad.addColorStop(0.55, "#0f172a");
+  bgGrad.addColorStop(1, "#070b14");
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle decorative rays
+  ctx.save();
+  ctx.translate(W / 2, 160);
+  ctx.strokeStyle = "rgba(250, 204, 21, 0.05)";
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 24; i++) {
+    ctx.rotate((Math.PI * 2) / 24);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, 700);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // 2. Double Gold Ornamental Border
+  ctx.strokeStyle = "#facc15";
+  ctx.lineWidth = 8;
+  ctx.strokeRect(28, 28, W - 56, H - 56);
+
+  ctx.strokeStyle = "rgba(250, 204, 21, 0.45)";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(44, 44, W - 88, H - 88);
+
+  // Corner Gold Accents
+  const corners = [
+    [44, 44],
+    [W - 44, 44],
+    [44, H - 44],
+    [W - 44, H - 44]
+  ];
+  ctx.fillStyle = "#facc15";
+  corners.forEach(([cx, cy]) => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // 3. Load App Logo & Student Photo
+  const logoImg = await loadImageSafe("icon-512.png");
+  const studentPhotoSrc = student.photo_url || student.student_photo || "icon-512.png";
+  const studentImg = await loadImageSafe(studentPhotoSrc);
+
+  if (logoImg) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(W / 2, 118, 46, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(logoImg, W / 2 - 46, 72, 92, 92);
+    ctx.restore();
+
+    ctx.strokeStyle = "#facc15";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(W / 2, 118, 46, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // 4. Header Title
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#facc15";
+  ctx.font = "bold 36px Georgia, serif";
+  ctx.fillText("LOGOS QUEST", W / 2, 208);
+
+  const isTop3 = rank >= 1 && rank <= 3;
+  const certHeading = isTop3
+    ? "CERTIFICATE OF EXCELLENCE"
+    : "CERTIFICATE OF PARTICIPATION";
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 40px system-ui, -apple-system, sans-serif";
+  ctx.fillText(certHeading, W / 2, 262);
+
+  // Gold Divider Line
+  const lineGrad = ctx.createLinearGradient(260, 0, W - 260, 0);
+  lineGrad.addColorStop(0, "transparent");
+  lineGrad.addColorStop(0.5, "#facc15");
+  lineGrad.addColorStop(1, "transparent");
+  ctx.strokeStyle = lineGrad;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(260, 282);
+  ctx.lineTo(W - 260, 282);
+  ctx.stroke();
+
+  // 5. Student Circular Photo on Left + Name on Center
+  if (studentImg) {
+    const px = 210;
+    const py = 435;
+    const pr = 72;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(px, py, pr, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(studentImg, px - pr, py - pr, pr * 2, pr * 2);
+    ctx.restore();
+
+    ctx.strokeStyle = "#facc15";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(px, py, pr, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = "#cbd5e1";
+  ctx.font = "22px system-ui, -apple-system, sans-serif";
+  ctx.fillText("This certificate is proudly presented to", W / 2 + 40, 345);
+
+  // Student Name
+  ctx.fillStyle = "#fef08a";
+  ctx.font = "bold 48px Georgia, serif";
+  ctx.fillText((student.student_name || "Participant").toUpperCase(), W / 2 + 40, 412);
+
+  // Location subtitle
+  const locText = [student.student_town, student.student_state].filter(Boolean).join(", ");
+  if (locText) {
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "20px system-ui, -apple-system, sans-serif";
+    ctx.fillText(locText, W / 2 + 40, 448);
+  }
+
+  // Achievement Description
+  const rankLabel = rank === 1 ? "1ST PLACE (GOLD WINNER)"
+    : rank === 2 ? "2ND PLACE (SILVER WINNER)"
+    : rank === 3 ? "3RD PLACE (BRONZE WINNER)"
+    : `RANK #${rank} OF ${totalParticipants}`;
+
+  ctx.fillStyle = "#e2e8f0";
+  ctx.font = "23px system-ui, -apple-system, sans-serif";
+  ctx.fillText(
+    `for outstanding performance in the Live Bible Quiz:`,
+    W / 2 + 40,
+    502
+  );
+
+  ctx.fillStyle = "#38bdf8";
+  ctx.font = "bold 30px system-ui, -apple-system, sans-serif";
+  ctx.fillText(`"${exam.exam_name}"`, W / 2 + 40, 546);
+
+  // 6. Score & Rank Pill Box
+  ctx.fillStyle = "rgba(250, 204, 21, 0.14)";
+  ctx.strokeStyle = "#facc15";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(W / 2 - 290, 580, 580, 62, 16);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#facc15";
+  ctx.font = "bold 24px system-ui, -apple-system, sans-serif";
+  ctx.fillText(
+    `🏆 ${rankLabel}   •   SCORE: ${student.score}/${student.total_questions}`,
+    W / 2,
+    620
+  );
+
+  // 7. Footer: Date & Official Seal
+  const dateStr = formatDateOnlyIST(student.submitted_at || exam.end_time);
+  ctx.textAlign = "left";
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = "18px system-ui, -apple-system, sans-serif";
+  ctx.fillText("DATE ISSUED", 110, 725);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 22px system-ui, -apple-system, sans-serif";
+  ctx.fillText(dateStr, 110, 758);
+
+  // Official Gold Seal in Center-Bottom
+  ctx.save();
+  ctx.translate(W / 2, 738);
+  ctx.fillStyle = "rgba(250, 204, 21, 0.18)";
+  ctx.strokeStyle = "#facc15";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(0, 0, 44, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#facc15";
+  ctx.font = "bold 13px system-ui, sans-serif";
+  ctx.fillText("VERIFIED", 0, -4);
+  ctx.fillText("LOGOS QUEST", 0, 14);
+  ctx.restore();
+
+  // Signature Right
+  ctx.textAlign = "right";
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = "18px system-ui, -apple-system, sans-serif";
+  ctx.fillText("ORGANIZED BY", W - 110, 725);
+  ctx.fillStyle = "#facc15";
+  ctx.font = "bold 22px Georgia, serif";
+  ctx.fillText("LOGOS QUEST Ministry", W - 110, 758);
+}
+
+function downloadCertificatePNG() {
+  const canvas = $("certificateCanvas");
+  const link = document.createElement("a");
+  link.download = lastGeneratedCertName;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
 }
 
 // 1. ఎగ్జామ్స్ లోడ్ చేయడం
@@ -921,7 +1327,7 @@ async function loadReleasedAnswerKey(exam) {
       })
     });
 
-    if (reqId !== akRequestSeq) return; // Ignore stale overlapping request
+    if (reqId !== akRequestSeq) return;
     if (!res.ok) throw new Error("HTTP " + res.status);
     const rows = await res.json();
 
@@ -933,7 +1339,6 @@ async function loadReleasedAnswerKey(exam) {
       return;
     }
 
-    // Deduplicate by question_id just in case
     const uniqueRows = [];
     const seenIds = new Set();
     rows.forEach(r => {
@@ -1008,6 +1413,8 @@ async function loadLiveLeaderboard() {
   clearTable("liveLeaderboardBody");
   $("top3Podium").replaceChildren();
   $("top3Podium").classList.add("hidden");
+  $("certPreviewContainer").classList.add("hidden");
+  $("certStatus").textContent = "";
   $("liveStatus").className = "status";
 
   if (!examId) {
@@ -1029,6 +1436,13 @@ async function loadLiveLeaderboard() {
   if (Date.now() < Date.parse(exam.end_time)) {
     $("liveStatus").textContent = t.examNotEnded;
     return;
+  }
+
+  // Auto-generate certificate preview if student identity is already stored
+  const storedId = ($("certIdentityInput").value || "").trim() || getStoredStudentIdentity();
+  if (storedId) {
+    $("certIdentityInput").value = storedId;
+    generateDigitalCertificate();
   }
 
   $("liveStatus").textContent = t.loadingResults;
@@ -1107,6 +1521,8 @@ async function loadLiveLeaderboard() {
 }
 
 $("examSelect").addEventListener("change", loadLiveLeaderboard);
+$("generateCertBtn").addEventListener("click", generateDigitalCertificate);
+$("downloadCertBtn").addEventListener("click", downloadCertificatePNG);
 $("checkMyAnswersBtn").addEventListener("click", () => {
   const examId = $("examSelect").value;
   const exam = exams.find(e => e.id === examId);
@@ -1123,7 +1539,10 @@ $("refreshLive").addEventListener("click", async () => {
 
 window.addEventListener("DOMContentLoaded", () => {
   const savedId = getStoredStudentIdentity();
-  if (savedId) $("studentMobileInput").value = savedId;
+  if (savedId) {
+    $("studentMobileInput").value = savedId;
+    $("certIdentityInput").value = savedId;
+  }
   applyTranslations();
   loadExams();
 });
