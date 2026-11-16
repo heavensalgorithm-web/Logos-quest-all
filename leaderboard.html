@@ -380,6 +380,40 @@ tr.gold { background: rgba(250, 204, 21, 0.15) !important; font-weight: 700; col
 tr.silver { background: rgba(148, 163, 184, 0.12) !important; font-weight: 600; }
 tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; color: #fed7aa; }
 
+/* ================= ANSWER KEY SECTION ================= */
+.ak-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.ak-item {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.ak-q {
+  font-weight: 600;
+  font-size: 15px;
+  color: #ffffff;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.ak-ans {
+  display: inline-block;
+  background: rgba(52, 211, 153, 0.16);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  color: #6ee7b7;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 10px;
+}
+
 .nav-grid {
   display: flex;
   gap: 12px;
@@ -464,6 +498,13 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
   <button id="refreshLive" type="button">🔄 Refresh Live Exam Results</button>
 </section>
 
+<!-- RELEASED CORRECT ANSWERS SECTION -->
+<section class="card" id="answerKeyCard">
+  <h2 id="txtAnswerKeyTitle">📖 Exam Correct Answers (Answer Key)</h2>
+  <p id="answerKeyStatus" class="status">Select an exam to view released answers.</p>
+  <div id="answerKeyList" class="ak-list"></div>
+</section>
+
 <section class="card">
   <div class="nav-grid">
     <a class="link-button" href="index.html" id="btnNavExams">📝 Live Exams</a>
@@ -509,7 +550,12 @@ const i18n = {
     thName: "పార్టిసిపెంట్",
     thLocation: "ప్రాంతం / రాష్ట్రం",
     thScore: "స్కోరు",
-    thTime: "సమయం"
+    thTime: "సమయం",
+    akTitle: "📖 పరీక్ష సరైన సమాధానాలు (Answer Key)",
+    akLocked: "🔒 Admin ఇంకా ఈ పరీక్షకు Correct Answers విడుదల చేయలేదు.",
+    akLoading: "సరైన సమాధానాలు లోడ్ అవుతున్నాయి...",
+    akEmpty: "ఈ పరీక్షకు ప్రశ్నలు కనుగొనబడలేదు.",
+    akLabel: "✅ సరైన సమాధానం"
   },
   en: {
     back: "← Home",
@@ -532,7 +578,12 @@ const i18n = {
     thName: "Participant",
     thLocation: "Town / State",
     thScore: "Score",
-    thTime: "Time"
+    thTime: "Time",
+    akTitle: "📖 Exam Correct Answers (Answer Key)",
+    akLocked: "🔒 Admin has not released the correct answers for this exam yet.",
+    akLoading: "Loading correct answers...",
+    akEmpty: "No questions found for this exam.",
+    akLabel: "✅ Correct Answer"
   },
   ta: {
     back: "← முகப்பு",
@@ -555,7 +606,12 @@ const i18n = {
     thName: "பங்கேற்பாளர்",
     thLocation: "ஊர் / மாநிலம்",
     thScore: "மதிப்பெண்",
-    thTime: "நேரம்"
+    thTime: "நேரம்",
+    akTitle: "📖 தேர்வு சரியான பதில்கள் (Answer Key)",
+    akLocked: "🔒 நிர்வாகி இன்னும் இந்தத் தேர்விற்கான சரியான பதில்களை வெளியிடவில்லை.",
+    akLoading: "சரியான பதில்கள் ஏற்றப்படுகின்றன...",
+    akEmpty: "இந்தத் தேர்விற்கான கேள்விகள் இல்லை.",
+    akLabel: "✅ சரியான பதில்"
   },
   hi: {
     back: "← होम",
@@ -578,7 +634,12 @@ const i18n = {
     thName: "प्रतिभागी",
     thLocation: "शहर / राज्य",
     thScore: "स्कोर",
-    thTime: "समय"
+    thTime: "समय",
+    akTitle: "📖 परीक्षा के सही उत्तर (Answer Key)",
+    akLocked: "🔒 एडमिन ने अभी तक इस परीक्षा के सही उत्तर जारी नहीं किए हैं।",
+    akLoading: "सही उत्तर लोड हो रहे हैं...",
+    akEmpty: "इस परीक्षा के लिए कोई प्रश्न नहीं मिला।",
+    akLabel: "✅ सही उत्तर"
   }
 };
 
@@ -601,6 +662,7 @@ function applyTranslations() {
   $("refreshLive").textContent = t.refreshLive;
   $("btnNavExams").textContent = t.navExams;
   $("btnNavHome").textContent = t.navHome;
+  $("txtAnswerKeyTitle").textContent = t.akTitle;
 
   $("thRank1").textContent = t.thRank;
   $("thName1").textContent = t.thName;
@@ -640,7 +702,16 @@ function medal(rank) {
   return String(rank);
 }
 
-// 1. ఎగ్జామ్స్ లోడ్ చేయడం
+function normalizeLangCode(val) {
+  const v = (val || "").toString().trim().toLowerCase();
+  if (v === "telugu" || v === "te") return "te";
+  if (v === "english" || v === "en") return "en";
+  if (v === "tamil" || v === "ta") return "ta";
+  if (v === "hindi" || v === "hi") return "hi";
+  return v;
+}
+
+// 1. ఎగ్జామ్స్ లోడ్ చేయడం (answers_released, bible_book, chapter_number, question_count తో సహా)
 async function loadExams() {
   const t = i18n[currentLang] || i18n.te;
   const select = $("examSelect");
@@ -652,7 +723,7 @@ async function loadExams() {
   select.appendChild(loading);
 
   try {
-    const url = SUPABASE_URL + "/rest/v1/exam_schedules?select=id,exam_name,start_time,end_time&order=start_time.desc&limit=100";
+    const url = SUPABASE_URL + "/rest/v1/exam_schedules?select=*&order=start_time.desc&limit=100";
     const response = await fetch(url, { headers: { apikey: SUPABASE_KEY } });
     if (!response.ok) throw new Error("HTTP " + response.status);
 
@@ -682,7 +753,99 @@ async function loadExams() {
   }
 }
 
-// 2. లైవ్ లీడర్‌బోర్డ్ మరియు టాప్ 3 పోడియం రెండరింగ్
+// 2. విడుదలైన సరైన సమాధానాలు (Answer Key) లోడ్ చేయడం
+async function loadReleasedAnswerKey(exam) {
+  const t = i18n[currentLang] || i18n.te;
+  const statusEl = $("answerKeyStatus");
+  const listEl = $("answerKeyList");
+  listEl.replaceChildren();
+
+  if (!exam || !exam.answers_released) {
+    statusEl.className = "status";
+    statusEl.textContent = t.akLocked;
+    return;
+  }
+
+  statusEl.className = "status";
+  statusEl.textContent = t.akLoading;
+
+  try {
+    let qUrl = SUPABASE_URL + "/rest/v1/bible_questions?select=*";
+    if (exam.bible_book) {
+      qUrl += `&bible_book=ilike.${encodeURIComponent(exam.bible_book.trim())}`;
+    }
+    if (exam.chapter_number !== null && exam.chapter_number !== undefined && exam.chapter_number !== "") {
+      qUrl += `&chapter_number=eq.${encodeURIComponent(exam.chapter_number)}`;
+    }
+    qUrl += "&limit=500";
+
+    const qRes = await fetch(qUrl, { headers: { apikey: SUPABASE_KEY } });
+    if (!qRes.ok) throw new Error("HTTP " + qRes.status);
+    const allQs = await qRes.json();
+
+    if (!Array.isArray(allQs) || allQs.length === 0) {
+      statusEl.textContent = t.akEmpty;
+      return;
+    }
+
+    const qLimit = Number(exam.question_count) || 10;
+    const directLang = allQs.filter(q => normalizeLangCode(q.language) === currentLang);
+    let selected = [];
+    if (directLang.length >= qLimit) {
+      selected = directLang.slice(0, qLimit);
+    } else if (directLang.length > 0) {
+      const used = new Set(directLang.map(r => r.id));
+      selected = [...directLang, ...allQs.filter(q => !used.has(q.id))].slice(0, qLimit);
+    } else {
+      selected = allQs.slice(0, qLimit);
+    }
+
+    // Fetch translations if any
+    const qIds = selected.map(q => q.id).join(",");
+    let transMap = {};
+    if (qIds) {
+      const trUrl = `${SUPABASE_URL}/rest/v1/bible_question_translations?select=*&question_id=in.(${qIds})`;
+      const trRes = await fetch(trUrl, { headers: { apikey: SUPABASE_KEY } });
+      if (trRes.ok) {
+        const trRows = await trRes.json();
+        (trRows || []).forEach(tr => {
+          if (normalizeLangCode(tr.language || tr.lang) === currentLang) {
+            transMap[tr.question_id] = tr;
+          }
+        });
+      }
+    }
+
+    statusEl.className = "status success";
+    statusEl.textContent = `✅ ${selected.length} Questions & Answers`;
+
+    selected.forEach((q, idx) => {
+      const tr = transMap[q.id] || {};
+      const qText = tr.question_text || tr.question || q.question_text || q.question || "";
+      const optMap = {
+        A: tr.option_a || q.option_a || "",
+        B: tr.option_b || q.option_b || "",
+        C: tr.option_c || q.option_c || "",
+        D: tr.option_d || q.option_d || ""
+      };
+      const correctLetter = (q.correct_option || q.correct_answer || "A").toString().trim().toUpperCase();
+      const correctText = optMap[correctLetter] || "";
+
+      const item = document.createElement("div");
+      item.className = "ak-item";
+      item.innerHTML = `
+        <div class="ak-q">${idx + 1}. ${qText}</div>
+        <div class="ak-ans">${t.akLabel}: ${correctLetter}${correctText ? " — " + correctText : ""}</div>
+      `;
+      listEl.appendChild(item);
+    });
+  } catch (err) {
+    statusEl.className = "status error";
+    statusEl.textContent = "❌ " + err.message;
+  }
+}
+
+// 3. లైవ్ లీడర్‌బోర్డ్ మరియు టాప్ 3 పోడియం రెండరింగ్
 async function loadLiveLeaderboard() {
   const t = i18n[currentLang] || i18n.te;
   const examId = $("examSelect").value;
@@ -701,6 +864,9 @@ async function loadLiveLeaderboard() {
     $("liveStatus").textContent = t.noDetails;
     return;
   }
+
+  // Load Answer Key status regardless of exam end time
+  loadReleasedAnswerKey(exam);
 
   $("examInfo").classList.remove("hidden");
   $("examInfo").textContent = "📅 " + exam.exam_name + " | Start: " + formatIST(exam.start_time) + " | End: " + formatIST(exam.end_time);
@@ -788,7 +954,14 @@ async function loadLiveLeaderboard() {
 }
 
 $("examSelect").addEventListener("change", loadLiveLeaderboard);
-$("refreshLive").addEventListener("click", loadLiveLeaderboard);
+$("refreshLive").addEventListener("click", async () => {
+  const currentId = $("examSelect").value;
+  await loadExams();
+  if (currentId) {
+    $("examSelect").value = currentId;
+    await loadLiveLeaderboard();
+  }
+});
 
 window.addEventListener("DOMContentLoaded", () => {
   applyTranslations();
