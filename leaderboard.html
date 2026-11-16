@@ -770,71 +770,37 @@ async function loadReleasedAnswerKey(exam) {
   statusEl.textContent = t.akLoading;
 
   try {
-    let qUrl = SUPABASE_URL + "/rest/v1/bible_questions?select=*";
-    if (exam.bible_book) {
-      qUrl += `&bible_book=ilike.${encodeURIComponent(exam.bible_book.trim())}`;
-    }
-    if (exam.chapter_number !== null && exam.chapter_number !== undefined && exam.chapter_number !== "") {
-      qUrl += `&chapter_number=eq.${encodeURIComponent(exam.chapter_number)}`;
-    }
-    qUrl += "&limit=500";
+    const res = await fetch(SUPABASE_URL + "/rest/v1/rpc/get_released_exam_answers", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ p_exam_id: exam.id, p_lang: currentLang })
+    });
 
-    const qRes = await fetch(qUrl, { headers: { apikey: SUPABASE_KEY } });
-    if (!qRes.ok) throw new Error("HTTP " + qRes.status);
-    const allQs = await qRes.json();
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const rows = await res.json();
 
-    if (!Array.isArray(allQs) || allQs.length === 0) {
+    if (!Array.isArray(rows) || rows.length === 0) {
       statusEl.textContent = t.akEmpty;
       return;
     }
 
-    const qLimit = Number(exam.question_count) || 10;
-    const directLang = allQs.filter(q => normalizeLangCode(q.language) === currentLang);
-    let selected = [];
-    if (directLang.length >= qLimit) {
-      selected = directLang.slice(0, qLimit);
-    } else if (directLang.length > 0) {
-      const used = new Set(directLang.map(r => r.id));
-      selected = [...directLang, ...allQs.filter(q => !used.has(q.id))].slice(0, qLimit);
-    } else {
-      selected = allQs.slice(0, qLimit);
-    }
-
-    // Fetch translations if any
-    const qIds = selected.map(q => q.id).join(",");
-    let transMap = {};
-    if (qIds) {
-      const trUrl = `${SUPABASE_URL}/rest/v1/bible_question_translations?select=*&question_id=in.(${qIds})`;
-      const trRes = await fetch(trUrl, { headers: { apikey: SUPABASE_KEY } });
-      if (trRes.ok) {
-        const trRows = await trRes.json();
-        (trRows || []).forEach(tr => {
-          if (normalizeLangCode(tr.language || tr.lang) === currentLang) {
-            transMap[tr.question_id] = tr;
-          }
-        });
-      }
-    }
-
     statusEl.className = "status success";
-    statusEl.textContent = `✅ ${selected.length} Questions & Answers`;
+    statusEl.textContent = `✅ ${rows.length} Questions & Answers`;
 
-    selected.forEach((q, idx) => {
-      const tr = transMap[q.id] || {};
-      const qText = tr.question_text || tr.question || q.question_text || q.question || "";
+    rows.forEach((q, idx) => {
       const optMap = {
-        A: tr.option_a || q.option_a || "",
-        B: tr.option_b || q.option_b || "",
-        C: tr.option_c || q.option_c || "",
-        D: tr.option_d || q.option_d || ""
+        A: q.option_a || "",
+        B: q.option_b || "",
+        C: q.option_c || "",
+        D: q.option_d || ""
       };
-      const correctLetter = (q.correct_option || q.correct_answer || "A").toString().trim().toUpperCase();
+      const correctLetter = (q.correct_option || "A").toString().trim().toUpperCase();
       const correctText = optMap[correctLetter] || "";
 
       const item = document.createElement("div");
       item.className = "ak-item";
       item.innerHTML = `
-        <div class="ak-q">${idx + 1}. ${qText}</div>
+        <div class="ak-q">${idx + 1}. ${q.question_text || ""}</div>
         <div class="ak-ans">${t.akLabel}: ${correctLetter}${correctText ? " — " + correctText : ""}</div>
       `;
       listEl.appendChild(item);
@@ -844,6 +810,7 @@ async function loadReleasedAnswerKey(exam) {
     statusEl.textContent = "❌ " + err.message;
   }
 }
+
 
 // 3. లైవ్ లీడర్‌బోర్డ్ మరియు టాప్ 3 పోడియం రెండరింగ్
 async function loadLiveLeaderboard() {
