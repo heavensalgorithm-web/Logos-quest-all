@@ -298,7 +298,78 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
 .question-actions{white-space:nowrap}
 
-/* CANDIDATE PHOTO & GALLERY STYLES */
+/* LIVE PARTICIPANTS & SEPARATE GALLERIES */
+.live-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #34d399;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@keyframes pulseGreen {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.75); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+  animation: pulseGreen 1.8s infinite;
+}
+
+.gallery-section-box {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.gallery-online-box {
+  border: 1.5px solid rgba(16, 185, 129, 0.45);
+}
+
+.gallery-completed-box {
+  border: 1.5px solid rgba(239, 68, 68, 0.45);
+}
+
+.gallery-title-online {
+  color: #34d399;
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gallery-title-completed {
+  color: #f87171;
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .cand-badge {
   display: inline-flex;
   align-items: center;
@@ -328,13 +399,13 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
 .cand-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   gap: 14px;
-  margin-top: 14px;
+  margin-top: 10px;
 }
 
 .cand-card {
-  background: rgba(22, 33, 62, 0.9);
+  background: rgba(22, 33, 62, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 14px;
   padding: 14px;
@@ -342,23 +413,40 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   position: relative;
 }
 
+.cand-card-online {
+  border-color: rgba(16, 185, 129, 0.55);
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.15);
+}
+
+.cand-card-completed {
+  border-color: rgba(239, 68, 68, 0.45);
+}
+
 .cand-photo {
-  width: 82px;
-  height: 82px;
+  width: 86px;
+  height: 86px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2.5px solid var(--gold-primary);
+  border: 3px solid var(--gold-primary);
   margin: 0 auto 10px;
   display: block;
   background: #0f172a;
   cursor: pointer;
 }
 
+.cand-card-online .cand-photo {
+  border-color: #10b981;
+}
+
+.cand-card-completed .cand-photo {
+  border-color: #ef4444;
+}
+
 .cand-avatar-fallback {
-  width: 82px;
-  height: 82px;
+  width: 86px;
+  height: 86px;
   border-radius: 50%;
-  border: 2.5px solid var(--gold-primary);
+  border: 3px solid var(--gold-primary);
   margin: 0 auto 10px;
   display: flex;
   align-items: center;
@@ -415,7 +503,54 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <a class="link-button" href="leaderboard.html">🏆 View Leaderboard</a>
 </div>
 
-<!-- 1. LIVE EXAM WINNERS DASHBOARD -->
+<!-- 1. LIVE EXAM PARTICIPANTS (REAL-TIME ONLINE & COMPLETED SEPARATE PHOTO GALLERIES) -->
+
+<div class="card" id="liveParticipantsCard">
+  <div class="live-header-row">
+    <h2 style="margin:0;">📡 Live Exam Participants</h2>
+    <span class="live-pill"><span class="pulse-dot"></span> Auto-Live Tracking (8s)</span>
+  </div>
+  <p class="small">పరీక్షలో జాయిన్ అయినప్పటి నుండి ముగిసే వరకు అభ్యర్థులందరినీ లైవ్‌లో చూడండి. Online (పరీక్ష రాస్తున్నవారు) మరియు Completed (పూర్తి చేసినవారు) వేర్వేరు Photo Galleries లో కనిపిస్తారు.</p>
+
+  <label for="liveMonitorExamSelect">Select Live / Recent Exam</label>
+  <select id="liveMonitorExamSelect">
+    <option value="">Loading Exams...</option>
+  </select>
+
+  <div style="display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:8px 0;">
+    <button id="refreshLiveMonitorBtn" type="button">🔄 Refresh Live Gallery</button>
+    <span id="liveMonitorStatus" class="small"></span>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      Total Joined
+      <strong id="liveTotalCount">0</strong>
+    </div>
+    <div class="stat" style="border-color:rgba(16,185,129,0.45);">
+      🟢 Online (Writing Now)
+      <strong id="liveOnlineCount" style="color:#34d399;">0</strong>
+    </div>
+    <div class="stat" style="border-color:rgba(239,68,68,0.45);">
+      🔴 Completed (Submitted)
+      <strong id="liveCompletedCount" style="color:#f87171;">0</strong>
+    </div>
+  </div>
+
+  <!-- SEPARATE GALLERY 1: ONLINE / WRITING NOW -->
+  <div class="gallery-section-box gallery-online-box">
+    <h3 class="gallery-title-online"><span class="pulse-dot"></span> 🟢 Online Participants Gallery (ప్రస్తుతం పరీక్ష రాస్తున్నవారు)</h3>
+    <div id="onlineGalleryGrid" class="cand-grid"></div>
+  </div>
+
+  <!-- SEPARATE GALLERY 2: COMPLETED / SUBMITTED -->
+  <div class="gallery-section-box gallery-completed-box">
+    <h3 class="gallery-title-completed"><span class="status-dot dot-red"></span> 🔴 Completed Participants Gallery (పరీక్ష పూర్తి చేసినవారు)</h3>
+    <div id="completedGalleryGrid" class="cand-grid"></div>
+  </div>
+</div>
+
+<!-- 2. LIVE EXAM WINNERS DASHBOARD -->
 
 <div class="card">
   <h2>🏆 Live Exam Results & Winners</h2>
@@ -451,7 +586,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   </div>
 </div>
 
-<!-- 2. EXISTING RESULTS & STUDENT HISTORY -->
+<!-- 3. EXISTING RESULTS & STUDENT HISTORY -->
 
 <div class="card stats">
 <div class="stat">
@@ -487,7 +622,7 @@ Highest Score
 </div>
 </div>
 
-<!-- 3. BIBLE QUESTION MANAGEMENT & AI GENERATOR -->
+<!-- 4. BIBLE QUESTION MANAGEMENT & AI GENERATOR -->
 
 <div class="card" id="questionManager">
 <h2>📖 Bible Question Management</h2>
@@ -669,7 +804,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 <p class="small">Showing questions from Bible questions repository.</p>
 </div>
 
-<!-- 4. LIVE EXAM SCHEDULING -->
+<!-- 5. LIVE EXAM SCHEDULING -->
 
 <div class="card">
 <h2>📅 Schedule Live Bible Exam</h2>
@@ -761,7 +896,7 @@ Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule �
 <p id="scheduleStatus" role="status"></p>
 </div>
 
-<!-- 5. SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS -->
+<!-- 6. SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS -->
 
 <div class="card" id="scheduledExamsCard">
 <h2>📋 Scheduled Exams & Participants</h2>
@@ -769,7 +904,6 @@ Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule �
 <button id="refreshExamsBtn" type="button">🔄 Refresh Exams</button>
 <p id="examListStatus" class="small"></p>
 
-<!-- EXAM CANDIDATES PHOTO & DETAILS VIEWER DRAWER -->
 <div id="examCandidatesDrawer" class="cand-drawer hidden">
   <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
     <h3 id="candDrawerTitle" style="color:var(--gold-primary); margin:0;">👥 Exam Participants</h3>
@@ -811,8 +945,11 @@ let allResults = [];
 let allQuestions = [];
 let editingQuestionId = null;
 let generatedAiQuestions = [];
+let liveMonitorTimer = null;
+let liveRealtimeChannel = null;
 
 function showLogin(message = "") {
+  if (liveMonitorTimer) clearInterval(liveMonitorTimer);
   $("loginSection").classList.remove("hidden");
   $("dashboard").classList.add("hidden");
   $("message").textContent = message;
@@ -850,7 +987,8 @@ async function verifyAdmin() {
     loadResults(),
     loadExams(),
     loadQuestions(),
-    loadWinnerExams()
+    loadWinnerExams(),
+    initLiveParticipantsMonitor()
   ]);
 }
 
@@ -876,6 +1014,204 @@ $("logoutBtn").addEventListener("click", async () => {
   await db.auth.signOut();
   showLogin("Logged out successfully.");
 });
+
+// ==========================================
+// LIVE EXAM PARTICIPANTS (ONLINE & COMPLETED SEPARATE GALLERIES)
+// ==========================================
+function formatTimeShortIST(value) {
+  if (!value) return "";
+  try {
+    return new Intl.DateTimeFormat("en-IN", {
+      timeZone: "Asia/Kolkata",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
+    }).format(new Date(value));
+  } catch (_) {
+    return "";
+  }
+}
+
+async function fetchStudentPhotoMap(attempts) {
+  const mobiles = [...new Set((attempts || []).map(a => a.student_mobile || a.mobile).filter(Boolean))];
+  const photoByMobile = {};
+  const detailsByMobile = {};
+
+  if (mobiles.length > 0) {
+    try {
+      const { data: stuData } = await db
+        .from("students")
+        .select("*")
+        .in("mobile", mobiles);
+      (stuData || []).forEach(s => {
+        const m = s.mobile || s.phone;
+        if (m) {
+          photoByMobile[m] = s.photo_url || s.selfie_url || s.avatar_url || s.photo || "";
+          detailsByMobile[m] = s;
+        }
+      });
+    } catch (_) {
+      // Fallback to fields inside secure_exam_attempts
+    }
+  }
+  return { photoByMobile, detailsByMobile };
+}
+
+function buildParticipantGalleryCard(cand, isOnline, photoByMobile, detailsByMobile, idx) {
+  const mobile = cand.student_mobile || cand.mobile || "";
+  const stu = detailsByMobile[mobile] || {};
+  const name = cand.student_name || stu.full_name || stu.name || "Participant";
+  const town = cand.student_town || stu.town || stu.city || "";
+  const state = cand.student_state || stu.state || "";
+  const loc = [town, state].filter(Boolean).join(", ");
+  const photoUrl = cand.photo_url || cand.selfie_url || cand.student_photo || photoByMobile[mobile] || "";
+  const totalQ = cand.total_questions || 10;
+
+  const card = document.createElement("div");
+  card.className = `cand-card ${isOnline ? "cand-card-online" : "cand-card-completed"}`;
+
+  const initial = String(name).trim().charAt(0).toUpperCase() || "?";
+  const photoHtml = photoUrl
+    ? `<img src="${photoUrl}" alt="${name}" class="cand-photo" onclick="window.open('${photoUrl}','_blank')" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+       <div class="cand-avatar-fallback" style="display:none;">${initial}</div>`
+    : `<div class="cand-avatar-fallback">${initial}</div>`;
+
+  const badgeHtml = isOnline
+    ? `<div style="font-size:12px; color:#34d399; font-weight:700; margin:4px 0;"><span class="pulse-dot" style="width:8px;height:8px;margin-right:4px;"></span> Writing Exam Live...</div>
+       <div class="small">🕒 Joined: ${formatTimeShortIST(cand.started_at || cand.created_at) || "Just now"}</div>`
+    : `<div style="font-size:12px; color:#f87171; font-weight:700; margin:4px 0;"><span class="status-dot dot-red"></span> Exam Completed</div>
+       <div style="margin-top:6px; font-size:13px; color:var(--gold-primary); font-weight:700;">🏆 Score: ${cand.score ?? 0}/${totalQ} • ⏱️ ${cand.time_seconds ?? 0}s</div>`;
+
+  card.innerHTML = `
+    ${photoHtml}
+    <div style="font-weight:700; font-size:15px; color:#fff;">${isOnline ? "" : "#" + (idx + 1) + " "}${name}</div>
+    ${badgeHtml}
+    ${mobile ? `<div class="small">📱 ${mobile}</div>` : ""}
+    ${loc ? `<div class="small">📍 ${loc}</div>` : ""}
+  `;
+  return card;
+}
+
+async function refreshLiveParticipantsGallery(silent = false) {
+  const examId = $("liveMonitorExamSelect").value;
+  const statusEl = $("liveMonitorStatus");
+  const onlineGrid = $("onlineGalleryGrid");
+  const completedGrid = $("completedGalleryGrid");
+
+  if (!examId) return;
+
+  if (!silent) {
+    statusEl.textContent = "⏳ Updating live gallery...";
+  }
+
+  try {
+    const { data, error } = await db
+      .from("secure_exam_attempts")
+      .select("*")
+      .eq("exam_id", examId)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    const all = data || [];
+    const onlineList = all.filter(a => a.status !== "submitted");
+    const completedList = all
+      .filter(a => a.status === "submitted")
+      .sort((a, b) => {
+        const sc = (Number(b.score) || 0) - (Number(a.score) || 0);
+        if (sc !== 0) return sc;
+        return (Number(a.time_seconds) || 999999) - (Number(b.time_seconds) || 999999);
+      });
+
+    $("liveTotalCount").textContent = all.length;
+    $("liveOnlineCount").textContent = onlineList.length;
+    $("liveCompletedCount").textContent = completedList.length;
+
+    const { photoByMobile, detailsByMobile } = await fetchStudentPhotoMap(all);
+
+    onlineGrid.replaceChildren();
+    if (onlineList.length === 0) {
+      onlineGrid.innerHTML = `<p class="small" style="grid-column:1/-1; margin:4px 0;">ప్రస్తుతం ఎవరూ పరీక్ష రాయడం లేదు (0 Online).</p>`;
+    } else {
+      onlineList.forEach((cand, idx) => {
+        onlineGrid.appendChild(buildParticipantGalleryCard(cand, true, photoByMobile, detailsByMobile, idx));
+      });
+    }
+
+    completedGrid.replaceChildren();
+    if (completedList.length === 0) {
+      completedGrid.innerHTML = `<p class="small" style="grid-column:1/-1; margin:4px 0;">ఇంకా ఎవరూ పరీక్ష పూర్తి చేయలేదు (0 Completed).</p>`;
+    } else {
+      completedList.forEach((cand, idx) => {
+        completedGrid.appendChild(buildParticipantGalleryCard(cand, false, photoByMobile, detailsByMobile, idx));
+      });
+    }
+
+    statusEl.textContent = `Last updated: ${formatTimeShortIST(new Date().toISOString())}`;
+  } catch (err) {
+    statusEl.textContent = "Error: " + err.message;
+  }
+}
+
+async function initLiveParticipantsMonitor() {
+  const { data } = await db
+    .from("exam_schedules")
+    .select("id,exam_name,start_time,end_time")
+    .order("start_time", { ascending: false })
+    .limit(100);
+
+  const sel = $("liveMonitorExamSelect");
+  sel.replaceChildren();
+
+  const exams = data || [];
+  if (exams.length === 0) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "No exams found";
+    sel.appendChild(opt);
+    return;
+  }
+
+  const now = Date.now();
+  let activeExamId = exams[0].id;
+
+  exams.forEach(e => {
+    const startMs = new Date(e.start_time).getTime();
+    const endMs = new Date(e.end_time).getTime();
+    const isLiveNow = now >= startMs && now <= endMs;
+    if (isLiveNow) activeExamId = e.id;
+
+    const opt = document.createElement("option");
+    opt.value = e.id;
+    opt.textContent = `${isLiveNow ? "🟢 [LIVE NOW] " : ""}${e.exam_name} - ${formatIST(e.start_time)}`;
+    sel.appendChild(opt);
+  });
+
+  sel.value = activeExamId;
+  await refreshLiveParticipantsGallery(false);
+
+  if (liveMonitorTimer) clearInterval(liveMonitorTimer);
+  liveMonitorTimer = setInterval(() => {
+    refreshLiveParticipantsGallery(true);
+  }, 8000);
+
+  // Also subscribe to Supabase Realtime changes on secure_exam_attempts
+  if (liveRealtimeChannel) {
+    db.removeChannel(liveRealtimeChannel);
+  }
+  liveRealtimeChannel = db
+    .channel("admin-live-attempts")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "secure_exam_attempts" },
+      () => refreshLiveParticipantsGallery(true)
+    )
+    .subscribe();
+}
+
+$("liveMonitorExamSelect").addEventListener("change", () => refreshLiveParticipantsGallery(false));
+$("refreshLiveMonitorBtn").addEventListener("click", () => refreshLiveParticipantsGallery(false));
 
 // RESULTS
 async function loadResults(){
@@ -1009,6 +1345,7 @@ $("scheduleForm").addEventListener("submit",async event=>{
     $("scheduleForm").reset();
     await loadExams();
     await loadWinnerExams();
+    await initLiveParticipantsMonitor();
   }catch(error){
     status.textContent = "Error: "+error.message;
     status.className = "error";
@@ -1043,30 +1380,8 @@ async function openExamCandidates(exam, attemptsForExam) {
   const activeCount = attemptsForExam.length - submittedCount;
   summary.innerHTML = `మొత్తం రాసినవారు: <strong>${attemptsForExam.length}</strong> &nbsp;|&nbsp; 🔴 Submitted: <strong>${submittedCount}</strong> &nbsp;|&nbsp; 🟢 Active: <strong>${activeCount}</strong>`;
 
-  // Fetch matching student photos from students / registrations table if not already in attempt row
-  const mobiles = [...new Set(attemptsForExam.map(a => a.student_mobile || a.mobile).filter(Boolean))];
-  const photoByMobile = {};
-  const detailsByMobile = {};
+  const { photoByMobile, detailsByMobile } = await fetchStudentPhotoMap(attemptsForExam);
 
-  if (mobiles.length > 0) {
-    try {
-      const { data: stuData } = await db
-        .from("students")
-        .select("*")
-        .in("mobile", mobiles);
-      (stuData || []).forEach(s => {
-        const m = s.mobile || s.phone;
-        if (m) {
-          photoByMobile[m] = s.photo_url || s.selfie_url || s.avatar_url || s.photo || "";
-          detailsByMobile[m] = s;
-        }
-      });
-    } catch (_) {
-      // Ignore if students table schema differs; fallback to attempt fields
-    }
-  }
-
-  // Sort by score descending, then time ascending
   const sorted = [...attemptsForExam].sort((a, b) => {
     const sc = (Number(b.score) || 0) - (Number(a.score) || 0);
     if (sc !== 0) return sc;
@@ -1160,12 +1475,10 @@ async function loadExams(){
       tr.appendChild(td);
     });
 
-    // Participant count badge column
     const countTd = document.createElement("td");
     countTd.innerHTML = `<span class="cand-badge">👥 ${examAttempts.length} Students</span>`;
     tr.appendChild(countTd);
 
-    // View Details & Photos button column
     const actionTd = document.createElement("td");
     const viewBtn = document.createElement("button");
     viewBtn.type = "button";
