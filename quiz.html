@@ -286,6 +286,13 @@ const studentMobile = (urlParams.get("mobile") || savedUser.phone || studentEmai
 const studentTown = savedUser.town || savedUser.city || "Renigunta";
 const studentState = savedUser.state || "Andhra Pradesh";
 
+if (studentMobile && studentMobile !== "00000") {
+  localStorage.setItem("logos_quest_mobile", studentMobile);
+}
+if (studentEmail) {
+  localStorage.setItem("logos_quest_email", studentEmail);
+}
+
 let examData = null;
 let allChapterQuestions = [];
 let allTranslations = { te: {}, en: {}, ta: {}, hi: {} };
@@ -322,50 +329,44 @@ function showError(msg) {
   `;
 }
 
+// STRICT SINGLE-LANGUAGE BUILDER (NEVER MIXES OTHER LANGUAGES)
 function buildLocalizedQuestions() {
   const qLimit = Number(examData?.question_count) || 10;
   const transMap = allTranslations[lang] || {};
 
-  // 1. Check if bible_questions already has rows directly in the selected language (e.g., AI generated rows)
-  const directLangRows = allChapterQuestions.filter(q => normalizeLangCode(q.language) === lang);
+  // Filter rows strictly matching selected language OR having a translation in the selected language
+  const strictLangRows = allChapterQuestions.filter(q => {
+    const rowLang = normalizeLangCode(q.language);
+    const hasTranslation = Boolean(transMap[q.id] && (transMap[q.id].question_text || transMap[q.id].question));
+    return rowLang === lang || hasTranslation;
+  });
 
-  let selectedRows = [];
-  if (directLangRows.length >= qLimit) {
-    selectedRows = directLangRows.slice(0, qLimit);
-  } else if (directLangRows.length > 0) {
-    // Combine selected language rows + remaining rows from same chapter
-    const usedIds = new Set(directLangRows.map(r => r.id));
-    const others = allChapterQuestions.filter(q => !usedIds.has(q.id));
-    selectedRows = [...directLangRows, ...others].slice(0, qLimit);
-  } else {
-    selectedRows = allChapterQuestions.slice(0, qLimit);
-  }
+  // Fallback only if zero rows exist in chosen language
+  const pool = strictLangRows.length > 0 ? strictLangRows : allChapterQuestions;
 
-  // Preserve already answered question IDs if switching language mid-exam
-  if (questions.length > 0 && Object.keys(userAnswers).length > 0) {
-    // Keep same question slots if possible
-    questions = questions.map((existingQ, idx) => {
-      const tr = transMap[existingQ.id] || {};
-      const matchingDirect = directLangRows[idx];
-      const source = (tr.question_text || tr.question) ? tr : (matchingDirect || existingQ._raw);
-      return {
-        id: existingQ.id,
-        _raw: existingQ._raw,
-        question: source.question_text || source.question || existingQ.question,
-        options: [
-          source.option_a || existingQ.options[0] || "",
-          source.option_b || existingQ.options[1] || "",
-          source.option_c || existingQ.options[2] || "",
-          source.option_d || existingQ.options[3] || ""
-        ],
-        correct: (source.correct_option || source.correct_answer || existingQ.correct || "A").toString().trim().toUpperCase()
-      };
-    });
-    return;
-  }
-
-  questions = selectedRows.map(q => {
+  // Deduplicate by question text so repeated rows never appear
+  const seenText = new Set();
+  const uniquePool = [];
+  pool.forEach(q => {
     const tr = transMap[q.id] || {};
+    const text = (tr.question_text || tr.question || q.question_text || q.question || "").trim();
+    if (text && !seenText.has(text)) {
+      seenText.add(text);
+      uniquePool.push(q);
+    }
+  });
+
+  const selectedRows = uniquePool.slice(0, qLimit);
+
+  // Remap userAnswers if language switched mid-exam by matching question index
+  const oldAnswersByIndex = questions.map(q => userAnswers[q.id]);
+  const newUserAnswers = {};
+
+  questions = selectedRows.map((q, idx) => {
+    const tr = transMap[q.id] || {};
+    if (oldAnswersByIndex[idx]) {
+      newUserAnswers[q.id] = oldAnswersByIndex[idx];
+    }
     return {
       id: q.id,
       _raw: q,
@@ -379,6 +380,13 @@ function buildLocalizedQuestions() {
       correct: (q.correct_option || q.correct_answer || "A").toString().trim().toUpperCase()
     };
   });
+
+  if (oldAnswersByIndex.some(Boolean)) {
+    userAnswers = newUserAnswers;
+  }
+  if (currentIndex >= questions.length) {
+    currentIndex = Math.max(0, questions.length - 1);
+  }
 }
 
 function switchExamLanguage(newLang) {
@@ -489,7 +497,6 @@ async function initExam() {
       throw new Error(`మీరు ఇప్పటికే గరిష్టంగా (${maxAttempts}) సార్లు ఈ పరీక్ష రాశారు.`);
     }
 
-    // Strictly filter by scheduled Bible Book & Chapter Number!
     let query = db.from("bible_questions").select("*");
     const bookFilter = (exam.bible_book || "").trim();
     const chapterFilter = exam.chapter_number;
@@ -501,7 +508,7 @@ async function initExam() {
       query = query.eq("chapter_number", Number(chapterFilter));
     }
 
-    const { data: qList, error: qErr } = await query.limit(500);
+    const { data: qList, error: qErr } = await query.order("id", { ascending: true }).limit(500);
 
     if (qErr) {
       throw new Error("ప్రశ్నలు లోడ్ చేయడంలో లోపం: " + qErr.message);
@@ -628,6 +635,12 @@ async function submitExam(isAuto) {
   const pct = questions.length > 0 ? Number(((score / questions.length) * 100).toFixed(2)) : 0;
   const photoUrl = await resolveStudentPhoto();
 
+  const assignedQuestionsJson = questions.map((q, idx) => ({
+    question_id: q.id,
+    question_order: idx + 1,
+    selected_answer: userAnswers[q.id] || ""
+  }));
+
   let saveMsg = "";
   try {
     const payload = {
@@ -645,7 +658,8 @@ async function submitExam(isAuto) {
       status: "submitted",
       language: lang,
       student_photo: photoUrl,
-      photo_url: photoUrl
+      photo_url: photoUrl,
+      assigned_questions: assignedQuestionsJson
     };
 
     let dbError = null;
@@ -657,16 +671,33 @@ async function submitExam(isAuto) {
       dbError = error;
     } else {
       payload.started_at = new Date(examStartTimeMs).toISOString();
-      const { error } = await db
+      const { data: insertedAttempt, error } = await db
         .from("secure_exam_attempts")
-        .insert(payload);
+        .insert(payload)
+        .select("id")
+        .single();
       dbError = error;
+      if (insertedAttempt) attemptId = insertedAttempt.id;
+    }
+
+    // ALSO SAVE EACH QUESTION + SELECTED ANSWER TO secure_attempt_questions
+    if (attemptId && questions.length > 0) {
+      const answerRows = questions.map((q, idx) => ({
+        attempt_id: attemptId,
+        question_id: q.id,
+        question_order: idx + 1,
+        selected_answer: userAnswers[q.id] || ""
+      }));
+
+      await db
+        .from("secure_attempt_questions")
+        .insert(answerRows);
     }
 
     if (dbError) {
       saveMsg = "⚠️ DB Save Error: " + dbError.message;
     } else {
-      saveMsg = "✅ మీ ఫలితం & ర్యాంక్ లీడర్‌బోర్డ్‌లో నమోదయ్యాయి!";
+      saveMsg = "✅ మీ ఫలితం & సమాధానాలు లీడర్‌బోర్డ్‌లో నమోదయ్యాయి!";
     }
   } catch (e) {
     saveMsg = "⚠️ Save Error: " + e.message;
@@ -678,9 +709,6 @@ async function submitExam(isAuto) {
   $("resScoreText").textContent = t.score.replace("{s}", score).replace("{t}", questions.length);
   $("resSubText").textContent = saveMsg;
 }
-
-
-  
 
 window.addEventListener("DOMContentLoaded", initExam);
 </script>
