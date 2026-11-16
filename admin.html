@@ -333,7 +333,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <a class="link-button" href="leaderboard.html">🏆 View Leaderboard</a>
 </div>
 
-<!-- 1. LIVE EXAM WINNERS DASHBOARD (FIRST PRIORITY SECTION) -->
+<!-- 1. LIVE EXAM WINNERS DASHBOARD -->
 
 <div class="card">
   <h2>🏆 Live Exam Results & Winners</h2>
@@ -405,120 +405,7 @@ Highest Score
 </div>
 </div>
 
-<!-- 3. LIVE EXAM SCHEDULING -->
-
-<div class="card">
-<h2>📅 Schedule Live Bible Exam</h2>
-<p class="small">
-Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule చేయవచ్చు. All times are India Standard Time (IST).
-</p>
-
-<form id="scheduleForm">
-<label for="examName">Exam Name</label>
-<input id="examName" type="text" placeholder="Example: Genesis Chapter 1 Quiz" required maxlength="150">
-
-<div class="grid">
-<div>
-<label for="examDate">Exam Date</label>
-<input id="examDate" type="date" required>
-</div>
-
-<div>
-<label for="questionCount">Questions</label>
-<select id="questionCount">
-<option value="10">10 Questions</option>
-<option value="20">20 Questions</option>
-<option value="50">50 Questions</option>
-<option value="100">100 Questions</option>
-</select>
-</div>
-
-<div>
-<label for="examBibleBook">Bible Book</label>
-<input id="examBibleBook" type="text" placeholder="Example: Genesis" maxlength="100" required>
-</div>
-
-<div>
-<label for="examChapter">Chapter Number</label>
-<input id="examChapter" type="number" min="1" max="150" placeholder="Example: 1" required>
-</div>
-
-<div>
-<label for="examLanguage">Question Language</label>
-<select id="examLanguage" required>
-  <option value="all" selected>All Languages (Trilingual / 4 Languages)</option>
-  <option value="telugu">Telugu Only</option>
-  <option value="english">English Only</option>
-  <option value="tamil">Tamil Only</option>
-  <option value="hindi">Hindi Only</option>
-</select>
-</div>
-
-<div>
-<label for="examDifficulty">Question Difficulty</label>
-<select id="examDifficulty" required>
-<option value="easy">Easy</option>
-<option value="medium">Medium</option>
-<option value="tough">Tough</option>
-</select>
-</div>
-
-<div>
-<label for="startTime">Start Time (IST)</label>
-<input id="startTime" type="time" required>
-</div>
-
-<div>
-<label for="endTime">End Time (IST)</label>
-<input id="endTime" type="time" required>
-</div>
-
-<div>
-<label for="maxAttempts">Maximum Attempts</label>
-<select id="maxAttempts">
-<option value="1">1 Attempt</option>
-<option value="2">2 Attempts</option>
-<option value="3">3 Attempts</option>
-</select>
-</div>
-
-<div>
-<label for="rankingMethod">Leaderboard Ranking</label>
-<select id="rankingMethod">
-<option value="best">Best Score</option>
-<option value="first">First Attempt Score</option>
-<option value="last">Last Attempt Score</option>
-</select>
-</div>
-</div>
-
-<button id="saveExamBtn" type="submit">💾 Save Exam Schedule</button>
-</form>
-<p id="scheduleStatus" role="status"></p>
-</div>
-
-<div class="card">
-<h2>📋 Scheduled Exams</h2>
-<button id="refreshExamsBtn" type="button">Refresh Exams</button>
-<p id="examListStatus" class="small"></p>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>Exam Name</th>
-<th>Start (IST)</th>
-<th>End (IST)</th>
-<th>Questions</th>
-<th>Attempts</th>
-<th>Ranking</th>
-</tr>
-</thead>
-<tbody id="examsBody"></tbody>
-</table>
-</div>
-</div>
-
-<!-- 4. BIBLE QUESTION MANAGEMENT -->
+<!-- 3. BIBLE QUESTION MANAGEMENT & AI GENERATOR (ABOVE SCHEDULED EXAMS) -->
 
 <div class="card" id="questionManager">
 <h2>📖 Bible Question Management</h2>
@@ -698,6 +585,119 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 </table>
 </div>
 <p class="small">Showing questions from Bible questions repository.</p>
+</div>
+
+<!-- 4. LIVE EXAM SCHEDULING -->
+
+<div class="card">
+<h2>📅 Schedule Live Bible Exam</h2>
+<p class="small">
+Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule చేయవచ్చు. All times are India Standard Time (IST).
+</p>
+
+<form id="scheduleForm">
+<label for="examName">Exam Name</label>
+<input id="examName" type="text" placeholder="Example: Genesis Chapter 1 Quiz" required maxlength="150">
+
+<div class="grid">
+<div>
+<label for="examDate">Exam Date</label>
+<input id="examDate" type="date" required>
+</div>
+
+<div>
+<label for="questionCount">Questions</label>
+<select id="questionCount">
+<option value="10">10 Questions</option>
+<option value="20">20 Questions</option>
+<option value="50">50 Questions</option>
+<option value="100">100 Questions</option>
+</select>
+</div>
+
+<div>
+<label for="examBibleBook">Bible Book</label>
+<input id="examBibleBook" type="text" placeholder="Example: Genesis" maxlength="100" required>
+</div>
+
+<div>
+<label for="examChapter">Chapter Number</label>
+<input id="examChapter" type="number" min="1" max="150" placeholder="Example: 1" required>
+</div>
+
+<div>
+<label for="examLanguage">Question Language</label>
+<select id="examLanguage" required>
+  <option value="all" selected>All Languages (Trilingual / 4 Languages)</option>
+  <option value="telugu">Telugu Only</option>
+  <option value="english">English Only</option>
+  <option value="tamil">Tamil Only</option>
+  <option value="hindi">Hindi Only</option>
+</select>
+</div>
+
+<div>
+<label for="examDifficulty">Question Difficulty</label>
+<select id="examDifficulty" required>
+<option value="easy">Easy</option>
+<option value="medium">Medium</option>
+<option value="tough">Tough</option>
+</select>
+</div>
+
+<div>
+<label for="startTime">Start Time (IST)</label>
+<input id="startTime" type="time" required>
+</div>
+
+<div>
+<label for="endTime">End Time (IST)</label>
+<input id="endTime" type="time" required>
+</div>
+
+<div>
+<label for="maxAttempts">Maximum Attempts</label>
+<select id="maxAttempts">
+<option value="1">1 Attempt</option>
+<option value="2">2 Attempts</option>
+<option value="3">3 Attempts</option>
+</select>
+</div>
+
+<div>
+<label for="rankingMethod">Leaderboard Ranking</label>
+<select id="rankingMethod">
+<option value="best">Best Score</option>
+<option value="first">First Attempt Score</option>
+<option value="last">Last Attempt Score</option>
+</select>
+</div>
+</div>
+
+<button id="saveExamBtn" type="submit">💾 Save Exam Schedule</button>
+</form>
+<p id="scheduleStatus" role="status"></p>
+</div>
+
+<div class="card">
+<h2>📋 Scheduled Exams</h2>
+<button id="refreshExamsBtn" type="button">Refresh Exams</button>
+<p id="examListStatus" class="small"></p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Exam Name</th>
+<th>Start (IST)</th>
+<th>End (IST)</th>
+<th>Questions</th>
+<th>Attempts</th>
+<th>Ranking</th>
+</tr>
+</thead>
+<tbody id="examsBody"></tbody>
+</table>
+</div>
 </div>
 
 </section>
