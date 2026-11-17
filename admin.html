@@ -1301,9 +1301,11 @@ function refreshPaperFoldersUI() {
       <div class="folder-lang-pills">${pillsHtml}</div>
       <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
         <button type="button" class="btn-sm secondary" onclick="selectFolderForScan('${name.replace(/'/g, "\\'")}')">➕ Add Language Paper</button>
-        <button type="button" class="btn-sm" onclick="selectFolderForSchedule('${name.replace(/'/g, "\\'")}')">📅 Schedule Exam</button>
+                <button type="button" class="btn-sm" onclick="selectFolderForSchedule('${name.replace(/'/g, "\\'")}')">📅 Schedule Exam</button>
+        <button type="button" class="btn-sm danger" onclick="deletePaperFolder('${name.replace(/'/g, "\\'")}')">🗑️ Delete</button>
       </div>
     `;
+
     grid.appendChild(card);
   });
 }
@@ -1322,6 +1324,15 @@ window.selectFolderForSchedule = function(folderName) {
   $("examBibleBook").value = "Folder: " + folderName;
   $("examChapter").value = 1;
   $("scheduleForm").scrollIntoView({ behavior: "smooth" });
+};
+window.deletePaperFolder = async function(folderName) {
+  if (!confirm(`"${folderName}" ఫోల్డర్‌లోని అన్ని ప్రశ్నలను తొలగించాలా?`)) return;
+  const { error } = await db.from("bible_questions").delete().eq("paper_folder", folderName);
+  if (error) {
+    alert("Delete Error: " + error.message);
+  } else {
+    await loadQuestions();
+  }
 };
 
 $("examPaperFolderSelect").addEventListener("change", function() {
