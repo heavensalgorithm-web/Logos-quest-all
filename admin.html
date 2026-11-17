@@ -1496,8 +1496,122 @@ function parseQuestionsFromRawText(rawText) {
       opts.C = mC[1].replace(/\n+/g, " ").trim();
       opts.D = mD[1].replace(/\n+/g, " ").trim();
     } else if (blk.lines.length >= 2) {
+function parseQuestionsFromRawText(rawText) {
+  let normalized = (rawText || "")
+    .replace(/\r/g, "\n")
+    .replace(/[①]/g, " A) ")
+    .replace(/[②]/g, " B) ")
+    .replace(/[③]/g, " C) ")
+    .replace(/[④]/g, " D) ")
+    // Convert OCR misread option markers anywhere (even without leading space after Telugu text)
+    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*(?:A|@|&|4|డీ)\s*[\)\]\}]\s*/g, (m) => {
+      const prefix = /^[^\x00-\x7F]/.test(m) ? m[0] : "";
+      return prefix + " A) ";
+    })
+    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*[Bb8]\s*[\)\]\}]\s*/g, (m) => {
+      const prefix = /^[^\x00-\x7F]/.test(m) ? m[0] : "";
+      return prefix + " B) ";
+    })
+    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*[Cc©]\s*[\)\]\}]\s*/g, (m) => {
+      const prefix = /^[^\x00-\x7F]/.test(m) ? m[0] : "";
+      return prefix + " C) ";
+    })
+    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*[Dd0Oo]\s*[\)\]\}]\s*/g, (m) => {
+      const prefix = /^[^\x00-\x7F]/.test(m) ? m[0] : "";
+      return prefix + " D) ";
+    })
+    // Also handle standard A. B. C. D.
+    .replace(/(^|\s)([A-Da-d])\.\s+/g, (_, sp, l) => `${sp}${l.toUpperCase()}) `)
+    .replace(/[ \t]+/g, " ")
+    .trim();
+
+  if (!normalized) return [];
+
+  // Extract bottom Answer Key map if present (e.g., "1-A, 2-C, 3. B")
+  const answerKeyMap = {};
+  const ansPairRegex = /\b(\d{1,3})\s*[\.\-\:\)]\s*([A-Da-d])\b/g;
+  const keySectionMatch = normalized.match(/(?:answer\s*key|answers|సమాధానాలు|ఉత్తరాలు)[:\s\-]*([\s\S]+)$/i);
+  if (keySectionMatch) {
+    let m;
+    while ((m = ansPairRegex.exec(keySectionMatch[1])) !== null) {
+      answerKeyMap[Number(m[1])] = m[2].toUpperCase();
+    }
+  }
+
+  // Split text into question blocks (supports "1. Question" or "2 నిర్గమకాండము...")
+  const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
+  const blocks = [];
+  let currentBlock = null;
+
+  const qStartRegex = /^(?:Q\.?\s*)?(\d{1,3})(?:[\.\)\:\-]\s*|\s+(?=[^\d\)\]\s]))(.+)$/i;
+
+  lines.forEach(line => {
+    if (/^(?:answer\s*key|answers|సమాధానాలు)/i.test(line)) {
+      if (currentBlock) {
+        blocks.push(currentBlock);
+        currentBlock = null;
+      }
+      return;
+    }
+
+    const qMatch = line.match(qStartRegex);
+    if (qMatch && (!currentBlock || currentBlock.lines.length >= 2)) {
+      if (currentBlock) blocks.push(currentBlock);
+      currentBlock = { qNum: Number(qMatch[1]), lines: [qMatch[2]] };
+    } else if (currentBlock) {
+      currentBlock.lines.push(line);
+    } else {
+      currentBlock = { qNum: blocks.length + 1, lines: [line] };
+    }
+  });
+  if (currentBlock) blocks.push(currentBlock);
+
+  const parsedQuestions = [];
+
+  blocks.forEach((blk) => {
+    const fullBlock = blk.lines.join("\n");
+
+    let detectedAns = answerKeyMap[blk.qNum] || "A";
+    const inlineAnsMatch = fullBlock.match(/(?:ans(?:wer)?|సమాధానం)\s*[\:\-\=]\s*\(?([A-Da-d])\)?/i);
+    if (inlineAnsMatch) {
+      detectedAns = inlineAnsMatch[1].toUpperCase();
+    }
+
+    const cleanedBlock = fullBlock.replace(/(?:ans(?:wer)?|సమాధానం)\s*[\:\-\=]\s*\(?[A-Da-d]\)?/gi, "").trim();
+
+    const opts = { A: "", B: "", C: "", D: "" };
+
+    // Split sequentially by B), C), D) even if A) was misread at the start of options
+    const idxB = cleanedBlock.search(/\bB\)\s*/);
+    const idxC = cleanedBlock.search(/\bC\)\s*/);
+    const idxD = cleanedBlock.search(/\bD\)\s*/);
+
+    let qText = "";
+    if (idxB !== -1 && idxC > idxB && idxD > idxC) {
+      const beforeB = cleanedBlock.slice(0, idxB).trim();
+      const idxA = beforeB.search(/\bA\)\s*/);
+
+      if (idxA !== -1) {
+        qText = beforeB.slice(0, idxA).replace(/\n+/g, " ").trim();
+        opts.A = beforeB.slice(idxA).replace(/^A\)\s*/, "").replace(/\n+/g, " ").trim();
+      } else {
+        const qEndMatch = beforeB.match(/^([\s\S]*[\?\.\:])\s*([^\?\.\:]+)$/);
+        if (qEndMatch) {
+          qText = qEndMatch[1].replace(/\n+/g, " ").trim();
+          opts.A = qEndMatch[2].replace(/\n+/g, " ").trim();
+        } else {
+          const splitLines = beforeB.split("\n");
+          qText = splitLines[0].trim();
+          opts.A = splitLines.slice(1).join(" ").trim();
+        }
+      }
+
+      opts.B = cleanedBlock.slice(idxB, idxC).replace(/^B\)\s*/, "").replace(/\n+/g, " ").trim();
+      opts.C = cleanedBlock.slice(idxC, idxD).replace(/^C\)\s*/, "").replace(/\n+/g, " ").trim();
+      opts.D = cleanedBlock.slice(idxD).replace(/^D\)\s*/, "").replace(/\n+/g, " ").trim();
+    } else if (blk.lines.length >= 2) {
       qText = blk.lines[0];
-      const rem = blk.lines.slice(1).map(l => l.replace(/^[\(\[]?[A-Da-d1-4][\)\]\.\:\-]\s*/, "").trim());
+      const rem = blk.lines.slice(1).map(l => l.replace(/^[A-D1-4]\)\s*/, "").trim());
       opts.A = rem[0] || "";
       opts.B = rem[1] || "";
       opts.C = rem[2] || "";
@@ -1522,6 +1636,9 @@ function parseQuestionsFromRawText(rawText) {
       });
     }
   });
+
+  return parsedQuestions;
+}
 
   return parsedQuestions;
 }
