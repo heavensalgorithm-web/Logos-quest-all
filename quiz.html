@@ -497,16 +497,20 @@ async function initExam() {
       throw new Error(`మీరు ఇప్పటికే గరిష్టంగా (${maxAttempts}) సార్లు ఈ పరీక్ష రాశారు.`);
     }
 
-    let query = db.from("bible_questions").select("*");
-    const bookFilter = (exam.bible_book || "").trim();
-    const chapterFilter = exam.chapter_number;
-
-    if (bookFilter) {
-      query = query.ilike("bible_book", bookFilter);
+        let query = db.from("bible_questions").select("*");
+    if (exam.paper_folder && exam.paper_folder.trim() !== "") {
+      query = query.eq("paper_folder", exam.paper_folder.trim());
+    } else {
+      const bookFilter = (exam.bible_book || "").trim();
+      const chapterFilter = exam.chapter_number;
+      if (bookFilter) {
+        query = query.ilike("bible_book", bookFilter);
+      }
+      if (chapterFilter !== null && chapterFilter !== undefined && chapterFilter !== "") {
+        query = query.eq("chapter_number", Number(chapterFilter));
+      }
     }
-    if (chapterFilter !== null && chapterFilter !== undefined && chapterFilter !== "") {
-      query = query.eq("chapter_number", Number(chapterFilter));
-    }
+    
 
     const { data: qList, error: qErr } = await query.order("id", { ascending: true }).limit(500);
 
