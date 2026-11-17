@@ -296,6 +296,128 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   font-size:14px;
 }
 
+/* FOLDER CARDS & QUESTION PAPER SCANNER STYLES */
+.folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.folder-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(250, 204, 21, 0.35);
+  border-radius: 14px;
+  padding: 14px;
+  transition: all 0.2s ease;
+}
+
+.folder-card:hover {
+  border-color: var(--gold-primary);
+  box-shadow: 0 4px 16px rgba(250, 204, 21, 0.15);
+}
+
+.folder-lang-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.lang-pill-tag {
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #7dd3fc;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.scanner-dropzone {
+  border: 2px dashed rgba(250, 204, 21, 0.5);
+  background: rgba(15, 23, 42, 0.75);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  margin: 12px 0;
+}
+
+.scanner-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.btn-scan-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  color: #0b1329;
+  font-weight: 800;
+  padding: 13px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 4px 12px var(--gold-glow);
+}
+
+.btn-scan-label.alt {
+  background: rgba(56, 189, 248, 0.18);
+  color: #7dd3fc;
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  box-shadow: none;
+}
+
+.scan-page-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+.scan-page-pill {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #6ee7b7;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.scan-edit-card {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(250, 204, 21, 0.28);
+  border-radius: 14px;
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.scan-edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.scan-edit-card input,
+.scan-edit-card textarea,
+.scan-edit-card select {
+  padding: 9px 11px;
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+.scan-edit-card textarea {
+  min-height: 56px;
+}
+
 .question-actions{white-space:nowrap}
 
 /* LIVE PARTICIPANTS & SEPARATE GALLERIES */
@@ -622,7 +744,85 @@ Highest Score
 </div>
 </div>
 
-<!-- 4. BIBLE QUESTION MANAGEMENT & AI GENERATOR -->
+<!-- 4. MULTI-PAGE & MULTI-LANGUAGE QUESTION PAPER SCANNER WITH EXAM FOLDERS -->
+
+<div class="card" id="paperScannerCard">
+  <h2>📁 Question Paper Folders & Scanner (Telugu / English / Tamil)</h2>
+  <p class="small">
+    ఒక ఎగ్జామ్‌కి ఒక <strong>Exam Folder Name</strong> ఇచ్చి, అందులోనే <strong>Telugu Paper</strong>, <strong>English Paper</strong>, <strong>Tamil Paper</strong> పేజీ బై పేజీ స్కాన్ చేసి సేవ్ చేయండి.<br>
+    ఆ తర్వాత కింద <strong>Schedule Live Bible Exam</strong> లో ఆ Folder సెలెక్ట్ చేసి Date & Time పెడితే చాలు — ఆ టైమ్‌కి ప్రతి విద్యార్థికి వారు ఎంచుకున్న భాష పేపర్ మాత్రమే వస్తుంది!
+  </p>
+
+  <div class="grid">
+    <div>
+      <label for="scanFolderName">📁 Exam Folder Name (ఒకే ఎగ్జామ్‌కి అన్ని భాషలకూ ఇదే పేరు ఇవ్వండి)</label>
+      <input id="scanFolderName" type="text" placeholder="Example: Sunday Grand Quiz Nov 22" list="existingFoldersDatalist" required>
+      <datalist id="existingFoldersDatalist"></datalist>
+    </div>
+
+    <div>
+      <label for="scanLanguage">🌐 Paper Language (ఇప్పుడు స్కాన్ చేసే పేపర్ భాష)</label>
+      <select id="scanLanguage">
+        <option value="telugu">తెలుగు (Telugu Paper)</option>
+        <option value="english">English (English Paper)</option>
+        <option value="tamil">தமிழ் (Tamil Paper)</option>
+        <option value="hindi">हिन्दी (Hindi Paper)</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="scanBibleBook">Bible Book (Optional / Reference)</label>
+      <input id="scanBibleBook" type="text" placeholder="Example: Genesis / General" value="General">
+    </div>
+
+    <div>
+      <label for="scanChapterNumber">Chapter Number (Optional)</label>
+      <input id="scanChapterNumber" type="number" min="1" max="150" value="1">
+    </div>
+  </div>
+
+  <div class="scanner-dropzone">
+    <p style="margin:0; font-weight:700; color:var(--gold-primary);">
+      📄 పేజీ 1, పేజీ 2, పేజీ 3... ఒక్కొక్కటిగా స్కాన్ చేయండి (Scanned Pages: <span id="scannedPagesCount">0</span> | Questions Ready: <span id="scannedQuestionsCount">0</span>)
+    </p>
+    <p class="small" style="margin:4px 0 8px;">100 ప్రశ్నలు (5 పేజీలు) ఒకేసారి Queue లో యాడ్ చేసి సేవ్ చేసుకోవచ్చు.</p>
+
+    <div class="scanner-btn-row">
+      <label for="scanCameraInput" class="btn-scan-label">📷 Take Page Photo (Camera)</label>
+      <input type="file" id="scanCameraInput" accept="image/*" capture="environment" style="display:none;">
+
+      <label for="scanGalleryInput" class="btn-scan-label alt">🖼️ Upload Page Image(s) (Gallery)</label>
+      <input type="file" id="scanGalleryInput" accept="image/*" multiple style="display:none;">
+    </div>
+
+    <div id="scannedPagesStrip" class="scan-page-strip"></div>
+  </div>
+
+  <p id="scannerStatus" role="status"></p>
+
+  <details style="margin:10px 0;">
+    <summary style="cursor:pointer; color:var(--gold-primary); font-size:13px; font-weight:600;">📝 Scanned OCR Text చూడండి / లేదా నేరుగా Text పేస్ట్ చేసి Parse చేయండి</summary>
+    <textarea id="scanRawOcrText" placeholder="స్కాన్ చేసిన టెక్స్ట్ ఇక్కడ కనిపిస్తుంది... లేదా మీ దగ్గర ఉన్న ప్రశ్నల టెక్స్ట్ పేస్ట్ చేసి 'Parse Text to Questions' నొక్కండి."></textarea>
+    <button type="button" id="parseManualTextBtn" class="secondary btn-sm">⚙️ Parse Text to Questions</button>
+  </details>
+
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;">
+    <button type="button" id="saveScannedQuestionsBtn" class="hidden">💾 Save Questions into Exam Folder</button>
+    <button type="button" id="clearScannedQueueBtn" class="danger hidden">🗑️ Clear Queue</button>
+  </div>
+
+  <p id="scannerSaveStatus" role="status"></p>
+  <div id="scannedPreviewList"></div>
+
+  <!-- SAVED EXAM PAPER FOLDERS OVERVIEW -->
+  <div style="margin-top:22px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.12);">
+    <h3 style="color:var(--gold-primary); margin:0 0 6px 0;">📂 Saved Exam Paper Folders (ఎగ్జామ్ ఫోల్డర్లు)</h3>
+    <p class="small">ఏ ఫోల్డర్‌లో ఏయే భాషల పేపర్లు ఎన్ని ప్రశ్నలు సిద్ధంగా ఉన్నాయో ఇక్కడ చూడండి:</p>
+    <div id="savedFoldersGrid" class="folder-grid"></div>
+  </div>
+</div>
+
+<!-- 5. BIBLE QUESTION MANAGEMENT & AI GENERATOR -->
 
 <div class="card" id="questionManager">
 <h2>📖 Bible Question Management</h2>
@@ -781,7 +981,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 </div>
 </div>
 
-<input id="questionSearch" placeholder="Search Bible Book or Question">
+<input id="questionSearch" placeholder="Search Bible Book, Folder or Question">
 <button id="refreshQuestionsBtn" type="button">🔄 Refresh Questions</button>
 <p id="questionListStatus" class="small"></p>
 
@@ -789,7 +989,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 <table>
 <thead>
 <tr>
-<th>Book</th>
+<th>Book / Folder</th>
 <th>Chapter</th>
 <th>Language</th>
 <th>Difficulty</th>
@@ -804,17 +1004,24 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 <p class="small">Showing questions from Bible questions repository.</p>
 </div>
 
-<!-- 5. LIVE EXAM SCHEDULING -->
+<!-- 6. LIVE EXAM SCHEDULING -->
 
 <div class="card">
 <h2>📅 Schedule Live Bible Exam</h2>
 <p class="small">
-Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule చేయవచ్చు. All times are India Standard Time (IST).
+పైన స్కాన్ చేసి సేవ్ చేసిన <strong>Exam Paper Folder</strong> సెలెక్ట్ చేసి Date & Time పెడితే, ఆ టైమ్‌కి ఆ ఫోల్డర్‌లోని Telugu / English / Tamil ప్రశ్నలే ఎగ్జామ్‌లో వస్తాయి!
 </p>
 
 <form id="scheduleForm">
 <label for="examName">Exam Name</label>
-<input id="examName" type="text" placeholder="Example: Genesis Chapter 1 Quiz" required maxlength="150">
+<input id="examName" type="text" placeholder="Example: Sunday Grand Bible Quiz" required maxlength="150">
+
+<div style="background:rgba(250,204,21,0.08); border:1.5px solid rgba(250,204,21,0.35); border-radius:12px; padding:12px; margin:8px 0;">
+  <label for="examPaperFolderSelect" style="margin-top:0;">📁 Select Scanned Exam Paper Folder (Optional - ఫోల్డర్ ఎంచుకుంటే Book/Chapter తో పనిలేకుండా ఆ ఫోల్డర్ పేపర్లు వస్తాయి)</label>
+  <select id="examPaperFolderSelect">
+    <option value="">-- Use Bible Book & Chapter Below (No Folder) --</option>
+  </select>
+</div>
 
 <div class="grid">
 <div>
@@ -845,7 +1052,7 @@ Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule �
 <div>
 <label for="examLanguage">Question Language</label>
 <select id="examLanguage" required>
-  <option value="all" selected>All Languages (Trilingual / 4 Languages)</option>
+  <option value="all" selected>All Languages (Telugu / English / Tamil / Hindi)</option>
   <option value="telugu">Telugu Only</option>
   <option value="english">English Only</option>
   <option value="tamil">Tamil Only</option>
@@ -896,7 +1103,7 @@ Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule �
 <p id="scheduleStatus" role="status"></p>
 </div>
 
-<!-- 6. SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS -->
+<!-- 7. SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS -->
 
 <div class="card" id="scheduledExamsCard">
 <h2>📋 Scheduled Exams & Participants</h2>
@@ -934,6 +1141,7 @@ Admin ఒక రోజులో గరిష్ఠంగా 10 Exams Schedule �
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
@@ -947,6 +1155,10 @@ let editingQuestionId = null;
 let generatedAiQuestions = [];
 let liveMonitorTimer = null;
 let liveRealtimeChannel = null;
+
+// Multi-Page Question Paper Scanner State
+let scannedQuestionQueue = [];
+let scannedPageNames = [];
 
 function showLogin(message = "") {
   if (liveMonitorTimer) clearInterval(liveMonitorTimer);
@@ -1016,6 +1228,528 @@ $("logoutBtn").addEventListener("click", async () => {
 });
 
 // ==========================================
+// SAVED EXAM PAPER FOLDERS OVERVIEW & DROPDOWN SYNC
+// ==========================================
+function refreshPaperFoldersUI() {
+  const folderMap = {};
+  allQuestions.forEach(q => {
+    const fName = (q.paper_folder || "").trim();
+    if (!fName) return;
+    if (!folderMap[fName]) {
+      folderMap[fName] = { total: 0, langs: {} };
+    }
+    folderMap[fName].total++;
+    const l = (q.language || "unknown").toLowerCase();
+    folderMap[fName].langs[l] = (folderMap[fName].langs[l] || 0) + 1;
+  });
+
+  const folderNames = Object.keys(folderMap);
+
+  // 1. Update Datalist in Scanner
+  const datalist = $("existingFoldersDatalist");
+  datalist.replaceChildren();
+  folderNames.forEach(name => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    datalist.appendChild(opt);
+  });
+
+  // 2. Update Folder Select in Schedule Live Bible Exam
+  const folderSelect = $("examPaperFolderSelect");
+  const prevVal = folderSelect.value;
+  folderSelect.replaceChildren();
+  const defaultOpt = document.createElement("option");
+  defaultOpt.value = "";
+  defaultOpt.textContent = "-- Use Bible Book & Chapter Below (No Folder) --";
+  folderSelect.appendChild(defaultOpt);
+
+  folderNames.forEach(name => {
+    const info = folderMap[name];
+    const langSummary = Object.entries(info.langs)
+      .map(([l, cnt]) => `${l.toUpperCase()}: ${cnt}`)
+      .join(", ");
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = `📁 ${name} (${langSummary})`;
+    folderSelect.appendChild(opt);
+  });
+  if (prevVal && folderMap[prevVal]) {
+    folderSelect.value = prevVal;
+  }
+
+  // 3. Render Folder Cards inside Scanner Section
+  const grid = $("savedFoldersGrid");
+  grid.replaceChildren();
+
+  if (folderNames.length === 0) {
+    grid.innerHTML = `<p class="small" style="grid-column:1/-1;">ఇంకా ఏ Exam Paper Folder క్రియేట్ చేయలేదు. పైన Folder Name ఇచ్చి పేపర్లు స్కాన్ చేసి సేవ్ చేయండి.</p>`;
+    return;
+  }
+
+  folderNames.forEach(name => {
+    const info = folderMap[name];
+    const card = document.createElement("div");
+    card.className = "folder-card";
+
+    const pillsHtml = Object.entries(info.langs)
+      .map(([l, cnt]) => `<span class="lang-pill-tag">${l.toUpperCase()}: ${cnt} Qs</span>`)
+      .join("");
+
+    card.innerHTML = `
+      <div style="font-weight:800; color:var(--gold-primary); font-size:15px;">📁 ${name}</div>
+      <div class="small">Total Questions: <strong>${info.total}</strong></div>
+      <div class="folder-lang-pills">${pillsHtml}</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
+        <button type="button" class="btn-sm secondary" onclick="selectFolderForScan('${name.replace(/'/g, "\\'")}')">➕ Add Language Paper</button>
+        <button type="button" class="btn-sm" onclick="selectFolderForSchedule('${name.replace(/'/g, "\\'")}')">📅 Schedule Exam</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+window.selectFolderForScan = function(folderName) {
+  $("scanFolderName").value = folderName;
+  $("scanFolderName").focus();
+  $("paperScannerCard").scrollIntoView({ behavior: "smooth" });
+};
+
+window.selectFolderForSchedule = function(folderName) {
+  $("examPaperFolderSelect").value = folderName;
+  if (!$("examName").value.trim()) {
+    $("examName").value = folderName;
+  }
+  $("examBibleBook").value = "Folder: " + folderName;
+  $("examChapter").value = 1;
+  $("scheduleForm").scrollIntoView({ behavior: "smooth" });
+};
+
+$("examPaperFolderSelect").addEventListener("change", function() {
+  const val = this.value;
+  if (val) {
+    if (!$("examName").value.trim()) $("examName").value = val;
+    $("examBibleBook").value = "Folder: " + val;
+    $("examChapter").value = 1;
+  }
+});
+
+// ==========================================
+// MULTI-PAGE & MULTI-LANGUAGE QUESTION PAPER SCANNER (OCR + PARSER)
+// ==========================================
+function preprocessImageForOcr(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 2000;
+        let w = img.width;
+        let h = img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) {
+            h = Math.round((h * maxDim) / w);
+            w = maxDim;
+          } else {
+            w = Math.round((w * maxDim) / h);
+            h = maxDim;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const d = imgData.data;
+        for (let i = 0; i < d.length; i += 4) {
+          const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+          const contrasted = gray < 145 ? Math.max(0, gray * 0.75) : Math.min(255, gray * 1.12);
+          d[i] = contrasted;
+          d[i + 1] = contrasted;
+          d[i + 2] = contrasted;
+        }
+        ctx.putImageData(imgData, 0, 0);
+        resolve(canvas.toDataURL("image/jpeg", 0.92));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function runCloudOcrFallback(base64DataUrl, langCode) {
+  const ocrSpaceLangMap = {
+    telugu: "tel",
+    english: "eng",
+    tamil: "tam",
+    hindi: "hin"
+  };
+  const fd = new FormData();
+  fd.append("base64Image", base64DataUrl);
+  fd.append("language", ocrSpaceLangMap[langCode] || "eng");
+  fd.append("isOverlayRequired", "false");
+  fd.append("OCREngine", "2");
+
+  const res = await fetch("https://api.ocr.space/parse/image", {
+    method: "POST",
+    headers: { apikey: "helloworld" },
+    body: fd
+  });
+  if (!res.ok) throw new Error("Cloud OCR HTTP " + res.status);
+  const json = await res.json();
+  if (json && Array.isArray(json.ParsedResults) && json.ParsedResults[0]) {
+    return json.ParsedResults[0].ParsedText || "";
+  }
+  return "";
+}
+
+function parseQuestionsFromRawText(rawText) {
+  const normalized = (rawText || "")
+    .replace(/\r/g, "\n")
+    .replace(/[①]/g, "(A)")
+    .replace(/[②]/g, "(B)")
+    .replace(/[③]/g, "(C)")
+    .replace(/[④]/g, "(D)")
+    .trim();
+
+  if (!normalized) return [];
+
+  const answerKeyMap = {};
+  const ansPairRegex = /\b(\d{1,3})\s*[\.\-\:\)]\s*([A-Da-d])\b/g;
+  const keySectionMatch = normalized.match(/(?:answer\s*key|answers|సమాధానాలు|ఉత్తరాలు)[:\s\-]*([\s\S]+)$/i);
+  if (keySectionMatch) {
+    let m;
+    while ((m = ansPairRegex.exec(keySectionMatch[1])) !== null) {
+      answerKeyMap[Number(m[1])] = m[2].toUpperCase();
+    }
+  }
+
+  const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
+  const blocks = [];
+  let currentBlock = null;
+
+  const qStartRegex = /^(?:Q\.?\s*)?(\d{1,3})\s*[\.\)\:\-]\s*(.+)$/i;
+
+  lines.forEach(line => {
+    if (/^(?:answer\s*key|answers|సమాధానాలు)/i.test(line)) {
+      if (currentBlock) {
+        blocks.push(currentBlock);
+        currentBlock = null;
+      }
+      return;
+    }
+
+    const qMatch = line.match(qStartRegex);
+    if (qMatch && (!currentBlock || currentBlock.lines.length >= 2)) {
+      if (currentBlock) blocks.push(currentBlock);
+      currentBlock = { qNum: Number(qMatch[1]), lines: [qMatch[2]] };
+    } else if (currentBlock) {
+      currentBlock.lines.push(line);
+    } else {
+      currentBlock = { qNum: blocks.length + 1, lines: [line] };
+    }
+  });
+  if (currentBlock) blocks.push(currentBlock);
+
+  const parsedQuestions = [];
+
+  blocks.forEach((blk) => {
+    const fullBlock = blk.lines.join("\n");
+
+    let detectedAns = answerKeyMap[blk.qNum] || "A";
+    const inlineAnsMatch = fullBlock.match(/(?:ans(?:wer)?|సమాధానం)\s*[\:\-\=]\s*\(?([A-Da-d])\)?/i);
+    if (inlineAnsMatch) {
+      detectedAns = inlineAnsMatch[1].toUpperCase();
+    }
+
+    const cleanedBlock = fullBlock.replace(/(?:ans(?:wer)?|సమాధానం)\s*[\:\-\=]\s*\(?[A-Da-d]\)?/gi, "").trim();
+
+    const opts = { A: "", B: "", C: "", D: "" };
+
+    const mA = cleanedBlock.match(/(?:^|\n|\s)[\(\[]?[Aa][\)\]\.\:\-]\s*([\s\S]*?)(?=(?:\n|\s)[\(\[]?[Bb][\)\]\.\:\-]\s*)/);
+    const mB = cleanedBlock.match(/(?:^|\n|\s)[\(\[]?[Bb][\)\]\.\:\-]\s*([\s\S]*?)(?=(?:\n|\s)[\(\[]?[Cc][\)\]\.\:\-]\s*)/);
+    const mC = cleanedBlock.match(/(?:^|\n|\s)[\(\[]?[Cc][\)\]\.\:\-]\s*([\s\S]*?)(?=(?:\n|\s)[\(\[]?[Dd][\)\]\.\:\-]\s*)/);
+    const mD = cleanedBlock.match(/(?:^|\n|\s)[\(\[]?[Dd][\)\]\.\:\-]\s*([\s\S]*?)$/);
+
+    let qText = "";
+    if (mA && mB && mC && mD) {
+      const firstOptIndex = cleanedBlock.indexOf(mA[0]);
+      qText = cleanedBlock.slice(0, firstOptIndex).replace(/\n+/g, " ").trim();
+      opts.A = mA[1].replace(/\n+/g, " ").trim();
+      opts.B = mB[1].replace(/\n+/g, " ").trim();
+      opts.C = mC[1].replace(/\n+/g, " ").trim();
+      opts.D = mD[1].replace(/\n+/g, " ").trim();
+    } else if (blk.lines.length >= 2) {
+      qText = blk.lines[0];
+      const rem = blk.lines.slice(1).map(l => l.replace(/^[\(\[]?[A-Da-d1-4][\)\]\.\:\-]\s*/, "").trim());
+      opts.A = rem[0] || "";
+      opts.B = rem[1] || "";
+      opts.C = rem[2] || "";
+      opts.D = rem[3] || "";
+    }
+
+    ["A", "B", "C", "D"].forEach(letter => {
+      if (/[✓✔\*]$/.test(opts[letter])) {
+        detectedAns = letter;
+        opts[letter] = opts[letter].replace(/[✓✔\*]+$/g, "").trim();
+      }
+    });
+
+    if (qText && (opts.A || opts.B)) {
+      parsedQuestions.push({
+        question_text: qText,
+        option_a: opts.A,
+        option_b: opts.B,
+        option_c: opts.C,
+        option_d: opts.D,
+        correct_answer: detectedAns
+      });
+    }
+  });
+
+  return parsedQuestions;
+}
+
+function renderScannedQueue() {
+  const listEl = $("scannedPreviewList");
+  const pagesStrip = $("scannedPagesStrip");
+  listEl.replaceChildren();
+  pagesStrip.replaceChildren();
+
+  $("scannedPagesCount").textContent = scannedPageNames.length;
+  $("scannedQuestionsCount").textContent = scannedQuestionQueue.length;
+
+  scannedPageNames.forEach((pName, i) => {
+    const pill = document.createElement("span");
+    pill.className = "scan-page-pill";
+    pill.textContent = `📄 Page ${i + 1}: ${pName}`;
+    pagesStrip.appendChild(pill);
+  });
+
+  if (scannedQuestionQueue.length > 0) {
+    $("saveScannedQuestionsBtn").classList.remove("hidden");
+    $("clearScannedQueueBtn").classList.remove("hidden");
+  } else {
+    $("saveScannedQuestionsBtn").classList.add("hidden");
+    $("clearScannedQueueBtn").classList.add("hidden");
+    return;
+  }
+
+  scannedQuestionQueue.forEach((item, idx) => {
+    const card = document.createElement("div");
+    card.className = "scan-edit-card";
+    card.innerHTML = `
+      <div class="scan-edit-header">
+        <strong style="color:var(--gold-primary);">Question #${idx + 1} (${item.pageTag || "Page"})</strong>
+        <button type="button" class="danger btn-sm" onclick="removeScannedQuestion(${idx})">🗑️ Remove</button>
+      </div>
+      <textarea onchange="updateScannedField(${idx}, 'question_text', this.value)" placeholder="Question Text">${item.question_text}</textarea>
+      <div class="grid">
+        <div>
+          <label>Option A</label>
+          <input type="text" value="${item.option_a.replace(/"/g, '&quot;')}" onchange="updateScannedField(${idx}, 'option_a', this.value)">
+        </div>
+        <div>
+          <label>Option B</label>
+          <input type="text" value="${item.option_b.replace(/"/g, '&quot;')}" onchange="updateScannedField(${idx}, 'option_b', this.value)">
+        </div>
+        <div>
+          <label>Option C</label>
+          <input type="text" value="${item.option_c.replace(/"/g, '&quot;')}" onchange="updateScannedField(${idx}, 'option_c', this.value)">
+        </div>
+        <div>
+          <label>Option D</label>
+          <input type="text" value="${item.option_d.replace(/"/g, '&quot;')}" onchange="updateScannedField(${idx}, 'option_d', this.value)">
+        </div>
+      </div>
+      <div style="max-width:240px;">
+        <label>Correct Answer</label>
+        <select onchange="updateScannedField(${idx}, 'correct_answer', this.value)">
+          <option value="A" ${item.correct_answer === "A" ? "selected" : ""}>Option A</option>
+          <option value="B" ${item.correct_answer === "B" ? "selected" : ""}>Option B</option>
+          <option value="C" ${item.correct_answer === "C" ? "selected" : ""}>Option C</option>
+          <option value="D" ${item.correct_answer === "D" ? "selected" : ""}>Option D</option>
+        </select>
+      </div>
+    `;
+    listEl.appendChild(card);
+  });
+}
+
+window.updateScannedField = function(index, field, val) {
+  if (scannedQuestionQueue[index]) {
+    scannedQuestionQueue[index][field] = val;
+  }
+};
+
+window.removeScannedQuestion = function(index) {
+  scannedQuestionQueue.splice(index, 1);
+  renderScannedQueue();
+};
+
+async function processScannedFiles(fileList) {
+  if (!fileList || fileList.length === 0) return;
+
+  const statusEl = $("scannerStatus");
+  const selectedLang = $("scanLanguage").value || "telugu";
+  const tessLangMap = {
+    telugu: "tel+eng",
+    english: "eng",
+    tamil: "tam+eng",
+    hindi: "hin+eng"
+  };
+
+  let totalNewlyParsed = 0;
+
+  for (let i = 0; i < fileList.length; i++) {
+    const file = fileList[i];
+    const pageNumber = scannedPageNames.length + 1;
+    statusEl.className = "";
+    statusEl.textContent = `⏳ Scanning Page ${pageNumber} (${file.name})... దయచేసి వేచి ఉండండి...`;
+
+    try {
+      const processedDataUrl = await preprocessImageForOcr(file);
+      let extractedText = "";
+
+      try {
+        extractedText = await runCloudOcrFallback(processedDataUrl, selectedLang);
+      } catch (_) {}
+
+      if (!extractedText || extractedText.trim().length < 15) {
+        if (window.Tesseract) {
+          const result = await window.Tesseract.recognize(
+            processedDataUrl,
+            tessLangMap[selectedLang] || "eng"
+          );
+          extractedText = result?.data?.text || "";
+        }
+      }
+
+      const prevRaw = $("scanRawOcrText").value;
+      $("scanRawOcrText").value = (prevRaw ? prevRaw + "\n\n--- Page " + pageNumber + " ---\n" : "") + extractedText;
+
+      const parsed = parseQuestionsFromRawText(extractedText);
+      scannedPageNames.push(`${file.name} (${parsed.length} Qs)`);
+
+      parsed.forEach(p => {
+        scannedQuestionQueue.push({
+          ...p,
+          pageTag: `Page ${pageNumber}`
+        });
+      });
+
+      totalNewlyParsed += parsed.length;
+      renderScannedQueue();
+    } catch (err) {
+      statusEl.className = "error";
+      statusEl.textContent = `❌ Page ${pageNumber} Scan Error: ${err.message}`;
+    }
+  }
+
+  statusEl.className = "success";
+  statusEl.textContent = `✅ స్కాన్ పూర్తయింది! కొత్తగా ${totalNewlyParsed} ప్రశ్నలు Queue లోకి యాడ్ అయ్యాయి (మొత్తం: ${scannedQuestionQueue.length} ప్రశ్నలు). కింద చెక్ చేసి Save నొక్కండి.`;
+}
+
+$("scanCameraInput").addEventListener("change", e => {
+  processScannedFiles(e.target.files);
+  e.target.value = "";
+});
+
+$("scanGalleryInput").addEventListener("change", e => {
+  processScannedFiles(e.target.files);
+  e.target.value = "";
+});
+
+$("parseManualTextBtn").addEventListener("click", () => {
+  const raw = $("scanRawOcrText").value.trim();
+  const statusEl = $("scannerStatus");
+  if (!raw) {
+    statusEl.className = "error";
+    statusEl.textContent = "ముందుగా ప్రశ్నల టెక్స్ట్ పేస్ట్ చేయండి.";
+    return;
+  }
+  const parsed = parseQuestionsFromRawText(raw);
+  if (parsed.length === 0) {
+    statusEl.className = "error";
+    statusEl.textContent = "ప్రశ్నలు మరియు A, B, C, D ఆప్షన్స్ గుర్తించబడలేదు. ఫార్మాట్ చెక్ చేయండి.";
+    return;
+  }
+  parsed.forEach(p => scannedQuestionQueue.push({ ...p, pageTag: "Manual Text" }));
+  renderScannedQueue();
+  statusEl.className = "success";
+  statusEl.textContent = `✅ ${parsed.length} ప్రశ్నలు Queue లోకి యాడ్ అయ్యాయి!`;
+});
+
+$("clearScannedQueueBtn").addEventListener("click", () => {
+  if (!confirm("స్కాన్ చేసిన ప్రశ్నల లిస్ట్ మొత్తాన్ని క్లియర్ చేయాలా?")) return;
+  scannedQuestionQueue = [];
+  scannedPageNames = [];
+  $("scanRawOcrText").value = "";
+  $("scannerStatus").textContent = "";
+  $("scannerSaveStatus").textContent = "";
+  renderScannedQueue();
+});
+
+$("saveScannedQuestionsBtn").addEventListener("click", async () => {
+  if (scannedQuestionQueue.length === 0) return;
+
+  const folderName = ($("scanFolderName").value || "").trim();
+  const book = ($("scanBibleBook").value || "").trim() || folderName || "General";
+  const chapter = Number($("scanChapterNumber").value) || 1;
+  const language = $("scanLanguage").value || "telugu";
+
+  if (!folderName) {
+    alert("దయచేసి Exam Folder Name (ఉదా: Sunday Grand Quiz) నమోదు చేయండి.");
+    $("scanFolderName").focus();
+    return;
+  }
+
+  const saveBtn = $("saveScannedQuestionsBtn");
+  const saveStatus = $("scannerSaveStatus");
+  saveBtn.disabled = true;
+  saveStatus.className = "";
+  saveStatus.textContent = `💾 Saving ${scannedQuestionQueue.length} (${language.toUpperCase()}) questions into folder "${folderName}"...`;
+
+  try {
+    const rowsToInsert = scannedQuestionQueue.map(item => ({
+      paper_folder: folderName,
+      bible_book: book,
+      chapter_number: chapter,
+      language: language,
+      difficulty: "medium",
+      question_text: item.question_text.trim(),
+      option_a: item.option_a.trim(),
+      option_b: item.option_b.trim(),
+      option_c: item.option_c.trim(),
+      option_d: item.option_d.trim(),
+      correct_answer: (item.correct_answer || "A").toUpperCase()
+    }));
+
+    const { error } = await db.from("bible_questions").insert(rowsToInsert);
+    if (error) throw error;
+
+    saveStatus.className = "success";
+    saveStatus.textContent = `✅ అద్భుతం! ${rowsToInsert.length} ప్రశ్నలు [${folderName} • ${language.toUpperCase()}] ఫోల్డర్‌లోకి సేవ్ అయ్యాయి! ఇప్పుడు ఇదే ఫోల్డర్‌లో మరో భాష పేపర్ కూడా స్కాన్ చేయవచ్చు.`;
+
+    scannedQuestionQueue = [];
+    scannedPageNames = [];
+    $("scanRawOcrText").value = "";
+    renderScannedQueue();
+    await loadQuestions();
+  } catch (err) {
+    saveStatus.className = "error";
+    saveStatus.textContent = "❌ Save Error: " + err.message;
+  } finally {
+    saveBtn.disabled = false;
+  }
+});
+
+// ==========================================
 // LIVE EXAM PARTICIPANTS (ONLINE & COMPLETED SEPARATE GALLERIES)
 // ==========================================
 function formatTimeShortIST(value) {
@@ -1051,9 +1785,7 @@ async function fetchStudentPhotoMap(attempts) {
           detailsByMobile[m] = s;
         }
       });
-    } catch (_) {
-      // Fallback to fields inside secure_exam_attempts
-    }
+    } catch (_) {}
   }
   return { photoByMobile, detailsByMobile };
 }
@@ -1196,7 +1928,6 @@ async function initLiveParticipantsMonitor() {
     refreshLiveParticipantsGallery(true);
   }, 8000);
 
-  // Also subscribe to Supabase Realtime changes on secure_exam_attempts
   if (liveRealtimeChannel) {
     db.removeChannel(liveRealtimeChannel);
   }
@@ -1289,6 +2020,7 @@ $("scheduleForm").addEventListener("submit",async event=>{
   event.preventDefault();
 
   const name = $("examName").value.trim();
+  const selectedFolder = ($("examPaperFolderSelect").value || "").trim();
   const date = $("examDate").value;
   const start = $("startTime").value;
   const end = $("endTime").value;
@@ -1322,8 +2054,9 @@ $("scheduleForm").addEventListener("submit",async event=>{
 
   const exam = {
     exam_name: name,
-    bible_book: $("examBibleBook").value.trim(),
-    chapter_number: Number($("examChapter").value),
+    paper_folder: selectedFolder || null,
+    bible_book: selectedFolder ? selectedFolder : $("examBibleBook").value.trim(),
+    chapter_number: Number($("examChapter").value) || 1,
     question_language: $("examLanguage").value,
     question_difficulty: $("examDifficulty").value,
     start_time: startIso,
@@ -1340,9 +2073,12 @@ $("scheduleForm").addEventListener("submit",async event=>{
     const {error} = await db.from("exam_schedules").insert(exam);
     if(error) throw error;
 
-    status.textContent = "✅ Exam scheduled successfully!";
+    status.textContent = selectedFolder
+      ? `✅ Exam scheduled successfully using Folder "${selectedFolder}"!`
+      : "✅ Exam scheduled successfully!";
     status.className = "success";
     $("scheduleForm").reset();
+    refreshPaperFoldersUI();
     await loadExams();
     await loadWinnerExams();
     await initLiveParticipantsMonitor();
@@ -1436,7 +2172,7 @@ async function loadExams(){
 
   const [examsRes, attemptsRes] = await Promise.all([
     db.from("exam_schedules")
-      .select("id,exam_name,start_time,end_time,question_count,max_attempts,ranking_method")
+      .select("id,exam_name,paper_folder,start_time,end_time,question_count,max_attempts,ranking_method")
       .order("start_time", { ascending: false })
       .limit(200),
     db.from("secure_exam_attempts")
@@ -1463,9 +2199,12 @@ async function loadExams(){
   examsList.forEach(exam => {
     const tr = document.createElement("tr");
     const examAttempts = attemptsByExam[exam.id] || [];
+    const displayExamTitle = exam.paper_folder
+      ? `${exam.exam_name} [📁 ${exam.paper_folder}]`
+      : exam.exam_name;
 
     [
-      exam.exam_name,
+      displayExamTitle,
       formatIST(exam.start_time),
       formatIST(exam.end_time),
       exam.question_count
@@ -1702,9 +2441,7 @@ $("aiGenerateBtn").addEventListener("click", async () => {
           };
         });
       }
-    } catch (_) {
-      // Fallback smoothly to built-in verse-based generator
-    }
+    } catch (_) {}
 
     generatedAiQuestions = aiData || buildLocalAiBibleQuestions(book, chapter, count, langMode, difficulty);
 
@@ -1879,6 +2616,7 @@ async function loadQuestions(){
   }
 
   allQuestions = data || [];
+  refreshPaperFoldersUI();
   renderQuestions();
 }
 
@@ -1892,6 +2630,7 @@ function renderQuestions(){
     const matchDiff = !diff || q.difficulty === diff;
     const matchQuery = !query || 
       String(q.bible_book||"").toLowerCase().includes(query) || 
+      String(q.paper_folder||"").toLowerCase().includes(query) || 
       String(q.question_text||"").toLowerCase().includes(query);
     return matchLang && matchDiff && matchQuery;
   });
@@ -1901,9 +2640,10 @@ function renderQuestions(){
 
   filtered.forEach(q => {
     const tr = document.createElement("tr");
+    const bookOrFolder = q.paper_folder ? `📁 ${q.paper_folder}` : q.bible_book;
 
     [
-      q.bible_book,
+      bookOrFolder,
       q.chapter_number,
       q.language,
       q.difficulty,
