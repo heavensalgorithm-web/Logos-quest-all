@@ -1245,7 +1245,6 @@ function refreshPaperFoldersUI() {
 
   const folderNames = Object.keys(folderMap);
 
-  // 1. Update Datalist in Scanner
   const datalist = $("existingFoldersDatalist");
   datalist.replaceChildren();
   folderNames.forEach(name => {
@@ -1254,7 +1253,6 @@ function refreshPaperFoldersUI() {
     datalist.appendChild(opt);
   });
 
-  // 2. Update Folder Select in Schedule Live Bible Exam
   const folderSelect = $("examPaperFolderSelect");
   const prevVal = folderSelect.value;
   folderSelect.replaceChildren();
@@ -1277,7 +1275,6 @@ function refreshPaperFoldersUI() {
     folderSelect.value = prevVal;
   }
 
-  // 3. Render Folder Cards inside Scanner Section
   const grid = $("savedFoldersGrid");
   grid.replaceChildren();
 
@@ -1301,7 +1298,7 @@ function refreshPaperFoldersUI() {
       <div class="folder-lang-pills">${pillsHtml}</div>
       <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
         <button type="button" class="btn-sm secondary" onclick="selectFolderForScan('${name.replace(/'/g, "\\'")}')">➕ Add Language Paper</button>
-                <button type="button" class="btn-sm" onclick="selectFolderForSchedule('${name.replace(/'/g, "\\'")}')">📅 Schedule Exam</button>
+        <button type="button" class="btn-sm" onclick="selectFolderForSchedule('${name.replace(/'/g, "\\'")}')">📅 Schedule Exam</button>
         <button type="button" class="btn-sm danger" onclick="deletePaperFolder('${name.replace(/'/g, "\\'")}')">🗑️ Delete</button>
       </div>
     `;
@@ -1325,6 +1322,7 @@ window.selectFolderForSchedule = function(folderName) {
   $("examChapter").value = 1;
   $("scheduleForm").scrollIntoView({ behavior: "smooth" });
 };
+
 window.deletePaperFolder = async function(folderName) {
   if (!confirm(`"${folderName}" ఫోల్డర్‌లోని అన్ని ప్రశ్నలను తొలగించాలా?`)) return;
   const { error } = await db.from("bible_questions").delete().eq("paper_folder", folderName);
@@ -1420,114 +1418,36 @@ async function runCloudOcrFallback(base64DataUrl, langCode) {
 }
 
 function parseQuestionsFromRawText(rawText) {
-  const normalized = (rawText || "")
-    .replace(/\r/g, "\n")
-    .replace(/[①]/g, "(A)")
-    .replace(/[②]/g, "(B)")
-    .replace(/[③]/g, "(C)")
-    .replace(/[④]/g, "(D)")
-    .trim();
-
-  if (!normalized) return [];
-
-  const answerKeyMap = {};
-  const ansPairRegex = /\b(\d{1,3})\s*[\.\-\:\)]\s*([A-Da-d])\b/g;
-  const keySectionMatch = normalized.match(/(?:answer\s*key|answers|సమాధానాలు|ఉత్తరాలు)[:\s\-]*([\s\S]+)$/i);
-  if (keySectionMatch) {
-    let m;
-    while ((m = ansPairRegex.exec(keySectionMatch[1])) !== null) {
-      answerKeyMap[Number(m[1])] = m[2].toUpperCase();
-    }
-  }
-
-  const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
-  const blocks = [];
-  let currentBlock = null;
-
-  const qStartRegex = /^(?:Q\.?\s*)?(\d{1,3})\s*[\.\)\:\-]\s*(.+)$/i;
-
-  lines.forEach(line => {
-    if (/^(?:answer\s*key|answers|సమాధానాలు)/i.test(line)) {
-      if (currentBlock) {
-        blocks.push(currentBlock);
-        currentBlock = null;
-      }
-      return;
-    }
-
-    const qMatch = line.match(qStartRegex);
-    if (qMatch && (!currentBlock || currentBlock.lines.length >= 2)) {
-      if (currentBlock) blocks.push(currentBlock);
-      currentBlock = { qNum: Number(qMatch[1]), lines: [qMatch[2]] };
-    } else if (currentBlock) {
-      currentBlock.lines.push(line);
-    } else {
-      currentBlock = { qNum: blocks.length + 1, lines: [line] };
-    }
-  });
-  if (currentBlock) blocks.push(currentBlock);
-
-  const parsedQuestions = [];
-
-  blocks.forEach((blk) => {
-    const fullBlock = blk.lines.join("\n");
-
-    let detectedAns = answerKeyMap[blk.qNum] || "A";
-    const inlineAnsMatch = fullBlock.match(/(?:ans(?:wer)?|సమాధానం)\s*[\:\-\=]\s*\(?([A-Da-d])\)?/i);
-    if (inlineAnsMatch) {
-      detectedAns = inlineAnsMatch[1].toUpperCase();
-    }
-
-    const cleanedBlock = fullBlock.replace(/(?:ans(?:wer)?|సమాధానం)\s*[\:\-\=]\s*\(?[A-Da-d]\)?/gi, "").trim();
-
-    const opts = { A: "", B: "", C: "", D: "" };
-
-    const mA = cleanedBlock.match(/(?:^|\n|\s)[\(\[]?[Aa][\)\]\.\:\-]\s*([\s\S]*?)(?=(?:\n|\s)[\(\[]?[Bb][\)\]\.\:\-]\s*)/);
-    const mB = cleanedBlock.match(/(?:^|\n|\s)[\(\[]?[Bb][\)\]\.\:\-]\s*([\s\S]*?)(?=(?:\n|\s)[\(\[]?[Cc][\)\]\.\:\-]\s*)/);
-    const mC = cleanedBlock.match(/(?:^|\n|\s)[\(\[]?[Cc][\)\]\.\:\-]\s*([\s\S]*?)(?=(?:\n|\s)[\(\[]?[Dd][\)\]\.\:\-]\s*)/);
-    const mD = cleanedBlock.match(/(?:^|\n|\s)[\(\[]?[Dd][\)\]\.\:\-]\s*([\s\S]*?)$/);
-
-    let qText = "";
-    if (mA && mB && mC && mD) {
-      const firstOptIndex = cleanedBlock.indexOf(mA[0]);
-      qText = cleanedBlock.slice(0, firstOptIndex).replace(/\n+/g, " ").trim();
-      opts.A = mA[1].replace(/\n+/g, " ").trim();
-      opts.B = mB[1].replace(/\n+/g, " ").trim();
-      opts.C = mC[1].replace(/\n+/g, " ").trim();
-      opts.D = mD[1].replace(/\n+/g, " ").trim();
-    } else if (blk.lines.length >= 2) {
-function parseQuestionsFromRawText(rawText) {
   let normalized = (rawText || "")
     .replace(/\r/g, "\n")
     .replace(/[①]/g, " A) ")
     .replace(/[②]/g, " B) ")
     .replace(/[③]/g, " C) ")
     .replace(/[④]/g, " D) ")
-    // Convert OCR misread option markers anywhere (even without leading space after Telugu text)
-    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*(?:A|@|&|4|డీ)\s*[\)\]\}]\s*/g, (m) => {
+    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*(?:A|@|&|4|డీ)\s*[\)\]\}]\s*/g, function(m) {
       const prefix = /^[^\x00-\x7F]/.test(m) ? m[0] : "";
       return prefix + " A) ";
     })
-    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*[Bb8]\s*[\)\]\}]\s*/g, (m) => {
+    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*[Bb8]\s*[\)\]\}]\s*/g, function(m) {
       const prefix = /^[^\x00-\x7F]/.test(m) ? m[0] : "";
       return prefix + " B) ";
     })
-    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*[Cc©]\s*[\)\]\}]\s*/g, (m) => {
+    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*[Cc©]\s*[\)\]\}]\s*/g, function(m) {
       const prefix = /^[^\x00-\x7F]/.test(m) ? m[0] : "";
       return prefix + " C) ";
     })
-    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*[Dd0Oo]\s*[\)\]\}]\s*/g, (m) => {
+    .replace(/(?:^|\s|[^\x00-\x7F])[\(\[\{]?\s*[Dd0Oo]\s*[\)\]\}]\s*/g, function(m) {
       const prefix = /^[^\x00-\x7F]/.test(m) ? m[0] : "";
       return prefix + " D) ";
     })
-    // Also handle standard A. B. C. D.
-    .replace(/(^|\s)([A-Da-d])\.\s+/g, (_, sp, l) => `${sp}${l.toUpperCase()}) `)
+    .replace(/(^|\s)([A-Da-d])\.\s+/g, function(_, sp, l) {
+      return sp + l.toUpperCase() + ") ";
+    })
     .replace(/[ \t]+/g, " ")
     .trim();
 
   if (!normalized) return [];
 
-  // Extract bottom Answer Key map if present (e.g., "1-A, 2-C, 3. B")
   const answerKeyMap = {};
   const ansPairRegex = /\b(\d{1,3})\s*[\.\-\:\)]\s*([A-Da-d])\b/g;
   const keySectionMatch = normalized.match(/(?:answer\s*key|answers|సమాధానాలు|ఉత్తరాలు)[:\s\-]*([\s\S]+)$/i);
@@ -1538,14 +1458,12 @@ function parseQuestionsFromRawText(rawText) {
     }
   }
 
-  // Split text into question blocks (supports "1. Question" or "2 నిర్గమకాండము...")
-  const lines = normalized.split("\n").map(l => l.trim()).filter(Boolean);
+  const lines = normalized.split("\n").map(function(l) { return l.trim(); }).filter(Boolean);
   const blocks = [];
   let currentBlock = null;
-
   const qStartRegex = /^(?:Q\.?\s*)?(\d{1,3})(?:[\.\)\:\-]\s*|\s+(?=[^\d\)\]\s]))(.+)$/i;
 
-  lines.forEach(line => {
+  lines.forEach(function(line) {
     if (/^(?:answer\s*key|answers|సమాధానాలు)/i.test(line)) {
       if (currentBlock) {
         blocks.push(currentBlock);
@@ -1568,7 +1486,7 @@ function parseQuestionsFromRawText(rawText) {
 
   const parsedQuestions = [];
 
-  blocks.forEach((blk) => {
+  blocks.forEach(function(blk) {
     const fullBlock = blk.lines.join("\n");
 
     let detectedAns = answerKeyMap[blk.qNum] || "A";
@@ -1578,10 +1496,8 @@ function parseQuestionsFromRawText(rawText) {
     }
 
     const cleanedBlock = fullBlock.replace(/(?:ans(?:wer)?|సమాధానం)\s*[\:\-\=]\s*\(?[A-Da-d]\)?/gi, "").trim();
-
     const opts = { A: "", B: "", C: "", D: "" };
 
-    // Split sequentially by B), C), D) even if A) was misread at the start of options
     const idxB = cleanedBlock.search(/\bB\)\s*/);
     const idxC = cleanedBlock.search(/\bC\)\s*/);
     const idxD = cleanedBlock.search(/\bD\)\s*/);
@@ -1611,14 +1527,16 @@ function parseQuestionsFromRawText(rawText) {
       opts.D = cleanedBlock.slice(idxD).replace(/^D\)\s*/, "").replace(/\n+/g, " ").trim();
     } else if (blk.lines.length >= 2) {
       qText = blk.lines[0];
-      const rem = blk.lines.slice(1).map(l => l.replace(/^[A-D1-4]\)\s*/, "").trim());
+      const rem = blk.lines.slice(1).map(function(l) {
+        return l.replace(/^[A-D1-4]\)\s*/, "").trim();
+      });
       opts.A = rem[0] || "";
       opts.B = rem[1] || "";
       opts.C = rem[2] || "";
       opts.D = rem[3] || "";
     }
 
-    ["A", "B", "C", "D"].forEach(letter => {
+    ["A", "B", "C", "D"].forEach(function(letter) {
       if (/[✓✔\*]$/.test(opts[letter])) {
         detectedAns = letter;
         opts[letter] = opts[letter].replace(/[✓✔\*]+$/g, "").trim();
@@ -1636,9 +1554,6 @@ function parseQuestionsFromRawText(rawText) {
       });
     }
   });
-
-  return parsedQuestions;
-}
 
   return parsedQuestions;
 }
