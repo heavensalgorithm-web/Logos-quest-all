@@ -595,8 +595,18 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <body>
 
 <div class="top-bar">
-  <a href="index.html" class="btn-back">← Home</a>
+  <a href="index.html" class="btn-back" id="navHomeBtn">← Home</a>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <span style="font-size:13px; color:var(--gold-primary); font-weight:700;">🌐</span>
+    <select id="adminUiLangSelect" style="width:auto; padding:7px 12px; margin:0; font-size:13px; border-radius:10px; border:1.5px solid var(--card-border);">
+      <option value="te">తెలుగు (Telugu)</option>
+      <option value="en">English</option>
+      <option value="ta">தமிழ் (Tamil)</option>
+      <option value="hi">हिन्दी (Hindi)</option>
+    </select>
+  </div>
 </div>
+  
 
 <header>
 <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
@@ -2890,6 +2900,112 @@ $("releaseAnswersBtn").addEventListener("click", async () => {
     btn.disabled = false;
   }
 });
+// ==========================================
+// ADMIN DASHBOARD UI LANGUAGE SWITCHER
+// ==========================================
+const ADMIN_UI_TRANSLATIONS = {
+  te: {
+    navHome: "← హోమ్",
+    loginHeading: "అడ్మిన్ లాగిన్",
+    adminStatusHeading: "అడ్మిన్ వివరాలు",
+    refreshBtn: "ఫలితాలు రిఫ్రెష్",
+    logoutBtn: "లాగౌట్",
+    liveHeading: "📡 లైవ్ ఎగ్జామ్ అభ్యర్థులు",
+    winnersHeading: "🏆 లైవ్ ఎగ్జామ్ ఫలితాలు & విజేతలు",
+    resultsHistoryHeading: "విద్యార్థుల ఫలితాల చరిత్ర",
+    scannerHeading: "📁 క్వశ్చన్ పేపర్ ఫోల్డర్లు & స్కానర్ (తెలుగు / English / தமிழ்)",
+    questionManagerHeading: "📖 బైబిల్ ప్రశ్నల నిర్వహణ",
+    savedQuestionsHeading: "📚 సేవ్ చేసిన బైబిల్ ప్రశ్నలు",
+    scheduleExamHeading: "📅 లైవ్ బైబిల్ ఎగ్జామ్ షెడ్యూల్",
+    scheduledExamsHeading: "📋 షెడ్యూల్ చేసిన ఎగ్జామ్స్ & అభ్యర్థులు",
+    defaultScanLang: "telugu"
+  },
+  en: {
+    navHome: "← Home",
+    loginHeading: "Admin Login",
+    adminStatusHeading: "Admin Status",
+    refreshBtn: "Refresh Results",
+    logoutBtn: "Logout",
+    liveHeading: "📡 Live Exam Participants",
+    winnersHeading: "🏆 Live Exam Results & Winners",
+    resultsHistoryHeading: "Student Results History",
+    scannerHeading: "📁 Question Paper Folders & Scanner (Telugu / English / Tamil)",
+    questionManagerHeading: "📖 Bible Question Management",
+    savedQuestionsHeading: "📚 Saved Bible Questions",
+    scheduleExamHeading: "📅 Schedule Live Bible Exam",
+    scheduledExamsHeading: "📋 Scheduled Exams & Participants",
+    defaultScanLang: "english"
+  },
+  ta: {
+    navHome: "← முகப்பு",
+    loginHeading: "நிர்வாகி உள்நுழைவு",
+    adminStatusHeading: "நிர்வாகி நிலை",
+    refreshBtn: "முடிவுகளை புதுப்பி",
+    logoutBtn: "வெளியேறு",
+    liveHeading: "📡 நேரடி தேர்வு பங்கேற்பாளர்கள்",
+    winnersHeading: "🏆 நேரடி தேர்வு முடிவுகள் & வெற்றியாளர்கள்",
+    resultsHistoryHeading: "மாணவர் முடிவுகள் வரலாறு",
+    scannerHeading: "📁 வினாத்தாள் கோப்புறைகள் & ஸ்கேனர்",
+    questionManagerHeading: "📖 வேதாகம கேள்விகள் மேலாண்மை",
+    savedQuestionsHeading: "📚 சேமிக்கப்பட்ட வேதாகம கேள்விகள்",
+    scheduleExamHeading: "📅 நேரடி வேதாகம தேர்வு அட்டவணை",
+    scheduledExamsHeading: "📋 திட்டமிடப்பட்ட தேர்வுகள்",
+    defaultScanLang: "tamil"
+  },
+  hi: {
+    navHome: "← होम",
+    loginHeading: "एडमिन लॉगिन",
+    adminStatusHeading: "एडमिन स्थिति",
+    refreshBtn: "परिणाम रीफ़्रेश करें",
+    logoutBtn: "लॉगआउट",
+    liveHeading: "📡 लाइव परीक्षा प्रतिभागी",
+    winnersHeading: "🏆 लाइव परीक्षा परिणाम और विजेता",
+    resultsHistoryHeading: "छात्र परिणाम इतिहास",
+    scannerHeading: "📁 प्रश्न पत्र फ़ोल्डर और स्कैनर",
+    questionManagerHeading: "📖 बाइबल प्रश्न प्रबंधन",
+    savedQuestionsHeading: "📚 सहेजे गए बाइबल प्रश्न",
+    scheduleExamHeading: "📅 लाइव बाइबल परीक्षा शेड्यूल करें",
+    scheduledExamsHeading: "📋 निर्धारित परीक्षाएं और प्रतिभागी",
+    defaultScanLang: "hindi"
+  }
+};
+
+function applyAdminUiLanguage(langCode) {
+  const t = ADMIN_UI_TRANSLATIONS[langCode] || ADMIN_UI_TRANSLATIONS.te;
+  localStorage.setItem("logos_admin_ui_lang", langCode);
+
+  const map = {
+    navHomeBtn: t.navHome,
+    loginHeading: t.loginHeading,
+    adminStatusHeading: t.adminStatusHeading,
+    refreshBtn: t.refreshBtn,
+    logoutBtn: t.logoutBtn,
+    liveParticipantsHeading: t.liveHeading,
+    winnersHeading: t.winnersHeading,
+    resultsHistoryHeading: t.resultsHistoryHeading,
+    scannerHeading: t.scannerHeading,
+    questionManagerHeading: t.questionManagerHeading,
+    savedQuestionsHeading: t.savedQuestionsHeading,
+    scheduleExamHeading: t.scheduleExamHeading,
+    scheduledExamsHeading: t.scheduledExamsHeading
+  };
+
+  Object.entries(map).forEach(([elId, text]) => {
+    const el = $(elId);
+    if (el) el.textContent = text;
+  });
+
+  if ($("scanLanguage")) $("scanLanguage").value = t.defaultScanLang;
+  if ($("questionLanguage")) $("questionLanguage").value = t.defaultScanLang;
+}
+
+$("adminUiLangSelect").addEventListener("change", function() {
+  applyAdminUiLanguage(this.value);
+});
+
+const savedAdminLang = localStorage.getItem("logos_admin_ui_lang") || "te";
+$("adminUiLangSelect").value = savedAdminLang;
+applyAdminUiLanguage(savedAdminLang);
 
 // STARTUP VERIFICATION
 window.addEventListener("DOMContentLoaded", () => {
