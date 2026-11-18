@@ -694,9 +694,11 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
   <button id="loadWinnersBtn" type="button">🔄 View Exam Winners</button>
   <button id="releaseAnswersBtn" type="button" class="secondary">🔓 Release Correct Answers</button>
+  <button id="releaseCertificatesBtn" type="button">🏅 Release / Send Certificates</button>
+  <p id="releaseCertificatesStatus" role="status"></p>
 
   <p id="releaseAnswersStatus" role="status"></p>
-  <p id="winnersStatus" role="status"></p>
+ <p id="winnersStatus" role="status"></p>
 
   <h3>🥇 Top 3 Winners</h3>
   <div id="top3Winners" class="stats"></div>
@@ -2900,6 +2902,38 @@ $("releaseAnswersBtn").addEventListener("click", async () => {
     btn.disabled = false;
   }
 });
+  $("releaseCertificatesBtn").addEventListener("click", async () => {
+  const examId = $("winnerExamSelect").value;
+  const status = $("releaseCertificatesStatus");
+  const btn = $("releaseCertificatesBtn");
+
+  if (!examId) {
+    alert("Please select an exam first to send certificates.");
+    return;
+  }
+
+  btn.disabled = true;
+  status.className = "";
+  status.textContent = "🏅 Releasing certificates for participants...";
+
+  try {
+    const { error } = await db
+      .from("exam_schedules")
+      .update({ certificates_released: true })
+      .eq("id", examId);
+
+    if (error) throw error;
+
+    status.className = "success";
+    status.textContent = "✅ Certificates have been released & sent! Participants can now download their certificates.";
+  } catch (err) {
+    status.className = "error";
+    status.textContent = "Error: " + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+
 // ==========================================
 // ADMIN DASHBOARD UI LANGUAGE SWITCHER
 // ==========================================
