@@ -38,6 +38,11 @@ body {
   min-height: 100vh;
 }
 
+body.exam-protected {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .top-bar {
   display: flex;
   justify-content: flex-end;
@@ -202,7 +207,7 @@ button:disabled {
   font-size: 14px;
 }
 
-.hidden { display: none; }
+.hidden { display: none !important; }
 .center { text-align: center; }
 
 .error {
@@ -251,6 +256,67 @@ button:disabled {
   border-radius: 8px;
 }
 
+.shield-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #34d399;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.shield-badge.warn {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+/* ANTI-CHEAT FULLSCREEN WARNING MODAL */
+.anticheat-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 13, 22, 0.92);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.anticheat-box {
+  max-width: 440px;
+  width: 100%;
+  background: #16213e;
+  border: 2px solid #ef4444;
+  border-radius: 20px;
+  padding: 26px;
+  text-align: center;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.45);
+}
+
+.anticheat-box h3 {
+  color: #f87171;
+  font-size: 22px;
+  margin: 0 0 10px;
+}
+
+.anticheat-count {
+  display: inline-block;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
 a {
   color: var(--gold-primary);
   text-decoration: none;
@@ -294,6 +360,19 @@ a:hover {
 </head>
 <body>
 
+<!-- ANTI-CHEAT WARNING MODAL -->
+<div id="antiCheatModal" class="anticheat-overlay hidden">
+  <div class="anticheat-box">
+    <div style="font-size:44px; margin-bottom:6px;">🚨</div>
+    <h3 id="acModalTitle">⚠️ Tab Switch Warning!</h3>
+    <div id="acWarningBadge" class="anticheat-count">Warning 1 / 3</div>
+    <p id="acModalMessage" style="color:#f8fafc; font-size:15px; margin-bottom:18px;">
+      పరీక్ష రాస్తున్నప్పుడు వేరే ట్యాబ్ లేదా యాప్ ఓపెన్ చేయడం నిషేధించబడింది! 3 సార్లు దాటితే మీ పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ అవుతుంది.
+    </p>
+    <button type="button" id="acAcknowledgeBtn">✅ పరీక్ష కొనసాగించు (Resume Exam)</button>
+  </div>
+</div>
+
 <div class="top-bar">
   <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
     <option value="te">🇮🇳 తెలుగు</option>
@@ -313,6 +392,9 @@ a:hover {
 
 <div class="card" id="registration">
   <h2 id="txtRegHeader">📝 Student Verification</h2>
+  <p id="txtAntiCheatRule" style="text-align:center; background:rgba(250,204,21,0.1); border:1px solid rgba(250,204,21,0.3); padding:10px; border-radius:10px; color:#fef08a; font-size:13px;">
+    🛡️ Anti-Cheat Active: పరీక్ష సమయంలో వేరే ట్యాబ్/యాప్ ఓపెన్ చేయవద్దు (Max 3 Warnings).
+  </p>
   <form id="registrationForm">
     <div style="display:none"> 
       <label>Full Name</label>
@@ -343,6 +425,7 @@ a:hover {
 <div class="card hidden" id="examSection">
   <div class="exam-top-bar">
     <div id="timer">⏳ Time: --:--</div>
+    <span id="shieldStatusBadge" class="shield-badge">🛡️ Protected (0/3)</span>
     <div>
       <label for="inExamLangSwitcher">🌐 Language: </label>
       <select id="inExamLangSwitcher">
@@ -363,6 +446,7 @@ a:hover {
   <h2 id="txtResultTitle">🏆 Exam Result</h2>
   <h1 id="scoreText" style="color:var(--gold-primary);font-size:36px;margin:10px 0;"></h1>
   <p id="resultDetails" style="font-size:16px;color:#f8fafc;"></p>
+  <p id="violationNotice" class="error hidden"></p>
   <a href="leaderboard.html" id="linkLeaderboard">🏆 View Leaderboard →</a>
   <br><br>
   <button id="reviewBtn" type="button">📖 Review My Answers</button>
@@ -402,6 +486,11 @@ const i18n = {
   te: {
     hdrSub: "లైవ్ బైబిల్ క్విజ్ అరీనా",
     regHeader: "📝 విద్యార్థి ధృవీకరణ",
+    acRule: "🛡️ Anti-Cheat Active: పరీక్ష సమయంలో వేరే ట్యాబ్/యాప్ ఓపెన్ చేయవద్దు (గరిష్టంగా 3 హెచ్చరికలు).",
+    acTitle: "⚠️ ట్యాబ్ మార్పు హెచ్చరిక!",
+    acMsg: "పరీక్ష రాస్తున్నప్పుడు వేరే ట్యాబ్ లేదా యాప్ ఓపెన్ చేయడం నిషేధించబడింది! 3వ సారి దాటితే మీ పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ అవుతుంది.",
+    acResume: "✅ పరీక్ష కొనసాగించు",
+    acAutoSubmitted: "🚨 3 సార్లు ట్యాబ్ మార్చినందున మీ పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ చేయబడింది!",
     lblLang: "🌐 డిఫాల్ట్ పరీక్ష భాషను ఎంచుకోండి",
     btnStart: "▶ పరీక్ష ప్రారంభించండి",
     quizHeader: "📚 బైబిల్ క్విజ్",
@@ -420,6 +509,11 @@ const i18n = {
   en: {
     hdrSub: "Live Bible Quiz Arena",
     regHeader: "📝 Student Verification",
+    acRule: "🛡️ Anti-Cheat Active: Do not switch tabs or minimize the app during the exam (Max 3 Warnings).",
+    acTitle: "⚠️ Tab Switch Warning!",
+    acMsg: "Switching tabs or opening other apps during the live exam is prohibited! On the 3rd violation, your exam will be auto-submitted.",
+    acResume: "✅ Resume Exam",
+    acAutoSubmitted: "🚨 Exam auto-submitted due to 3 tab-switch violations!",
     lblLang: "🌐 Select Default Exam Language",
     btnStart: "▶ Start Exam",
     quizHeader: "📚 Bible Quiz",
@@ -438,6 +532,11 @@ const i18n = {
   ta: {
     hdrSub: "நேரலை பைபிள் வினாடி வினா அரங்கம்",
     regHeader: "📝 மாணவர் சரிபார்ப்பு",
+    acRule: "🛡️ Anti-Cheat Active: தேர்வின் போது வேறு தாவல்/செயலியைத் திறக்க வேண்டாம் (அதிகபட்சம் 3 எச்சரிக்கைகள்).",
+    acTitle: "⚠️ தாவல் மாற்ற எச்சரிக்கை!",
+    acMsg: "தேர்வின் போது வேறு தாவல் அல்லது செயலியைத் திறப்பது தடைசெய்யப்பட்டுள்ளது! 3-வது முறை மீறினால் தேர்வு தானாகவே சமர்ப்பிக்கப்படும்.",
+    acResume: "✅ தேர்வைத் தொடரவும்",
+    acAutoSubmitted: "🚨 3 முறை விதிமீறல் காரணமாக தேர்வு தானாகவே சமர்ப்பிக்கப்பட்டது!",
     lblLang: "🌐 இயல்புநிலை தேர்வு மொழியைத் தேர்ந்தெடுக்கவும்",
     btnStart: "▶ தேர்வைத் தொடங்குங்கள்",
     quizHeader: "📚 பைபிள் வினாடி வினா",
@@ -456,6 +555,11 @@ const i18n = {
   hi: {
     hdrSub: "लाइव बाइबिल क्विज़ अखाड़ा",
     regHeader: "📝 छात्र सत्यापन",
+    acRule: "🛡️ Anti-Cheat Active: परीक्षा के दौरान दूसरा टैब या ऐप न खोलें (अधिकतम 3 चेतावनियाँ)।",
+    acTitle: "⚠️ टैब बदलने की चेतावनी!",
+    acMsg: "परीक्षा के दौरान दूसरा टैब या ऐप खोलना प्रतिबंधित है! तीसरी बार नियम तोड़ने पर आपकी परीक्षा अपने आप जमा हो जाएगी।",
+    acResume: "✅ परीक्षा जारी रखें",
+    acAutoSubmitted: "🚨 3 बार टैब बदलने के कारण आपकी परीक्षा अपने आप जमा कर दी गई है!",
     lblLang: "🌐 डिफ़ॉल्ट परीक्षा भाषा चुनें",
     btnStart: "▶ परीक्षा शुरू करें",
     quizHeader: "📚 बाइबिल क्विज़",
@@ -492,6 +596,10 @@ function applyTranslations() {
   const t = i18n[currentLangCode] || i18n.te;
   $("hdrSubtitle").textContent = t.hdrSub;
   $("txtRegHeader").textContent = t.regHeader;
+  $("txtAntiCheatRule").textContent = t.acRule;
+  $("acModalTitle").textContent = t.acTitle;
+  $("acModalMessage").textContent = t.acMsg;
+  $("acAcknowledgeBtn").textContent = t.acResume;
   $("lblLangSelect").textContent = t.lblLang;
   $("startBtn").textContent = t.btnStart;
   $("txtQuizHeader").textContent = t.quizHeader;
@@ -502,7 +610,6 @@ function applyTranslations() {
   $("linkBack").textContent = t.linkBack;
 }
 
-// స్థానిక ప్రొఫైల్ వివరాలు మరియు Supabase Auth రెండింటినీ చెక్ చేయడం
 async function loadLoggedInStudent() {
   const localUser = JSON.parse(localStorage.getItem("logos_quest_user") || "{}");
 
@@ -554,6 +661,63 @@ let currentLanguage = langMap[currentLangCode] || "telugu";
 let deadline = 0;
 let timerHandle = null;
 let submitting = false;
+
+// ==========================================
+// ANTI-CHEATING / TAB-SWITCH MONITORING
+// ==========================================
+let examActive = false;
+let tabSwitchCount = 0;
+const MAX_TAB_WARNINGS = 3;
+let lastViolationTime = 0;
+
+function recordTabViolation() {
+  if (!examActive || submitting || !attemptId) return;
+  const now = Date.now();
+  // Prevent duplicate triggers from simultaneous blur + visibilitychange events
+  if (now - lastViolationTime < 1200) return;
+  lastViolationTime = now;
+
+  tabSwitchCount++;
+  const badge = $("shieldStatusBadge");
+  badge.textContent = `⚠️ Warning (${tabSwitchCount}/${MAX_TAB_WARNINGS})`;
+  badge.classList.add("warn");
+
+  if (tabSwitchCount >= MAX_TAB_WARNINGS) {
+    $("antiCheatModal").classList.add("hidden");
+    const t = i18n[currentLangCode] || i18n.te;
+    $("violationNotice").textContent = t.acAutoSubmitted;
+    $("violationNotice").classList.remove("hidden");
+    submitExam(true);
+    return;
+  }
+
+  $("acWarningBadge").textContent = `Warning ${tabSwitchCount} / ${MAX_TAB_WARNINGS}`;
+  $("antiCheatModal").classList.remove("hidden");
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden && examActive) {
+    recordTabViolation();
+  }
+});
+
+window.addEventListener("blur", () => {
+  if (examActive) {
+    recordTabViolation();
+  }
+});
+
+document.addEventListener("contextmenu", e => {
+  if (examActive) e.preventDefault();
+});
+
+document.addEventListener("copy", e => {
+  if (examActive) e.preventDefault();
+});
+
+$("acAcknowledgeBtn").addEventListener("click", () => {
+  $("antiCheatModal").classList.add("hidden");
+});
 
 function showStatus(message, isError = false) {
   $("status").textContent = message;
@@ -654,6 +818,11 @@ $("registrationForm").addEventListener("submit", async event => {
     $("registration").classList.add("hidden");
     $("examSection").classList.remove("hidden");
     renderQuestions();
+
+    // Activate Anti-Cheat Monitoring
+    examActive = true;
+    tabSwitchCount = 0;
+    document.body.classList.add("exam-protected");
 
     deadline = new Date(exam.end_time).getTime();
     timerHandle = setInterval(updateTimer, 1000);
@@ -763,6 +932,9 @@ async function submitExam(automatic) {
   if (!automatic && !confirm(t.submitConfirm)) return;
 
   submitting = true;
+  examActive = false;
+  document.body.classList.remove("exam-protected");
+  $("antiCheatModal").classList.add("hidden");
   $("submitBtn").disabled = true;
   clearInterval(timerHandle);
   showStatus(t.submitting);
@@ -800,6 +972,8 @@ async function submitExam(automatic) {
     showStatus("❌ Submission failed: " + err.message, true);
     $("submitBtn").disabled = false;
     submitting = false;
+    examActive = true;
+    document.body.classList.add("exam-protected");
     if (Date.now() < deadline) {
       timerHandle = setInterval(updateTimer, 1000);
       updateTimer();
