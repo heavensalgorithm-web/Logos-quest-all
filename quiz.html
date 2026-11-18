@@ -33,6 +33,11 @@ body {
   min-height: 100vh;
 }
 
+body.exam-protected {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .card {
   background: var(--card-bg);
   backdrop-filter: blur(14px);
@@ -60,6 +65,27 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+}
+
+.shield-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #34d399;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.shield-badge.warn {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: #ef4444;
+  color: #fca5a5;
 }
 
 .exam-lang-select {
@@ -213,9 +239,64 @@ body {
   border-radius: 14px;
   text-align: center;
 }
+
+/* ANTI-CHEAT WARNING MODAL */
+.anticheat-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 13, 22, 0.94);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.anticheat-box {
+  max-width: 440px;
+  width: 100%;
+  background: #16213e;
+  border: 2px solid #ef4444;
+  border-radius: 20px;
+  padding: 26px;
+  text-align: center;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.5);
+}
+
+.anticheat-box h3 {
+  color: #f87171;
+  font-size: 22px;
+  margin: 0 0 10px;
+}
+
+.anticheat-count {
+  display: inline-block;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
 </style>
 </head>
 <body>
+
+<!-- ANTI-CHEAT WARNING MODAL -->
+<div id="antiCheatModal" class="anticheat-overlay" style="display:none;">
+  <div class="anticheat-box">
+    <div style="font-size:44px; margin-bottom:6px;">🚨</div>
+    <h3 id="acModalTitle">⚠️ ట్యాబ్ మార్పు హెచ్చరిక!</h3>
+    <div id="acWarningBadge" class="anticheat-count">Warning 1 / 3</div>
+    <p id="acModalMessage" style="color:#f8fafc; font-size:15px; line-height:1.5; margin-bottom:18px;">
+      పరీక్ష రాస్తున్నప్పుడు వేరే ట్యాబ్ లేదా యాప్ ఓపెన్ చేయడం నిషేధించబడింది! 3వ సారి దాటితే మీ పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ అవుతుంది.
+    </p>
+    <button type="button" class="btn-gold" style="width:100%;" id="acAcknowledgeBtn" onclick="closeAntiCheatModal()">✅ పరీక్ష కొనసాగించు</button>
+  </div>
+</div>
 
 <div class="card" id="mainCard">
   <div id="loadingView" class="center" style="padding:30px 10px;">
@@ -231,6 +312,7 @@ body {
         <span style="font-size:12px; color:var(--text-muted);" id="studentBadge">Student</span>
       </div>
       <div class="top-right-controls">
+        <span id="shieldBadge" class="shield-badge">🛡️ 0/3</span>
         <select id="examLangSelect" class="exam-lang-select" onchange="switchExamLanguage(this.value)">
           <option value="te">తెలుగు</option>
           <option value="en">English</option>
@@ -256,6 +338,7 @@ body {
     <div style="font-size:48px; margin-bottom:10px;">🎉</div>
     <h2 style="color:var(--gold-primary); margin:0 0 8px;" id="resHeading">పరీక్ష పూర్తయింది!</h2>
     <p id="resScoreText" style="font-size:20px; font-weight:800; color:#fff; margin:12px 0;"></p>
+    <p id="violationNotice" style="color:#fca5a5; font-weight:700; font-size:14px; display:none; margin:8px 0;"></p>
     <p id="resSubText" style="font-size:14px; color:var(--text-muted); margin-bottom:20px;"></p>
     <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
       <a href="leaderboard.html" class="btn-gold" style="text-decoration:none; max-width:200px;">🏆 లీడర్‌బోర్డ్</a>
@@ -304,12 +387,125 @@ let timerInterval = null;
 let isSubmitted = false;
 let examStartTimeMs = Date.now();
 
+// ==========================================
+// ANTI-CHEATING / TAB-SWITCH MONITORING
+// ==========================================
+let examActive = false;
+let tabSwitchCount = 0;
+const MAX_TAB_WARNINGS = 3;
+let lastViolationTime = 0;
+
 const labels = {
-  te: { prev: "← వెనుకకు", next: "తదుపరి →", submit: "✅ సబ్మిట్ చేయండి", qOf: "ప్రశ్న {c} / {t}", done: "పరీక్ష పూర్తయింది!", score: "మీ స్కోర్: {s} / {t}", confirmSub: "మీరు పరీక్షను సబ్మిట్ చేయాలనుకుంటున్నారా?" },
-  en: { prev: "← Previous", next: "Next →", submit: "✅ Submit Exam", qOf: "Question {c} of {t}", done: "Exam Completed!", score: "Your Score: {s} / {t}", confirmSub: "Do you want to submit the exam?" },
-  ta: { prev: "← முந்தைய", next: "அடுத்து →", submit: "✅ சமர்ப்பிக்கவும்", qOf: "கேள்வி {c} / {t}", done: "தேர்வு முடிந்தது!", score: "உங்கள் மதிப்பெண்: {s} / {t}", confirmSub: "தேர்வைச் சமர்ப்பிக்க விரும்புகிறீர்களா?" },
-  hi: { prev: "← पिछला", next: "अगला →", submit: "✅ सबमिट करें", qOf: "प्रश्न {c} / {t}", done: "परीक्षा पूर्ण हुई!", score: "आपका स्कोर: {s} / {t}", confirmSub: "क्या आप परीक्षा सबमिट करना चाहते हैं?" }
+  te: {
+    prev: "← వెనుకకు",
+    next: "తదుపరి →",
+    submit: "✅ సబ్మిట్ చేయండి",
+    qOf: "ప్రశ్న {c} / {t}",
+    done: "పరీక్ష పూర్తయింది!",
+    score: "మీ స్కోర్: {s} / {t}",
+    confirmSub: "మీరు పరీక్షను సబ్మిట్ చేయాలనుకుంటున్నారా?",
+    acTitle: "⚠️ ట్యాబ్ మార్పు హెచ్చరిక!",
+    acMsg: "పరీక్ష రాస్తున్నప్పుడు వేరే ట్యాబ్ లేదా యాప్ ఓపెన్ చేయడం నిషేధించబడింది! 3వ సారి దాటితే మీ పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ అవుతుంది.",
+    acResume: "✅ పరీక్ష కొనసాగించు",
+    acAutoSub: "🚨 3 సార్లు ట్యాబ్ మార్చినందున మీ పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ చేయబడింది!"
+  },
+  en: {
+    prev: "← Previous",
+    next: "Next →",
+    submit: "✅ Submit Exam",
+    qOf: "Question {c} of {t}",
+    done: "Exam Completed!",
+    score: "Your Score: {s} / {t}",
+    confirmSub: "Do you want to submit the exam?",
+    acTitle: "⚠️ Tab Switch Warning!",
+    acMsg: "Switching tabs or opening other apps during the live exam is prohibited! On the 3rd violation, your exam will be auto-submitted.",
+    acResume: "✅ Resume Exam",
+    acAutoSub: "🚨 Exam auto-submitted due to 3 tab-switch violations!"
+  },
+  ta: {
+    prev: "← முந்தைய",
+    next: "அடுத்து →",
+    submit: "✅ சமர்ப்பிக்கவும்",
+    qOf: "கேள்வி {c} / {t}",
+    done: "தேர்வு முடிந்தது!",
+    score: "உங்கள் மதிப்பெண்: {s} / {t}",
+    confirmSub: "தேர்வைச் சமர்ப்பிக்க விரும்புகிறீர்களா?",
+    acTitle: "⚠️ தாவல் மாற்ற எச்சரிக்கை!",
+    acMsg: "தேர்வின் போது வேறு தாவல் அல்லது செயலியைத் திறப்பது தடைசெய்யப்பட்டுள்ளது! 3-வது முறை மீறினால் தேர்வு தானாகவே சமர்ப்பிக்கப்படும்.",
+    acResume: "✅ தேர்வைத் தொடரவும்",
+    acAutoSub: "🚨 3 முறை விதிமீறல் காரணமாக தேர்வு தானாகவே சமர்ப்பிக்கப்பட்டது!"
+  },
+  hi: {
+    prev: "← पिछला",
+    next: "अगला →",
+    submit: "✅ सबमिट करें",
+    qOf: "प्रश्न {c} / {t}",
+    done: "परीक्षा पूर्ण हुई!",
+    score: "आपका स्कोर: {s} / {t}",
+    confirmSub: "क्या आप परीक्षा सबमिट करना चाहते हैं?",
+    acTitle: "⚠️ टैब बदलने की चेतावनी!",
+    acMsg: "परीक्षा के दौरान दूसरा टैब या ऐप खोलना प्रतिबंधित है! तीसरी बार नियम तोड़ने पर आपकी परीक्षा अपने आप जमा हो जाएगी।",
+    acResume: "✅ परीक्षा जारी रखें",
+    acAutoSub: "🚨 3 बार टैब बदलने के कारण आपकी परीक्षा अपने आप जमा कर दी गई है!"
+  }
 };
+
+function updateAntiCheatTexts() {
+  const t = labels[lang] || labels.te;
+  $("acModalTitle").textContent = t.acTitle;
+  $("acModalMessage").textContent = t.acMsg;
+  $("acAcknowledgeBtn").textContent = t.acResume;
+}
+
+function closeAntiCheatModal() {
+  $("antiCheatModal").style.display = "none";
+}
+
+function recordTabViolation() {
+  if (!examActive || isSubmitted) return;
+  const now = Date.now();
+  if (now - lastViolationTime < 1200) return;
+  lastViolationTime = now;
+
+  tabSwitchCount++;
+  const badge = $("shieldBadge");
+  badge.textContent = `⚠️ ${tabSwitchCount}/${MAX_TAB_WARNINGS}`;
+  badge.classList.add("warn");
+
+  updateAntiCheatTexts();
+  const t = labels[lang] || labels.te;
+
+  if (tabSwitchCount >= MAX_TAB_WARNINGS) {
+    $("antiCheatModal").style.display = "none";
+    $("violationNotice").textContent = t.acAutoSub;
+    $("violationNotice").style.display = "block";
+    submitExam(true);
+    return;
+  }
+
+  $("acWarningBadge").textContent = `Warning ${tabSwitchCount} / ${MAX_TAB_WARNINGS}`;
+  $("antiCheatModal").style.display = "flex";
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden && examActive) {
+    recordTabViolation();
+  }
+});
+
+window.addEventListener("blur", () => {
+  if (examActive) {
+    recordTabViolation();
+  }
+});
+
+document.addEventListener("contextmenu", e => {
+  if (examActive) e.preventDefault();
+});
+
+document.addEventListener("copy", e => {
+  if (examActive) e.preventDefault();
+});
 
 function normalizeLangCode(val) {
   const v = (val || "").toString().trim().toLowerCase();
@@ -334,17 +530,14 @@ function buildLocalizedQuestions() {
   const qLimit = Number(examData?.question_count) || 10;
   const transMap = allTranslations[lang] || {};
 
-  // Filter rows strictly matching selected language OR having a translation in the selected language
   const strictLangRows = allChapterQuestions.filter(q => {
     const rowLang = normalizeLangCode(q.language);
     const hasTranslation = Boolean(transMap[q.id] && (transMap[q.id].question_text || transMap[q.id].question));
     return rowLang === lang || hasTranslation;
   });
 
-  // Fallback only if zero rows exist in chosen language
   const pool = strictLangRows.length > 0 ? strictLangRows : allChapterQuestions;
 
-  // Deduplicate by question text so repeated rows never appear
   const seenText = new Set();
   const uniquePool = [];
   pool.forEach(q => {
@@ -358,7 +551,6 @@ function buildLocalizedQuestions() {
 
   const selectedRows = uniquePool.slice(0, qLimit);
 
-  // Remap userAnswers if language switched mid-exam by matching question index
   const oldAnswersByIndex = questions.map(q => userAnswers[q.id]);
   const newUserAnswers = {};
 
@@ -396,6 +588,7 @@ function switchExamLanguage(newLang) {
   $("prevBtn").textContent = t.prev;
   $("nextBtn").textContent = t.next;
   $("submitBtn").textContent = t.submit;
+  updateAntiCheatTexts();
   buildLocalizedQuestions();
   renderQuestion();
 }
@@ -463,6 +656,7 @@ async function initExam() {
   $("nextBtn").textContent = t.next;
   $("submitBtn").textContent = t.submit;
   $("studentBadge").textContent = "👤 " + studentName;
+  updateAntiCheatTexts();
 
   try {
     const { data: exam, error: examErr } = await db
@@ -497,7 +691,7 @@ async function initExam() {
       throw new Error(`మీరు ఇప్పటికే గరిష్టంగా (${maxAttempts}) సార్లు ఈ పరీక్ష రాశారు.`);
     }
 
-        let query = db.from("bible_questions").select("*");
+    let query = db.from("bible_questions").select("*");
     if (exam.paper_folder && exam.paper_folder.trim() !== "") {
       query = query.eq("paper_folder", exam.paper_folder.trim());
     } else {
@@ -510,7 +704,6 @@ async function initExam() {
         query = query.eq("chapter_number", Number(chapterFilter));
       }
     }
-    
 
     const { data: qList, error: qErr } = await query.order("id", { ascending: true }).limit(500);
 
@@ -519,7 +712,7 @@ async function initExam() {
     }
 
     if (!qList || qList.length === 0) {
-      throw new Error(`${bookFilter || "Selected Book"} Chapter ${chapterFilter || ""} కోసం ప్రశ్నలు డేటాబేస్‌లో లేవు.`);
+      throw new Error("ఈ పరీక్ష కోసం ప్రశ్నలు డేటాబేస్‌లో లేవు.");
     }
 
     allChapterQuestions = qList;
@@ -546,6 +739,12 @@ async function initExam() {
 
     $("loadingView").style.display = "none";
     $("quizView").style.display = "block";
+
+    // ACTIVATE ANTI-CHEAT PROTECTION
+    examActive = true;
+    tabSwitchCount = 0;
+    document.body.classList.add("exam-protected");
+
     startTimer(end);
     renderQuestion();
 
@@ -623,6 +822,9 @@ async function submitExam(isAuto) {
   if (!isAuto && !confirm(t.confirmSub)) return;
 
   isSubmitted = true;
+  examActive = false;
+  document.body.classList.remove("exam-protected");
+  $("antiCheatModal").style.display = "none";
   clearInterval(timerInterval);
   $("submitBtn").disabled = true;
   $("submitBtn").textContent = "Submitting...";
@@ -684,7 +886,6 @@ async function submitExam(isAuto) {
       if (insertedAttempt) attemptId = insertedAttempt.id;
     }
 
-    // ALSO SAVE EACH QUESTION + SELECTED ANSWER TO secure_attempt_questions
     if (attemptId && questions.length > 0) {
       const answerRows = questions.map((q, idx) => ({
         attempt_id: attemptId,
