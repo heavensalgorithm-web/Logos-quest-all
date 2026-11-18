@@ -1631,6 +1631,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
 setInterval(renderExams, 15000);
 setInterval(loadExams, 60000);
+  if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+
 </script>
 </body>
 </html>
