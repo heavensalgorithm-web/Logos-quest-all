@@ -2,7 +2,7 @@
       "relation": ["delegate_permission/common.handle_all_urls"],
       "target": {
         "namespace": "android_app",
-        "package_name": "com.logosquest.app",
-        "sha256_cert_fingerprints": ["38:1C:B8:EB:C5:3F:17:08:8E:BA:EB:04:76:77:F5:7C:9A:46:98:00:67:D9:EB:F9:2C:60:E1:A5:5C:01:1F:09"]
+        "package_name": "com.logosquest.biblequiz",
+        "sha256_cert_fingerprints": ["FE:43:B5:50:C3:A3:D3:6E:88:DE:3E:15:C0:53:75:CE:90:C9:29:D9:10:62:29:9A:CA:E9:2F:30:79:39:95:1F"]
       }
     }]
