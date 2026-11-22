@@ -130,7 +130,7 @@ input,select,button,textarea{
   font-family:inherit;
 }
 
-input,select,textarea{
+input:not([type="checkbox"]),select,textarea{
   width:100%;
   border:1.5px solid rgba(255,255,255,0.15);
   background:rgba(15,23,42,0.85);
@@ -138,6 +138,15 @@ input,select,textarea{
   margin:8px 0;
   outline:none;
   transition:border-color 0.2s;
+}
+
+input[type="checkbox"].q-checkbox {
+  width: 19px;
+  height: 19px;
+  accent-color: var(--gold-primary);
+  cursor: pointer;
+  margin: 0;
+  vertical-align: middle;
 }
 
 input:focus,select:focus,textarea:focus{
@@ -234,6 +243,10 @@ th{
   letter-spacing:0.5px;
 }
 
+tr.selected-row {
+  background: rgba(250, 204, 21, 0.12);
+}
+
 #message{color:#f87171}
 .small{font-size:13px;color:var(--text-muted);line-height:1.5}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -264,7 +277,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   color:#ffffff !important;
   box-shadow:none;
 }
-.danger:hover{
+.danger:hover:not(:disabled){
   background:#dc2626 !important;
 }
 
@@ -616,7 +629,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
 <main>
 <section id="loginSection" class="card" style="max-width:440px; margin:20px auto;">
-<h2>Admin Login</h2>
+<h2 id="loginHeading">Admin Login</h2>
 <form id="loginForm">
 <input id="email" type="email" placeholder="Admin Email" required>
 <input id="password" type="password" placeholder="Password" required>
@@ -628,7 +641,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <section id="dashboard" class="hidden">
 
 <div class="card">
-<h2>Admin Status</h2>
+<h2 id="adminStatusHeading">Admin Status</h2>
 <p id="adminEmail" style="color:var(--gold-primary); font-weight:600;"></p>
 <button id="refreshBtn" type="button">Refresh Results</button>
 <button id="logoutBtn" type="button" class="secondary">Logout</button>
@@ -639,7 +652,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
 <div class="card" id="liveParticipantsCard">
   <div class="live-header-row">
-    <h2 style="margin:0;">📡 Live Exam Participants</h2>
+    <h2 id="liveParticipantsHeading" style="margin:0;">📡 Live Exam Participants</h2>
     <span class="live-pill"><span class="pulse-dot"></span> Auto-Live Tracking (8s)</span>
   </div>
   <p class="small">పరీక్షలో జాయిన్ అయినప్పటి నుండి ముగిసే వరకు అభ్యర్థులందరినీ లైవ్‌లో చూడండి. Online (పరీక్ష రాస్తున్నవారు) మరియు Completed (పూర్తి చేసినవారు) వేర్వేరు Photo Galleries లో కనిపిస్తారు.</p>
@@ -685,7 +698,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <!-- 2. LIVE EXAM WINNERS DASHBOARD -->
 
 <div class="card">
-  <h2>🏆 Live Exam Results & Winners</h2>
+  <h2 id="winnersHeading">🏆 Live Exam Results & Winners</h2>
 
   <label for="winnerExamSelect">Select Exam</label>
   <select id="winnerExamSelect">
@@ -738,7 +751,7 @@ Highest Score
 </div>
 
 <div class="card">
-<h2>Student Results History</h2>
+<h2 id="resultsHistoryHeading">Student Results History</h2>
 <input id="search" placeholder="Search by name or mobile number">
 <p id="status" class="small"></p>
 <div class="table-wrap">
@@ -759,7 +772,7 @@ Highest Score
 <!-- 4. MULTI-PAGE & MULTI-LANGUAGE QUESTION PAPER SCANNER WITH EXAM FOLDERS -->
 
 <div class="card" id="paperScannerCard">
-  <h2>📁 Question Paper Folders & Scanner (Telugu / English / Tamil)</h2>
+  <h2 id="scannerHeading">📁 Question Paper Folders & Scanner (Telugu / English / Tamil)</h2>
   <p class="small">
     ఒక ఎగ్జామ్‌కి ఒక <strong>Exam Folder Name</strong> ఇచ్చి, అందులోనే <strong>Telugu Paper</strong>, <strong>English Paper</strong>, <strong>Tamil Paper</strong> పేజీ బై పేజీ స్కాన్ చేసి సేవ్ చేయండి.<br>
     ఆ తర్వాత కింద <strong>Schedule Live Bible Exam</strong> లో ఆ Folder సెలెక్ట్ చేసి Date & Time పెడితే చాలు — ఆ టైమ్‌కి ప్రతి విద్యార్థికి వారు ఎంచుకున్న భాష పేపర్ మాత్రమే వస్తుంది!
@@ -837,7 +850,7 @@ Highest Score
 <!-- 5. BIBLE QUESTION MANAGEMENT & AI GENERATOR -->
 
 <div class="card" id="questionManager">
-<h2>📖 Bible Question Management</h2>
+<h2 id="questionManagerHeading">📖 Bible Question Management</h2>
 <p class="small">
 Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. Correct Answers Studentsకి ఈ Page ద్వారా చూపించబడవు.
 </p>
@@ -968,7 +981,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 </div>
 
 <div class="card">
-<h2>📚 Saved Bible Questions</h2>
+<h2 id="savedQuestionsHeading">📚 Saved Bible Questions</h2>
 
 <div class="grid">
 <div>
@@ -994,13 +1007,22 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 </div>
 
 <input id="questionSearch" placeholder="Search Bible Book, Folder or Question">
-<button id="refreshQuestionsBtn" type="button">🔄 Refresh Questions</button>
+
+<div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:8px 0;">
+  <button id="refreshQuestionsBtn" type="button">🔄 Refresh Questions</button>
+  <button id="selectAllQuestionsBtn" type="button" class="secondary">☑️ Select All Visible</button>
+  <button id="deleteSelectedQuestionsBtn" type="button" class="danger hidden">🗑️ Delete Selected (0)</button>
+</div>
+
 <p id="questionListStatus" class="small"></p>
 
 <div class="table-wrap">
 <table>
 <thead>
 <tr>
+<th style="width:42px; text-align:center;">
+  <input type="checkbox" id="selectAllCheckbox" class="q-checkbox" title="Select All">
+</th>
 <th>Book / Folder</th>
 <th>Chapter</th>
 <th>Language</th>
@@ -1019,7 +1041,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 <!-- 6. LIVE EXAM SCHEDULING -->
 
 <div class="card">
-<h2>📅 Schedule Live Bible Exam</h2>
+<h2 id="scheduleExamHeading">📅 Schedule Live Bible Exam</h2>
 <p class="small">
 పైన స్కాన్ చేసి సేవ్ చేసిన <strong>Exam Paper Folder</strong> సెలెక్ట్ చేసి Date & Time పెడితే, ఆ టైమ్‌కి ఆ ఫోల్డర్‌లోని Telugu / English / Tamil ప్రశ్నలే ఎగ్జామ్‌లో వస్తాయి!
 </p>
@@ -1118,7 +1140,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 <!-- 7. SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS -->
 
 <div class="card" id="scheduledExamsCard">
-<h2>📋 Scheduled Exams & Participants</h2>
+<h2 id="scheduledExamsHeading">📋 Scheduled Exams & Participants</h2>
 <p class="small">ప్రతి ఎగ్జామ్‌కి ఎంతమంది హాజరయ్యారో చూడండి మరియు "👁️ View Details & Photos" క్లిక్ చేసి వారి పేరు, వివరాలు & ఫోటో చూడండి.</p>
 <button id="refreshExamsBtn" type="button">🔄 Refresh Exams</button>
 <p id="examListStatus" class="small"></p>
@@ -1163,6 +1185,7 @@ const $ = id => document.getElementById(id);
 
 let allResults = [];
 let allQuestions = [];
+let selectedQuestionIds = new Set();
 let editingQuestionId = null;
 let generatedAiQuestions = [];
 let liveMonitorTimer = null;
@@ -2656,6 +2679,50 @@ $("questionForm").addEventListener("submit",async event=>{
   }
 });
 
+// ==========================================
+// SAVED BIBLE QUESTIONS + MULTI-SELECT BULK DELETE
+// ==========================================
+function getFilteredQuestions() {
+  const lang = $("filterLanguage").value;
+  const diff = $("filterDifficulty").value;
+  const query = $("questionSearch").value.trim().toLowerCase();
+
+  return allQuestions.filter(q => {
+    const matchLang = !lang || q.language === lang;
+    const matchDiff = !diff || q.difficulty === diff;
+    const matchQuery = !query || 
+      String(q.bible_book||"").toLowerCase().includes(query) || 
+      String(q.paper_folder||"").toLowerCase().includes(query) || 
+      String(q.question_text||"").toLowerCase().includes(query);
+    return matchLang && matchDiff && matchQuery;
+  });
+}
+
+function updateBulkSelectionUI() {
+  const count = selectedQuestionIds.size;
+  const delBtn = $("deleteSelectedQuestionsBtn");
+  const selectAllBtn = $("selectAllQuestionsBtn");
+  const headerChk = $("selectAllCheckbox");
+
+  if (count > 0) {
+    delBtn.classList.remove("hidden");
+    delBtn.textContent = `🗑️ Delete Selected (${count})`;
+  } else {
+    delBtn.classList.add("hidden");
+  }
+
+  const visible = getFilteredQuestions();
+  const allVisibleSelected = visible.length > 0 && visible.every(q => selectedQuestionIds.has(String(q.id)));
+
+  if (headerChk) {
+    headerChk.checked = allVisibleSelected;
+    headerChk.indeterminate = count > 0 && !allVisibleSelected;
+  }
+  if (selectAllBtn) {
+    selectAllBtn.textContent = allVisibleSelected ? "⬜ Deselect All" : "☑️ Select All Visible";
+  }
+}
+
 async function loadQuestions(){
   $("questionListStatus").textContent = "Loading Bible Questions...";
 
@@ -2671,30 +2738,44 @@ async function loadQuestions(){
   }
 
   allQuestions = data || [];
+  const validIds = new Set(allQuestions.map(q => String(q.id)));
+  selectedQuestionIds = new Set([...selectedQuestionIds].filter(id => validIds.has(id)));
+
   refreshPaperFoldersUI();
   renderQuestions();
 }
 
 function renderQuestions(){
-  const lang = $("filterLanguage").value;
-  const diff = $("filterDifficulty").value;
-  const query = $("questionSearch").value.trim().toLowerCase();
-
-  const filtered = allQuestions.filter(q => {
-    const matchLang = !lang || q.language === lang;
-    const matchDiff = !diff || q.difficulty === diff;
-    const matchQuery = !query || 
-      String(q.bible_book||"").toLowerCase().includes(query) || 
-      String(q.paper_folder||"").toLowerCase().includes(query) || 
-      String(q.question_text||"").toLowerCase().includes(query);
-    return matchLang && matchDiff && matchQuery;
-  });
-
+  const filtered = getFilteredQuestions();
   const body = $("questionsBody");
   body.replaceChildren();
 
   filtered.forEach(q => {
+    const qIdStr = String(q.id);
+    const isChecked = selectedQuestionIds.has(qIdStr);
     const tr = document.createElement("tr");
+    if (isChecked) tr.classList.add("selected-row");
+
+    // Checkbox Cell
+    const chkTd = document.createElement("td");
+    chkTd.style.textAlign = "center";
+    const chk = document.createElement("input");
+    chk.type = "checkbox";
+    chk.className = "q-checkbox";
+    chk.checked = isChecked;
+    chk.addEventListener("change", () => {
+      if (chk.checked) {
+        selectedQuestionIds.add(qIdStr);
+        tr.classList.add("selected-row");
+      } else {
+        selectedQuestionIds.delete(qIdStr);
+        tr.classList.remove("selected-row");
+      }
+      updateBulkSelectionUI();
+    });
+    chkTd.appendChild(chk);
+    tr.appendChild(chkTd);
+
     const bookOrFolder = q.paper_folder ? `📁 ${q.paper_folder}` : q.bible_book;
 
     [
@@ -2740,7 +2821,10 @@ function renderQuestions(){
     delBtn.onclick = async () => {
       if(confirm("మీరు నిజంగా ఈ ప్రశ్నను తొలగించాలనుకుంటున్నారా?")){
         const {error} = await db.from("bible_questions").delete().eq("id", q.id);
-        if(!error) await loadQuestions();
+        if(!error) {
+          selectedQuestionIds.delete(qIdStr);
+          await loadQuestions();
+        }
       }
     };
 
@@ -2751,7 +2835,68 @@ function renderQuestions(){
   });
 
   $("questionListStatus").textContent = filtered.length + " questions displayed.";
+  updateBulkSelectionUI();
 }
+
+function toggleSelectAllVisible(forceState) {
+  const visible = getFilteredQuestions();
+  const shouldSelect = typeof forceState === "boolean"
+    ? forceState
+    : !(visible.length > 0 && visible.every(q => selectedQuestionIds.has(String(q.id))));
+
+  visible.forEach(q => {
+    const idStr = String(q.id);
+    if (shouldSelect) {
+      selectedQuestionIds.add(idStr);
+    } else {
+      selectedQuestionIds.delete(idStr);
+    }
+  });
+  renderQuestions();
+}
+
+$("selectAllCheckbox").addEventListener("change", function() {
+  toggleSelectAllVisible(this.checked);
+});
+
+$("selectAllQuestionsBtn").addEventListener("click", () => {
+  toggleSelectAllVisible();
+});
+
+$("deleteSelectedQuestionsBtn").addEventListener("click", async () => {
+  const idsToDelete = [...selectedQuestionIds];
+  if (idsToDelete.length === 0) return;
+
+  if (!confirm(`మీరు ఎంచుకున్న ${idsToDelete.length} ప్రశ్నలను ఒకేసారి తొలగించాలనుకుంటున్నారా?`)) return;
+
+  const delBtn = $("deleteSelectedQuestionsBtn");
+  const statusEl = $("questionListStatus");
+  delBtn.disabled = true;
+  statusEl.textContent = `⏳ Deleting ${idsToDelete.length} selected questions...`;
+
+  try {
+    // Clean any reference in secure_attempt_questions first if foreign key exists
+    try {
+      await db.from("secure_attempt_questions").delete().in("question_id", idsToDelete);
+    } catch (_) {}
+
+    const { error } = await db
+      .from("bible_questions")
+      .delete()
+      .in("id", idsToDelete);
+
+    if (error) throw error;
+
+    selectedQuestionIds.clear();
+    statusEl.textContent = `✅ ${idsToDelete.length} ప్రశ్నలు విజయవంతంగా తొలగించబడ్డాయి!`;
+    await loadQuestions();
+  } catch (err) {
+    alert("Delete Error: " + err.message);
+    statusEl.textContent = "❌ Error: " + err.message;
+  } finally {
+    delBtn.disabled = false;
+  }
+});
 
 $("filterLanguage").addEventListener("change", renderQuestions);
 $("filterDifficulty").addEventListener("change", renderQuestions);
@@ -2902,7 +3047,8 @@ $("releaseAnswersBtn").addEventListener("click", async () => {
     btn.disabled = false;
   }
 });
-  $("releaseCertificatesBtn").addEventListener("click", async () => {
+
+$("releaseCertificatesBtn").addEventListener("click", async () => {
   const examId = $("winnerExamSelect").value;
   const status = $("releaseCertificatesStatus");
   const btn = $("releaseCertificatesBtn");
