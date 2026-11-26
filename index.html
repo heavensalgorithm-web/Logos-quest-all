@@ -42,6 +42,53 @@ body {
   min-height: 100vh;
 }
 
+/* ================= BACKSIDE GOLDEN CROWN CLOSE-UP ANIMATION ================= */
+@keyframes crownApproach {
+  0% {
+    transform: translate(-50%, -50%) scale(0.45) rotate(-6deg);
+    opacity: 0.08;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08) rotate(2deg);
+    opacity: 0.22;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.75) rotate(0deg);
+    opacity: 0.05;
+  }
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  padding: 24px;
+  margin: 14px auto;
+  border-radius: 20px;
+  max-width: 620px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.card > *:not(.crown-backdrop-anim) {
+  position: relative;
+  z-index: 2;
+}
+
+.crown-backdrop-anim {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  width: 240px;
+  height: 180px;
+  pointer-events: none;
+  z-index: 1;
+  animation: crownApproach 7.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 26px rgba(250, 204, 21, 0.45));
+}
+
 .lang-selector-box {
   display: flex;
   justify-content: flex-end;
@@ -67,18 +114,6 @@ body {
 .lang-select option {
   background: #0f172a;
   color: #f8fafc;
-}
-
-.card {
-  background: var(--card-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--card-border);
-  padding: 24px;
-  margin: 14px auto;
-  border-radius: 20px;
-  max-width: 620px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 
 /* ================= PREMIUM 3D MAIN LOGO & TITLE ================= */
@@ -177,12 +212,60 @@ img.ico-img-sm {
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.55));
 }
 
-/* ================= FEATURE SECTION TRIGGER BUTTONS ================= */
+/* ================= CROSS CONNECTORS & SNAP-TO-BUTTON OPTIONS ================= */
+@keyframes crossDockSnap {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.95);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.cross-junction-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0 6px;
+  color: var(--gold-primary);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.cross-junction-line::before,
+.cross-junction-line::after {
+  content: "";
+  height: 1.5px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, rgba(250, 204, 21, 0.55), transparent);
+}
+
+.cross-pin-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #fde047, #ca8a04);
+  color: #0b1329;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 900;
+  box-shadow: 0 0 12px rgba(250, 204, 21, 0.55);
+}
+
 .section-trigger-btn {
   width: 100%;
   background: linear-gradient(145deg, #1d367a 0%, #0f1c42 65%, #080f26 100%);
   color: var(--gold-primary);
-  border: 1.5px solid rgba(250, 204, 21, 0.5);
+  border: 1.5px solid rgba(250, 204, 21, 0.55);
   border-radius: 14px;
   padding: 14px 18px;
   font-size: 17px;
@@ -201,9 +284,25 @@ img.ico-img-sm {
   box-shadow: 0 7px 0 #854d0e, 0 12px 24px rgba(250, 204, 21, 0.35);
 }
 
+.section-trigger-btn.open {
+  border-color: #fef08a;
+  box-shadow: 0 5px 0 #854d0e, 0 0 20px rgba(250, 204, 21, 0.35);
+}
+
 .section-trigger-left {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
+}
+
+.cross-tag-pill {
+  background: rgba(250, 204, 21, 0.16);
+  border: 1px solid rgba(250, 204, 21, 0.5);
+  color: #fef08a;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 8px;
 }
 
 .section-trigger-arrow {
@@ -219,13 +318,34 @@ img.ico-img-sm {
 
 .section-collapsible-body {
   display: none;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 6px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1.5px solid rgba(250, 204, 21, 0.42);
+  background: rgba(11, 19, 41, 0.72);
+  box-shadow: 0 0 18px rgba(250, 204, 21, 0.14);
 }
 
 .section-collapsible-body.open {
   display: block;
+  animation: crossDockSnap 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.option-dock-item {
+  position: relative;
+  border-left: 3px solid var(--gold-primary);
+  animation: crossDockSnap 0.35s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.option-dock-item::before {
+  content: "✚";
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  color: var(--gold-primary);
+  font-size: 13px;
+  font-weight: 900;
+  opacity: 0.85;
 }
 
 h1 {
@@ -591,10 +711,10 @@ p {
 
 .exam {
   background: rgba(15, 23, 42, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(250, 204, 21, 0.25);
   border-radius: 16px;
   padding: 18px;
-  margin-top: 16px;
+  margin-top: 14px;
 }
 
 .live {
@@ -771,14 +891,17 @@ a {
     </div>
   </div>
 
-  <!-- 1. LIVE BIBLE EXAMS BUTTON + COLLAPSIBLE CONTENT -->
+  <!-- 1. LIVE BIBLE EXAMS BUTTON + CROSS-SNAPPED OPTIONS -->
   <div class="card">
     <button type="button" class="section-trigger-btn open" id="btnTriggerExams" onclick="toggleHomeSection('examsBodyPanel', 'btnTriggerExams')">
       <span class="section-trigger-left">
         <img data-ico="bible" class="ico-img-md" alt="Exams"><span id="dashExamsTitle">లైవ్ బైబిల్ పరీక్షలు</span>
+        <span class="cross-tag-pill">✚</span>
       </span>
       <span class="section-trigger-arrow">▼</span>
     </button>
+
+    <div class="cross-junction-line"><span class="cross-pin-badge">✚</span></div>
 
     <div id="examsBodyPanel" class="section-collapsible-body open">
       <p class="center" id="dashIstNotice">పరీక్షల సమయాలు IST ప్రకారం</p>
@@ -794,33 +917,43 @@ a {
     </div>
   </div>
 
-  <!-- 2. WINNERS BUTTON + COLLAPSIBLE CONTENT -->
+  <!-- 2. WINNERS BUTTON + CROSS-SNAPPED OPTIONS -->
   <div class="card">
     <button type="button" class="section-trigger-btn" id="btnTriggerWinners" onclick="toggleHomeSection('winnersBodyPanel', 'btnTriggerWinners')">
       <span class="section-trigger-left">
         <img data-ico="trophy" class="ico-img-md" alt="Winners"><span id="dashWinnersTitle">విజేతలు</span>
+        <span class="cross-tag-pill">✚</span>
       </span>
       <span class="section-trigger-arrow">▶</span>
     </button>
 
+    <div class="cross-junction-line"><span class="cross-pin-badge">✚</span></div>
+
     <div id="winnersBodyPanel" class="section-collapsible-body center">
-      <p id="dashWinnersDesc">ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
-      <a href="leaderboard.html" id="linkLeaderboard">లీడర్‌బోర్డ్ చూడండి →</a>
+      <div class="exam option-dock-item">
+        <p id="dashWinnersDesc">ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
+        <a href="leaderboard.html" id="linkLeaderboard">లీడర్‌బోర్డ్ చూడండి →</a>
+      </div>
     </div>
   </div>
 
-  <!-- 3. MY RESULTS BUTTON + COLLAPSIBLE CONTENT -->
+  <!-- 3. MY RESULTS BUTTON + CROSS-SNAPPED OPTIONS -->
   <div class="card">
     <button type="button" class="section-trigger-btn" id="btnTriggerResults" onclick="toggleHomeSection('resultsBodyPanel', 'btnTriggerResults')">
       <span class="section-trigger-left">
         <img data-ico="chart" class="ico-img-md" alt="Results"><span id="dashResultsTitle">నా ఫలితాలు</span>
+        <span class="cross-tag-pill">✚</span>
       </span>
       <span class="section-trigger-arrow">▶</span>
     </button>
 
+    <div class="cross-junction-line"><span class="cross-pin-badge">✚</span></div>
+
     <div id="resultsBodyPanel" class="section-collapsible-body center">
-      <p id="dashResultsDesc">మీ పరీక్ష ఫలితాలు ఇక్కడ చూడవచ్చు.</p>
-      <a href="results.html" id="linkResults">ఫలితాలు చూడండి →</a>
+      <div class="exam option-dock-item">
+        <p id="dashResultsDesc">మీ పరీక్ష ఫలితాలు ఇక్కడ చూడవచ్చు.</p>
+        <a href="results.html" id="linkResults">ఫలితాలు చూడండి →</a>
+      </div>
     </div>
   </div>
 
@@ -1064,6 +1197,33 @@ function hydrateAll3DImageIcons(root = document) {
   });
 }
 
+function injectBacksideGoldenCrownLayers() {
+  const crownSvg = `<svg viewBox="0 0 160 110" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bgCrownGold" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fef9c3"/>
+        <stop offset="45%" stop-color="#facc15"/>
+        <stop offset="100%" stop-color="#a16207"/>
+      </linearGradient>
+    </defs>
+    <path d="M16 84 L12 32 L46 56 L80 20 L114 56 L148 32 L144 84 Z" fill="url(#bgCrownGold)" stroke="#fef08a" stroke-width="2.5" stroke-linejoin="round"/>
+    <rect x="16" y="84" width="128" height="14" rx="6" fill="#ca8a04" stroke="#fef9c3" stroke-width="2"/>
+    <circle cx="80" cy="14" r="6" fill="#fef9c3"/>
+    <circle cx="12" cy="26" r="5" fill="#fde047"/>
+    <circle cx="148" cy="26" r="5" fill="#fde047"/>
+  </svg>`;
+
+  document.querySelectorAll(".card").forEach(card => {
+    if (!card.querySelector(".crown-backdrop-anim")) {
+      const layer = document.createElement("div");
+      layer.className = "crown-backdrop-anim";
+      layer.setAttribute("aria-hidden", "true");
+      layer.innerHTML = crownSvg;
+      card.insertBefore(layer, card.firstChild);
+    }
+  });
+}
+
 window.toggleHomeSection = function(panelId, btnId) {
   const panel = $(panelId);
   const btn = $(btnId);
@@ -1073,6 +1233,13 @@ window.toggleHomeSection = function(panelId, btnId) {
   btn.classList.toggle("open", willOpen);
   const arrow = btn.querySelector(".section-trigger-arrow");
   if (arrow) arrow.textContent = willOpen ? "▼" : "▶";
+  if (willOpen) {
+    panel.querySelectorAll(".option-dock-item").forEach((el, idx) => {
+      el.style.animation = "none";
+      void el.offsetWidth;
+      el.style.animation = `crossDockSnap ${0.28 + idx * 0.06}s cubic-bezier(0.22, 1, 0.36, 1) backwards`;
+    });
+  }
 };
 
 const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
@@ -1941,13 +2108,21 @@ function renderExams(){
     ? `${icoImgHtml("online")}${t.liveCount.replace("{count}", liveCount)}`
     : t.upcomingOnly;
 
-  visible.forEach(exam=>{
+  visible.forEach((exam, index) => {
     const start = new Date(exam.start_time).getTime();
     const end = new Date(exam.end_time).getTime();
     const isLive = now >= start && now < end;
 
+    if (index > 0) {
+      const divider = document.createElement("div");
+      divider.className = "cross-junction-line";
+      divider.innerHTML = `<span class="cross-pin-badge">✚</span>`;
+      list.appendChild(divider);
+    }
+
     const card = document.createElement("div");
-    card.className = "exam";
+    card.className = "exam option-dock-item";
+    card.style.animationDelay = `${index * 0.06}s`;
 
     card.appendChild(makeText("h3", exam.exam_name || "Bible Quiz"));
 
@@ -2014,6 +2189,7 @@ async function loadExams(){
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  injectBacksideGoldenCrownLayers();
   hydrateAll3DImageIcons();
   checkExistingSession();
 });
