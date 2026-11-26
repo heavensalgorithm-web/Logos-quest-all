@@ -68,7 +68,7 @@ body{
 /* ================= PREMIUM 3D LOGO & HEADER ================= */
 header{
   text-align:center;
-  padding:18px 15px 12px;
+  padding:16px 15px 10px;
   perspective: 900px;
 }
 
@@ -78,9 +78,9 @@ header{
 }
 
 .logo-3d-wrap {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 14px;
+  width: 92px;
+  height: 92px;
+  margin: 0 auto 12px;
   padding: 5px;
   border-radius: 26px;
   background: linear-gradient(145deg, #fef08a 0%, #eab308 45%, #854d0e 100%);
@@ -90,7 +90,6 @@ header{
     0 0 28px rgba(250, 204, 21, 0.45),
     inset 0 2px 4px rgba(255, 255, 255, 0.75);
   animation: float3D 4.5s ease-in-out infinite;
-  transition: transform 0.35s ease;
   position: relative;
 }
 
@@ -113,8 +112,8 @@ header{
 }
 
 .brand-3d-title {
-  margin: 0 0 6px 0;
-  font-size: 30px;
+  margin: 0 0 4px 0;
+  font-size: 28px;
   font-weight: 900;
   letter-spacing: 1.5px;
   background: linear-gradient(180deg, #fef9c3 0%, #facc15 48%, #ca8a04 100%);
@@ -135,6 +134,15 @@ header p{
 }
 
 /* ================= 3D IMAGE ICON BADGES ================= */
+img.ico-img-xl {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  object-fit: contain;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.75));
+}
+
 img.ico-img-lg {
   width: 38px;
   height: 38px;
@@ -143,7 +151,7 @@ img.ico-img-lg {
   margin-right: 10px;
   vertical-align: middle;
   flex-shrink: 0;
-  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.65));
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.75));
 }
 
 img.ico-img-md {
@@ -158,14 +166,105 @@ img.ico-img-md {
 }
 
 img.ico-img-sm {
-  width: 18px;
-  height: 18px;
+  width: 19px;
+  height: 19px;
   border-radius: 5px;
   object-fit: contain;
   margin-right: 5px;
-  vertical-align: -3px;
+  vertical-align: -4px;
   flex-shrink: 0;
   filter: drop-shadow(0 2px 3px rgba(0,0,0,0.45));
+}
+
+/* ================= 9-BUTTON FEATURE MENU GRID ================= */
+.admin-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.menu-tile-btn {
+  width: 100%;
+  margin: 0;
+  padding: 22px 14px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #1d367a 0%, #0f1c42 60%, #080f26 100%) !important;
+  border: 2px solid rgba(250, 204, 21, 0.55) !important;
+  color: #fef9c3 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
+  box-shadow:
+    0 6px 0 #713f12,
+    0 12px 24px rgba(0, 0, 0, 0.55),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.3) !important;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.menu-tile-btn:hover {
+  transform: translateY(-4px) !important;
+  border-color: var(--gold-primary) !important;
+  background: linear-gradient(145deg, #26469c 0%, #142557 100%) !important;
+  box-shadow:
+    0 8px 0 #854d0e,
+    0 16px 30px rgba(250, 204, 21, 0.35),
+    inset 0 2px 3px rgba(255, 255, 255, 0.45) !important;
+}
+
+.menu-tile-btn:active {
+  transform: translateY(2px) !important;
+  box-shadow: 0 3px 0 #713f12 !important;
+}
+
+.menu-tile-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--gold-primary);
+  line-height: 1.3;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.65);
+}
+
+.menu-tile-sub {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #cbd5e1;
+  line-height: 1.3;
+}
+
+.section-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(250, 204, 21, 0.22);
+  gap: 10px;
+}
+
+.btn-menu-return {
+  background: linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%) !important;
+  color: #0b1329 !important;
+  font-weight: 800;
+  padding: 9px 16px !important;
+  font-size: 13px !important;
+  border-radius: 12px;
+  margin: 0 !important;
+  box-shadow: 0 3px 0 #854d0e, 0 5px 12px var(--gold-glow) !important;
+}
+
+@media (max-width: 780px) {
+  .admin-menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .menu-tile-btn {
+    padding: 18px 10px;
+  }
 }
 
 main{
@@ -749,35 +848,114 @@ label{display:flex;align-items:center;font-weight:600;margin-top:8px;font-size:1
 
 <section id="dashboard" class="hidden">
 
-<div class="card">
-<h2>
-  <img data-ico="shield" class="ico-img-lg" alt="Admin Status">
-  <span id="adminStatusHeading">Admin Status</span>
-</h2>
-<p id="adminEmail" style="color:var(--gold-primary); font-weight:600;"></p>
-<button id="refreshBtn" type="button">
-  <img data-ico="refresh" class="ico-img-sm" alt="Refresh">
-  <span id="refreshBtnText">Refresh Results</span>
-</button>
-<button id="logoutBtn" type="button" class="secondary">
-  <img data-ico="logout" class="ico-img-sm" alt="Logout">
-  <span id="logoutBtnText">Logout</span>
-</button>
-<a class="link-button" href="leaderboard.html">
-  <img data-ico="trophy" class="ico-img-sm" alt="Leaderboard">
-  <span id="viewLeaderboardText">View Leaderboard</span>
-</a>
+<!-- ================= 9 FEATURE BUTTONS MAIN MENU ================= -->
+<div id="adminMenuGridView" class="card">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+    <span id="adminMenuWelcome" style="color:var(--gold-primary); font-weight:700; font-size:14px;">Admin Control Center</span>
+    <span class="small" id="adminMenuHint">ఏదైనా ఆప్షన్ ఎంచుకోండి</span>
+  </div>
+
+  <div class="admin-menu-grid">
+    <!-- 1. Admin Status -->
+    <button type="button" class="menu-tile-btn" onclick="openAdminSection('secAdminStatus')">
+      <img data-ico="shield" class="ico-img-xl" alt="Admin Status">
+      <span class="menu-tile-title" id="tileTitle1">Admin Status</span>
+      <span class="menu-tile-sub" id="tileSub1">Account & Leaderboard</span>
+    </button>
+
+    <!-- 2. Live Exam Participants -->
+    <button type="button" class="menu-tile-btn" onclick="openAdminSection('liveParticipantsCard')">
+      <img data-ico="radar" class="ico-img-xl" alt="Live Participants">
+      <span class="menu-tile-title" id="tileTitle2">Live Exam Participants</span>
+      <span class="menu-tile-sub" id="tileSub2">Online & Completed Photos</span>
+    </button>
+
+    <!-- 3. Live Results & Winners -->
+    <button type="button" class="menu-tile-btn" onclick="openAdminSection('secWinnersCard')">
+      <img data-ico="trophy" class="ico-img-xl" alt="Winners">
+      <span class="menu-tile-title" id="tileTitle3">Live Results & Winners</span>
+      <span class="menu-tile-sub" id="tileSub3">Top 10, Answers & Certificates</span>
+    </button>
+
+    <!-- 4. Student Results History -->
+    <button type="button" class="menu-tile-btn" onclick="openAdminSection('secResultsHistory')">
+      <img data-ico="chart" class="ico-img-xl" alt="Results History">
+      <span class="menu-tile-title" id="tileTitle4">Student Results History</span>
+      <span class="menu-tile-sub" id="tileSub4">Search Scores & Attempts</span>
+    </button>
+
+    <!-- 5. Paper Folders & Scanner -->
+    <button type="button" class="menu-tile-btn" onclick="openAdminSection('paperScannerCard')">
+      <img data-ico="folder" class="ico-img-xl" alt="Scanner">
+      <span class="menu-tile-title" id="tileTitle5">Paper Folders & Scanner</span>
+      <span class="menu-tile-sub" id="tileSub5">Camera / Gallery OCR</span>
+    </button>
+
+    <!-- 6. Bible Question Manager -->
+    <button type="button" class="menu-tile-btn" onclick="openAdminSection('questionManager')">
+      <img data-ico="bible" class="ico-img-xl" alt="Question Manager">
+      <span class="menu-tile-title" id="tileTitle6">Bible Question Manager</span>
+      <span class="menu-tile-sub" id="tileSub6">AI Generator & Manual Entry</span>
+    </button>
+
+    <!-- 7. Saved Questions Bank -->
+    <button type="button" class="menu-tile-btn" onclick="openAdminSection('secSavedQuestions')">
+      <img data-ico="books" class="ico-img-xl" alt="Saved Questions">
+      <span class="menu-tile-title" id="tileTitle7">Saved Questions Bank</span>
+      <span class="menu-tile-sub" id="tileSub7">Filter, Edit & Bulk Delete</span>
+    </button>
+
+    <!-- 8. Schedule Live Exam -->
+    <button type="button" class="menu-tile-btn" onclick="openAdminSection('secScheduleExam')">
+      <img data-ico="calendar" class="ico-img-xl" alt="Schedule Exam">
+      <span class="menu-tile-title" id="tileTitle8">Schedule Live Exam</span>
+      <span class="menu-tile-sub" id="tileSub8">Set Date, Time & Folder</span>
+    </button>
+
+    <!-- 9. Scheduled Exams & Photos -->
+    <button type="button" class="menu-tile-btn" onclick="openAdminSection('scheduledExamsCard')">
+      <img data-ico="clipboard" class="ico-img-xl" alt="Scheduled Exams">
+      <span class="menu-tile-title" id="tileTitle9">Scheduled Exams & Photos</span>
+      <span class="menu-tile-sub" id="tileSub9">View All Exam Candidates</span>
+    </button>
+  </div>
 </div>
 
-<!-- 1. LIVE EXAM PARTICIPANTS (REAL-TIME ONLINE & COMPLETED SEPARATE PHOTO GALLERIES) -->
+<!-- ================= 1. ADMIN STATUS SECTION ================= -->
+<div class="card admin-feature-section hidden" id="secAdminStatus">
+  <div class="section-nav-bar">
+    <button type="button" class="btn-menu-return" onclick="backToAdminMenu()">← <span class="back-menu-lbl">Back to Menu</span></button>
+  </div>
+  <h2>
+    <img data-ico="shield" class="ico-img-lg" alt="Admin Status">
+    <span id="adminStatusHeading">Admin Status</span>
+  </h2>
+  <p id="adminEmail" style="color:var(--gold-primary); font-weight:600;"></p>
+  <button id="refreshBtn" type="button">
+    <img data-ico="refresh" class="ico-img-sm" alt="Refresh">
+    <span id="refreshBtnText">Refresh Results</span>
+  </button>
+  <button id="logoutBtn" type="button" class="secondary">
+    <img data-ico="logout" class="ico-img-sm" alt="Logout">
+    <span id="logoutBtnText">Logout</span>
+  </button>
+  <a class="link-button" href="leaderboard.html">
+    <img data-ico="trophy" class="ico-img-sm" alt="Leaderboard">
+    <span id="viewLeaderboardText">View Leaderboard</span>
+  </a>
+</div>
 
-<div class="card" id="liveParticipantsCard">
+<!-- ================= 2. LIVE EXAM PARTICIPANTS SECTION ================= -->
+<div class="card admin-feature-section hidden" id="liveParticipantsCard">
+  <div class="section-nav-bar">
+    <button type="button" class="btn-menu-return" onclick="backToAdminMenu()">← <span class="back-menu-lbl">Back to Menu</span></button>
+    <span class="live-pill"><span class="pulse-dot"></span> Auto-Live Tracking (8s)</span>
+  </div>
   <div class="live-header-row">
     <h2 style="margin:0;">
       <img data-ico="radar" class="ico-img-lg" alt="Live Radar">
       <span id="liveParticipantsHeading">Live Exam Participants</span>
     </h2>
-    <span class="live-pill"><span class="pulse-dot"></span> Auto-Live Tracking (8s)</span>
   </div>
   <p class="small" id="liveParticipantsSub">పరీక్షలో జాయిన్ అయినప్పటి నుండి ముగిసే వరకు అభ్యర్థులందరినీ లైవ్‌లో చూడండి. Online (పరీక్ష రాస్తున్నవారు) మరియు Completed (పూర్తి చేసినవారు) వేర్వేరు Photo Galleries లో కనిపిస్తారు.</p>
 
@@ -822,9 +1000,11 @@ label{display:flex;align-items:center;font-weight:600;margin-top:8px;font-size:1
   </div>
 </div>
 
-<!-- 2. LIVE EXAM WINNERS DASHBOARD -->
-
-<div class="card">
+<!-- ================= 3. LIVE EXAM WINNERS DASHBOARD SECTION ================= -->
+<div class="card admin-feature-section hidden" id="secWinnersCard">
+  <div class="section-nav-bar">
+    <button type="button" class="btn-menu-return" onclick="backToAdminMenu()">← <span class="back-menu-lbl">Back to Menu</span></button>
+  </div>
   <h2>
     <img data-ico="trophy" class="ico-img-lg" alt="Winners">
     <span id="winnersHeading">Live Exam Results & Winners</span>
@@ -877,48 +1057,53 @@ label{display:flex;align-items:center;font-weight:600;margin-top:8px;font-size:1
   </div>
 </div>
 
-<!-- 3. EXISTING RESULTS & STUDENT HISTORY -->
+<!-- ================= 4. EXISTING RESULTS & STUDENT HISTORY SECTION ================= -->
+<div class="card admin-feature-section hidden" id="secResultsHistory">
+  <div class="section-nav-bar">
+    <button type="button" class="btn-menu-return" onclick="backToAdminMenu()">← <span class="back-menu-lbl">Back to Menu</span></button>
+  </div>
 
-<div class="card stats">
-<div class="stat">
-<span id="statAttemptsLbl">Total Attempts</span>
-<strong id="attempts">0</strong>
-</div>
-<div class="stat">
-<span id="statAvgLbl">Average Score</span>
-<strong id="average">0</strong>
-</div>
-<div class="stat">
-<span id="statHighLbl">Highest Score</span>
-<strong id="highest">0</strong>
-</div>
+  <div class="stats">
+    <div class="stat">
+      <span id="statAttemptsLbl">Total Attempts</span>
+      <strong id="attempts">0</strong>
+    </div>
+    <div class="stat">
+      <span id="statAvgLbl">Average Score</span>
+      <strong id="average">0</strong>
+    </div>
+    <div class="stat">
+      <span id="statHighLbl">Highest Score</span>
+      <strong id="highest">0</strong>
+    </div>
+  </div>
+
+  <h2>
+    <img data-ico="chart" class="ico-img-lg" alt="Chart">
+    <span id="resultsHistoryHeading">Student Results History</span>
+  </h2>
+  <input id="search" placeholder="Search by name or mobile number">
+  <p id="status" class="small"></p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Mobile</th>
+          <th>Score</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+  </div>
 </div>
 
-<div class="card">
-<h2>
-  <img data-ico="chart" class="ico-img-lg" alt="Chart">
-  <span id="resultsHistoryHeading">Student Results History</span>
-</h2>
-<input id="search" placeholder="Search by name or mobile number">
-<p id="status" class="small"></p>
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Mobile</th>
-<th>Score</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody id="resultsBody"></tbody>
-</table>
-</div>
-</div>
-
-<!-- 4. MULTI-PAGE & MULTI-LANGUAGE QUESTION PAPER SCANNER WITH EXAM FOLDERS -->
-
-<div class="card" id="paperScannerCard">
+<!-- ================= 5. QUESTION PAPER SCANNER & FOLDERS SECTION ================= -->
+<div class="card admin-feature-section hidden" id="paperScannerCard">
+  <div class="section-nav-bar">
+    <button type="button" class="btn-menu-return" onclick="backToAdminMenu()">← <span class="back-menu-lbl">Back to Menu</span></button>
+  </div>
   <h2>
     <img data-ico="folder" class="ico-img-lg" alt="Folder">
     <span id="scannerHeading">Question Paper Folders & Scanner (Telugu / English / Tamil)</span>
@@ -1019,373 +1204,356 @@ label{display:flex;align-items:center;font-weight:600;margin-top:8px;font-size:1
   </div>
 </div>
 
-<!-- 5. BIBLE QUESTION MANAGEMENT & AI GENERATOR -->
+<!-- ================= 6. BIBLE QUESTION MANAGEMENT & AI GENERATOR SECTION ================= -->
+<div class="card admin-feature-section hidden" id="questionManager">
+  <div class="section-nav-bar">
+    <button type="button" class="btn-menu-return" onclick="backToAdminMenu()">← <span class="back-menu-lbl">Back to Menu</span></button>
+  </div>
+  <h2>
+    <img data-ico="bible" class="ico-img-lg" alt="Bible">
+    <span id="questionManagerHeading">Bible Question Management</span>
+  </h2>
+  <p class="small" id="questionManagerSub">
+    Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from students on this page.
+  </p>
 
-<div class="card" id="questionManager">
-<h2>
-  <img data-ico="bible" class="ico-img-lg" alt="Bible">
-  <span id="questionManagerHeading">Bible Question Management</span>
-</h2>
-<p class="small" id="questionManagerSub">
-Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from students on this page.
-</p>
+  <div class="ai-box">
+    <h3 style="color:var(--gold-primary);">
+      <img data-ico="sparkles" class="ico-img-md" alt="AI">
+      <span id="aiBoxHeading">AI Bible Question Generator</span>
+    </h3>
+    <p class="small" id="aiBoxSub">Generate unique Bible quiz questions based on Scripture verses & events with randomized A/B/C/D options.</p>
 
-<div class="ai-box">
-  <h3 style="color:var(--gold-primary);">
-    <img data-ico="sparkles" class="ico-img-md" alt="AI">
-    <span id="aiBoxHeading">AI Bible Question Generator</span>
-  </h3>
-  <p class="small" id="aiBoxSub">Generate unique Bible quiz questions based on Scripture verses & events with randomized A/B/C/D options.</p>
+    <div class="grid">
+      <div>
+        <label for="aiBibleBook">Bible Book</label>
+        <input id="aiBibleBook" type="text" placeholder="Example: Genesis / Matthew / Psalms" value="Genesis">
+      </div>
+
+      <div>
+        <label for="aiChapterNumber">Chapter Number</label>
+        <input id="aiChapterNumber" type="number" min="1" max="150" value="1">
+      </div>
+
+      <div>
+        <label for="aiQuestionLanguage">Generate Language</label>
+        <select id="aiQuestionLanguage">
+          <option value="all" selected>All 4 Languages (Telugu, English, Tamil, Hindi)</option>
+          <option value="telugu">Telugu Only</option>
+          <option value="english">English Only</option>
+          <option value="tamil">Tamil Only</option>
+          <option value="hindi">Hindi Only</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="aiDifficulty">Difficulty Level</label>
+        <select id="aiDifficulty">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="tough">Tough</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="aiQuestionCount">Number of AI Questions</label>
+    <select id="aiQuestionCount">
+      <option value="10">10 Questions</option>
+      <option value="20">20 Questions</option>
+      <option value="50">50 Questions</option>
+      <option value="100">100 Questions</option>
+    </select>
+
+    <button type="button" id="aiGenerateBtn">
+      <img data-ico="sparkles" class="ico-img-sm" alt="Generate">
+      <span>Generate Questions with AI</span>
+    </button>
+    <p id="aiGenerateStatus"></p>
+
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">
+      <button type="button" id="aiSaveTrilingualBtn" class="hidden">💾 Save Multi-Language Questions</button> 
+      <button type="button" id="aiDownloadCsvBtn" class="hidden secondary">📥 Download Questions CSV</button>
+    </div>
+
+    <p id="aiSaveStatus" role="status"></p>
+    <div id="aiQuestionPreview"></div>
+  </div>
+
+  <form id="questionForm">
+    <div class="grid">
+      <div>
+        <label for="bibleBook">Bible Book</label>
+        <input id="bibleBook" type="text" placeholder="Example: Genesis" required maxlength="100">
+      </div>
+
+      <div>
+        <label for="chapterNumber">Chapter Number</label>
+        <input id="chapterNumber" type="number" min="1" max="150" required placeholder="1">
+      </div>
+
+      <div>
+        <label for="questionLanguage">Language</label>
+        <select id="questionLanguage">
+          <option value="telugu">Telugu</option>
+          <option value="english">English</option>
+          <option value="tamil">Tamil</option>
+          <option value="hindi">Hindi</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="questionDifficulty">Difficulty</label>
+        <select id="questionDifficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="tough">Tough</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="questionText">Bible Question</label>
+    <textarea id="questionText" required placeholder="Enter question here"></textarea>
+
+    <div class="grid">
+      <div>
+        <label for="optionA">Option A</label>
+        <input id="optionA" required maxlength="1000">
+      </div>
+      <div>
+        <label for="optionB">Option B</label>
+        <input id="optionB" required maxlength="1000">
+      </div>
+      <div>
+        <label for="optionC">Option C</label>
+        <input id="optionC" required maxlength="1000">
+      </div>
+      <div>
+        <label for="optionD">Option D</label>
+        <input id="optionD" required maxlength="1000">
+      </div>
+    </div>
+
+    <label for="correctAnswer">Correct Answer</label>
+    <select id="correctAnswer">
+      <option value="A">Option A</option>
+      <option value="B">Option B</option>
+      <option value="C">Option C</option>
+      <option value="D">Option D</option>
+    </select>
+
+    <button id="saveQuestionBtn" type="submit">💾 Save Bible Question</button>
+    <button id="cancelEditBtn" class="secondary hidden" type="button">Cancel Edit</button>
+  </form>
+
+  <p id="questionStatus" role="status"></p>
+</div>
+
+<!-- ================= 7. SAVED BIBLE QUESTIONS BANK SECTION ================= -->
+<div class="card admin-feature-section hidden" id="secSavedQuestions">
+  <div class="section-nav-bar">
+    <button type="button" class="btn-menu-return" onclick="backToAdminMenu()">← <span class="back-menu-lbl">Back to Menu</span></button>
+  </div>
+  <h2>
+    <img data-ico="books" class="ico-img-lg" alt="Books">
+    <span id="savedQuestionsHeading">Saved Bible Questions</span>
+  </h2>
 
   <div class="grid">
     <div>
-      <label for="aiBibleBook">Bible Book</label>
-      <input id="aiBibleBook" type="text" placeholder="Example: Genesis / Matthew / Psalms" value="Genesis">
-    </div>
-
-    <div>
-      <label for="aiChapterNumber">Chapter Number</label>
-      <input id="aiChapterNumber" type="number" min="1" max="150" value="1">
-    </div>
-
-    <div>
-      <label for="aiQuestionLanguage">Generate Language</label>
-      <select id="aiQuestionLanguage">
-        <option value="all" selected>All 4 Languages (Telugu, English, Tamil, Hindi)</option>
-        <option value="telugu">Telugu Only</option>
-        <option value="english">English Only</option>
-        <option value="tamil">Tamil Only</option>
-        <option value="hindi">Hindi Only</option>
+      <label for="filterLanguage">Filter Language</label>
+      <select id="filterLanguage">
+        <option value="">All Languages</option>
+        <option value="telugu">Telugu</option>
+        <option value="english">English</option>
+        <option value="tamil">Tamil</option>
+        <option value="hindi">Hindi</option>
       </select>
     </div>
 
     <div>
-      <label for="aiDifficulty">Difficulty Level</label>
-      <select id="aiDifficulty">
+      <label for="filterDifficulty">Filter Difficulty</label>
+      <select id="filterDifficulty">
+        <option value="">All Difficulties</option>
         <option value="easy">Easy</option>
-        <option value="medium" selected>Medium</option>
+        <option value="medium">Medium</option>
         <option value="tough">Tough</option>
       </select>
     </div>
   </div>
 
-  <label for="aiQuestionCount">Number of AI Questions</label>
-  <select id="aiQuestionCount">
-    <option value="10">10 Questions</option>
-    <option value="20">20 Questions</option>
-    <option value="50">50 Questions</option>
-    <option value="100">100 Questions</option>
-  </select>
+  <input id="questionSearch" placeholder="Search Bible Book, Folder or Question">
 
-  <button type="button" id="aiGenerateBtn">
-    <img data-ico="sparkles" class="ico-img-sm" alt="Generate">
-    <span>Generate Questions with AI</span>
-  </button>
-  <p id="aiGenerateStatus"></p>
-
-  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">
-    <button type="button" id="aiSaveTrilingualBtn" class="hidden">
-      <img data-ico="save" class="ico-img-sm" alt="Save">
-      <span>Save Multi-Language Questions</span>
-    </button> 
-    <button type="button" id="aiDownloadCsvBtn" class="hidden secondary">
-      <img data-ico="download" class="ico-img-sm" alt="CSV">
-      <span>Download Questions CSV</span>
-    </button>
+  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:8px 0;">
+    <button id="refreshQuestionsBtn" type="button">🔄 Refresh Questions</button>
+    <button id="selectAllQuestionsBtn" type="button" class="secondary">☑️ Select All Visible</button>
+    <button id="deleteSelectedQuestionsBtn" type="button" class="danger hidden">🗑️ Delete Selected (0)</button>
   </div>
 
-  <p id="aiSaveStatus" role="status"></p>
-  <div id="aiQuestionPreview"></div>
-</div>
+  <p id="questionListStatus" class="small"></p>
 
-<form id="questionForm">
-<div class="grid">
-<div>
-<label for="bibleBook">Bible Book</label>
-<input id="bibleBook" type="text" placeholder="Example: Genesis" required maxlength="100">
-</div>
-
-<div>
-<label for="chapterNumber">Chapter Number</label>
-<input id="chapterNumber" type="number" min="1" max="150" required placeholder="1">
-</div>
-
-<div>
-<label for="questionLanguage">Language</label>
-<select id="questionLanguage">
-<option value="telugu">Telugu</option>
-<option value="english">English</option>
-<option value="tamil">Tamil</option>
-<option value="hindi">Hindi</option>
-</select>
-</div>
-
-<div>
-<label for="questionDifficulty">Difficulty</label>
-<select id="questionDifficulty">
-<option value="easy">Easy</option>
-<option value="medium">Medium</option>
-<option value="tough">Tough</option>
-</select>
-</div>
-</div>
-
-<label for="questionText">Bible Question</label>
-<textarea id="questionText" required placeholder="Enter question here"></textarea>
-
-<div class="grid">
-<div>
-<label for="optionA">Option A</label>
-<input id="optionA" required maxlength="1000">
-</div>
-<div>
-<label for="optionB">Option B</label>
-<input id="optionB" required maxlength="1000">
-</div>
-<div>
-<label for="optionC">Option C</label>
-<input id="optionC" required maxlength="1000">
-</div>
-<div>
-<label for="optionD">Option D</label>
-<input id="optionD" required maxlength="1000">
-</div>
-</div>
-
-<label for="correctAnswer">Correct Answer</label>
-<select id="correctAnswer">
-<option value="A">Option A</option>
-<option value="B">Option B</option>
-<option value="C">Option C</option>
-<option value="D">Option D</option>
-</select>
-
-<button id="saveQuestionBtn" type="submit">
-  <img data-ico="save" class="ico-img-sm" alt="Save">
-  <span id="saveQuestionBtnText">Save Bible Question</span>
-</button>
-<button id="cancelEditBtn" class="secondary hidden" type="button">Cancel Edit</button>
-</form>
-
-<p id="questionStatus" role="status"></p>
-</div>
-
-<div class="card">
-<h2>
-  <img data-ico="books" class="ico-img-lg" alt="Books">
-  <span id="savedQuestionsHeading">Saved Bible Questions</span>
-</h2>
-
-<div class="grid">
-<div>
-<label for="filterLanguage">Filter Language</label>
-<select id="filterLanguage">
-<option value="">All Languages</option>
-<option value="telugu">Telugu</option>
-<option value="english">English</option>
-<option value="tamil">Tamil</option>
-<option value="hindi">Hindi</option>
-</select>
-</div>
-
-<div>
-<label for="filterDifficulty">Filter Difficulty</label>
-<select id="filterDifficulty">
-<option value="">All Difficulties</option>
-<option value="easy">Easy</option>
-<option value="medium">Medium</option>
-<option value="tough">Tough</option>
-</select>
-</div>
-</div>
-
-<input id="questionSearch" placeholder="Search Bible Book, Folder or Question">
-
-<div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:8px 0;">
-  <button id="refreshQuestionsBtn" type="button">
-    <img data-ico="refresh" class="ico-img-sm" alt="Refresh">
-    <span>Refresh Questions</span>
-  </button>
-  <button id="selectAllQuestionsBtn" type="button" class="secondary">
-    <img data-ico="check" class="ico-img-sm" alt="Select">
-    <span id="selectAllQuestionsText">Select All Visible</span>
-  </button>
-  <button id="deleteSelectedQuestionsBtn" type="button" class="danger hidden">
-    <img data-ico="trash" class="ico-img-sm" alt="Delete">
-    <span id="deleteSelectedText">Delete Selected (0)</span>
-  </button>
-</div>
-
-<p id="questionListStatus" class="small"></p>
-
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th style="width:42px; text-align:center;">
-  <input type="checkbox" id="selectAllCheckbox" class="q-checkbox" title="Select All">
-</th>
-<th>Book / Folder</th>
-<th>Chapter</th>
-<th>Language</th>
-<th>Difficulty</th>
-<th>Question</th>
-<th>Answer</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody id="questionsBody"></tbody>
-</table>
-</div>
-<p class="small">Showing questions from Bible questions repository.</p>
-</div>
-
-<!-- 6. LIVE EXAM SCHEDULING -->
-
-<div class="card">
-<h2>
-  <img data-ico="calendar" class="ico-img-lg" alt="Calendar">
-  <span id="scheduleExamHeading">Schedule Live Bible Exam</span>
-</h2>
-<p class="small" id="scheduleExamSub">
-Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time — participants will automatically get the paper in their chosen language!
-</p>
-
-<form id="scheduleForm">
-<label for="examName">Exam Name</label>
-<input id="examName" type="text" placeholder="Example: Sunday Grand Bible Quiz" required maxlength="150">
-
-<div style="background:rgba(250,204,21,0.08); border:1.5px solid rgba(250,204,21,0.35); border-radius:12px; padding:12px; margin:8px 0;">
-  <label for="examPaperFolderSelect" id="examFolderSelectLabel" style="margin-top:0;"><img data-ico="folder" class="ico-img-sm" alt="Folder">Select Scanned Exam Paper Folder (Optional - uses folder papers instead of Book/Chapter below)</label>
-  <select id="examPaperFolderSelect">
-    <option value="">-- Use Bible Book & Chapter Below (No Folder) --</option>
-  </select>
-</div>
-
-<div class="grid">
-<div>
-<label for="examDate">Exam Date</label>
-<input id="examDate" type="date" required>
-</div>
-
-<div>
-<label for="questionCount">Questions</label>
-<select id="questionCount">
-<option value="10">10 Questions</option>
-<option value="20">20 Questions</option>
-<option value="50">50 Questions</option>
-<option value="100">100 Questions</option>
-</select>
-</div>
-
-<div>
-<label for="examBibleBook">Bible Book</label>
-<input id="examBibleBook" type="text" placeholder="Example: Genesis" maxlength="100" required>
-</div>
-
-<div>
-<label for="examChapter">Chapter Number</label>
-<input id="examChapter" type="number" min="1" max="150" placeholder="Example: 1" required>
-</div>
-
-<div>
-<label for="examLanguage">Question Language</label>
-<select id="examLanguage" required>
-  <option value="all" selected>All Languages (Telugu / English / Tamil / Hindi)</option>
-  <option value="telugu">Telugu Only</option>
-  <option value="english">English Only</option>
-  <option value="tamil">Tamil Only</option>
-  <option value="hindi">Hindi Only</option>
-</select>
-</div>
-
-<div>
-<label for="examDifficulty">Question Difficulty</label>
-<select id="examDifficulty" required>
-<option value="easy">Easy</option>
-<option value="medium">Medium</option>
-<option value="tough">Tough</option>
-</select>
-</div>
-
-<div>
-<label for="startTime">Start Time (IST)</label>
-<input id="startTime" type="time" required>
-</div>
-
-<div>
-<label for="endTime">End Time (IST)</label>
-<input id="endTime" type="time" required>
-</div>
-
-<div>
-<label for="maxAttempts">Maximum Attempts</label>
-<select id="maxAttempts">
-<option value="1">1 Attempt</option>
-<option value="2">2 Attempts</option>
-<option value="3">3 Attempts</option>
-</select>
-</div>
-
-<div>
-<label for="rankingMethod">Leaderboard Ranking</label>
-<select id="rankingMethod">
-<option value="best">Best Score</option>
-<option value="first">First Attempt Score</option>
-<option value="last">Last Attempt Score</option>
-</select>
-</div>
-</div>
-
-<button id="saveExamBtn" type="submit">
-  <img data-ico="save" class="ico-img-sm" alt="Save">
-  <span>Save Exam Schedule</span>
-</button>
-</form>
-<p id="scheduleStatus" role="status"></p>
-</div>
-
-<!-- 7. SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS -->
-
-<div class="card" id="scheduledExamsCard">
-<h2>
-  <img data-ico="clipboard" class="ico-img-lg" alt="Scheduled">
-  <span id="scheduledExamsHeading">Scheduled Exams & Participants</span>
-</h2>
-<p class="small" id="scheduledExamsSub">View participant counts for each exam and click "View Details & Photos" to see candidate names, details & photos.</p>
-<button id="refreshExamsBtn" type="button">
-  <img data-ico="refresh" class="ico-img-sm" alt="Refresh">
-  <span>Refresh Exams</span>
-</button>
-<p id="examListStatus" class="small"></p>
-
-<div id="examCandidatesDrawer" class="cand-drawer hidden">
-  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-    <h3 id="candDrawerTitle" style="color:var(--gold-primary); margin:0;">Exam Participants</h3>
-    <button type="button" id="closeCandDrawerBtn" class="secondary btn-sm">
-      <img data-ico="close" class="ico-img-sm" alt="Close">
-      <span>Close</span>
-    </button>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:42px; text-align:center;">
+            <input type="checkbox" id="selectAllCheckbox" class="q-checkbox" title="Select All">
+          </th>
+          <th>Book / Folder</th>
+          <th>Chapter</th>
+          <th>Language</th>
+          <th>Difficulty</th>
+          <th>Question</th>
+          <th>Answer</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="questionsBody"></tbody>
+    </table>
   </div>
-  <p id="candDrawerSummary" class="small" style="margin-top:6px;"></p>
-  <div id="candPhotoGrid" class="cand-grid"></div>
+  <p class="small">Showing questions from Bible questions repository.</p>
 </div>
 
-<div class="table-wrap">
-<table>
-<thead>
-<tr>
-<th>Exam Name</th>
-<th>Start (IST)</th>
-<th>End (IST)</th>
-<th>Questions</th>
-<th>Participants</th>
-<th>Details & Photos</th>
-</tr>
-</thead>
-<tbody id="examsBody"></tbody>
-</table>
+<!-- ================= 8. LIVE EXAM SCHEDULING SECTION ================= -->
+<div class="card admin-feature-section hidden" id="secScheduleExam">
+  <div class="section-nav-bar">
+    <button type="button" class="btn-menu-return" onclick="backToAdminMenu()">← <span class="back-menu-lbl">Back to Menu</span></button>
+  </div>
+  <h2>
+    <img data-ico="calendar" class="ico-img-lg" alt="Calendar">
+    <span id="scheduleExamHeading">Schedule Live Bible Exam</span>
+  </h2>
+  <p class="small" id="scheduleExamSub">
+    Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time — participants will automatically get the paper in their chosen language!
+  </p>
+
+  <form id="scheduleForm">
+    <label for="examName">Exam Name</label>
+    <input id="examName" type="text" placeholder="Example: Sunday Grand Bible Quiz" required maxlength="150">
+
+    <div style="background:rgba(250,204,21,0.08); border:1.5px solid rgba(250,204,21,0.35); border-radius:12px; padding:12px; margin:8px 0;">
+      <label for="examPaperFolderSelect" id="examFolderSelectLabel" style="margin-top:0;"><img data-ico="folder" class="ico-img-sm" alt="Folder">Select Scanned Exam Paper Folder (Optional - uses folder papers instead of Book/Chapter below)</label>
+      <select id="examPaperFolderSelect">
+        <option value="">-- Use Bible Book & Chapter Below (No Folder) --</option>
+      </select>
+    </div>
+
+    <div class="grid">
+      <div>
+        <label for="examDate">Exam Date</label>
+        <input id="examDate" type="date" required>
+      </div>
+
+      <div>
+        <label for="questionCount">Questions</label>
+        <select id="questionCount">
+          <option value="10">10 Questions</option>
+          <option value="20">20 Questions</option>
+          <option value="50">50 Questions</option>
+          <option value="100">100 Questions</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="examBibleBook">Bible Book</label>
+        <input id="examBibleBook" type="text" placeholder="Example: Genesis" maxlength="100" required>
+      </div>
+
+      <div>
+        <label for="examChapter">Chapter Number</label>
+        <input id="examChapter" type="number" min="1" max="150" placeholder="Example: 1" required>
+      </div>
+
+      <div>
+        <label for="examLanguage">Question Language</label>
+        <select id="examLanguage" required>
+          <option value="all" selected>All Languages (Telugu / English / Tamil / Hindi)</option>
+          <option value="telugu">Telugu Only</option>
+          <option value="english">English Only</option>
+          <option value="tamil">Tamil Only</option>
+          <option value="hindi">Hindi Only</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="examDifficulty">Question Difficulty</label>
+        <select id="examDifficulty" required>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="tough">Tough</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="startTime">Start Time (IST)</label>
+        <input id="startTime" type="time" required>
+      </div>
+
+      <div>
+        <label for="endTime">End Time (IST)</label>
+        <input id="endTime" type="time" required>
+      </div>
+
+      <div>
+        <label for="maxAttempts">Maximum Attempts</label>
+        <select id="maxAttempts">
+          <option value="1">1 Attempt</option>
+          <option value="2">2 Attempts</option>
+          <option value="3">3 Attempts</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="rankingMethod">Leaderboard Ranking</label>
+        <select id="rankingMethod">
+          <option value="best">Best Score</option>
+          <option value="first">First Attempt Score</option>
+          <option value="last">Last Attempt Score</option>
+        </select>
+      </div>
+    </div>
+
+    <button id="saveExamBtn" type="submit">💾 Save Exam Schedule</button>
+  </form>
+  <p id="scheduleStatus" role="status"></p>
 </div>
+
+<!-- ================= 9. SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS SECTION ================= -->
+<div class="card admin-feature-section hidden" id="scheduledExamsCard">
+  <div class="section-nav-bar">
+    <button type="button" class="btn-menu-return" onclick="backToAdminMenu()">← <span class="back-menu-lbl">Back to Menu</span></button>
+  </div>
+  <h2>
+    <img data-ico="clipboard" class="ico-img-lg" alt="Scheduled">
+    <span id="scheduledExamsHeading">Scheduled Exams & Participants</span>
+  </h2>
+  <p class="small" id="scheduledExamsSub">View participant counts for each exam and click "👁️ View Details & Photos" to see candidate names, details & photos.</p>
+  <button id="refreshExamsBtn" type="button">🔄 Refresh Exams</button>
+  <p id="examListStatus" class="small"></p>
+
+  <div id="examCandidatesDrawer" class="cand-drawer hidden">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <h3 id="candDrawerTitle" style="color:var(--gold-primary); margin:0;">👥 Exam Participants</h3>
+      <button type="button" id="closeCandDrawerBtn" class="secondary btn-sm">✖ Close</button>
+    </div>
+    <p id="candDrawerSummary" class="small" style="margin-top:6px;"></p>
+    <div id="candPhotoGrid" class="cand-grid"></div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Exam Name</th>
+          <th>Start (IST)</th>
+          <th>End (IST)</th>
+          <th>Questions</th>
+          <th>Participants</th>
+          <th>Details & Photos</th>
+        </tr>
+      </thead>
+      <tbody id="examsBody"></tbody>
+    </table>
+  </div>
 </div>
 
 </section>
@@ -1395,70 +1563,234 @@ Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time �
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 // ==========================================
-// 3D GLOSSY IMAGE ICON GENERATOR (APPLIES TO ALL <img data-ico="...">)
+// BEVELED 3D ROYAL BLUE & METALLIC GOLD IMAGE ICON ENGINE
 // ==========================================
 const ICON_3D_DESIGNS = {
-  globe: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="url(#gGold)" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="none" stroke="#fef08a" stroke-width="2"/><ellipse cx="24" cy="24" rx="6" ry="13" fill="none" stroke="#fef08a" stroke-width="1.8"/><line x1="11" y1="24" x2="37" y2="24" stroke="#fef08a" stroke-width="1.8"/>`,
-  cross: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGold)" stroke="#fef9c3" stroke-width="2"/><path d="M21 10h6v9h9v6h-9v13h-6V25h-9v-6h9v-9z" fill="#0b1329"/>`,
-  lock: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="13" y="21" width="22" height="16" rx="4" fill="url(#gGold)"/><path d="M18 21v-4a6 6 0 0112 0v4" fill="none" stroke="#fef08a" stroke-width="2.6" stroke-linecap="round"/><circle cx="24" cy="29" r="2.2" fill="#0b1329"/>`,
-  unlock: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGreen)" stroke="#6ee7b7" stroke-width="2"/><rect x="13" y="21" width="22" height="16" rx="4" fill="#fef9c3"/><path d="M18 21v-4a6 6 0 0111-3" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/><circle cx="24" cy="29" r="2.2" fill="#065f46"/>`,
-  shield: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M24 9l12 5v9c0 8-5 14-12 16-7-2-12-8-12-16v-9l12-5z" fill="url(#gGold)"/><path d="M19 24l3.5 3.5L30 20" fill="none" stroke="#0b1329" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
-  refresh: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M13 24a11 11 0 0119.5-7M35 12v6h-6M35 24a11 11 0 01-19.5 7M13 36v-6h6" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
-  logout: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gRed)" stroke="#fca5a5" stroke-width="2"/><path d="M26 12H15a3 3 0 00-3 3v18a3 3 0 003 3h11M22 30l7-6-7-6M29 24H16" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>`,
-  trophy: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M16 12h16v8a8 8 0 01-16 0v-8z" fill="url(#gGold)"/><path d="M16 14h-4v3a4 4 0 004 4M32 14h4v3a4 4 0 01-4 4M24 28v6M18 36h12" fill="none" stroke="#fef08a" stroke-width="2.4" stroke-linecap="round"/>`,
-  radar: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGreen)" stroke-width="2"/><circle cx="24" cy="24" r="4.5" fill="url(#gGreen)"/><path d="M17 17a10 10 0 000 14M31 17a10 10 0 010 14M12 12a17 17 0 000 24M36 12a17 17 0 010 24" fill="none" stroke="url(#gGold)" stroke-width="2.4" stroke-linecap="round"/>`,
-  online: `<circle cx="24" cy="24" r="18" fill="url(#gGreen)" stroke="#a7f3d0" stroke-width="3"/><circle cx="19" cy="18" r="5" fill="#ffffff" opacity="0.45"/>`,
-  offline: `<circle cx="24" cy="24" r="18" fill="url(#gRed)" stroke="#fecaca" stroke-width="3"/><circle cx="19" cy="18" r="5" fill="#ffffff" opacity="0.45"/>`,
-  clock: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="none" stroke="#fef08a" stroke-width="2.4"/><path d="M24 17v7l5 3" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>`,
-  phone: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><rect x="15" y="9" width="18" height="30" rx="4" fill="url(#gGold)"/><rect x="18" y="13" width="12" height="19" rx="1.5" fill="#0b1329"/><circle cx="24" cy="35" r="1.5" fill="#0b1329"/>`,
-  pin: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gRed)" stroke="#fca5a5" stroke-width="2"/><path d="M24 10a9 9 0 00-9 9c0 7 9 19 9 19s9-12 9-19a9 9 0 00-9-9z" fill="#fef9c3"/><circle cx="24" cy="19" r="3.5" fill="#dc2626"/>`,
-  church: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M24 8v6M21 11h6M14 23l10-8 10 8v14H14V23z" fill="url(#gGold)" stroke="#fef08a" stroke-width="1.5"/><rect x="21" y="28" width="6" height="9" fill="#0b1329"/>`,
-  users: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="url(#gGold)" stroke-width="2"/><circle cx="19" cy="19" r="5" fill="url(#gGold)"/><path d="M10 34c0-5 4-8 9-8s9 3 9 8" fill="url(#gGold)"/><circle cx="31" cy="20" r="4" fill="#fef08a"/><path d="M30 27c4 0 8 2.5 8 7" fill="none" stroke="#fef08a" stroke-width="2.4" stroke-linecap="round"/>`,
-  medal: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><circle cx="24" cy="21" r="10" fill="url(#gGold)"/><path d="M19 30l-3 9 8-4 8 4-3-9" fill="#60a5fa"/>`,
-  medal1: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGold)" stroke="#fef9c3" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="#0b1329"/><text x="24" y="30" text-anchor="middle" font-size="18" font-weight="900" fill="#facc15">1</text>`,
-  medal2: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gSilver)" stroke="#ffffff" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="#0b1329"/><text x="24" y="30" text-anchor="middle" font-size="18" font-weight="900" fill="#e2e8f0">2</text>`,
-  medal3: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBronze)" stroke="#fed7aa" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="#0b1329"/><text x="24" y="30" text-anchor="middle" font-size="18" font-weight="900" fill="#fb923c">3</text>`,
-  chart: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="11" y="24" width="6" height="13" rx="2" fill="url(#gBlue)"/><rect x="21" y="16" width="6" height="21" rx="2" fill="url(#gGold)"/><rect x="31" y="11" width="6" height="26" rx="2" fill="url(#gGreen)"/>`,
-  folder: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M10 15a3 3 0 013-3h7l3 3h12a3 3 0 013 3v15a3 3 0 01-3 3H13a3 3 0 01-3-3V15z" fill="url(#gGold)"/>`,
-  folderOpen: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="url(#gGold)" stroke-width="2"/><path d="M10 15a3 3 0 013-3h7l3 3h11a2 2 0 012 2v3H12l-2 13V15z" fill="#fde047"/><path d="M12 20h26l-3 15H9l3-15z" fill="url(#gGold)"/>`,
-  doc: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M15 10h12l7 7v19a2 2 0 01-2 2H15a2 2 0 01-2-2V12a2 2 0 012-2z" fill="#fef9c3"/><line x1="18" y1="23" x2="29" y2="23" stroke="#1e3a8a" stroke-width="2.4"/><line x1="18" y1="29" x2="26" y2="29" stroke="#1e3a8a" stroke-width="2.4"/>`,
-  camera: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="10" y="16" width="28" height="20" rx="4" fill="url(#gGold)"/><circle cx="24" cy="26" r="5.5" fill="#0b1329"/><path d="M17 16l2-4h10l2 4" fill="url(#gGold)"/>`,
-  gallery: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><rect x="10" y="12" width="28" height="24" rx="4" fill="#0b1329"/><circle cx="18" cy="19" r="3" fill="url(#gGold)"/><path d="M12 33l8-8 5 5 4-4 7 7" fill="none" stroke="url(#gGreen)" stroke-width="2.6" stroke-linecap="round"/>`,
-  note: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGold)" stroke="#fef9c3" stroke-width="2"/><rect x="13" y="11" width="22" height="26" rx="3" fill="#0b1329"/><line x1="18" y1="19" x2="30" y2="19" stroke="#facc15" stroke-width="2.4"/><line x1="18" y1="25" x2="30" y2="25" stroke="#facc15" stroke-width="2.4"/><line x1="18" y1="31" x2="25" y2="31" stroke="#facc15" stroke-width="2.4"/>`,
-  gear: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><circle cx="24" cy="24" r="6" fill="none" stroke="url(#gGold)" stroke-width="4"/><path d="M24 10v4M24 34v4M10 24h4M34 24h4M14 14l3 3M31 31l3 3M34 14l-3 3M17 31l-3 3" stroke="#fef08a" stroke-width="2.6" stroke-linecap="round"/>`,
-  plus: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGreen)" stroke="#6ee7b7" stroke-width="2"/><path d="M24 13v22M13 24h22" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round"/>`,
-  bible: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M10 14c5-1.5 9 0 14 3 5-3 9-4.5 14-3v20c-5-1.5-9 0-14 3-5-3-9-4.5-14-3V14z" fill="url(#gGold)"/><line x1="24" y1="17" x2="24" y2="37" stroke="#0b1329" stroke-width="2.4"/>`,
-  sparkles: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M24 9l3.5 9.5L37 22l-9.5 3.5L24 35l-3.5-9.5L11 22l9.5-3.5L24 9z" fill="url(#gGold)"/><circle cx="34" cy="13" r="2.5" fill="#60a5fa"/>`,
-  save: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M12 12h19l5 5v19a2 2 0 01-2 2H12a2 2 0 01-2-2V14a2 2 0 012-2z" fill="url(#gGold)"/><rect x="16" y="12" width="12" height="7" fill="#0b1329"/><rect x="16" y="25" width="16" height="9" rx="1.5" fill="#fef9c3"/>`,
-  download: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGreen)" stroke="#6ee7b7" stroke-width="2"/><path d="M24 11v18M17 23l7 7 7-7M13 35h22" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
-  books: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="11" y="10" width="22" height="7" rx="2" fill="url(#gGold)"/><rect x="15" y="20" width="22" height="7" rx="2" fill="url(#gBlue)"/><rect x="11" y="30" width="22" height="7" rx="2" fill="url(#gGreen)"/>`,
-  check: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGreen)" stroke="#6ee7b7" stroke-width="2"/><path d="M14 24l7 7 13-14" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>`,
-  edit: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M14 34l3-9L29 13l6 6-12 12-9 3z" fill="url(#gGold)"/>`,
-  trash: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gRed)" stroke="#fca5a5" stroke-width="2"/><path d="M14 17h20M19 17v-3h10v3M17 17l1.5 19h11L31 17" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`,
-  calendar: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="10" y="13" width="28" height="24" rx="4" fill="url(#gBlue)"/><path d="M10 17a4 4 0 014-4h20a4 4 0 014 4v4H10v-4z" fill="url(#gGold)"/><circle cx="18" cy="28" r="2" fill="#fef08a"/><circle cx="24" cy="28" r="2" fill="#fef08a"/><circle cx="30" cy="28" r="2" fill="#fef08a"/>`,
-  clipboard: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="13" y="12" width="22" height="26" rx="3" fill="url(#gGold)"/><rect x="19" y="9" width="10" height="5" rx="2" fill="url(#gBlue)"/><line x1="18" y1="22" x2="30" y2="22" stroke="#0b1329" stroke-width="2.4"/><line x1="18" y1="28" x2="27" y2="28" stroke="#0b1329" stroke-width="2.4"/>`,
-  eye: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M9 24c4-7 9-10 15-10s11 3 15 10c-4 7-9 10-15 10S13 31 9 24z" fill="#fef9c3"/><circle cx="24" cy="24" r="4.5" fill="#1e3a8a"/>`,
-  close: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gRed)" stroke="#fca5a5" stroke-width="2"/><path d="M16 16l16 16M32 16L16 32" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>`,
-  warn: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGold)" stroke="#fef9c3" stroke-width="2"/><path d="M24 10L10 35h28L24 10z" fill="#0b1329"/><line x1="24" y1="19" x2="24" y2="27" stroke="#facc15" stroke-width="2.8" stroke-linecap="round"/><circle cx="24" cy="31" r="1.8" fill="#facc15"/>`
+  globe: `
+    <circle cx="32" cy="32" r="14" fill="none" stroke="url(#goldEmb)" stroke-width="2.6" filter="url(#emboss)"/>
+    <ellipse cx="32" cy="32" rx="6.5" ry="14" fill="none" stroke="url(#goldEmb)" stroke-width="2.2"/>
+    <line x1="18" y1="32" x2="46" y2="32" stroke="url(#goldEmb)" stroke-width="2.2"/>
+  `,
+  cross: `
+    <path d="M29 14h6v12h12v6H35v18h-6V32H17v-6h12V14z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
+  `,
+  lock: `
+    <rect x="20" y="29" width="24" height="17" rx="3.5" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+    <path d="M25 29v-5a7 7 0 0114 0v5" fill="none" stroke="url(#goldEmb)" stroke-width="3.2" stroke-linecap="round"/>
+    <circle cx="32" cy="37" r="2.2" fill="#0b1329"/>
+  `,
+  unlock: `
+    <rect x="20" y="29" width="24" height="17" rx="3.5" fill="url(#emeraldEmb)" stroke="#a7f3d0" stroke-width="0.9" filter="url(#emboss)"/>
+    <path d="M25 29v-5a7 7 0 0113-3.2" fill="none" stroke="#fef9c3" stroke-width="3.2" stroke-linecap="round"/>
+    <circle cx="32" cy="37" r="2.2" fill="#065f46"/>
+  `,
+  shield: `
+    <path d="M32 14l14 6v11c0 9-6 16-14 19-8-3-14-10-14-19V20l14-6z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
+    <path d="M26 32l4 4 8-8" fill="none" stroke="#0b1329" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  `,
+  refresh: `
+    <path d="M20 27a13 13 0 0122.5-8.5" fill="none" stroke="url(#goldEmb)" stroke-width="4" stroke-linecap="round" filter="url(#emboss)"/>
+    <polygon points="45,14 45,23 36,23" fill="url(#goldEmb)" filter="url(#emboss)"/>
+    <path d="M44 37a13 13 0 01-22.5 8.5" fill="none" stroke="url(#goldEmb)" stroke-width="4" stroke-linecap="round" filter="url(#emboss)"/>
+    <polygon points="19,50 19,41 28,41" fill="url(#goldEmb)" filter="url(#emboss)"/>
+  `,
+  logout: `
+    <path d="M35 17H23a3 3 0 00-3 3v24a3 3 0 003 3h12" fill="none" stroke="url(#goldEmb)" stroke-width="3" stroke-linecap="round" filter="url(#emboss)"/>
+    <polygon points="22,19 31,15 31,49 22,45" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
+    <path d="M33 32h11M40 26.5L45.5 32 40 37.5" fill="none" stroke="url(#goldEmb)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
+  `,
+  trophy: `
+    <path d="M22 17h20v10c0 6-4.5 10.5-10 10.5S22 33 22 27V17z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+    <path d="M22 20h-4.5c0 4.5 2 7.5 5 8M42 20h4.5c0 4.5-2 7.5-5 8" fill="none" stroke="url(#goldEmb)" stroke-width="2.8" stroke-linecap="round"/>
+    <rect x="29.5" y="37" width="5" height="6" fill="url(#goldEmb)"/>
+    <rect x="23" y="43" width="18" height="4.5" rx="2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
+  `,
+  radar: `
+    <circle cx="32" cy="32" r="5" fill="url(#emeraldEmb)" stroke="#a7f3d0" stroke-width="1"/>
+    <path d="M23 23a13 13 0 000 18M41 23a13 13 0 010 18M17 17a21 21 0 000 30M47 17a21 21 0 010 30" fill="none" stroke="url(#goldEmb)" stroke-width="2.8" stroke-linecap="round" filter="url(#emboss)"/>
+  `,
+  online: `
+    <circle cx="32" cy="32" r="13" fill="url(#emeraldEmb)" stroke="#a7f3d0" stroke-width="2.4" filter="url(#emboss)"/>
+  `,
+  offline: `
+    <circle cx="32" cy="32" r="13" fill="url(#crimsonEmb)" stroke="#fecaca" stroke-width="2.4" filter="url(#emboss)"/>
+  `,
+  clock: `
+    <circle cx="32" cy="34" r="13.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="3.2" filter="url(#emboss)"/>
+    <path d="M32 26v8l5.5 3.5" fill="none" stroke="#0f235a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  `,
+  phone: `
+    <rect x="21" y="14" width="22" height="36" rx="4" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
+    <rect x="24" y="19" width="16" height="23" rx="1.5" fill="#0b1329"/>
+    <circle cx="32" cy="46" r="1.8" fill="#0b1329"/>
+  `,
+  pin: `
+    <path d="M32 15a11 11 0 00-11 11c0 8.5 11 23 11 23s11-14.5 11-23a11 11 0 00-11-11z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
+    <circle cx="32" cy="26" r="4" fill="#0b1329"/>
+  `,
+  church: `
+    <path d="M32 12v7M28.5 15.5h7M19 30l13-10 13 10v17H19V30z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
+    <rect x="28.5" y="36" width="7" height="11" fill="#0b1329"/>
+  `,
+  users: `
+    <circle cx="26" cy="24" r="6" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
+    <path d="M15 43c0-6 5-9.5 11-9.5s11 3.5 11 9.5" fill="url(#goldEmb)" filter="url(#emboss)"/>
+    <circle cx="40" cy="26" r="4.8" fill="#fef08a"/>
+    <path d="M39 34c5 0 9 3 9 8.5" fill="none" stroke="#fef08a" stroke-width="2.8" stroke-linecap="round"/>
+  `,
+  medal: `
+    <circle cx="32" cy="28" r="11" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1.1" filter="url(#emboss)"/>
+    <path d="M26 38l-4 11 10-5 10 5-4-11" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8"/>
+  `,
+  medal1: `
+    <circle cx="32" cy="32" r="13" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1.2" filter="url(#emboss)"/>
+    <text x="32" y="38" text-anchor="middle" font-size="16" font-weight="900" fill="#0b1329">1</text>
+  `,
+  chart: `
+    <line x1="17" y1="45" x2="47" y2="45" stroke="url(#goldEmb)" stroke-width="2.6" stroke-linecap="round"/>
+    <rect x="19" y="34" width="4.5" height="10" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
+    <rect x="26.5" y="28" width="4.5" height="16" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
+    <rect x="34" y="22" width="4.5" height="22" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
+    <rect x="41.5" y="16" width="4.5" height="28" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
+  `,
+  folder: `
+    <path d="M16 21a3 3 0 013-3h8l3.5 3.5H45a3 3 0 013 3V42a3 3 0 01-3 3H19a3 3 0 01-3-3V21z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+  `,
+  folderOpen: `
+    <path d="M15 21a3 3 0 013-3h8l3.5 3.5H44a2.5 2.5 0 012.5 2.5v3H18l-3 15V21z" fill="#fde047"/>
+    <path d="M18 27h30l-3.5 17h-30L18 27z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
+  `,
+  doc: `
+    <rect x="19" y="16" width="26" height="32" rx="3" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <line x1="24" y1="26" x2="40" y2="26" stroke="#1e3a8a" stroke-width="2.4"/>
+    <line x1="24" y1="33" x2="36" y2="33" stroke="#1e3a8a" stroke-width="2.4"/>
+  `,
+  camera: `
+    <circle cx="32" cy="32" r="14.5" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
+    <circle cx="32" cy="32" r="10.5" fill="#08122b" stroke="#ca8a04" stroke-width="1.2"/>
+    <circle cx="32" cy="32" r="6" fill="#38bdf8"/>
+  `,
+  gallery: `
+    <rect x="16" y="18" width="32" height="28" rx="4" fill="#0b1329" stroke="url(#goldEmb)" stroke-width="2" filter="url(#emboss)"/>
+    <circle cx="24" cy="25" r="3" fill="url(#goldEmb)"/>
+    <path d="M18 42l9-9 6 6 5-5 8 8" fill="none" stroke="url(#goldEmb)" stroke-width="2.6" stroke-linecap="round"/>
+  `,
+  note: `
+    <rect x="19" y="18" width="24" height="29" rx="3" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <line x1="23" y1="27" x2="35" y2="27" stroke="#1e3a8a" stroke-width="2"/>
+    <line x1="23" y1="33" x2="32" y2="33" stroke="#1e3a8a" stroke-width="2"/>
+  `,
+  gear: `
+    <circle cx="32" cy="32" r="7" fill="none" stroke="url(#goldEmb)" stroke-width="4.5" filter="url(#emboss)"/>
+    <path d="M32 16v4M32 44v4M16 32h4M44 32h4M21 21l3 3M40 40l3 3M43 21l-3 3M24 40l-3 3" stroke="url(#goldEmb)" stroke-width="3" stroke-linecap="round"/>
+  `,
+  plus: `
+    <path d="M32 18v28M18 32h28" stroke="url(#goldEmb)" stroke-width="4.5" stroke-linecap="round" filter="url(#emboss)"/>
+  `,
+  bible: `
+    <path d="M20 17l13-3 11 4v25l-11 4-13-4V17z" fill="url(#royalBook)" stroke="url(#goldEmb)" stroke-width="1.4" filter="url(#emboss)"/>
+    <path d="M20 41l13 4 11-4v4l-11 4-13-4v-4z" fill="#fef9c3" stroke="#ca8a04" stroke-width="0.8"/>
+    <path d="M32 20.5v9M28.5 24h7" stroke="url(#goldEmb)" stroke-width="2.6" stroke-linecap="round"/>
+  `,
+  sparkles: `
+    <path d="M32 14l4.5 12.5L49 31l-12.5 4.5L32 48l-4.5-12.5L15 31l12.5-4.5L32 14z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
+  `,
+  save: `
+    <path d="M18 16h23l5 5v25a2.5 2.5 0 01-2.5 2.5h-25.5A2.5 2.5 0 0115.5 46V18.5A2.5 2.5 0 0118 16z" fill="url(#royalBook)" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <rect x="22" y="16" width="16" height="9" rx="1" fill="url(#goldEmb)"/>
+    <rect x="21" y="31" width="22" height="14" rx="1.5" fill="#fef9c3"/>
+  `,
+  books: `
+    <rect x="16" y="16" width="28" height="8" rx="2.5" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
+    <rect x="20" y="28" width="28" height="8" rx="2.5" fill="url(#royalBook)" stroke="url(#goldEmb)" stroke-width="1.2" filter="url(#emboss)"/>
+    <rect x="16" y="40" width="28" height="8" rx="2.5" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
+  `,
+  trash: `
+    <path d="M19 22h26M26 22v-4h12v4M22 22l2 25h16l2-25" fill="none" stroke="url(#goldEmb)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
+  `,
+  calendar: `
+    <rect x="17" y="19" width="30" height="27" rx="3.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <path d="M17 22.5a3.5 3.5 0 013.5-3.5h23a3.5 3.5 0 013.5 3.5V26H17v-3.5z" fill="url(#goldEmb)"/>
+    <path d="M23 16v5M29 16v5M35 16v5M41 16v5" stroke="#fef9c3" stroke-width="2.4" stroke-linecap="round"/>
+    <rect x="22" y="30" width="4" height="3.5" rx="0.8" fill="#1e3a8a"/>
+    <rect x="30" y="30" width="4" height="3.5" rx="0.8" fill="#1e3a8a"/>
+    <rect x="38" y="30" width="4" height="3.5" rx="0.8" fill="#ca8a04"/>
+  `,
+  clipboard: `
+    <rect x="18" y="16" width="28" height="33" rx="3.5" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
+    <rect x="25" y="12" width="14" height="6" rx="2" fill="url(#royalBook)" stroke="#fef9c3" stroke-width="0.9"/>
+    <line x1="24" y1="28" x2="40" y2="28" stroke="#0b1329" stroke-width="2.6"/>
+    <line x1="24" y1="35" x2="36" y2="35" stroke="#0b1329" stroke-width="2.6"/>
+  `,
+  eye: `
+    <path d="M14 32c5-8 11-12 18-12s13 4 18 12c-5 8-11 12-18 12S19 40 14 32z" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <circle cx="32" cy="32" r="5.5" fill="#1e3a8a"/>
+  `,
+  check: `
+    <path d="M20 33l8 8 17-18" fill="none" stroke="url(#emeraldEmb)" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
+  `,
+  close: `
+    <path d="M21 21l22 22M43 21L21 43" fill="none" stroke="url(#crimsonEmb)" stroke-width="4.6" stroke-linecap="round" filter="url(#emboss)"/>
+  `,
+  warn: `
+    <path d="M32 16L16 45h32L32 16z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" stroke-linejoin="round" filter="url(#emboss)"/>
+    <line x1="32" y1="26" x2="32" y2="35" stroke="#0b1329" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="32" cy="40" r="2" fill="#0b1329"/>
+  `
 };
 
 const ICON_IMAGE_CACHE = {};
 function get3DIconUrl(name) {
   if (ICON_IMAGE_CACHE[name]) return ICON_IMAGE_CACHE[name];
-  const inner = ICON_3D_DESIGNS[name] || ICON_3D_DESIGNS.sparkles;
-  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="96" height="96">
+  const inner = ICON_3D_DESIGNS[name] || ICON_3D_DESIGNS.shield;
+
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
     <defs>
-      <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="50%" stop-color="#facc15"/><stop offset="100%" stop-color="#a16207"/></linearGradient>
-      <linearGradient id="gBlue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="50%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1e3a8a"/></linearGradient>
-      <linearGradient id="gGreen" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6ee7b7"/><stop offset="50%" stop-color="#10b981"/><stop offset="100%" stop-color="#065f46"/></linearGradient>
-      <linearGradient id="gRed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fca5a5"/><stop offset="50%" stop-color="#ef4444"/><stop offset="100%" stop-color="#991b1b"/></linearGradient>
-      <linearGradient id="gSilver" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff"/><stop offset="50%" stop-color="#cbd5e1"/><stop offset="100%" stop-color="#475569"/></linearGradient>
-      <linearGradient id="gBronze" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fed7aa"/><stop offset="50%" stop-color="#d97706"/><stop offset="100%" stop-color="#78350f"/></linearGradient>
-      <linearGradient id="gDark" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1e3a8a"/><stop offset="100%" stop-color="#090d16"/></linearGradient>
+      <linearGradient id="goldRim" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fef9c3"/>
+        <stop offset="30%" stop-color="#facc15"/>
+        <stop offset="70%" stop-color="#ca8a04"/>
+        <stop offset="100%" stop-color="#713f12"/>
+      </linearGradient>
+      <linearGradient id="goldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fef9c3"/>
+        <stop offset="45%" stop-color="#facc15"/>
+        <stop offset="100%" stop-color="#a16207"/>
+      </linearGradient>
+      <radialGradient id="royalFace" cx="35%" cy="25%" r="75%">
+        <stop offset="0%" stop-color="#25489c"/>
+        <stop offset="60%" stop-color="#142966"/>
+        <stop offset="100%" stop-color="#091336"/>
+      </radialGradient>
+      <linearGradient id="royalBook" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#3b82f6"/>
+        <stop offset="100%" stop-color="#172554"/>
+      </linearGradient>
+      <linearGradient id="emeraldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#6ee7b7"/>
+        <stop offset="50%" stop-color="#10b981"/>
+        <stop offset="100%" stop-color="#065f46"/>
+      </linearGradient>
+      <linearGradient id="crimsonEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fca5a5"/>
+        <stop offset="50%" stop-color="#ef4444"/>
+        <stop offset="100%" stop-color="#991b1b"/>
+      </linearGradient>
+      <filter id="emboss" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-color="#040814" flood-opacity="0.75"/>
+      </filter>
     </defs>
+
+    <rect x="3" y="6" width="58" height="56" rx="15" fill="#5c330a"/>
+    <rect x="3" y="3" width="58" height="56" rx="15" fill="url(#goldRim)"/>
+    <rect x="7" y="7" width="50" height="48" rx="11.5" fill="url(#royalFace)" stroke="#713f12" stroke-width="1"/>
+    <rect x="9" y="9" width="46" height="44" rx="10" fill="none" stroke="url(#goldRim)" stroke-width="1.5"/>
+
     ${inner}
-    <rect x="3" y="3" width="42" height="20" rx="11" fill="#ffffff" opacity="0.14"/>
+
+    <path d="M10 14a6 6 0 016-6h32a6 6 0 016 6v10c-14 4-30 4-44 0V14z" fill="#ffffff" opacity="0.12"/>
   </svg>`;
+
   const uri = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svgStr);
   ICON_IMAGE_CACHE[name] = uri;
   return uri;
@@ -1474,6 +1806,32 @@ function hydrateAll3DImageIcons(root = document) {
     if (key) img.src = get3DIconUrl(key);
   });
 }
+
+// ==========================================
+// 9-BUTTON MENU NAVIGATION CONTROLLER
+// ==========================================
+window.openAdminSection = function(sectionId) {
+  $("adminMenuGridView").classList.add("hidden");
+  document.querySelectorAll(".admin-feature-section").forEach(sec => {
+    sec.classList.add("hidden");
+  });
+  const target = $(sectionId);
+  if (target) {
+    target.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  if (sectionId === "liveParticipantsCard") {
+    refreshLiveParticipantsGallery(false);
+  }
+};
+
+window.backToAdminMenu = function() {
+  document.querySelectorAll(".admin-feature-section").forEach(sec => {
+    sec.classList.add("hidden");
+  });
+  $("adminMenuGridView").classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
 
 const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
@@ -1504,6 +1862,8 @@ function showDashboard(user) {
   $("loginSection").classList.add("hidden");
   $("dashboard").classList.remove("hidden");
   $("adminEmail").textContent = "Admin: " + (user.email || "");
+  $("adminMenuWelcome").textContent = "Admin: " + (user.email || "");
+  backToAdminMenu();
 }
 
 async function verifyAdmin() {
@@ -1644,19 +2004,19 @@ function refreshPaperFoldersUI() {
 }
 
 window.selectFolderForScan = function(folderName) {
+  openAdminSection("paperScannerCard");
   $("scanFolderName").value = folderName;
   $("scanFolderName").focus();
-  $("paperScannerCard").scrollIntoView({ behavior: "smooth" });
 };
 
 window.selectFolderForSchedule = function(folderName) {
+  openAdminSection("secScheduleExam");
   $("examPaperFolderSelect").value = folderName;
   if (!$("examName").value.trim()) {
     $("examName").value = folderName;
   }
   $("examBibleBook").value = "Folder: " + folderName;
   $("examChapter").value = 1;
-  $("scheduleForm").scrollIntoView({ behavior: "smooth" });
 };
 
 window.deletePaperFolder = async function(folderName) {
@@ -2945,7 +3305,7 @@ function getQuestionFormData(){
 function resetQuestionForm(){
   $("questionForm").reset();
   editingQuestionId = null;
-  $("saveQuestionBtnText").textContent = "Save Bible Question";
+  $("saveQuestionBtn").textContent = "💾 Save Bible Question";
   $("cancelEditBtn").classList.add("hidden");
 }
 
@@ -3017,12 +3377,12 @@ function getFilteredQuestions() {
 function updateBulkSelectionUI() {
   const count = selectedQuestionIds.size;
   const delBtn = $("deleteSelectedQuestionsBtn");
-  const selectAllText = $("selectAllQuestionsText");
+  const selectAllBtn = $("selectAllQuestionsBtn");
   const headerChk = $("selectAllCheckbox");
 
   if (count > 0) {
     delBtn.classList.remove("hidden");
-    $("deleteSelectedText").textContent = `Delete Selected (${count})`;
+    delBtn.textContent = `🗑️ Delete Selected (${count})`;
   } else {
     delBtn.classList.add("hidden");
   }
@@ -3034,8 +3394,8 @@ function updateBulkSelectionUI() {
     headerChk.checked = allVisibleSelected;
     headerChk.indeterminate = count > 0 && !allVisibleSelected;
   }
-  if (selectAllText) {
-    selectAllText.textContent = allVisibleSelected ? "Deselect All" : "Select All Visible";
+  if (selectAllBtn) {
+    selectAllBtn.textContent = allVisibleSelected ? "⬜ Deselect All" : "☑️ Select All Visible";
   }
 }
 
@@ -3113,10 +3473,11 @@ function renderQuestions(){
     actTd.className = "question-actions";
 
     const editBtn = document.createElement("button");
-    editBtn.innerHTML = `${icoImgHtml("edit")}Edit`;
+    editBtn.textContent = "✏️ Edit";
     editBtn.type = "button";
     editBtn.onclick = () => {
       editingQuestionId = q.id;
+      openAdminSection("questionManager");
       $("bibleBook").value = q.bible_book;
       $("chapterNumber").value = q.chapter_number;
       $("questionLanguage").value = q.language;
@@ -3127,13 +3488,12 @@ function renderQuestions(){
       $("optionC").value = q.option_c;
       $("optionD").value = q.option_d;
       $("correctAnswer").value = q.correct_answer;
-      $("saveQuestionBtnText").textContent = "Update Bible Question";
+      $("saveQuestionBtn").textContent = "💾 Update Bible Question";
       $("cancelEditBtn").classList.remove("hidden");
-      window.scrollTo({top: $("questionManager").offsetTop, behavior: "smooth"});
     };
 
     const delBtn = document.createElement("button");
-    delBtn.innerHTML = `${icoImgHtml("trash")}Delete`;
+    delBtn.textContent = "🗑️ Delete";
     delBtn.type = "button";
     delBtn.className = "danger";
     delBtn.onclick = async () => {
@@ -3279,8 +3639,7 @@ async function fetchExamWinners(examId) {
       return;
     }
 
-    const medalIcons = ["medal1", "medal2", "medal3"];
-    const medalLabels = ["1st Place", "2nd Place", "3rd Place"];
+    const medals = ["1st Place", "2nd Place", "3rd Place"];
     list.slice(0, 3).forEach((w, i) => {
       const box = document.createElement("div");
       box.className = "stat";
@@ -3288,7 +3647,7 @@ async function fetchExamWinners(examId) {
       const totalQ = w.total_questions || 10;
       const timeSec = w.time_seconds != null ? `${w.time_seconds}s` : "-";
       box.innerHTML = `
-        <span style="display:flex;align-items:center;">${icoImgHtml(medalIcons[i], "ico-img-md")}<strong>${medalLabels[i]}</strong></span>
+        <span>${icoImgHtml("medal1")}${medals[i]}</span>
         <strong>${name}</strong>
         <span class="small">Score: ${w.score ?? 0}/${totalQ} • Time: ${timeSec}</span>
       `;
@@ -3405,6 +3764,26 @@ const ADMIN_UI_TRANSLATIONS = {
   te: {
     navHome: "← హోమ్",
     headerSub: "సురక్షిత అడ్మిన్ డాష్‌బోర్డ్",
+    backMenu: "మెనూకి వెళ్ళండి",
+    menuHint: "ఏదైనా ఆప్షన్ ఎంచుకోండి",
+    tile1Title: "Admin Status",
+    tile1Sub: "అడ్మిన్ ఖాతా & లీడర్‌బోర్డ్",
+    tile2Title: "Live Exam Participants",
+    tile2Sub: "లైవ్ & పూర్తయిన వారి ఫోటోలు",
+    tile3Title: "Live Results & Winners",
+    tile3Sub: "Top 10, Answers & సర్టిఫికెట్లు",
+    tile4Title: "Student Results History",
+    tile4Sub: "విద్యార్థుల స్కోర్ల చరిత్ర",
+    tile5Title: "Paper Folders & Scanner",
+    tile5Sub: "పేపర్ స్కానర్ & ఫోల్డర్లు",
+    tile6Title: "Bible Question Manager",
+    tile6Sub: "AI & మాన్యువల్ ప్రశ్నలు",
+    tile7Title: "Saved Questions Bank",
+    tile7Sub: "సేవ్ చేసిన ప్రశ్నల జాబితా",
+    tile8Title: "Schedule Live Exam",
+    tile8Sub: "కొత్త పరీక్ష షెడ్యూల్",
+    tile9Title: "Scheduled Exams & Photos",
+    tile9Sub: "అన్ని ఎగ్జామ్స్ & అభ్యర్థులు",
     loginHeading: "అడ్మిన్ లాగిన్",
     loginBtn: "లాగిన్",
     adminStatusHeading: "అడ్మిన్ వివరాలు",
@@ -3434,7 +3813,7 @@ const ADMIN_UI_TRANSLATIONS = {
     statHigh: "అత్యధిక స్కోర్",
     resultsHistoryHeading: "విద్యార్థుల ఫలితాల చరిత్ర",
     scannerHeading: "క్వశ్చన్ పేపర్ ఫోల్డర్లు & స్కానర్ (తెలుగు / English / தமிழ்)",
-    scannerSubHtml: "ఒక ఎగ్జామ్‌కి ఒక <strong>Exam Folder Name</strong> ఇచ్చి, అందులోనే <strong>Telugu Paper</strong>, <strong>English Paper</strong>, <strong>Tamil Paper</strong> పేజీ బై పేజీ స్కాన్ చేసి సేవ్ చేయండి.<br>ఆ తర్వాత కింద <strong>Schedule Live Bible Exam</strong> లో ఆ Folder సెలెక్ట్ చేసి Date & Time పెడితే చాలు — ఆ టైమ్‌కి ప్రతి విద్యార్థికి వారు ఎంచుకున్న భాష పేపర్ మాత్రమే వస్తుంది!",
+    scannerSubHtml: "ఒక ఎగ్జామ్‌కి ఒక <strong>Exam Folder Name</strong> ఇచ్చి, అందులోనే <strong>Telugu Paper</strong>, <strong>English Paper</strong>, <strong>Tamil Paper</strong> పేజీ బై పేజీ స్కాన్ చేసి సేవ్ చేయండి.<br>ఆ తర్వాత <strong>Schedule Live Bible Exam</strong> లో ఆ Folder సెలెక్ట్ చేసి Date & Time పెడితే చాలు — ఆ టైమ్‌కి ప్రతి విద్యార్థికి వారు ఎంచుకున్న భాష పేపర్ మాత్రమే వస్తుంది!",
     scanFolderHtml: `${icoImgHtml("folder")}Exam Folder Name (ఒకే ఎగ్జామ్‌కి అన్ని భాషలకూ ఇదే పేరు ఇవ్వండి)`,
     scanLangHtml: `${icoImgHtml("globe")}Paper Language (ఇప్పుడు స్కాన్ చేసే పేపర్ భాష)`,
     scanBookLabel: "బైబిల్ పుస్తకం (ఐచ్ఛికం)",
@@ -3453,7 +3832,7 @@ const ADMIN_UI_TRANSLATIONS = {
     aiBoxSub: "బైబిల్ వచనాలు మరియు సంఘటనల ఆధారంగా A/B/C/D ఆప్షన్లతో కొత్త ప్రశ్నలను రూపొందించండి.",
     savedQuestionsHeading: "సేవ్ చేసిన బైబిల్ ప్రశ్నలు",
     scheduleExamHeading: "లైవ్ బైబిల్ ఎగ్జామ్ షెడ్యూల్",
-    scheduleExamSubHtml: "పైన స్కాన్ చేసి సేవ్ చేసిన <strong>Exam Paper Folder</strong> సెలెక్ట్ చేసి Date & Time పెడితే, ఆ టైమ్‌కి ఆ ఫోల్డర్‌లోని ప్రశ్నలే ఎగ్జామ్‌లో వస్తాయి!",
+    scheduleExamSubHtml: "స్కాన్ చేసి సేవ్ చేసిన <strong>Exam Paper Folder</strong> సెలెక్ట్ చేసి Date & Time పెడితే, ఆ టైమ్‌కి ఆ ఫోల్డర్‌లోని ప్రశ్నలే ఎగ్జామ్‌లో వస్తాయి!",
     examFolderSelectHtml: `${icoImgHtml("folder")}స్కాన్ చేసిన Exam Paper Folder ఎంచుకోండి (ఐచ్ఛికం)`,
     scheduledExamsHeading: "షెడ్యూల్ చేసిన ఎగ్జామ్స్ & అభ్యర్థులు",
     scheduledExamsSub: "ప్రతి ఎగ్జామ్‌కి ఎంతమంది హాజరయ్యారో చూడండి మరియు 'View Details & Photos' క్లిక్ చేసి వారి వివరాలు & ఫోటో చూడండి.",
@@ -3464,6 +3843,26 @@ const ADMIN_UI_TRANSLATIONS = {
   en: {
     navHome: "← Home",
     headerSub: "Secure Admin Dashboard",
+    backMenu: "Back to Menu",
+    menuHint: "Tap any feature button to open",
+    tile1Title: "Admin Status",
+    tile1Sub: "Account & Leaderboard",
+    tile2Title: "Live Exam Participants",
+    tile2Sub: "Online & Completed Photos",
+    tile3Title: "Live Results & Winners",
+    tile3Sub: "Top 10, Answers & Certificates",
+    tile4Title: "Student Results History",
+    tile4Sub: "Search Scores & Attempts",
+    tile5Title: "Paper Folders & Scanner",
+    tile5Sub: "Camera / Gallery OCR",
+    tile6Title: "Bible Question Manager",
+    tile6Sub: "AI Generator & Manual Entry",
+    tile7Title: "Saved Questions Bank",
+    tile7Sub: "Filter, Edit & Bulk Delete",
+    tile8Title: "Schedule Live Exam",
+    tile8Sub: "Set Date, Time & Folder",
+    tile9Title: "Scheduled Exams & Photos",
+    tile9Sub: "View All Exam Candidates",
     loginHeading: "Admin Login",
     loginBtn: "Login",
     adminStatusHeading: "Admin Status",
@@ -3493,7 +3892,7 @@ const ADMIN_UI_TRANSLATIONS = {
     statHigh: "Highest Score",
     resultsHistoryHeading: "Student Results History",
     scannerHeading: "Question Paper Folders & Scanner (Telugu / English / Tamil / Hindi)",
-    scannerSubHtml: "Create one <strong>Exam Folder Name</strong> per exam, then scan and save <strong>Telugu</strong>, <strong>English</strong>, <strong>Tamil</strong>, and <strong>Hindi</strong> papers page by page inside it.<br>Then select that Folder in <strong>Schedule Live Bible Exam</strong> below and set Date & Time — each student will automatically get the paper in their chosen language!",
+    scannerSubHtml: "Create one <strong>Exam Folder Name</strong> per exam, then scan and save <strong>Telugu</strong>, <strong>English</strong>, <strong>Tamil</strong>, and <strong>Hindi</strong> papers page by page inside it.<br>Then select that Folder in <strong>Schedule Live Bible Exam</strong> and set Date & Time — each student will automatically get the paper in their chosen language!",
     scanFolderHtml: `${icoImgHtml("folder")}Exam Folder Name (Use the same name for all languages of an exam)`,
     scanLangHtml: `${icoImgHtml("globe")}Paper Language (Language of the paper being scanned now)`,
     scanBookLabel: "Bible Book (Optional / Reference)",
@@ -3512,7 +3911,7 @@ const ADMIN_UI_TRANSLATIONS = {
     aiBoxSub: "Generate unique Bible quiz questions based on Scripture verses & events with randomized A/B/C/D options.",
     savedQuestionsHeading: "Saved Bible Questions",
     scheduleExamHeading: "Schedule Live Bible Exam",
-    scheduleExamSubHtml: "Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time — participants will automatically get the questions in their chosen language!",
+    scheduleExamSubHtml: "Select a scanned <strong>Exam Paper Folder</strong> and set Date & Time — participants will automatically get the questions in their chosen language!",
     examFolderSelectHtml: `${icoImgHtml("folder")}Select Scanned Exam Paper Folder (Optional - uses folder papers instead of Book/Chapter below)`,
     scheduledExamsHeading: "Scheduled Exams & Participants",
     scheduledExamsSub: "View participant counts for each exam and click 'View Details & Photos' to inspect candidate names, details & photos.",
@@ -3523,6 +3922,26 @@ const ADMIN_UI_TRANSLATIONS = {
   ta: {
     navHome: "← முகப்பு",
     headerSub: "பாதுகாப்பான நிர்வாகி டாஷ்போர்டு",
+    backMenu: "மெனுவிற்குத் திரும்புக",
+    menuHint: "எந்தவொரு விருப்பத்தையும் தேர்ந்தெடுக்கவும்",
+    tile1Title: "Admin Status",
+    tile1Sub: "நிர்வாகி நிலை & தரவரிசை",
+    tile2Title: "Live Exam Participants",
+    tile2Sub: "நேரடி தேர்வு புகைப்படங்கள்",
+    tile3Title: "Live Results & Winners",
+    tile3Sub: "வெற்றியாளர்கள் & சான்றிதழ்கள்",
+    tile4Title: "Student Results History",
+    tile4Sub: "மாணவர் மதிப்பெண் வரலாறு",
+    tile5Title: "Paper Folders & Scanner",
+    tile5Sub: "வினாத்தாள் ஸ்கேனர்",
+    tile6Title: "Bible Question Manager",
+    tile6Sub: "AI & நேரடி கேள்விகள்",
+    tile7Title: "Saved Questions Bank",
+    tile7Sub: "சேமிக்கப்பட்ட கேள்விகள்",
+    tile8Title: "Schedule Live Exam",
+    tile8Sub: "தேர்வு நேர அட்டவணை",
+    tile9Title: "Scheduled Exams & Photos",
+    tile9Sub: "அனைத்து தேர்வுகள் & விவரங்கள்",
     loginHeading: "நிர்வாகி உள்நுழைவு",
     loginBtn: "உள்நுழை",
     adminStatusHeading: "நிர்வாகி நிலை",
@@ -3571,7 +3990,7 @@ const ADMIN_UI_TRANSLATIONS = {
     aiBoxSub: "வேதாகம வசனங்களின் அடிப்படையில் புதிய வினாடி வினா கேள்விகளை உருவாக்கவும்.",
     savedQuestionsHeading: "சேமிக்கப்பட்ட வேதாகம கேள்விகள்",
     scheduleExamHeading: "நேரடி வேதாகம தேர்வு அட்டவணை",
-    scheduleExamSubHtml: "மேலே சேமித்த <strong>Exam Paper Folder</strong> தேர்ந்தெடுத்து தேதி & நேரம் அமைக்கவும்.",
+    scheduleExamSubHtml: "சேமித்த <strong>Exam Paper Folder</strong> தேர்ந்தெடுத்து தேதி & நேரம் அமைக்கவும்.",
     examFolderSelectHtml: `${icoImgHtml("folder")}ஸ்கேன் செய்த Exam Paper Folder தேர்ந்தெடுக்கவும் (விருப்பத்தேர்வு)`,
     scheduledExamsHeading: "திட்டமிடப்பட்ட தேர்வுகள் & பங்கேற்பாளர்கள்",
     scheduledExamsSub: "ஒவ்வொரு தேர்விலும் பங்கேற்றவர்களின் விவரங்கள் & புகைப்படங்களைக் காண்க.",
@@ -3582,6 +4001,26 @@ const ADMIN_UI_TRANSLATIONS = {
   hi: {
     navHome: "← होम",
     headerSub: "सुरक्षित एडमिन डैशबोर्ड",
+    backMenu: "मेनू पर वापस जाएं",
+    menuHint: "खोलने के लिए किसी भी बटन पर टैप करें",
+    tile1Title: "Admin Status",
+    tile1Sub: "एडमिन स्थिति और लीडरबोर्ड",
+    tile2Title: "Live Exam Participants",
+    tile2Sub: "लाइव और पूर्ण प्रतिभागी फोटो",
+    tile3Title: "Live Results & Winners",
+    tile3Sub: "विजेता, उत्तर और प्रमाण पत्र",
+    tile4Title: "Student Results History",
+    tile4Sub: "छात्र स्कोर इतिहास",
+    tile5Title: "Paper Folders & Scanner",
+    tile5Sub: "कैमरा / गैलरी OCR स्कैनर",
+    tile6Title: "Bible Question Manager",
+    tile6Sub: "AI और मैनुअल प्रश्न",
+    tile7Title: "Saved Questions Bank",
+    tile7Sub: "सहेजे गए प्रश्नों की सूची",
+    tile8Title: "Schedule Live Exam",
+    tile8Sub: "परीक्षा तिथि और समय तय करें",
+    tile9Title: "Scheduled Exams & Photos",
+    tile9Sub: "सभी परीक्षाएं और प्रतिभागी",
     loginHeading: "एडमिन लॉगिन",
     loginBtn: "लॉगिन",
     adminStatusHeading: "एडमिन स्थिति",
@@ -3630,7 +4069,7 @@ const ADMIN_UI_TRANSLATIONS = {
     aiBoxSub: "पवित्र शास्त्र के वचनों के आधार पर नए प्रश्न बनाएं।",
     savedQuestionsHeading: "सहेजे गए बाइबल प्रश्न",
     scheduleExamHeading: "लाइव बाइबल परीक्षा शेड्यूल करें",
-    scheduleExamSubHtml: "ऊपर सहेजे गए <strong>Exam Paper Folder</strong> को चुनें और दिनांक व समय निर्धारित करें।",
+    scheduleExamSubHtml: "सहेजे गए <strong>Exam Paper Folder</strong> को चुनें और दिनांक व समय निर्धारित करें।",
     examFolderSelectHtml: `${icoImgHtml("folder")}स्कैन किया गया Exam Paper Folder चुनें (वैकल्पिक)`,
     scheduledExamsHeading: "निर्धारित परीक्षाएं और प्रतिभागी",
     scheduledExamsSub: "प्रत्येक परीक्षा के प्रतिभागियों की संख्या, विवरण और फोटो देखें।",
@@ -3648,6 +4087,25 @@ function applyAdminUiLanguage(langCode) {
   const textMap = {
     navHomeBtn: t.navHome,
     headerSub: t.headerSub,
+    adminMenuHint: t.menuHint,
+    tileTitle1: t.tile1Title,
+    tileSub1: t.tile1Sub,
+    tileTitle2: t.tile2Title,
+    tileSub2: t.tile2Sub,
+    tileTitle3: t.tile3Title,
+    tileSub3: t.tile3Sub,
+    tileTitle4: t.tile4Title,
+    tileSub4: t.tile4Sub,
+    tileTitle5: t.tile5Title,
+    tileSub5: t.tile5Sub,
+    tileTitle6: t.tile6Title,
+    tileSub6: t.tile6Sub,
+    tileTitle7: t.tile7Title,
+    tileSub7: t.tile7Sub,
+    tileTitle8: t.tile8Title,
+    tileSub8: t.tile8Sub,
+    tileTitle9: t.tile9Title,
+    tileSub9: t.tile9Sub,
     loginHeading: t.loginHeading,
     loginSubmitBtn: t.loginBtn,
     adminStatusHeading: t.adminStatusHeading,
@@ -3695,6 +4153,10 @@ function applyAdminUiLanguage(langCode) {
   Object.entries(textMap).forEach(([elId, text]) => {
     const el = $(elId);
     if (el) el.textContent = text;
+  });
+
+  document.querySelectorAll(".back-menu-lbl").forEach(el => {
+    el.textContent = t.backMenu;
   });
 
   if ($("statOnlineLbl")) $("statOnlineLbl").innerHTML = t.statOnlineHtml;
