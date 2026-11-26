@@ -10,10 +10,10 @@
 :root {
   --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
   --card-bg: rgba(22, 33, 62, 0.85);
-  --card-border: rgba(234, 179, 8, 0.3);
+  --card-border: rgba(234, 179, 8, 0.32);
   --gold-primary: #facc15;
   --gold-dark: #ca8a04;
-  --gold-glow: rgba(250, 204, 21, 0.35);
+  --gold-glow: rgba(250, 204, 21, 0.4);
   --text-main: #f8fafc;
   --text-muted: #cbd5e1;
 }
@@ -38,16 +38,84 @@ body.exam-protected {
   -webkit-user-select: none;
 }
 
+/* ================= PREMIUM 3D HEADER ================= */
+.quiz-hdr {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 10px;
+  perspective: 900px;
+}
+
+@keyframes float3D {
+  0%, 100% { transform: translateY(0px) rotateX(4deg) rotateY(-4deg); }
+  50% { transform: translateY(-5px) rotateX(-3deg) rotateY(5deg); }
+}
+
+.logo-3d-wrap {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 8px;
+  padding: 4px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fef08a 0%, #eab308 45%, #854d0e 100%);
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.65),
+    0 5px 0 #713f12,
+    0 0 22px rgba(250, 204, 21, 0.45),
+    inset 0 2px 3px rgba(255, 255, 255, 0.75);
+  animation: float3D 4.5s ease-in-out infinite;
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  display: block;
+  object-fit: cover;
+  background: #0b1329;
+}
+
+.brand-3d-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+  background: linear-gradient(180deg, #fef9c3 0%, #facc15 48%, #ca8a04 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 0 #713f12) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7));
+}
+
+img.ico-img-lg {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  object-fit: contain;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.7));
+}
+
+img.ico-img-sm {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  object-fit: contain;
+  margin-right: 5px;
+  vertical-align: -3px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+}
+
 .card {
   background: var(--card-bg);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--card-border);
   padding: 22px;
-  margin: 12px auto;
-  border-radius: 20px;
-  max-width: 680px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+  margin: 10px auto;
+  border-radius: 22px;
+  max-width: 720px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255,255,255,0.12);
 }
 
 .top-bar {
@@ -58,7 +126,7 @@ body.exam-protected {
   gap: 10px;
   border-bottom: 1px solid rgba(255,255,255,0.1);
   padding-bottom: 14px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .top-right-controls {
@@ -75,7 +143,7 @@ body.exam-protected {
   background: rgba(16, 185, 129, 0.16);
   border: 1px solid rgba(16, 185, 129, 0.45);
   color: #34d399;
-  padding: 5px 10px;
+  padding: 6px 11px;
   border-radius: 10px;
   font-size: 12px;
   font-weight: 800;
@@ -113,21 +181,44 @@ body.exam-protected {
 }
 
 .timer-badge {
-  background: rgba(239, 68, 68, 0.18);
-  border: 1px solid rgba(239, 68, 68, 0.45);
-  color: #fca5a5;
-  font-weight: 800;
-  padding: 6px 12px;
+  background: linear-gradient(145deg, #fde047, #ca8a04);
+  color: #0b1329;
+  font-weight: 900;
+  padding: 6px 13px;
   border-radius: 10px;
   font-size: 14px;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 3px 0 #854d0e, 0 5px 12px var(--gold-glow);
 }
 
-.q-counter {
+/* PROGRESS BAR & STATUS ROW */
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 13px;
   color: var(--gold-primary);
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 16px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #eab308, #fef08a);
+  transition: width 0.25s ease;
 }
 
 .q-text {
@@ -147,7 +238,7 @@ body.exam-protected {
 .option-btn {
   width: 100%;
   text-align: left;
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(15, 23, 42, 0.82);
   border: 1.5px solid rgba(255, 255, 255, 0.14);
   color: var(--text-main);
   padding: 14px 16px;
@@ -163,14 +254,15 @@ body.exam-protected {
 .option-btn:hover {
   border-color: var(--gold-primary);
   background: rgba(30, 58, 138, 0.45);
+  transform: translateX(2px);
 }
 
 .option-btn.selected {
-  background: linear-gradient(135deg, rgba(250, 204, 21, 0.22) 0%, rgba(202, 138, 4, 0.28) 100%);
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.24) 0%, rgba(202, 138, 4, 0.3) 100%);
   border-color: var(--gold-primary);
   color: #ffffff;
   font-weight: 700;
-  box-shadow: 0 0 12px var(--gold-glow);
+  box-shadow: 0 0 14px var(--gold-glow);
 }
 
 .opt-letter {
@@ -192,11 +284,107 @@ body.exam-protected {
   color: #0b1329;
 }
 
+/* UTILITY ACTION STRIP (REVIEW & CLEAR) */
+.helper-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-chip {
+  background: rgba(15, 23, 42, 0.85);
+  color: var(--text-muted);
+  border: 1px solid rgba(255,255,255,0.16);
+  padding: 8px 13px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.18s ease;
+}
+
+.btn-chip:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+}
+
+.btn-chip.flagged {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: #f59e0b;
+  color: #fde68a;
+}
+
+/* QUESTION NUMBER PALETTE */
+.q-palette-box {
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(10, 16, 34, 0.72);
+  border: 1px solid rgba(255,255,255,0.09);
+}
+
+.q-palette-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.q-palette-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.q-num-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(30, 41, 59, 0.85);
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.q-num-btn.answered {
+  background: rgba(16, 185, 129, 0.24);
+  border-color: #10b981;
+  color: #6ee7b7;
+}
+
+.q-num-btn.reviewed {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #f59e0b;
+  color: #fde68a;
+}
+
+.q-num-btn.current {
+  background: linear-gradient(145deg, #fde047, #ca8a04);
+  border-color: #fef9c3;
+  color: #0b1329;
+  font-weight: 900;
+  transform: scale(1.08);
+}
+
 .nav-row {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 18px;
 }
 
 .btn-nav {
@@ -209,6 +397,9 @@ body.exam-protected {
   border: 1px solid rgba(255,255,255,0.2);
   background: rgba(255,255,255,0.08);
   color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-gold {
@@ -219,9 +410,12 @@ body.exam-protected {
   font-size: 15px;
   cursor: pointer;
   border: none;
-  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  background: linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
   color: #0b1329;
-  box-shadow: 0 4px 14px var(--gold-glow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 0 #854d0e, 0 6px 14px var(--gold-glow);
 }
 
 .btn-gold:disabled, .btn-nav:disabled {
@@ -268,6 +462,9 @@ body.exam-protected {
   color: #f87171;
   font-size: 22px;
   margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .anticheat-count {
@@ -285,16 +482,23 @@ body.exam-protected {
 </head>
 <body>
 
+<div class="quiz-hdr">
+  <div class="logo-3d-wrap">
+    <img src="icon-512.png" alt="LOGOS QUEST" class="logo-img">
+  </div>
+  <h1 class="brand-3d-title">LOGOS QUEST</h1>
+</div>
+
 <!-- ANTI-CHEAT WARNING MODAL -->
 <div id="antiCheatModal" class="anticheat-overlay" style="display:none;">
   <div class="anticheat-box">
-    <div style="font-size:44px; margin-bottom:6px;">🚨</div>
-    <h3 id="acModalTitle">⚠️ ట్యాబ్ మార్పు హెచ్చరిక!</h3>
+    <img data-ico="warn" class="ico-img-lg" alt="Warning">
+    <h3 id="acModalTitle">ట్యాబ్ మార్పు హెచ్చరిక!</h3>
     <div id="acWarningBadge" class="anticheat-count">Warning 1 / 3</div>
     <p id="acModalMessage" style="color:#f8fafc; font-size:15px; line-height:1.5; margin-bottom:18px;">
       పరీక్ష రాస్తున్నప్పుడు వేరే ట్యాబ్ లేదా యాప్ ఓపెన్ చేయడం నిషేధించబడింది! 3వ సారి దాటితే మీ పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ అవుతుంది.
     </p>
-    <button type="button" class="btn-gold" style="width:100%;" id="acAcknowledgeBtn" onclick="closeAntiCheatModal()">✅ పరీక్ష కొనసాగించు</button>
+    <button type="button" class="btn-gold" style="width:100%;" id="acAcknowledgeBtn" onclick="closeAntiCheatModal()">పరీక్ష కొనసాగించు</button>
   </div>
 </div>
 
@@ -312,43 +516,156 @@ body.exam-protected {
         <span style="font-size:12px; color:var(--text-muted);" id="studentBadge">Student</span>
       </div>
       <div class="top-right-controls">
-        <span id="shieldBadge" class="shield-badge">🛡️ 0/3</span>
+        <span id="shieldBadge" class="shield-badge"><img data-ico="shield" class="ico-img-sm" alt="Shield"><span>0/3</span></span>
         <select id="examLangSelect" class="exam-lang-select" onchange="switchExamLanguage(this.value)">
           <option value="te">తెలుగు</option>
           <option value="en">English</option>
           <option value="ta">தமிழ்</option>
           <option value="hi">हिन्दी</option>
         </select>
-        <div class="timer-badge" id="timerDisplay">⏱ 00:00</div>
+        <div class="timer-badge" id="timerDisplay"><img data-ico="clock" class="ico-img-sm" alt="Timer"><span id="timerText">00:00</span></div>
       </div>
     </div>
 
-    <div class="q-counter" id="questionCounter">Question 1 of 10</div>
+    <div class="progress-meta">
+      <span id="questionCounter">Question 1 of 10</span>
+      <span id="answeredCounter">Answered: 0 / 10</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
     <div class="q-text" id="questionText">...</div>
     <div class="options-list" id="optionsContainer"></div>
+
+    <div class="helper-actions">
+      <button type="button" class="btn-chip" id="reviewBtn" onclick="toggleReviewFlag()">
+        <img data-ico="flag" class="ico-img-sm" alt="Review"><span id="reviewBtnText">Mark for Review</span>
+      </button>
+      <button type="button" class="btn-chip" id="clearOptBtn" onclick="clearCurrentAnswer()">
+        <img data-ico="close" class="ico-img-sm" alt="Clear"><span id="clearOptText">Clear Choice</span>
+      </button>
+    </div>
+
+    <div class="q-palette-box">
+      <div class="q-palette-title">
+        <span id="paletteLabel">Question Navigator</span>
+        <span style="color:#6ee7b7;" id="paletteLegend">● Answered &nbsp; • &nbsp; ● Review</span>
+      </div>
+      <div id="questionPalette" class="q-palette-grid"></div>
+    </div>
 
     <div class="nav-row">
       <button type="button" class="btn-nav" id="prevBtn" onclick="prevQuestion()">← వెనుకకు</button>
       <button type="button" class="btn-gold" id="nextBtn" onclick="nextQuestion()">తదుపరి →</button>
-      <button type="button" class="btn-gold" id="submitBtn" style="display:none;" onclick="submitExam(false)">✅ పరీక్ష సబ్మిట్ చేయండి</button>
+      <button type="button" class="btn-gold" id="submitBtn" style="display:none;" onclick="submitExam(false)">పరీక్ష సబ్మిట్ చేయండి</button>
     </div>
   </div>
 
   <div id="resultView" style="display:none; text-align:center; padding:20px 10px;">
-    <div style="font-size:48px; margin-bottom:10px;">🎉</div>
+    <img data-ico="trophy" class="ico-img-lg" alt="Trophy">
     <h2 style="color:var(--gold-primary); margin:0 0 8px;" id="resHeading">పరీక్ష పూర్తయింది!</h2>
     <p id="resScoreText" style="font-size:20px; font-weight:800; color:#fff; margin:12px 0;"></p>
     <p id="violationNotice" style="color:#fca5a5; font-weight:700; font-size:14px; display:none; margin:8px 0;"></p>
     <p id="resSubText" style="font-size:14px; color:var(--text-muted); margin-bottom:20px;"></p>
     <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-      <a href="leaderboard.html" class="btn-gold" style="text-decoration:none; max-width:200px;">🏆 లీడర్‌బోర్డ్</a>
-      <a href="index.html" class="btn-nav" style="text-decoration:none; max-width:200px;">🏠 హోమ్ పేజీ</a>
+      <a href="leaderboard.html" class="btn-gold" style="text-decoration:none; max-width:200px;">
+        <img data-ico="trophy" class="ico-img-sm" alt="Leaderboard"><span>లీడర్‌బోర్డ్</span>
+      </a>
+      <a href="index.html" class="btn-nav" style="text-decoration:none; max-width:200px;">
+        <img data-ico="home" class="ico-img-sm" alt="Home"><span>హోమ్ పేజీ</span>
+      </a>
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ==========================================
+// BEVELED 3D ROYAL BLUE & METALLIC GOLD IMAGE ICON ENGINE
+// ==========================================
+const ICON_3D_DESIGNS = {
+  shield: `
+    <path d="M32 14l14 6v11c0 9-6 16-14 19-8-3-14-10-14-19V20l14-6z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
+    <path d="M26 32l4 4 8-8" fill="none" stroke="#0b1329" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  `,
+  clock: `
+    <circle cx="32" cy="34" r="13.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="3.2" filter="url(#emboss)"/>
+    <path d="M32 26v8l5.5 3.5" fill="none" stroke="#0f235a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  `,
+  flag: `
+    <line x1="21" y1="15" x2="21" y2="49" stroke="url(#goldEmb)" stroke-width="3.4" stroke-linecap="round" filter="url(#emboss)"/>
+    <path d="M22 17h23l-5 8 5 8H22V17z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+  `,
+  close: `
+    <path d="M21 21l22 22M43 21L21 43" fill="none" stroke="url(#crimsonEmb)" stroke-width="4.6" stroke-linecap="round" filter="url(#emboss)"/>
+  `,
+  warn: `
+    <path d="M32 16L16 45h32L32 16z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" stroke-linejoin="round" filter="url(#emboss)"/>
+    <line x1="32" y1="26" x2="32" y2="35" stroke="#0b1329" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="32" cy="40" r="2" fill="#0b1329"/>
+  `,
+  trophy: `
+    <path d="M22 17h20v10c0 6-4.5 10.5-10 10.5S22 33 22 27V17z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+    <rect x="29.5" y="37" width="5" height="6" fill="url(#goldEmb)"/>
+    <rect x="23" y="43" width="18" height="4.5" rx="2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8"/>
+  `,
+  home: `
+    <path d="M16 31l16-14 16 14v15H36V36h-8v10H16V31z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" stroke-linejoin="round" filter="url(#emboss)"/>
+  `,
+  check: `
+    <path d="M20 33l8 8 17-18" fill="none" stroke="url(#emeraldEmb)" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
+  `
+};
+
+const ICON_IMAGE_CACHE = {};
+function get3DIconUrl(name) {
+  if (ICON_IMAGE_CACHE[name]) return ICON_IMAGE_CACHE[name];
+  const inner = ICON_3D_DESIGNS[name] || ICON_3D_DESIGNS.shield;
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+    <defs>
+      <linearGradient id="goldRim" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fef9c3"/><stop offset="35%" stop-color="#facc15"/><stop offset="75%" stop-color="#ca8a04"/><stop offset="100%" stop-color="#713f12"/>
+      </linearGradient>
+      <linearGradient id="goldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fef9c3"/><stop offset="45%" stop-color="#facc15"/><stop offset="100%" stop-color="#a16207"/>
+      </linearGradient>
+      <radialGradient id="royalFace" cx="35%" cy="25%" r="75%">
+        <stop offset="0%" stop-color="#25489c"/><stop offset="60%" stop-color="#142966"/><stop offset="100%" stop-color="#091336"/>
+      </radialGradient>
+      <linearGradient id="emeraldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#6ee7b7"/><stop offset="50%" stop-color="#10b981"/><stop offset="100%" stop-color="#065f46"/>
+      </linearGradient>
+      <linearGradient id="crimsonEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fca5a5"/><stop offset="50%" stop-color="#ef4444"/><stop offset="100%" stop-color="#991b1b"/>
+      </linearGradient>
+      <filter id="emboss" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-color="#040814" flood-opacity="0.75"/>
+      </filter>
+    </defs>
+    <rect x="3" y="6" width="58" height="56" rx="15" fill="#5c330a"/>
+    <rect x="3" y="3" width="58" height="56" rx="15" fill="url(#goldRim)"/>
+    <rect x="7" y="7" width="50" height="48" rx="11.5" fill="url(#royalFace)" stroke="#713f12" stroke-width="1"/>
+    <rect x="9" y="9" width="46" height="44" rx="10" fill="none" stroke="url(#goldRim)" stroke-width="1.5"/>
+    ${inner}
+    <path d="M10 14a6 6 0 016-6h32a6 6 0 016 6v10c-14 4-30 4-44 0V14z" fill="#ffffff" opacity="0.12"/>
+  </svg>`;
+  const uri = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svgStr);
+  ICON_IMAGE_CACHE[name] = uri;
+  return uri;
+}
+
+function icoImgHtml(name, cls = "ico-img-sm") {
+  return `<img src="${get3DIconUrl(name)}" class="${cls}" alt="${name}">`;
+}
+
+function hydrateAll3DImageIcons(root = document) {
+  root.querySelectorAll("img[data-ico]").forEach(img => {
+    const key = img.getAttribute("data-ico");
+    if (key) img.src = get3DIconUrl(key);
+  });
+}
+
 const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -382,14 +699,12 @@ let allTranslations = { te: {}, en: {}, ta: {}, hi: {} };
 let questions = [];
 let currentIndex = 0;
 let userAnswers = {};
+let reviewedFlags = {};
 let attemptId = null;
 let timerInterval = null;
 let isSubmitted = false;
 let examStartTimeMs = Date.now();
 
-// ==========================================
-// ANTI-CHEATING / TAB-SWITCH MONITORING
-// ==========================================
 let examActive = false;
 let tabSwitchCount = 0;
 const MAX_TAB_WARNINGS = 3;
@@ -399,54 +714,70 @@ const labels = {
   te: {
     prev: "← వెనుకకు",
     next: "తదుపరి →",
-    submit: "✅ సబ్మిట్ చేయండి",
+    submit: "సబ్మిట్ చేయండి",
     qOf: "ప్రశ్న {c} / {t}",
+    ansOf: "సమాధానం ఇచ్చినవి: {a} / {t}",
+    review: "రివ్యూ కోసం గుర్తించు",
+    clearOpt: "ఆప్షన్ తొలగించు",
+    paletteLbl: "ప్రశ్నల నావిగేటర్",
     done: "పరీక్ష పూర్తయింది!",
     score: "మీ స్కోర్: {s} / {t}",
     confirmSub: "మీరు పరీక్షను సబ్మిట్ చేయాలనుకుంటున్నారా?",
-    acTitle: "⚠️ ట్యాబ్ మార్పు హెచ్చరిక!",
+    acTitle: "ట్యాబ్ మార్పు హెచ్చరిక!",
     acMsg: "పరీక్ష రాస్తున్నప్పుడు వేరే ట్యాబ్ లేదా యాప్ ఓపెన్ చేయడం నిషేధించబడింది! 3వ సారి దాటితే మీ పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ అవుతుంది.",
-    acResume: "✅ పరీక్ష కొనసాగించు",
-    acAutoSub: "🚨 3 సార్లు ట్యాబ్ మార్చినందున మీ పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ చేయబడింది!"
+    acResume: "పరీక్ష కొనసాగించు",
+    acAutoSub: "3 సార్లు ట్యాబ్ మార్చినందున మీ పరీక్ష ఆటోమేటిక్‌గా సబ్మిట్ చేయబడింది!"
   },
   en: {
     prev: "← Previous",
     next: "Next →",
-    submit: "✅ Submit Exam",
+    submit: "Submit Exam",
     qOf: "Question {c} of {t}",
+    ansOf: "Answered: {a} / {t}",
+    review: "Mark for Review",
+    clearOpt: "Clear Choice",
+    paletteLbl: "Question Palette",
     done: "Exam Completed!",
     score: "Your Score: {s} / {t}",
     confirmSub: "Do you want to submit the exam?",
-    acTitle: "⚠️ Tab Switch Warning!",
+    acTitle: "Tab Switch Warning!",
     acMsg: "Switching tabs or opening other apps during the live exam is prohibited! On the 3rd violation, your exam will be auto-submitted.",
-    acResume: "✅ Resume Exam",
-    acAutoSub: "🚨 Exam auto-submitted due to 3 tab-switch violations!"
+    acResume: "Resume Exam",
+    acAutoSub: "Exam auto-submitted due to 3 tab-switch violations!"
   },
   ta: {
     prev: "← முந்தைய",
     next: "அடுத்து →",
-    submit: "✅ சமர்ப்பிக்கவும்",
+    submit: "சமர்ப்பிக்கவும்",
     qOf: "கேள்வி {c} / {t}",
+    ansOf: "பதிலளித்தவை: {a} / {t}",
+    review: "மதிப்பாய்வுக்கு குறி",
+    clearOpt: "தெரிவை நீக்கு",
+    paletteLbl: "கேள்விப் பட்டியல்",
     done: "தேர்வு முடிந்தது!",
     score: "உங்கள் மதிப்பெண்: {s} / {t}",
     confirmSub: "தேர்வைச் சமர்ப்பிக்க விரும்புகிறீர்களா?",
-    acTitle: "⚠️ தாவல் மாற்ற எச்சரிக்கை!",
+    acTitle: "தாவல் மாற்ற எச்சரிக்கை!",
     acMsg: "தேர்வின் போது வேறு தாவல் அல்லது செயலியைத் திறப்பது தடைசெய்யப்பட்டுள்ளது! 3-வது முறை மீறினால் தேர்வு தானாகவே சமர்ப்பிக்கப்படும்.",
-    acResume: "✅ தேர்வைத் தொடரவும்",
-    acAutoSub: "🚨 3 முறை விதிமீறல் காரணமாக தேர்வு தானாகவே சமர்ப்பிக்கப்பட்டது!"
+    acResume: "தேர்வைத் தொடரவும்",
+    acAutoSub: "3 முறை விதிமீறல் காரணமாக தேர்வு தானாகவே சமர்ப்பிக்கப்பட்டது!"
   },
   hi: {
     prev: "← पिछला",
     next: "अगला →",
-    submit: "✅ सबमिट करें",
+    submit: "सबमिट करें",
     qOf: "प्रश्न {c} / {t}",
+    ansOf: "उत्तर दिए गए: {a} / {t}",
+    review: "समीक्षा के लिए चिह्नित करें",
+    clearOpt: "विकल्प हटाएं",
+    paletteLbl: "प्रश्न नेविगेटर",
     done: "परीक्षा पूर्ण हुई!",
     score: "आपका स्कोर: {s} / {t}",
     confirmSub: "क्या आप परीक्षा सबमिट करना चाहते हैं?",
-    acTitle: "⚠️ टैब बदलने की चेतावनी!",
+    acTitle: "टैब बदलने की चेतावनी!",
     acMsg: "परीक्षा के दौरान दूसरा टैब या ऐप खोलना प्रतिबंधित है! तीसरी बार नियम तोड़ने पर आपकी परीक्षा अपने आप जमा हो जाएगी।",
-    acResume: "✅ परीक्षा जारी रखें",
-    acAutoSub: "🚨 3 बार टैब बदलने के कारण आपकी परीक्षा अपने आप जमा कर दी गई है!"
+    acResume: "परीक्षा जारी रखें",
+    acAutoSub: "3 बार टैब बदलने के कारण आपकी परीक्षा अपने आप जमा कर दी गई है!"
   }
 };
 
@@ -454,7 +785,7 @@ function updateAntiCheatTexts() {
   const t = labels[lang] || labels.te;
   $("acModalTitle").textContent = t.acTitle;
   $("acModalMessage").textContent = t.acMsg;
-  $("acAcknowledgeBtn").textContent = t.acResume;
+  $("acAcknowledgeBtn").innerHTML = `${icoImgHtml("check")}<span>${t.acResume}</span>`;
 }
 
 function closeAntiCheatModal() {
@@ -469,7 +800,7 @@ function recordTabViolation() {
 
   tabSwitchCount++;
   const badge = $("shieldBadge");
-  badge.textContent = `⚠️ ${tabSwitchCount}/${MAX_TAB_WARNINGS}`;
+  badge.innerHTML = `${icoImgHtml("warn")}<span>${tabSwitchCount}/${MAX_TAB_WARNINGS}</span>`;
   badge.classList.add("warn");
 
   updateAntiCheatTexts();
@@ -477,7 +808,7 @@ function recordTabViolation() {
 
   if (tabSwitchCount >= MAX_TAB_WARNINGS) {
     $("antiCheatModal").style.display = "none";
-    $("violationNotice").textContent = t.acAutoSub;
+    $("violationNotice").innerHTML = `${icoImgHtml("warn")}${t.acAutoSub}`;
     $("violationNotice").style.display = "block";
     submitExam(true);
     return;
@@ -519,13 +850,12 @@ function normalizeLangCode(val) {
 function showError(msg) {
   $("loadingView").innerHTML = `
     <div class="error-box">
-      <p style="margin:0 0 14px; font-weight:700;">❌ ${msg}</p>
-      <a href="index.html" class="btn-gold" style="display:inline-block; text-decoration:none; padding:10px 20px;">🏠 హోమ్ పేజీకి వెళ్ళండి</a>
+      <p style="margin:0 0 14px; font-weight:700; display:flex; align-items:center; justify-content:center;">${icoImgHtml("warn")}<span>${msg}</span></p>
+      <a href="index.html" class="btn-gold" style="display:inline-flex; text-decoration:none; padding:10px 20px;">${icoImgHtml("home")}<span>హోమ్ పేజీకి వెళ్ళండి</span></a>
     </div>
   `;
 }
 
-// STRICT SINGLE-LANGUAGE BUILDER (NEVER MIXES OTHER LANGUAGES)
 function buildLocalizedQuestions() {
   const qLimit = Number(examData?.question_count) || 10;
   const transMap = allTranslations[lang] || {};
@@ -581,14 +911,21 @@ function buildLocalizedQuestions() {
   }
 }
 
-function switchExamLanguage(newLang) {
-  lang = newLang;
-  localStorage.setItem("logos_quest_lang", newLang);
+function applyStaticLabels() {
   const t = labels[lang] || labels.te;
   $("prevBtn").textContent = t.prev;
   $("nextBtn").textContent = t.next;
-  $("submitBtn").textContent = t.submit;
+  $("submitBtn").innerHTML = `${icoImgHtml("check")}<span>${t.submit}</span>`;
+  $("reviewBtnText").textContent = t.review;
+  $("clearOptText").textContent = t.clearOpt;
+  $("paletteLabel").textContent = t.paletteLbl;
   updateAntiCheatTexts();
+}
+
+function switchExamLanguage(newLang) {
+  lang = newLang;
+  localStorage.setItem("logos_quest_lang", newLang);
+  applyStaticLabels();
   buildLocalizedQuestions();
   renderQuestion();
 }
@@ -645,18 +982,15 @@ async function createAttemptRecord(totalQ) {
 }
 
 async function initExam() {
+  hydrateAll3DImageIcons();
   if (!examId) {
     showError("Exam ID కనుగొనబడలేదు. దయచేసి హోమ్ పేజీ నుండి పరీక్షలో చేరండి.");
     return;
   }
 
-  const t = labels[lang] || labels.te;
   $("examLangSelect").value = lang;
-  $("prevBtn").textContent = t.prev;
-  $("nextBtn").textContent = t.next;
-  $("submitBtn").textContent = t.submit;
-  $("studentBadge").textContent = "👤 " + studentName;
-  updateAntiCheatTexts();
+  $("studentBadge").textContent = studentName;
+  applyStaticLabels();
 
   try {
     const { data: exam, error: examErr } = await db
@@ -740,7 +1074,6 @@ async function initExam() {
     $("loadingView").style.display = "none";
     $("quizView").style.display = "block";
 
-    // ACTIVATE ANTI-CHEAT PROTECTION
     examActive = true;
     tabSwitchCount = 0;
     document.body.classList.add("exam-protected");
@@ -758,7 +1091,9 @@ function startTimer(endTimeMs) {
     const remaining = Math.max(0, Math.floor((endTimeMs - Date.now()) / 1000));
     const mins = String(Math.floor(remaining / 60)).padStart(2, "0");
     const secs = String(remaining % 60).padStart(2, "0");
-    $("timerDisplay").textContent = `⏱ ${mins}:${secs}`;
+    if ($("timerText")) {
+      $("timerText").textContent = `${mins}:${secs}`;
+    }
 
     if (remaining <= 0 && !isSubmitted) {
       clearInterval(timerInterval);
@@ -769,11 +1104,39 @@ function startTimer(endTimeMs) {
   timerInterval = setInterval(tick, 1000);
 }
 
+function renderPalette() {
+  const paletteEl = $("questionPalette");
+  paletteEl.replaceChildren();
+
+  questions.forEach((item, idx) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "q-num-btn";
+    if (userAnswers[item.id]) btn.classList.add("answered");
+    if (reviewedFlags[item.id]) btn.classList.add("reviewed");
+    if (idx === currentIndex) btn.classList.add("current");
+    btn.textContent = String(idx + 1);
+    btn.onclick = () => {
+      currentIndex = idx;
+      renderQuestion();
+    };
+    paletteEl.appendChild(btn);
+  });
+}
+
 function renderQuestion() {
   const t = labels[lang] || labels.te;
   const q = questions[currentIndex];
+  const answeredCount = questions.filter(item => Boolean(userAnswers[item.id])).length;
+  const pct = questions.length > 0 ? Math.round(((currentIndex + 1) / questions.length) * 100) : 0;
+
   $("questionCounter").textContent = t.qOf.replace("{c}", currentIndex + 1).replace("{t}", questions.length);
+  $("answeredCounter").textContent = t.ansOf.replace("{a}", answeredCount).replace("{t}", questions.length);
+  $("progressFill").style.width = `${pct}%`;
   $("questionText").textContent = q.question;
+
+  const isFlagged = Boolean(reviewedFlags[q.id]);
+  $("reviewBtn").classList.toggle("flagged", isFlagged);
 
   const container = $("optionsContainer");
   container.innerHTML = "";
@@ -792,14 +1155,30 @@ function renderQuestion() {
     container.appendChild(btn);
   });
 
+  renderPalette();
+
   $("prevBtn").disabled = currentIndex === 0;
   if (currentIndex === questions.length - 1) {
     $("nextBtn").style.display = "none";
-    $("submitBtn").style.display = "block";
+    $("submitBtn").style.display = "inline-flex";
   } else {
-    $("nextBtn").style.display = "block";
+    $("nextBtn").style.display = "inline-flex";
     $("submitBtn").style.display = "none";
   }
+}
+
+function toggleReviewFlag() {
+  const q = questions[currentIndex];
+  if (!q) return;
+  reviewedFlags[q.id] = !reviewedFlags[q.id];
+  renderQuestion();
+}
+
+function clearCurrentAnswer() {
+  const q = questions[currentIndex];
+  if (!q) return;
+  delete userAnswers[q.id];
+  renderQuestion();
 }
 
 function prevQuestion() {
@@ -900,19 +1279,19 @@ async function submitExam(isAuto) {
     }
 
     if (dbError) {
-      saveMsg = "⚠️ DB Save Error: " + dbError.message;
+      saveMsg = "DB Save Error: " + dbError.message;
     } else {
-      saveMsg = "✅ మీ ఫలితం & సమాధానాలు లీడర్‌బోర్డ్‌లో నమోదయ్యాయి!";
+      saveMsg = "మీ ఫలితం & సమాధానాలు లీడర్‌బోర్డ్‌లో నమోదయ్యాయి!";
     }
   } catch (e) {
-    saveMsg = "⚠️ Save Error: " + e.message;
+    saveMsg = "Save Error: " + e.message;
   }
 
   $("quizView").style.display = "none";
   $("resultView").style.display = "block";
   $("resHeading").textContent = t.done;
   $("resScoreText").textContent = t.score.replace("{s}", score).replace("{t}", questions.length);
-  $("resSubText").textContent = saveMsg;
+  $("resSubText").innerHTML = `${icoImgHtml("check")}<span>${saveMsg}</span>`;
 }
 
 window.addEventListener("DOMContentLoaded", initExam);
