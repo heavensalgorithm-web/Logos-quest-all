@@ -17,10 +17,10 @@
 :root {
   --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
   --card-bg: rgba(22, 33, 62, 0.78);
-  --card-border: rgba(234, 179, 8, 0.25);
+  --card-border: rgba(234, 179, 8, 0.28);
   --gold-primary: #facc15;
   --gold-dark: #ca8a04;
-  --gold-glow: rgba(250, 204, 21, 0.35);
+  --gold-glow: rgba(250, 204, 21, 0.4);
   --text-main: #f8fafc;
   --text-muted: #cbd5e1;
   --live-green: #10b981;
@@ -45,6 +45,8 @@ body {
 .lang-selector-box {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
   max-width: 620px;
   margin: 0 auto 12px;
 }
@@ -76,18 +78,103 @@ body {
   margin: 14px auto;
   border-radius: 20px;
   max-width: 620px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(234, 179, 8, 0.08);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+/* ================= PREMIUM 3D MAIN LOGO & TITLE ================= */
+@keyframes float3D {
+  0%, 100% { transform: translateY(0px) rotateX(4deg) rotateY(-4deg); }
+  50% { transform: translateY(-6px) rotateX(-3deg) rotateY(5deg); }
+}
+
+.logo-3d-wrap {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 14px;
+  padding: 5px;
+  border-radius: 26px;
+  background: linear-gradient(145deg, #fef08a 0%, #eab308 45%, #854d0e 100%);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.65),
+    0 6px 0 #713f12,
+    0 0 28px rgba(250, 204, 21, 0.45),
+    inset 0 2px 4px rgba(255, 255, 255, 0.75);
+  animation: float3D 4.5s ease-in-out infinite;
+  position: relative;
+}
+
+.logo-3d-wrap.sm {
+  width: 82px;
+  height: 82px;
+  border-radius: 22px;
+  padding: 4px;
+}
+
+.logo-3d-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 21px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0) 48%);
+  pointer-events: none;
 }
 
 .logo-img {
-  width: 90px;
-  height: 90px;
-  border-radius: 22px;
-  margin: 0 auto 10px;
+  width: 100%;
+  height: 100%;
+  border-radius: 21px;
   display: block;
-  box-shadow: 0 8px 24px var(--gold-glow);
-  border: 2px solid var(--gold-primary);
-  background: #0f172a;
+  object-fit: cover;
+  background: #0b1329;
+}
+
+.brand-3d-title {
+  margin: 0 0 6px 0;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  background: linear-gradient(180deg, #fef9c3 0%, #facc15 48%, #ca8a04 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 0 #713f12) drop-shadow(0 4px 0 #422006) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ================= 3D IMAGE ICON BADGES ================= */
+img.ico-img-lg {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  object-fit: contain;
+  margin-right: 9px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 7px rgba(0,0,0,0.65));
+}
+
+img.ico-img-md {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  object-fit: contain;
+  margin-right: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,0.5));
+}
+
+img.ico-img-sm {
+  width: 17px;
+  height: 17px;
+  border-radius: 5px;
+  object-fit: contain;
+  margin-right: 5px;
+  vertical-align: -3px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.45));
 }
 
 h1 {
@@ -104,7 +191,10 @@ h2 {
   color: #ffffff;
   font-size: 18px;
   margin-top: 0;
-  font-weight: 600;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .center { text-align: center; }
@@ -143,10 +233,10 @@ p {
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  background: linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
   color: #0b1329 !important;
   font-weight: 800;
-  box-shadow: 0 2px 8px var(--gold-glow);
+  box-shadow: 0 3px 0 #854d0e, 0 4px 10px var(--gold-glow);
 }
 
 .input-group {
@@ -215,7 +305,7 @@ p {
 
 .btn-photo {
   flex: 1;
-  background: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(145deg, #1e293b, #0f172a);
   color: var(--gold-primary);
   border: 1px solid var(--card-border);
   padding: 10px 6px;
@@ -223,7 +313,10 @@ p {
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 0 #060a14, 0 4px 10px rgba(0,0,0,0.4);
   transition: all 0.2s;
 }
 
@@ -233,7 +326,7 @@ p {
 }
 
 .btn-action {
-  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  background: linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
   color: #0b1329 !important;
   font-weight: 800;
   padding: 14px 24px;
@@ -242,22 +335,26 @@ p {
   margin: 14px 0 8px;
   font-size: 15px;
   cursor: pointer;
-  box-shadow: 0 4px 14px var(--gold-glow);
-  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 0 #854d0e, 0 6px 14px var(--gold-glow), inset 0 1px 1px rgba(255,255,255,0.7);
+  transition: all 0.2s ease;
   width: 100%;
   text-align: center;
 }
 
 .btn-action:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(250, 204, 21, 0.5);
-  background: linear-gradient(135deg, #fef08a 0%, var(--gold-primary) 100%);
+  box-shadow: 0 6px 0 #854d0e, 0 8px 20px rgba(250, 204, 21, 0.55);
+  background: linear-gradient(145deg, #fef08a 0%, var(--gold-primary) 100%);
 }
 
 .btn-action:disabled {
   background: #334155;
   color: #64748b !important;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .btn-link {
@@ -269,27 +366,33 @@ p {
   cursor: pointer;
   text-decoration: underline;
   margin-top: 8px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(145deg, rgba(51,65,85,0.9), rgba(30,41,59,0.95));
   color: var(--text-main);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 8px 16px;
+  padding: 8px 14px;
   font-size: 13px;
-  border-radius: 8px;
+  font-weight: 700;
+  border-radius: 10px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 0 #0f172a, 0 4px 10px rgba(0,0,0,0.35);
 }
 
 .user-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(15, 23, 42, 0.75);
   border: 1px solid var(--card-border);
-  padding: 10px 16px;
-  border-radius: 14px;
+  padding: 10px 14px;
+  border-radius: 16px;
   margin-bottom: 16px;
 }
 
@@ -315,7 +418,7 @@ p {
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--gold-primary);
+  border: 2.5px solid var(--gold-primary);
   box-shadow: 0 2px 10px var(--gold-glow);
   background: #0f172a;
 }
@@ -323,8 +426,10 @@ p {
 .profile-badge-hint {
   font-size: 11px;
   color: var(--text-muted);
-  font-weight: 500;
-  display: block;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
 }
 
 /* ================= PROFILE MODAL ================= */
@@ -364,7 +469,7 @@ p {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -429,11 +534,13 @@ p {
   font-weight: 700;
   color: var(--gold-primary);
   margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
 }
 
 .exam {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
   padding: 18px;
   margin-top: 16px;
@@ -442,20 +549,22 @@ p {
 .live {
   color: var(--live-green);
   font-weight: 700;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   background: rgba(16, 185, 129, 0.12);
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .upcoming {
   color: var(--upcoming-gold);
   font-weight: 700;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   background: rgba(245, 158, 11, 0.12);
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
@@ -478,7 +587,7 @@ p {
 a {
   color: var(--gold-primary);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .footer-links {
@@ -499,18 +608,23 @@ a {
 <body>
 
 <div class="lang-selector-box">
+  <img data-ico="globe" class="ico-img-md" style="margin:0;" alt="Language">
   <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
-    <option value="te">🇮🇳 తెలుగు</option>
-    <option value="en">🌐 English</option>
-    <option value="ta">🇮🇳 தமிழ்</option>
-    <option value="hi">🇮🇳 हिन्दी</option>
+    <option value="te">తెలుగు (Telugu)</option>
+    <option value="en">English</option>
+    <option value="ta">தமிழ் (Tamil)</option>
+    <option value="hi">हिन्दी (Hindi)</option>
   </select>
 </div>
 
 <!-- ================= AUTH VIEW ================= -->
 <div id="authContainer" class="card" style="max-width:440px;">
-  <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
-  <h1>LOGOS QUEST</h1>
+  <div class="logo-3d-wrap">
+    <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
+  </div>
+  <div class="center">
+    <h1 class="brand-3d-title">LOGOS QUEST</h1>
+  </div>
   <h2>Live Bible Quiz</h2>
   <p class="center" id="authSubTitle" style="font-size:14px; margin-bottom:16px;"></p>
 
@@ -532,14 +646,18 @@ a {
     <div class="photo-upload-box" id="photoBox">
       <img id="userPhotoPreview" class="preview-photo" alt="Profile Preview">
       <p id="lblPhotoNotice" style="font-size:12px; margin:0 0 10px; color:var(--gold-primary); text-align:center;">
-        📸 Top 3 ర్యాంకర్ల ఫోటోలు లీడర్‌బోర్డ్‌లో ప్రదర్శించబడతాయి!
+        Top 3 ర్యాంకర్ల ఫోటోలు లీడర్‌బోర్డ్‌లో ప్రదర్శించబడతాయి!
       </p>
       
       <div class="photo-buttons">
-        <label for="cameraInput" class="btn-photo" id="btnCamera">📷 Take Selfie</label>
+        <label for="cameraInput" class="btn-photo" id="btnCamera">
+          <img data-ico="camera" class="ico-img-sm" alt="Selfie"><span>Take Selfie</span>
+        </label>
         <input type="file" id="cameraInput" accept="image/*" capture="user" style="display:none;" onchange="handlePhotoUpload(event)">
         
-        <label for="galleryInput" class="btn-photo" id="btnGallery">📁 Upload Photo</label>
+        <label for="galleryInput" class="btn-photo" id="btnGallery">
+          <img data-ico="folder" class="ico-img-sm" alt="Photo"><span>Upload Photo</span>
+        </label>
         <input type="file" id="galleryInput" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
       </div>
     </div>
@@ -567,7 +685,9 @@ a {
     <button type="submit" class="btn-action" id="authSubmitBtn">ఖాతా సృష్టించండి (Sign Up)</button>
 
     <div class="center" id="changePwdLinkWrap">
-      <button type="button" class="btn-link" id="btnChangePwdMode" onclick="switchAuthTab('change_pwd')">🔑 పాస్‌వర్డ్ మార్చుకోండి (Change Password)</button>
+      <button type="button" class="btn-link" id="btnChangePwdMode" onclick="switchAuthTab('change_pwd')">
+        <img data-ico="key" class="ico-img-sm" alt="Key"><span>పాస్‌వర్డ్ మార్చుకోండి (Change Password)</span>
+      </button>
     </div>
   </form>
 </div>
@@ -575,31 +695,41 @@ a {
 <!-- ================= DASHBOARD VIEW ================= -->
 <div id="dashboardContainer" style="display:none;">
 
-  <div class="card" style="padding:16px 20px;">
+  <div class="card" style="padding:18px 20px;">
     <div class="user-bar">
       <div class="user-info" onclick="openProfileModal()" title="View Full Profile">
         <img id="dashUserAvatar" class="user-avatar" src="icon-512.png" alt="Avatar">
         <div>
           <span id="currentUserName">User</span>
-          <span class="profile-badge-hint" id="lblTapProfile">👤 ప్రొఫైల్ చూడండి</span>
+          <span class="profile-badge-hint" id="lblTapProfile">
+            <img data-ico="user" class="ico-img-sm" alt="Profile"><span>ప్రొఫైల్ చూడండి</span>
+          </span>
         </div>
       </div>
-      <button type="button" class="btn-secondary" onclick="logoutUser()" id="btnLogout">🚪 లాగౌట్</button>
+      <button type="button" class="btn-secondary" onclick="logoutUser()" id="btnLogout">
+        <img data-ico="logout" class="ico-img-sm" alt="Logout"><span>లాగౌట్</span>
+      </button>
     </div>
 
     <div class="center">
-      <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img" style="width:75px; height:75px;">
-      <h1>LOGOS QUEST</h1>
+      <div class="logo-3d-wrap sm">
+        <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
+      </div>
+      <h1 class="brand-3d-title">LOGOS QUEST</h1>
       <p style="margin:4px 0 0;" id="dashSubtitle">బైబిల్ క్విజ్ పోటీలకు స్వాగతం</p>
     </div>
   </div>
 
   <div class="card">
-    <h2 id="dashExamsTitle">📚 లైవ్ బైబిల్ పరీక్షలు</h2>
+    <h2 id="dashExamsTitle">
+      <img data-ico="books" class="ico-img-lg" alt="Exams"><span>లైవ్ బైబిల్ పరీక్షలు</span>
+    </h2>
     <p class="center" id="dashIstNotice">పరీక్షల సమయాలు IST ప్రకారం</p>
 
     <div class="center">
-      <button type="button" class="btn-action" style="max-width:240px;" id="refreshBtn" onclick="loadExams()">🔄 పరీక్షలను రిఫ్రెష్ చేయండి</button>
+      <button type="button" class="btn-action" style="max-width:240px;" id="refreshBtn" onclick="loadExams()">
+        <img data-ico="refresh" class="ico-img-sm" alt="Refresh"><span>పరీక్షలను రిఫ్రెష్ చేయండి</span>
+      </button>
     </div>
 
     <p id="examStatus" class="center"></p>
@@ -607,13 +737,17 @@ a {
   </div>
 
   <div class="card center">
-    <h2 id="dashWinnersTitle">🏆 విజేతలు</h2>
+    <h2 id="dashWinnersTitle">
+      <img data-ico="trophy" class="ico-img-lg" alt="Winners"><span>విజేతలు</span>
+    </h2>
     <p id="dashWinnersDesc">ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
     <a href="leaderboard.html" id="linkLeaderboard">లీడర్‌బోర్డ్ చూడండి →</a>
   </div>
 
   <div class="card center">
-    <h2 id="dashResultsTitle">📊 నా ఫలితాలు</h2>
+    <h2 id="dashResultsTitle">
+      <img data-ico="chart" class="ico-img-lg" alt="Results"><span>నా ఫలితాలు</span>
+    </h2>
     <p id="dashResultsDesc">మీ పరీక్ష ఫలితాలు ఇక్కడ చూడవచ్చు.</p>
     <a href="results.html" id="linkResults">ఫలితాలు చూడండి →</a>
   </div>
@@ -636,10 +770,14 @@ a {
       <p id="profJoinedDate" style="font-size:12px; margin:4px 0 10px;">LOGOS QUEST Verified Participant</p>
 
       <div class="photo-buttons" style="max-width:280px; margin:0 auto;">
-        <label for="profCameraInput" class="btn-photo" id="btnProfCamera">📷 New Selfie</label>
+        <label for="profCameraInput" class="btn-photo" id="btnProfCamera">
+          <img data-ico="camera" class="ico-img-sm" alt="Selfie"><span>New Selfie</span>
+        </label>
         <input type="file" id="profCameraInput" accept="image/*" capture="user" style="display:none;" onchange="handleProfilePhotoChange(event)">
         
-        <label for="profGalleryInput" class="btn-photo" id="btnProfGallery">📁 Change Photo</label>
+        <label for="profGalleryInput" class="btn-photo" id="btnProfGallery">
+          <img data-ico="folder" class="ico-img-sm" alt="Photo"><span>Change Photo</span>
+        </label>
         <input type="file" id="profGalleryInput" accept="image/*" style="display:none;" onchange="handleProfilePhotoChange(event)">
       </div>
     </div>
@@ -662,7 +800,9 @@ a {
 
     <!-- Account Details & Edit -->
     <div class="profile-section">
-      <h3 class="profile-section-title" id="lblProfDetailsTitle">📋 నా ఖాతా వివరాలు (Account Details)</h3>
+      <h3 class="profile-section-title" id="lblProfDetailsTitle">
+        <img data-ico="clipboard" class="ico-img-sm" alt="Details"><span>నా ఖాతా వివరాలు (Account Details)</span>
+      </h3>
       
       <div class="input-group">
         <label id="lblProfName">పూర్తి పేరు (Full Name)</label>
@@ -681,24 +821,32 @@ a {
 
       <p id="profMsg" class="center success-msg" style="display:none;"></p>
 
-      <button type="button" class="btn-action" id="btnSaveProfile" onclick="saveProfileChanges()">💾 ప్రొఫైల్ సేవ్ చేయండి (Save Profile)</button>
+      <button type="button" class="btn-action" id="btnSaveProfile" onclick="saveProfileChanges()">
+        <img data-ico="save" class="ico-img-sm" alt="Save"><span>ప్రొఫైల్ సేవ్ చేయండి (Save Profile)</span>
+      </button>
     </div>
 
     <!-- Quick Change Password inside Profile -->
     <div class="profile-section">
-      <h3 class="profile-section-title" id="lblProfPwdTitle">🔑 పాస్‌వర్డ్ మార్చండి (Change Password)</h3>
+      <h3 class="profile-section-title" id="lblProfPwdTitle">
+        <img data-ico="key" class="ico-img-sm" alt="Password"><span>పాస్‌వర్డ్ మార్చండి (Change Password)</span>
+      </h3>
       <div class="input-group" style="margin-bottom:8px;">
         <input type="password" id="profNewPassword" class="input-field" placeholder="కొత్త పాస్‌వర్డ్ (New Password)">
       </div>
       <button type="button" class="btn-secondary" style="width:100%; padding:11px; font-weight:700; color:var(--gold-primary); border-color:var(--card-border);" id="btnProfUpdatePwd" onclick="updatePasswordFromProfile()">
-        🔒 పాస్‌వర్డ్ అప్‌డేట్ చేయండి
+        <img data-ico="lock" class="ico-img-sm" alt="Lock"><span>పాస్‌వర్డ్ అప్‌డేట్ చేయండి</span>
       </button>
     </div>
 
     <!-- Quick Navigation Links -->
     <div style="display:flex; gap:10px; margin-top:16px;">
-      <a href="results.html" class="btn-photo" style="padding:12px;" id="btnProfMyResults">📊 నా ఫలితాలు</a>
-      <a href="leaderboard.html" class="btn-photo" style="padding:12px;" id="btnProfLeaderboard">🏆 లీడర్‌బోర్డ్</a>
+      <a href="results.html" class="btn-photo" style="padding:12px;" id="btnProfMyResults">
+        <img data-ico="chart" class="ico-img-sm" alt="Results"><span>నా ఫలితాలు</span>
+      </a>
+      <a href="leaderboard.html" class="btn-photo" style="padding:12px;" id="btnProfLeaderboard">
+        <img data-ico="trophy" class="ico-img-sm" alt="Leaderboard"><span>లీడర్‌బోర్డ్</span>
+      </a>
     </div>
 
   </div>
@@ -707,6 +855,63 @@ a {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+// ==========================================
+// 3D GLOSSY IMAGE ICON GENERATOR
+// ==========================================
+const ICON_3D_DESIGNS = {
+  globe: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="url(#gGold)" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="none" stroke="#fef08a" stroke-width="2"/><ellipse cx="24" cy="24" rx="6" ry="13" fill="none" stroke="#fef08a" stroke-width="1.8"/><line x1="11" y1="24" x2="37" y2="24" stroke="#fef08a" stroke-width="1.8"/>`,
+  user: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="url(#gGold)" stroke-width="2"/><circle cx="24" cy="18" r="6" fill="url(#gGold)"/><path d="M13 36c0-6 5-10 11-10s11 4 11 10" fill="url(#gGold)"/>`,
+  logout: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gRed)" stroke="#fca5a5" stroke-width="2"/><path d="M26 12H15a3 3 0 00-3 3v18a3 3 0 003 3h11M22 30l7-6-7-6M29 24H16" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>`,
+  books: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="11" y="10" width="22" height="7" rx="2" fill="url(#gGold)"/><rect x="15" y="20" width="22" height="7" rx="2" fill="url(#gBlue)"/><rect x="11" y="30" width="22" height="7" rx="2" fill="url(#gGreen)"/>`,
+  refresh: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M13 24a11 11 0 0119.5-7M35 12v6h-6M35 24a11 11 0 01-19.5 7M13 36v-6h6" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
+  trophy: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M16 12h16v8a8 8 0 01-16 0v-8z" fill="url(#gGold)"/><path d="M16 14h-4v3a4 4 0 004 4M32 14h4v3a4 4 0 01-4 4M24 28v6M18 36h12" fill="none" stroke="#fef08a" stroke-width="2.4" stroke-linecap="round"/>`,
+  chart: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="11" y="24" width="6" height="13" rx="2" fill="url(#gBlue)"/><rect x="21" y="16" width="6" height="21" rx="2" fill="url(#gGold)"/><rect x="31" y="11" width="6" height="26" rx="2" fill="url(#gGreen)"/>`,
+  camera: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="10" y="16" width="28" height="20" rx="4" fill="url(#gGold)"/><circle cx="24" cy="26" r="5.5" fill="#0b1329"/><path d="M17 16l2-4h10l2 4" fill="url(#gGold)"/>`,
+  folder: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M10 15a3 3 0 013-3h7l3 3h12a3 3 0 013 3v15a3 3 0 01-3 3H13a3 3 0 01-3-3V15z" fill="url(#gGold)"/>`,
+  key: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><circle cx="17" cy="24" r="6" fill="none" stroke="url(#gGold)" stroke-width="3"/><path d="M23 24h14M32 24v5M36 24v4" stroke="url(#gGold)" stroke-width="3" stroke-linecap="round"/>`,
+  lock: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="13" y="21" width="22" height="16" rx="4" fill="url(#gGold)"/><path d="M18 21v-4a6 6 0 0112 0v4" fill="none" stroke="#fef08a" stroke-width="2.6" stroke-linecap="round"/><circle cx="24" cy="29" r="2.2" fill="#0b1329"/>`,
+  save: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M12 12h19l5 5v19a2 2 0 01-2 2H12a2 2 0 01-2-2V14a2 2 0 012-2z" fill="url(#gGold)"/><rect x="16" y="12" width="12" height="7" fill="#0b1329"/><rect x="16" y="25" width="16" height="9" rx="1.5" fill="#fef9c3"/>`,
+  clipboard: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="13" y="12" width="22" height="26" rx="3" fill="url(#gGold)"/><rect x="19" y="9" width="10" height="5" rx="2" fill="url(#gBlue)"/><line x1="18" y1="22" x2="30" y2="22" stroke="#0b1329" stroke-width="2.4"/><line x1="18" y1="28" x2="27" y2="28" stroke="#0b1329" stroke-width="2.4"/>`,
+  play: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGreen)" stroke="#6ee7b7" stroke-width="2"/><polygon points="18,13 35,24 18,35" fill="#ffffff"/>`,
+  clock: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="none" stroke="#fef08a" stroke-width="2.4"/><path d="M24 17v7l5 3" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>`,
+  calendar: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="10" y="13" width="28" height="24" rx="4" fill="url(#gBlue)"/><path d="M10 17a4 4 0 014-4h20a4 4 0 014 4v4H10v-4z" fill="url(#gGold)"/><circle cx="18" cy="28" r="2" fill="#fef08a"/><circle cx="24" cy="28" r="2" fill="#fef08a"/><circle cx="30" cy="28" r="2" fill="#fef08a"/>`,
+  doc: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M15 10h12l7 7v19a2 2 0 01-2 2H15a2 2 0 01-2-2V12a2 2 0 012-2z" fill="#fef9c3"/><line x1="18" y1="23" x2="29" y2="23" stroke="#1e3a8a" stroke-width="2.4"/><line x1="18" y1="29" x2="26" y2="29" stroke="#1e3a8a" stroke-width="2.4"/>`,
+  online: `<circle cx="24" cy="24" r="18" fill="url(#gGreen)" stroke="#a7f3d0" stroke-width="3"/><circle cx="19" cy="18" r="5" fill="#ffffff" opacity="0.45"/>`,
+  upcoming: `<circle cx="24" cy="24" r="18" fill="url(#gGold)" stroke="#fef9c3" stroke-width="3"/><circle cx="19" cy="18" r="5" fill="#ffffff" opacity="0.45"/>`,
+  check: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGreen)" stroke="#6ee7b7" stroke-width="2"/><path d="M14 24l7 7 13-14" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>`
+};
+
+const ICON_IMAGE_CACHE = {};
+function get3DIconUrl(name) {
+  if (ICON_IMAGE_CACHE[name]) return ICON_IMAGE_CACHE[name];
+  const inner = ICON_3D_DESIGNS[name] || ICON_3D_DESIGNS.books;
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="96" height="96">
+    <defs>
+      <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="50%" stop-color="#facc15"/><stop offset="100%" stop-color="#a16207"/></linearGradient>
+      <linearGradient id="gBlue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="50%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1e3a8a"/></linearGradient>
+      <linearGradient id="gGreen" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6ee7b7"/><stop offset="50%" stop-color="#10b981"/><stop offset="100%" stop-color="#065f46"/></linearGradient>
+      <linearGradient id="gRed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fca5a5"/><stop offset="50%" stop-color="#ef4444"/><stop offset="100%" stop-color="#991b1b"/></linearGradient>
+      <linearGradient id="gDark" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1e3a8a"/><stop offset="100%" stop-color="#090d16"/></linearGradient>
+    </defs>
+    ${inner}
+    <rect x="3" y="3" width="42" height="20" rx="11" fill="#ffffff" opacity="0.14"/>
+  </svg>`;
+  const uri = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svgStr);
+  ICON_IMAGE_CACHE[name] = uri;
+  return uri;
+}
+
+function icoImgHtml(name, cls = "ico-img-sm") {
+  return `<img src="${get3DIconUrl(name)}" class="${cls}" alt="${name}">`;
+}
+
+function hydrateAll3DImageIcons(root = document) {
+  root.querySelectorAll("img[data-ico]").forEach(img => {
+    const key = img.getAttribute("data-ico");
+    if (key) img.src = get3DIconUrl(key);
+  });
+}
+
 const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
@@ -737,24 +942,24 @@ const i18n = {
     btnLogin: "లాగిన్ అవ్వండి (Login)",
     btnAdminLogin: "అడ్మిన్ లాగిన్ (Admin Login)",
     btnUpdatePwd: "పాస్‌వర్డ్ అప్‌డేట్ చేయండి",
-    btnChangePwdLink: "🔑 పాస్‌వర్డ్ మార్చుకోండి (Change Password)",
+    btnChangePwdLink: "పాస్‌వర్డ్ మార్చుకోండి (Change Password)",
     btnBackLoginLink: "← లాగిన్ కు తిరిగి వెళ్ళండి",
-    btnLogout: "🚪 లాగౌట్",
-    lblTapProfile: "👤 ప్రొఫైల్ చూడండి",
+    btnLogout: "లాగౌట్",
+    lblTapProfile: "ప్రొఫైల్ చూడండి",
     dashSubtitle: "బైబిల్ క్విజ్ పోటీలకు స్వాగతం",
-    dashExamsTitle: "📚 లైవ్ బైబిల్ పరీక్షలు",
+    dashExamsTitle: "లైవ్ బైబిల్ పరీక్షలు",
     dashIstNotice: "పరీక్షల సమయాలు IST ప్రకారం",
-    btnRefresh: "🔄 పరీక్షలను రిఫ్రెష్ చేయండి",
+    btnRefresh: "పరీక్షలను రిఫ్రెష్ చేయండి",
     loadingExams: "పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...",
     noExams: "ప్రస్తుతం లైవ్ లేదా రాబోయే పరీక్షలు లేవు.",
-    liveCount: "🟢 {count} లైవ్ పరీక్ష(లు) అందుబాటులో ఉన్నాయి",
+    liveCount: "{count} లైవ్ పరీక్ష(లు) అందుబాటులో ఉన్నాయి",
     upcomingOnly: "రాబోయే పరీక్షలు క్రింద చూడండి.",
-    btnJoin: "▶ పరీక్షలో పాల్గొనండి",
-    btnNotStarted: "⏳ ప్రారంభం కాలేదు",
-    dashWinnersTitle: "🏆 విజేతలు",
+    btnJoin: "పరీక్షలో పాల్గొనండి",
+    btnNotStarted: "ప్రారంభం కాలేదు",
+    dashWinnersTitle: "విజేతలు",
     dashWinnersDesc: "ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.",
     linkLeaderboard: "లీడర్‌బోర్డ్ చూడండి →",
-    dashResultsTitle: "📊 నా ఫలితాలు",
+    dashResultsTitle: "నా ఫలితాలు",
     dashResultsDesc: "మీ పరీక్ష ఫలితాలు ఇక్కడ చూడవచ్చు.",
     linkResults: "ఫలితాలు చూడండి →",
     examNotStartedAlert: "ఈ పరీక్ష ఇంకా ప్రారంభం కాలేదు.",
@@ -762,17 +967,17 @@ const i18n = {
     errName: "దయచేసి మీ పూర్తి పేరు నమోదు చేయండి.",
     errPhone: "దయచేసి సరైన ఫోన్ నంబర్ (10 అంకెలు) నమోదు చేయండి.",
     errFields: "దయచేసి Email ID మరియు Password తప్పనిసరిగా నమోదు చేయండి.",
-    pwdChangedSuccess: "✅ పాస్‌వర్డ్ విజయవంతంగా మార్చబడింది! కొత్త పాస్‌వర్డ్‌తో లాగిన్ అవ్వండి.",
+    pwdChangedSuccess: "పాస్‌వర్డ్ విజయవంతంగా మార్చబడింది! కొత్త పాస్‌వర్డ్‌తో లాగిన్ అవ్వండి.",
     logoutConfirm: "మీరు నిజంగా లాగౌట్ కావాలనుకుంటున్నారా?",
-    photoNotice: "📸 Top 3 ర్యాంకర్ల ఫోటోలు లీడర్‌బోర్డ్‌లో ప్రదర్శించబడతాయి!",
-    btnCamera: "📷 సెల్ఫీ తీసుకోండి",
-    btnGallery: "📁 ఫోటో అప్‌లోడ్",
+    photoNotice: "Top 3 ర్యాంకర్ల ఫోటోలు లీడర్‌బోర్డ్‌లో ప్రదర్శించబడతాయి!",
+    btnCamera: "సెల్ఫీ తీసుకోండి",
+    btnGallery: "ఫోటో అప్‌లోడ్",
     lblStatExams: "పరీక్షలు",
     lblStatBest: "బెస్ట్ స్కోర్",
     lblStatTotal: "మొత్తం పాయింట్లు",
-    lblProfDetailsTitle: "📋 నా ఖాతా వివరాలు",
-    btnSaveProfile: "💾 ప్రొఫైల్ సేవ్ చేయండి",
-    profSavedMsg: "✅ మీ ప్రొఫైల్ వివరాలు & ఫోటో విజయవంతంగా సేవ్ అయ్యాయి!",
+    lblProfDetailsTitle: "నా ఖాతా వివరాలు",
+    btnSaveProfile: "ప్రొఫైల్ సేవ్ చేయండి",
+    profSavedMsg: "మీ ప్రొఫైల్ వివరాలు & ఫోటో విజయవంతంగా సేవ్ అయ్యాయి!",
     start: "ప్రారంభం",
     end: "ముగింపు",
     questions: "ప్రశ్నలు",
@@ -794,24 +999,24 @@ const i18n = {
     btnLogin: "Login to Account",
     btnAdminLogin: "Admin Login",
     btnUpdatePwd: "Update Password",
-    btnChangePwdLink: "🔑 Change Password",
+    btnChangePwdLink: "Change Password",
     btnBackLoginLink: "← Back to Login",
-    btnLogout: "🚪 Logout",
-    lblTapProfile: "👤 View Profile",
+    btnLogout: "Logout",
+    lblTapProfile: "View Profile",
     dashSubtitle: "Welcome to Logos Quest Quiz Arena",
-    dashExamsTitle: "📚 Live Bible Exams",
+    dashExamsTitle: "Live Bible Exams",
     dashIstNotice: "All exam timings are in IST",
-    btnRefresh: "🔄 Refresh Exams",
+    btnRefresh: "Refresh Exams",
     loadingExams: "Loading exam schedules...",
     noExams: "No live or upcoming exams right now.",
-    liveCount: "🟢 {count} Live Exam(s) available",
+    liveCount: "{count} Live Exam(s) available",
     upcomingOnly: "Check upcoming exams below.",
-    btnJoin: "▶ Join Exam",
-    btnNotStarted: "⏳ Not Started Yet",
-    dashWinnersTitle: "🏆 Winners",
+    btnJoin: "Join Exam",
+    btnNotStarted: "Not Started Yet",
+    dashWinnersTitle: "Winners",
     dashWinnersDesc: "Weekly winners will appear here soon.",
     linkLeaderboard: "View Leaderboard →",
-    dashResultsTitle: "📊 My Results",
+    dashResultsTitle: "My Results",
     dashResultsDesc: "Check your exam submissions and review here.",
     linkResults: "View Results →",
     examNotStartedAlert: "This exam has not started yet.",
@@ -819,17 +1024,17 @@ const i18n = {
     errName: "Please enter your full name.",
     errPhone: "Please enter a valid 10-digit phone number.",
     errFields: "Please enter Email ID and Password.",
-    pwdChangedSuccess: "✅ Password updated successfully! Please login with your new password.",
+    pwdChangedSuccess: "Password updated successfully! Please login with your new password.",
     logoutConfirm: "Are you sure you want to log out?",
-    photoNotice: "📸 Top 3 ranker photos will appear on the Leaderboard!",
-    btnCamera: "📷 Take Selfie",
-    btnGallery: "📁 Upload Photo",
+    photoNotice: "Top 3 ranker photos will appear on the Leaderboard!",
+    btnCamera: "Take Selfie",
+    btnGallery: "Upload Photo",
     lblStatExams: "Exams",
     lblStatBest: "Best Score",
     lblStatTotal: "Total Points",
-    lblProfDetailsTitle: "📋 Account Details",
-    btnSaveProfile: "💾 Save Profile",
-    profSavedMsg: "✅ Your profile details & photo have been saved!",
+    lblProfDetailsTitle: "Account Details",
+    btnSaveProfile: "Save Profile",
+    profSavedMsg: "Your profile details & photo have been saved!",
     start: "Start",
     end: "End",
     questions: "Questions",
@@ -851,24 +1056,24 @@ const i18n = {
     btnLogin: "உள்நுழையவும் (Login)",
     btnAdminLogin: "நிர்வாகி உள்நுழைவு (Admin Login)",
     btnUpdatePwd: "கடவுச்சொல்லை புதுப்பிக்கவும்",
-    btnChangePwdLink: "🔑 கடவுச்சொல்லை மாற்றவும் (Change Password)",
+    btnChangePwdLink: "கடவுச்சொல்லை மாற்றவும் (Change Password)",
     btnBackLoginLink: "← உள்நுழைவுக்குத் திரும்புக",
-    btnLogout: "🚪 வெளியேறு",
-    lblTapProfile: "👤 சுயவிவரம் காண்க",
+    btnLogout: "வெளியேறு",
+    lblTapProfile: "சுயவிவரம் காண்க",
     dashSubtitle: "பைபிள் வினாடி வினா போட்டிக்கு வரவேற்கிறோம்",
-    dashExamsTitle: "📚 நேரலை பைபிள் தேர்வுகள்",
+    dashExamsTitle: "நேரலை பைபிள் தேர்வுகள்",
     dashIstNotice: "தேர்வு நேரங்கள் IST படி அமைக்கப்பட்டவை",
-    btnRefresh: "🔄 தேர்வுகளைப் புதுப்பிக்கவும்",
+    btnRefresh: "தேர்வுகளைப் புதுப்பிக்கவும்",
     loadingExams: "தேர்வு அட்டவணைகள் ஏற்றப்படுகின்றன...",
     noExams: "தற்போது நேரலை அல்லது வரவிருக்கும் தேர்வுகள் இல்லை.",
-    liveCount: "🟢 {count} நேரலைத் தேர்வு(கள்) உள்ளன",
+    liveCount: "{count} நேரலைத் தேர்வு(கள்) உள்ளன",
     upcomingOnly: "வரவிருக்கும் தேர்வுகளை கீழே காண்க.",
-    btnJoin: "▶ தேர்வில் சேரவும்",
-    btnNotStarted: "⏳ இன்னும் தொடங்கவில்லை",
-    dashWinnersTitle: "🏆 வெற்றியாளர்கள்",
+    btnJoin: "தேர்வில் சேரவும்",
+    btnNotStarted: "இன்னும் தொடங்கவில்லை",
+    dashWinnersTitle: "வெற்றியாளர்கள்",
     dashWinnersDesc: "இந்த வார வெற்றியாளர்கள் விரைவில் தோன்றுவார்கள்.",
     linkLeaderboard: "முன்னணிப் பலகையைப் பார்க்கவும் →",
-    dashResultsTitle: "📊 எனது முடிவுகள்",
+    dashResultsTitle: "எனது முடிவுகள்",
     dashResultsDesc: "உங்கள் தேர்வு முடிவுகளை இங்கே பார்க்கலாம்.",
     linkResults: "முடிவுகளைக் காண்க →",
     examNotStartedAlert: "இந்தத் தேர்வு இன்னும் தொடங்கவில்லை.",
@@ -876,17 +1081,17 @@ const i18n = {
     errName: "தயவுசெய்து உங்கள் முழு பெயரை உள்ளிடவும்.",
     errPhone: "சரியான 10 இலக்க தொலைபேசி எண்ணை உள்ளிடவும்.",
     errFields: "மின்னஞ்சல் மற்றும் கடவுச்சொல்லை உள்ளிடவும்.",
-    pwdChangedSuccess: "✅ கடவுச்சொல் வெற்றிகரமாக மாற்றப்பட்டது! புதிய கடவுச்சொல்லுடன் உள்நுழையவும்.",
+    pwdChangedSuccess: "கடவுச்சொல் வெற்றிகரமாக மாற்றப்பட்டது! புதிய கடவுச்சொல்லுடன் உள்நுழையவும்.",
     logoutConfirm: "நிச்சயமாக வெளியேற விரும்புகிறீர்களா?",
-    photoNotice: "📸 முதல் 3 வெற்றியாளர்களின் புகைப்படம் முன்னணி பலகையில் காட்டப்படும்!",
-    btnCamera: "📷 செல்ஃபி எடுக்கவும்",
-    btnGallery: "📁 படம் பதிவேற்றவும்",
+    photoNotice: "முதல் 3 வெற்றியாளர்களின் புகைப்படம் முன்னணி பலகையில் காட்டப்படும்!",
+    btnCamera: "செல்ஃபி எடுக்கவும்",
+    btnGallery: "படம் பதிவேற்றவும்",
     lblStatExams: "தேர்வுகள்",
     lblStatBest: "சிறந்த மதிப்பெண்",
     lblStatTotal: "மொத்த புள்ளிகள்",
-    lblProfDetailsTitle: "📋 கணக்கு விவரங்கள்",
-    btnSaveProfile: "💾 சுயவிவரத்தை சேமி",
-    profSavedMsg: "✅ உங்கள் சுயவிவரம் வெற்றிகரமாக சேமிக்கப்பட்டது!",
+    lblProfDetailsTitle: "கணக்கு விவரங்கள்",
+    btnSaveProfile: "சுயவிவரத்தை சேமி",
+    profSavedMsg: "உங்கள் சுயவிவரம் வெற்றிகரமாக சேமிக்கப்பட்டது!",
     start: "தொடக்கம்",
     end: "முடிவு",
     questions: "கேள்விகள்",
@@ -908,24 +1113,24 @@ const i18n = {
     btnLogin: "लॉग इन करें (Login)",
     btnAdminLogin: "व्यवस्थापक लॉगिन (Admin Login)",
     btnUpdatePwd: "पासवर्ड अपडेट करें",
-    btnChangePwdLink: "🔑 पासवर्ड बदलें (Change Password)",
+    btnChangePwdLink: "पासवर्ड बदलें (Change Password)",
     btnBackLoginLink: "← लॉगिन पर वापस जाएं",
-    btnLogout: "🚪 लॉग आउट",
-    lblTapProfile: "👤 प्रोफ़ाइल देखें",
+    btnLogout: "लॉग आउट",
+    lblTapProfile: "प्रोफ़ाइल देखें",
     dashSubtitle: "लोगोस क्वेस्ट क्विज़ में आपका स्वागत है",
-    dashExamsTitle: "📚 लाइव बाइबिल परीक्षाएं",
+    dashExamsTitle: "लाइव बाइबिल परीक्षाएं",
     dashIstNotice: "परीक्षा का समय IST के अनुसार है",
-    btnRefresh: "🔄 परीक्षाएं रीफ्रेश करें",
+    btnRefresh: "परीक्षाएं रीफ्रेश करें",
     loadingExams: "परीक्षा विवरण लोड हो रहा है...",
     noExams: "वर्तमान में कोई लाइव या आगामी परीक्षा नहीं है।",
-    liveCount: "🟢 {count} लाइव परीक्षा उपलब्ध है",
+    liveCount: "{count} लाइव परीक्षा उपलब्ध है",
     upcomingOnly: "आगामी परीक्षाएं नीचे देखें।",
-    btnJoin: "▶ परीक्षा में शामिल हों",
-    btnNotStarted: "⏳ शुरू नहीं हुआ",
-    dashWinnersTitle: "🏆 विजेता",
+    btnJoin: "परीक्षा में शामिल हों",
+    btnNotStarted: "शुरू नहीं हुआ",
+    dashWinnersTitle: "विजेता",
     dashWinnersDesc: "इस सप्ताह के विजेता जल्द ही दिखाई देंगे।",
     linkLeaderboard: "लीडरबोर्ड देखें →",
-    dashResultsTitle: "📊 मेरे परिणाम",
+    dashResultsTitle: "मेरे परिणाम",
     dashResultsDesc: "अपने परीक्षा परिणाम यहां देखें।",
     linkResults: "परिणाम देखें →",
     examNotStartedAlert: "यह परीक्षा अभी शुरू नहीं हुई है।",
@@ -933,17 +1138,17 @@ const i18n = {
     errName: "कृपया अपना पूरा नाम दर्ज करें।",
     errPhone: "कृपया सही 10 अंकों का फ़ोन नंबर दर्ज करें।",
     errFields: "कृपया ईमेल आईडी और पासवर्ड दर्ज करें।",
-    pwdChangedSuccess: "✅ पासवर्ड सफलतापूर्वक बदल दिया गया! नए पासवर्ड से लॉग इन करें।",
+    pwdChangedSuccess: "पासवर्ड सफलतापूर्वक बदल दिया गया! नए पासवर्ड से लॉग इन करें।",
     logoutConfirm: "क्या आप वाकई लॉग आउट करना चाहते हैं?",
-    photoNotice: "📸 शीर्ष 3 विजेताओं की तस्वीरें लीडरबोर्ड पर दिखाई देंगी!",
-    btnCamera: "📷 सेल्फी लें",
-    btnGallery: "📁 फोटो अपलोड करें",
+    photoNotice: "शीर्ष 3 विजेताओं की तस्वीरें लीडरबोर्ड पर दिखाई देंगी!",
+    btnCamera: "सेल्फी लें",
+    btnGallery: "फोटो अपलोड करें",
     lblStatExams: "परीक्षाएं",
     lblStatBest: "सर्वश्रेष्ठ स्कोर",
     lblStatTotal: "कुल अंक",
-    lblProfDetailsTitle: "📋 खाता विवरण",
-    btnSaveProfile: "💾 प्रोफ़ाइल सहेजें",
-    profSavedMsg: "✅ आपकी प्रोफ़ाइल सफलतापूर्वक सहेजी गई है!",
+    lblProfDetailsTitle: "खाता विवरण",
+    btnSaveProfile: "प्रोफ़ाइल सहेजें",
+    profSavedMsg: "आपकी प्रोफ़ाइल सफलतापूर्वक सहेजी गई है!",
     start: "प्रारंभ",
     end: "समाप्त",
     questions: "प्रश्न",
@@ -967,6 +1172,10 @@ function applyTranslations() {
     const el = $(id);
     if (el) el.textContent = val;
   };
+  const setHtml = (id, val) => {
+    const el = $(id);
+    if (el) el.innerHTML = val;
+  };
 
   setTxt("authSubTitle", t.authSubTitle);
   setTxt("tabRegister", t.tabRegister);
@@ -974,8 +1183,8 @@ function applyTranslations() {
   setTxt("tabAdmin", t.tabAdmin);
   setTxt("lblFullName", t.lblFullName);
   setTxt("lblPhotoNotice", t.photoNotice);
-  setTxt("btnCamera", t.btnCamera);
-  setTxt("btnGallery", t.btnGallery);
+  setHtml("btnCamera", `${icoImgHtml("camera")}<span>${t.btnCamera}</span>`);
+  setHtml("btnGallery", `${icoImgHtml("folder")}<span>${t.btnGallery}</span>`);
 
   if (currentMode === "admin") {
     setTxt("lblEmail", t.lblAdminEmail);
@@ -996,20 +1205,20 @@ function applyTranslations() {
     setTxt("lblPassword", t.lblPassword);
     setTxt("authSubmitBtn", currentMode === "register" ? t.btnRegister : t.btnLogin);
     $("changePwdLinkWrap").style.display = "block";
-    setTxt("btnChangePwdMode", t.btnChangePwdLink);
+    setHtml("btnChangePwdMode", `${icoImgHtml("key")}<span>${t.btnChangePwdLink}</span>`);
     $("btnChangePwdMode").onclick = () => switchAuthTab("change_pwd");
   }
 
-  setTxt("lblTapProfile", t.lblTapProfile);
-  setTxt("btnLogout", t.btnLogout);
+  setHtml("lblTapProfile", `${icoImgHtml("user")}<span>${t.lblTapProfile}</span>`);
+  setHtml("btnLogout", `${icoImgHtml("logout")}<span>${t.btnLogout}</span>`);
   setTxt("dashSubtitle", t.dashSubtitle);
-  setTxt("dashExamsTitle", t.dashExamsTitle);
+  setHtml("dashExamsTitle", `${icoImgHtml("books", "ico-img-lg")}<span>${t.dashExamsTitle}</span>`);
   setTxt("dashIstNotice", t.dashIstNotice);
-  setTxt("refreshBtn", t.btnRefresh);
-  setTxt("dashWinnersTitle", t.dashWinnersTitle);
+  setHtml("refreshBtn", `${icoImgHtml("refresh")}<span>${t.btnRefresh}</span>`);
+  setHtml("dashWinnersTitle", `${icoImgHtml("trophy", "ico-img-lg")}<span>${t.dashWinnersTitle}</span>`);
   setTxt("dashWinnersDesc", t.dashWinnersDesc);
   setTxt("linkLeaderboard", t.linkLeaderboard);
-  setTxt("dashResultsTitle", t.dashResultsTitle);
+  setHtml("dashResultsTitle", `${icoImgHtml("chart", "ico-img-lg")}<span>${t.dashResultsTitle}</span>`);
   setTxt("dashResultsDesc", t.dashResultsDesc);
   setTxt("linkResults", t.linkResults);
 
@@ -1017,10 +1226,10 @@ function applyTranslations() {
   setTxt("lblStatExams", t.lblStatExams);
   setTxt("lblStatBest", t.lblStatBest);
   setTxt("lblStatTotal", t.lblStatTotal);
-  setTxt("lblProfDetailsTitle", t.lblProfDetailsTitle);
-  setTxt("btnSaveProfile", t.btnSaveProfile);
-  setTxt("btnProfMyResults", t.dashResultsTitle);
-  setTxt("btnProfLeaderboard", t.linkLeaderboard);
+  setHtml("lblProfDetailsTitle", `${icoImgHtml("clipboard")}<span>${t.lblProfDetailsTitle}</span>`);
+  setHtml("btnSaveProfile", `${icoImgHtml("save")}<span>${t.btnSaveProfile}</span>`);
+  setHtml("btnProfMyResults", `${icoImgHtml("chart")}<span>${t.dashResultsTitle}</span>`);
+  setHtml("btnProfLeaderboard", `${icoImgHtml("trophy")}<span>${t.linkLeaderboard}</span>`);
 }
 
 function compressImageToBase64(file, callback) {
@@ -1166,16 +1375,16 @@ async function saveProfileChanges() {
 
     const msg = $("profMsg");
     msg.className = "center success-msg";
-    msg.textContent = t.profSavedMsg;
+    msg.innerHTML = `${icoImgHtml("check")}${t.profSavedMsg}`;
     msg.style.display = "block";
   } catch (err) {
     const msg = $("profMsg");
     msg.className = "center error";
-    msg.textContent = "❌ " + err.message;
+    msg.textContent = err.message;
     msg.style.display = "block";
   } finally {
     btn.disabled = false;
-    btn.textContent = t.btnSaveProfile;
+    btn.innerHTML = `${icoImgHtml("save")}<span>${t.btnSaveProfile}</span>`;
   }
 }
 
@@ -1203,7 +1412,7 @@ async function updatePasswordFromProfile() {
 
     const msg = $("profMsg");
     msg.className = "center success-msg";
-    msg.textContent = t.pwdChangedSuccess;
+    msg.innerHTML = `${icoImgHtml("check")}${t.pwdChangedSuccess}`;
     msg.style.display = "block";
   } catch(e) {
     alert("Error: " + e.message);
@@ -1315,7 +1524,7 @@ async function handleAuthSubmit(e) {
       window.location.href = "admin.html";
       return;
     } catch (err) {
-      showMsg("❌ " + err.message);
+      showMsg(err.message);
       $("authSubmitBtn").disabled = false;
       applyTranslations();
       return;
@@ -1358,7 +1567,7 @@ async function handleAuthSubmit(e) {
       showMsg(t.pwdChangedSuccess, true);
       return;
     } catch (err) {
-      showMsg("❌ " + err.message);
+      showMsg(err.message);
       $("authSubmitBtn").disabled = false;
       applyTranslations();
       return;
@@ -1420,7 +1629,7 @@ async function handleAuthSubmit(e) {
       localStorage.setItem("logos_user_pwd_" + email, password);
 
     } catch (err) {
-      showMsg("❌ " + err.message);
+      showMsg(err.message);
       $("authSubmitBtn").disabled = false;
       applyTranslations();
       return;
@@ -1456,7 +1665,7 @@ async function handleAuthSubmit(e) {
     }
   } catch(err) {
     if (err.message.includes("Password") || err.message.includes("పాస్‌వర్డ్")) {
-      showMsg("❌ " + err.message);
+      showMsg(err.message);
       $("authSubmitBtn").disabled = false;
       applyTranslations();
       return;
@@ -1565,8 +1774,8 @@ function renderExams(){
   }
 
   const liveCount = visible.filter(exam => new Date(exam.start_time).getTime() <= now).length;
-  $("examStatus").textContent = liveCount 
-    ? t.liveCount.replace("{count}", liveCount)
+  $("examStatus").innerHTML = liveCount 
+    ? `${icoImgHtml("online")}${t.liveCount.replace("{count}", liveCount)}`
     : t.upcomingOnly;
 
   visible.forEach(exam=>{
@@ -1579,20 +1788,36 @@ function renderExams(){
 
     card.appendChild(makeText("h3", exam.exam_name || "Bible Quiz"));
 
-    const state = makeText("p", isLive ? "🟢 LIVE NOW" : "🟡 UPCOMING");
+    const state = document.createElement("p");
     state.className = isLive ? "live" : "upcoming";
+    state.innerHTML = isLive
+      ? `${icoImgHtml("online")}<span>LIVE NOW</span>`
+      : `${icoImgHtml("upcoming")}<span>UPCOMING</span>`;
     card.appendChild(state);
 
-    card.appendChild(makeText("p", `📅 ${t.start}: ` + formatIST(exam.start_time)));
-    card.appendChild(makeText("p", `⏰ ${t.end}: ` + formatIST(exam.end_time)));
-    card.appendChild(makeText("p", `📝 ${t.questions}: ` + exam.question_count));
-    card.appendChild(makeText("p", `🔁 ${t.attempts}: ` + exam.max_attempts));
+    const pStart = document.createElement("p");
+    pStart.innerHTML = `${icoImgHtml("calendar")}${t.start}: ${formatIST(exam.start_time)}`;
+    card.appendChild(pStart);
+
+    const pEnd = document.createElement("p");
+    pEnd.innerHTML = `${icoImgHtml("clock")}${t.end}: ${formatIST(exam.end_time)}`;
+    card.appendChild(pEnd);
+
+    const pQ = document.createElement("p");
+    pQ.innerHTML = `${icoImgHtml("doc")}${t.questions}: ${exam.question_count}`;
+    card.appendChild(pQ);
+
+    const pAtt = document.createElement("p");
+    pAtt.innerHTML = `${icoImgHtml("refresh")}${t.attempts}: ${exam.max_attempts}`;
+    card.appendChild(pAtt);
 
     const button = document.createElement("button");
     button.type = "button";
     button.className = "btn-action";
     button.style.width = "100%";
-    button.textContent = isLive ? t.btnJoin : t.btnNotStarted;
+    button.innerHTML = isLive
+      ? `${icoImgHtml("play")}<span>${t.btnJoin}</span>`
+      : `${icoImgHtml("clock")}<span>${t.btnNotStarted}</span>`;
     button.disabled = !isLive;
 
     button.addEventListener("click", () => joinExam(exam));
@@ -1620,21 +1845,21 @@ async function loadExams(){
     exams = data || [];
     renderExams();
   } catch (error) {
-    status.textContent = "❌ " + error.message;
+    status.textContent = error.message;
     status.className = "center error";
   }
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  hydrateAll3DImageIcons();
   checkExistingSession();
 });
 
 setInterval(renderExams, 15000);
 setInterval(loadExams, 60000);
-  if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js").catch(() => {});
 }
-
 </script>
 </body>
 </html>
