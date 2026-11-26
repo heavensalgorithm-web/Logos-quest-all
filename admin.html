@@ -133,21 +133,17 @@ header{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .cross-3d {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
   background: linear-gradient(145deg, #fde047, #a16207);
-  -webkit-text-fill-color: #0b1329;
-  color: #0b1329;
-  font-size: 20px;
-  font-weight: 900;
   box-shadow: 0 3px 0 #713f12, 0 6px 14px rgba(250, 204, 21, 0.45), inset 0 1px 2px rgba(255,255,255,0.85);
 }
 
@@ -158,49 +154,47 @@ header p{
   letter-spacing: 0.4px;
 }
 
-/* ================= PREMIUM 3D SECTION & INLINE ICONS ================= */
-.icon-3d {
+/* ================= CUSTOM 3D SVG ICON CONTAINERS ================= */
+.svg-3d-box {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 11px;
-  background: linear-gradient(145deg, #243b7a 0%, #0f172a 100%);
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #243b7a 0%, #0b1329 100%);
   border: 1.5px solid rgba(250, 204, 21, 0.55);
   box-shadow:
-    0 4px 0 #060a14,
-    0 7px 14px rgba(0, 0, 0, 0.55),
-    inset 0 1px 2px rgba(255, 255, 255, 0.35),
-    0 0 12px rgba(250, 204, 21, 0.22);
-  font-size: 17px;
-  margin-right: 8px;
+    0 4px 0 #050811,
+    0 8px 16px rgba(0, 0, 0, 0.6),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.35),
+    0 0 14px rgba(250, 204, 21, 0.25);
+  margin-right: 10px;
   vertical-align: middle;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
   flex-shrink: 0;
 }
 
-.icon-3d-gold {
-  background: linear-gradient(145deg, #fef08a 0%, #eab308 50%, #92400e 100%);
-  border-color: #fef9c3;
-  box-shadow:
-    0 4px 0 #713f12,
-    0 7px 16px rgba(250, 204, 21, 0.35),
-    inset 0 1px 2px rgba(255, 255, 255, 0.85);
+.svg-3d-box svg {
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.65));
 }
 
-.icon-3d-sm {
+.svg-3d-inline {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 7px;
-  background: linear-gradient(145deg, rgba(255,255,255,0.28), rgba(0,0,0,0.22));
-  box-shadow: 0 2px 4px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.45);
-  font-size: 13px;
+  width: 22px;
+  height: 22px;
   margin-right: 6px;
   vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.svg-3d-inline svg {
+  width: 19px;
+  height: 19px;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.45));
 }
 
 main{
@@ -288,6 +282,9 @@ button{
   border:0;
   cursor:pointer;
   margin:8px 6px 8px 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   box-shadow:0 4px 0 #854d0e, 0 6px 14px var(--gold-glow), inset 0 1px 1px rgba(255,255,255,0.7);
   transition:all 0.18s ease;
 }
@@ -496,7 +493,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 .btn-scan-label {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
   color: #0b1329;
   font-weight: 800;
@@ -739,10 +736,42 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 </head>
 <body>
 
+<!-- SHARED 3D METALLIC SVG GRADIENT DEFINITIONS -->
+<svg width="0" height="0" style="position:absolute; visibility:hidden;" aria-hidden="true">
+  <defs>
+    <linearGradient id="gold3d" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef9c3"/>
+      <stop offset="45%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#a16207"/>
+    </linearGradient>
+    <linearGradient id="blue3d" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="50%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="emerald3d" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#065f46"/>
+    </linearGradient>
+    <linearGradient id="crimson3d" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fca5a5"/>
+      <stop offset="50%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+    <linearGradient id="dark3d" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+  </defs>
+</svg>
+
 <div class="top-bar">
   <a href="index.html" class="btn-back" id="navHomeBtn">← Home</a>
   <div style="display:flex; align-items:center; gap:8px;">
-    <span class="icon-3d-sm" style="margin:0;">🌐</span>
+    <span class="svg-3d-inline" style="margin:0;">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="url(#blue3d)" stroke="url(#gold3d)" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="4.5" ry="9.5" fill="none" stroke="#fef08a" stroke-width="1.2"/><line x1="2.5" y1="12" x2="21.5" y2="12" stroke="#fef08a" stroke-width="1.2"/></svg>
+    </span>
     <select id="adminUiLangSelect" style="width:auto; padding:7px 12px; margin:0; font-size:13px; border-radius:10px; border:1.5px solid var(--card-border);">
       <option value="te">తెలుగు (Telugu)</option>
       <option value="en">English</option>
@@ -756,13 +785,23 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   <div class="logo-3d-wrap">
     <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
   </div>
-  <h1 class="brand-3d-title"><span class="cross-3d">✝</span> LOGOS QUEST</h1>
+  <h1 class="brand-3d-title">
+    <span class="cross-3d">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M10 2h4v6h6v4h-6v10h-4V12H4V8h6V2z" fill="url(#dark3d)"/></svg>
+    </span>
+    LOGOS QUEST
+  </h1>
   <p id="headerSub">Secure Admin Dashboard</p>
 </header>
 
 <main>
 <section id="loginSection" class="card" style="max-width:440px; margin:20px auto;">
-<h2><span class="icon-3d icon-3d-gold">🔐</span> <span id="loginHeading">Admin Login</span></h2>
+<h2>
+  <span class="svg-3d-box">
+    <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3" fill="url(#gold3d)"/><path d="M8 10V7a4 4 0 018 0v3" fill="none" stroke="#fef08a" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="15.5" r="1.6" fill="#0b1329"/></svg>
+  </span>
+  <span id="loginHeading">Admin Login</span>
+</h2>
 <form id="loginForm">
 <input id="email" type="email" placeholder="Admin Email" required>
 <input id="password" type="password" placeholder="Password" required>
@@ -774,18 +813,37 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <section id="dashboard" class="hidden">
 
 <div class="card">
-<h2><span class="icon-3d icon-3d-gold">🛡️</span> <span id="adminStatusHeading">Admin Status</span></h2>
+<h2>
+  <span class="svg-3d-box">
+    <svg viewBox="0 0 24 24"><path d="M12 2L4 5.5v6c0 5.2 3.4 10 8 11.5 4.6-1.5 8-6.3 8-11.5v-6L12 2z" fill="url(#gold3d)"/><path d="M9 12l2 2 4-4" fill="none" stroke="#0b1329" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </span>
+  <span id="adminStatusHeading">Admin Status</span>
+</h2>
 <p id="adminEmail" style="color:var(--gold-primary); font-weight:600;"></p>
-<button id="refreshBtn" type="button"><span class="icon-3d-sm">🔄</span><span id="refreshBtnText">Refresh Results</span></button>
-<button id="logoutBtn" type="button" class="secondary"><span class="icon-3d-sm">🚪</span><span id="logoutBtnText">Logout</span></button>
-<a class="link-button" href="leaderboard.html"><span class="icon-3d-sm">🏆</span><span id="viewLeaderboardText">View Leaderboard</span></a>
+<button id="refreshBtn" type="button">
+  <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114.9-4M20 4v5h-5M20 12a8 8 0 01-14.9 4M4 20v-5h5" fill="none" stroke="#0b1329" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  <span id="refreshBtnText">Refresh Results</span>
+</button>
+<button id="logoutBtn" type="button" class="secondary">
+  <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M15 3H6a2 2 0 00-2 2v14a2 2 0 002 2h9M10 17l5-5-5-5M15 12H3" fill="none" stroke="#fca5a5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  <span id="logoutBtnText">Logout</span>
+</button>
+<a class="link-button" href="leaderboard.html">
+  <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 01-10 0V4z" fill="url(#gold3d)"/><path d="M12 14v4M8 21h8" stroke="#fef08a" stroke-width="2" stroke-linecap="round"/></svg></span>
+  <span id="viewLeaderboardText">View Leaderboard</span>
+</a>
 </div>
 
 <!-- 1. LIVE EXAM PARTICIPANTS (REAL-TIME ONLINE & COMPLETED SEPARATE PHOTO GALLERIES) -->
 
 <div class="card" id="liveParticipantsCard">
   <div class="live-header-row">
-    <h2 style="margin:0;"><span class="icon-3d">📡</span> <span id="liveParticipantsHeading">Live Exam Participants</span></h2>
+    <h2 style="margin:0;">
+      <span class="svg-3d-box">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="url(#emerald3d)"/><path d="M7.8 7.8a6 6 0 000 8.4M16.2 7.8a6 6 0 010 8.4M4.9 4.9a10 10 0 000 14.2M19.1 4.9a10 10 0 010 14.2" fill="none" stroke="url(#gold3d)" stroke-width="2" stroke-linecap="round"/></svg>
+      </span>
+      <span id="liveParticipantsHeading">Live Exam Participants</span>
+    </h2>
     <span class="live-pill"><span class="pulse-dot"></span> Auto-Live Tracking (8s)</span>
   </div>
   <p class="small" id="liveParticipantsSub">పరీక్షలో జాయిన్ అయినప్పటి నుండి ముగిసే వరకు అభ్యర్థులందరినీ లైవ్‌లో చూడండి. Online (పరీక్ష రాస్తున్నవారు) మరియు Completed (పూర్తి చేసినవారు) వేర్వేరు Photo Galleries లో కనిపిస్తారు.</p>
@@ -796,7 +854,10 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   </select>
 
   <div style="display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:8px 0;">
-    <button id="refreshLiveMonitorBtn" type="button"><span class="icon-3d-sm">🔄</span><span id="refreshLiveBtnText">Refresh Live Gallery</span></button>
+    <button id="refreshLiveMonitorBtn" type="button">
+      <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114.9-4M20 4v5h-5M20 12a8 8 0 01-14.9 4M4 20v-5h5" fill="none" stroke="#0b1329" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span id="refreshLiveBtnText">Refresh Live Gallery</span>
+    </button>
     <span id="liveMonitorStatus" class="small"></span>
   </div>
 
@@ -831,25 +892,44 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <!-- 2. LIVE EXAM WINNERS DASHBOARD -->
 
 <div class="card">
-  <h2><span class="icon-3d icon-3d-gold">🏆</span> <span id="winnersHeading">Live Exam Results & Winners</span></h2>
+  <h2>
+    <span class="svg-3d-box">
+      <svg viewBox="0 0 24 24"><path d="M6 3h12v6a6 6 0 01-12 0V3z" fill="url(#gold3d)"/><path d="M6 5H3v2a3 3 0 003 3M18 5h3v2a3 3 0 01-3 3M12 15v4M8 21h8" fill="none" stroke="#fef08a" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </span>
+    <span id="winnersHeading">Live Exam Results & Winners</span>
+  </h2>
 
   <label for="winnerExamSelect" id="winnerExamLabel">Select Exam</label>
   <select id="winnerExamSelect">
     <option value="">Select Exam</option>
   </select>
 
-  <button id="loadWinnersBtn" type="button"><span class="icon-3d-sm">🔄</span><span id="loadWinnersBtnText">View Exam Winners</span></button>
-  <button id="releaseAnswersBtn" type="button" class="secondary"><span class="icon-3d-sm">🔓</span><span id="releaseAnswersBtnText">Release Correct Answers</span></button>
-  <button id="releaseCertificatesBtn" type="button"><span class="icon-3d-sm">🏅</span><span id="releaseCertBtnText">Release / Send Certificates</span></button>
+  <button id="loadWinnersBtn" type="button">
+    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 01-10 0V4z" fill="#0b1329"/><path d="M12 14v4M8 20h8" stroke="#0b1329" stroke-width="2" stroke-linecap="round"/></svg></span>
+    <span id="loadWinnersBtnText">View Exam Winners</span>
+  </button>
+  <button id="releaseAnswersBtn" type="button" class="secondary">
+    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2.5" fill="url(#emerald3d)"/><path d="M8 11V7a4 4 0 017.5-1.8" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"/></svg></span>
+    <span id="releaseAnswersBtnText">Release Correct Answers</span>
+  </button>
+  <button id="releaseCertificatesBtn" type="button">
+    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6" fill="#0b1329"/><path d="M9 14.5L7 21l5-2.5L17 21l-2-6.5" fill="#0b1329"/></svg></span>
+    <span id="releaseCertBtnText">Release / Send Certificates</span>
+  </button>
   <p id="releaseCertificatesStatus" role="status"></p>
-
   <p id="releaseAnswersStatus" role="status"></p>
   <p id="winnersStatus" role="status"></p>
 
-  <h3><span class="icon-3d-sm">🥇</span> <span id="top3Heading">Top 3 Winners</span></h3>
+  <h3>
+    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7" fill="url(#gold3d)"/><path d="M8 3l4 4 4-4" fill="none" stroke="#60a5fa" stroke-width="2.2" stroke-linecap="round"/><text x="12" y="16" text-anchor="middle" font-size="9" font-weight="900" fill="#0b1329">1</text></svg></span>
+    <span id="top3Heading">Top 3 Winners</span>
+  </h3>
   <div id="top3Winners" class="stats"></div>
 
-  <h3><span class="icon-3d-sm">🏅</span> <span id="top10Heading">Top 10 Participants</span></h3>
+  <h3>
+    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><polygon points="12,2 15,8.5 22,9.3 17,14 18.3,21 12,17.6 5.7,21 7,14 2,9.3 9,8.5" fill="url(#gold3d)"/></svg></span>
+    <span id="top10Heading">Top 10 Participants</span>
+  </h3>
   <div class="table-wrap">
     <table>
       <thead>
@@ -884,7 +964,12 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 </div>
 
 <div class="card">
-<h2><span class="icon-3d">📊</span> <span id="resultsHistoryHeading">Student Results History</span></h2>
+<h2>
+  <span class="svg-3d-box">
+    <svg viewBox="0 0 24 24"><rect x="3" y="12" width="4" height="8" rx="1" fill="url(#blue3d)"/><rect x="10" y="7" width="4" height="13" rx="1" fill="url(#gold3d)"/><rect x="17" y="4" width="4" height="16" rx="1" fill="url(#emerald3d)"/></svg>
+  </span>
+  <span id="resultsHistoryHeading">Student Results History</span>
+</h2>
 <input id="search" placeholder="Search by name or mobile number">
 <p id="status" class="small"></p>
 <div class="table-wrap">
@@ -905,7 +990,12 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <!-- 4. MULTI-PAGE & MULTI-LANGUAGE QUESTION PAPER SCANNER WITH EXAM FOLDERS -->
 
 <div class="card" id="paperScannerCard">
-  <h2><span class="icon-3d icon-3d-gold">📁</span> <span id="scannerHeading">Question Paper Folders & Scanner (Telugu / English / Tamil)</span></h2>
+  <h2>
+    <span class="svg-3d-box">
+      <svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6z" fill="url(#gold3d)"/><rect x="6" y="10" width="12" height="2" rx="1" fill="#0b1329" opacity="0.45"/></svg>
+    </span>
+    <span id="scannerHeading">Question Paper Folders & Scanner (Telugu / English / Tamil)</span>
+  </h2>
   <p class="small" id="scannerSubDesc">
     ఒక ఎగ్జామ్‌కి ఒక <strong>Exam Folder Name</strong> ఇచ్చి, అందులోనే <strong>Telugu Paper</strong>, <strong>English Paper</strong>, <strong>Tamil Paper</strong> పేజీ బై పేజీ స్కాన్ చేసి సేవ్ చేయండి.<br>
     ఆ తర్వాత కింద <strong>Schedule Live Bible Exam</strong> లో ఆ Folder సెలెక్ట్ చేసి Date & Time పెడితే చాలు — ఆ టైమ్‌కి ప్రతి విద్యార్థికి వారు ఎంచుకున్న భాష పేపర్ మాత్రమే వస్తుంది!
@@ -941,15 +1031,22 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
   <div class="scanner-dropzone">
     <p style="margin:0; font-weight:700; color:var(--gold-primary);">
-      <span class="icon-3d-sm">📄</span> <span id="scanDropTitle">పేజీ 1, పేజీ 2, పేజీ 3... ఒక్కొక్కటిగా స్కాన్ చేయండి</span> (Scanned Pages: <span id="scannedPagesCount">0</span> | Questions Ready: <span id="scannedQuestionsCount">0</span>)
+      <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M6 2h8l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z" fill="url(#gold3d)"/><line x1="8" y1="12" x2="15" y2="12" stroke="#0b1329" stroke-width="1.8"/><line x1="8" y1="16" x2="13" y2="16" stroke="#0b1329" stroke-width="1.8"/></svg></span>
+      <span id="scanDropTitle">పేజీ 1, పేజీ 2, పేజీ 3... ఒక్కొక్కటిగా స్కాన్ చేయండి</span> (Scanned Pages: <span id="scannedPagesCount">0</span> | Questions Ready: <span id="scannedQuestionsCount">0</span>)
     </p>
     <p class="small" id="scanDropSub" style="margin:4px 0 8px;">100 ప్రశ్నలు (5 పేజీలు) ఒకేసారి Queue లో యాడ్ చేసి సేవ్ చేసుకోవచ్చు.</p>
 
     <div class="scanner-btn-row">
-      <label for="scanCameraInput" class="btn-scan-label"><span class="icon-3d-sm">📷</span><span id="scanCamBtnLbl">Take Page Photo (Camera)</span></label>
+      <label for="scanCameraInput" class="btn-scan-label">
+        <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3" fill="#0b1329"/><circle cx="12" cy="12.5" r="3.5" fill="url(#gold3d)"/><path d="M8 6l1.5-2h5L16 6" fill="#0b1329"/></svg></span>
+        <span id="scanCamBtnLbl">Take Page Photo (Camera)</span>
+      </label>
       <input type="file" id="scanCameraInput" accept="image/*" capture="environment" style="display:none;">
 
-      <label for="scanGalleryInput" class="btn-scan-label alt"><span class="icon-3d-sm">🖼️</span><span id="scanGalBtnLbl">Upload Page Image(s) (Gallery)</span></label>
+      <label for="scanGalleryInput" class="btn-scan-label alt">
+        <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3" fill="url(#blue3d)"/><circle cx="8.5" cy="9" r="1.8" fill="#fef08a"/><path d="M4 18l5-5 4 4 3-3 4 4" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <span id="scanGalBtnLbl">Upload Page Image(s) (Gallery)</span>
+      </label>
       <input type="file" id="scanGalleryInput" accept="image/*" multiple style="display:none;">
     </div>
 
@@ -974,7 +1071,10 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
   <!-- SAVED EXAM PAPER FOLDERS OVERVIEW -->
   <div style="margin-top:22px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.12);">
-    <h3 style="color:var(--gold-primary); margin:0 0 6px 0;"><span class="icon-3d-sm">📂</span> <span id="savedFoldersTitle">Saved Exam Paper Folders (ఎగ్జామ్ ఫోల్డర్లు)</span></h3>
+    <h3 style="color:var(--gold-primary); margin:0 0 6px 0;">
+      <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6z" fill="url(#gold3d)"/></svg></span>
+      <span id="savedFoldersTitle">Saved Exam Paper Folders (ఎగ్జామ్ ఫోల్డర్లు)</span>
+    </h3>
     <p class="small" id="savedFoldersSub">ఏ ఫోల్డర్‌లో ఏయే భాషల పేపర్లు ఎన్ని ప్రశ్నలు సిద్ధంగా ఉన్నాయో ఇక్కడ చూడండి:</p>
     <div id="savedFoldersGrid" class="folder-grid"></div>
   </div>
@@ -983,13 +1083,21 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <!-- 5. BIBLE QUESTION MANAGEMENT & AI GENERATOR -->
 
 <div class="card" id="questionManager">
-<h2><span class="icon-3d">📖</span> <span id="questionManagerHeading">Bible Question Management</span></h2>
+<h2>
+  <span class="svg-3d-box">
+    <svg viewBox="0 0 24 24"><path d="M2 5c4-1 7 0 10 2 3-2 6-3 10-2v14c-4-1-7 0-10 2-3-2-6-3-10-2V5z" fill="url(#gold3d)"/><line x1="12" y1="7" x2="12" y2="21" stroke="#0b1329" stroke-width="1.8"/></svg>
+  </span>
+  <span id="questionManagerHeading">Bible Question Management</span>
+</h2>
 <p class="small" id="questionManagerSub">
 Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from students on this page.
 </p>
 
 <div class="ai-box">
-  <h3 style="color:var(--gold-primary);"><span class="icon-3d-sm">✨</span> <span id="aiBoxHeading">AI Bible Question Generator</span></h3>
+  <h3 style="color:var(--gold-primary);">
+    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 6.2L20.5 10l-6.3 2.2L12 18.5l-2.2-6.3L3.5 10l6.3-1.8L12 2z" fill="url(#gold3d)"/><circle cx="19" cy="18" r="2" fill="#60a5fa"/></svg></span>
+    <span id="aiBoxHeading">AI Bible Question Generator</span>
+  </h3>
   <p class="small" id="aiBoxSub">Generate unique Bible quiz questions based on Scripture verses & events with randomized A/B/C/D options.</p>
 
   <div class="grid">
@@ -1032,7 +1140,10 @@ Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from s
     <option value="100">100 Questions</option>
   </select>
 
-  <button type="button" id="aiGenerateBtn"><span class="icon-3d-sm">✨</span>Generate Questions with AI</button>
+  <button type="button" id="aiGenerateBtn">
+    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 6.2L20.5 10l-6.3 2.2L12 18.5l-2.2-6.3L3.5 10l6.3-1.8L12 2z" fill="#0b1329"/></svg></span>
+    <span>Generate Questions with AI</span>
+  </button>
   <p id="aiGenerateStatus"></p>
 
   <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">
@@ -1114,7 +1225,12 @@ Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from s
 </div>
 
 <div class="card">
-<h2><span class="icon-3d">📚</span> <span id="savedQuestionsHeading">Saved Bible Questions</span></h2>
+<h2>
+  <span class="svg-3d-box">
+    <svg viewBox="0 0 24 24"><rect x="4" y="3" width="14" height="5" rx="1.5" fill="url(#gold3d)"/><rect x="6" y="9.5" width="14" height="5" rx="1.5" fill="url(#blue3d)"/><rect x="4" y="16" width="14" height="5" rx="1.5" fill="url(#emerald3d)"/></svg>
+  </span>
+  <span id="savedQuestionsHeading">Saved Bible Questions</span>
+</h2>
 
 <div class="grid">
 <div>
@@ -1174,7 +1290,12 @@ Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from s
 <!-- 6. LIVE EXAM SCHEDULING -->
 
 <div class="card">
-<h2><span class="icon-3d icon-3d-gold">📅</span> <span id="scheduleExamHeading">Schedule Live Bible Exam</span></h2>
+<h2>
+  <span class="svg-3d-box">
+    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="url(#blue3d)"/><path d="M3 8a3 3 0 013-3h12a3 3 0 013 3v2H3V8z" fill="url(#gold3d)"/><circle cx="8" cy="14" r="1.4" fill="#fef08a"/><circle cx="12" cy="14" r="1.4" fill="#fef08a"/><circle cx="16" cy="14" r="1.4" fill="#fef08a"/></svg>
+  </span>
+  <span id="scheduleExamHeading">Schedule Live Bible Exam</span>
+</h2>
 <p class="small" id="scheduleExamSub">
 Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time — participants will automatically get the paper in their chosen language!
 </p>
@@ -1273,7 +1394,12 @@ Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time �
 <!-- 7. SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS -->
 
 <div class="card" id="scheduledExamsCard">
-<h2><span class="icon-3d">📋</span> <span id="scheduledExamsHeading">Scheduled Exams & Participants</span></h2>
+<h2>
+  <span class="svg-3d-box">
+    <svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.5" fill="url(#gold3d)"/><rect x="9" y="2" width="6" height="4" rx="1.5" fill="url(#blue3d)"/><line x1="8" y1="10" x2="16" y2="10" stroke="#0b1329" stroke-width="1.8"/><line x1="8" y1="14" x2="14" y2="14" stroke="#0b1329" stroke-width="1.8"/></svg>
+  </span>
+  <span id="scheduledExamsHeading">Scheduled Exams & Participants</span>
+</h2>
 <p class="small" id="scheduledExamsSub">View participant counts for each exam and click "👁️ View Details & Photos" to see candidate names, details & photos.</p>
 <button id="refreshExamsBtn" type="button">🔄 Refresh Exams</button>
 <p id="examListStatus" class="small"></p>
@@ -1325,7 +1451,6 @@ let liveMonitorTimer = null;
 let liveRealtimeChannel = null;
 let currentAdminUiLang = localStorage.getItem("logos_admin_ui_lang") || "en";
 
-// Multi-Page Question Paper Scanner State
 let scannedQuestionQueue = [];
 let scannedPageNames = [];
 
