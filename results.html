@@ -17,10 +17,10 @@
 :root {
   --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
   --card-bg: rgba(22, 33, 62, 0.78);
-  --card-border: rgba(234, 179, 8, 0.25);
+  --card-border: rgba(234, 179, 8, 0.28);
   --gold-primary: #facc15;
   --gold-dark: #ca8a04;
-  --gold-glow: rgba(250, 204, 21, 0.35);
+  --gold-glow: rgba(250, 204, 21, 0.4);
   --text-main: #f8fafc;
   --text-muted: #cbd5e1;
 }
@@ -50,22 +50,24 @@ body {
 }
 
 .btn-back {
-  background: rgba(15, 23, 42, 0.85);
+  background: linear-gradient(145deg, #162244, #0a1022);
   color: var(--gold-primary);
   border: 1.5px solid var(--card-border);
   padding: 8px 16px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.45), inset 0 1px 1px rgba(255,255,255,0.15);
   transition: all 0.2s ease;
 }
 
 .btn-back:hover {
   background: rgba(234, 179, 8, 0.2);
   border-color: var(--gold-primary);
+  transform: translateY(-1px);
 }
 
 .lang-select {
@@ -86,35 +88,104 @@ body {
   color: #f8fafc;
 }
 
-/* హెడర్ */
+/* ================= PREMIUM 3D LOGO & HEADER ================= */
 header {
   text-align: center;
   margin-bottom: 20px;
+  perspective: 900px;
+}
+
+@keyframes float3D {
+  0%, 100% { transform: translateY(0px) rotateX(4deg) rotateY(-4deg); }
+  50% { transform: translateY(-6px) rotateX(-3deg) rotateY(5deg); }
+}
+
+.logo-3d-wrap {
+  width: 92px;
+  height: 92px;
+  margin: 0 auto 14px;
+  padding: 5px;
+  border-radius: 26px;
+  background: linear-gradient(145deg, #fef08a 0%, #eab308 45%, #854d0e 100%);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.65),
+    0 6px 0 #713f12,
+    0 0 28px rgba(250, 204, 21, 0.45),
+    inset 0 2px 4px rgba(255, 255, 255, 0.75);
+  animation: float3D 4.5s ease-in-out infinite;
+  position: relative;
+}
+
+.logo-3d-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 21px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0) 48%);
+  pointer-events: none;
 }
 
 .logo-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 20px;
-  margin: 0 auto 10px;
+  width: 100%;
+  height: 100%;
+  border-radius: 21px;
   display: block;
-  box-shadow: 0 6px 20px var(--gold-glow);
-  border: 2px solid var(--gold-primary);
-  background: #0f172a;
+  object-fit: cover;
+  background: #0b1329;
 }
 
-header h1 {
-  color: var(--gold-primary);
-  margin: 0 0 4px 0;
-  font-size: 26px;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 10px var(--gold-glow);
+.brand-3d-title {
+  margin: 0 0 6px 0;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  background: linear-gradient(180deg, #fef9c3 0%, #facc15 48%, #ca8a04 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 0 #713f12) drop-shadow(0 4px 0 #422006) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 header p {
   color: var(--text-muted);
   font-size: 14px;
   margin: 0;
+}
+
+/* ================= BEVELED 3D ROYAL BLUE & GOLD IMAGE ICONS ================= */
+img.ico-img-lg {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  object-fit: contain;
+  margin-right: 10px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.75));
+}
+
+img.ico-img-md {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  object-fit: contain;
+  margin-right: 7px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,0.6));
+}
+
+img.ico-img-sm {
+  width: 21px;
+  height: 21px;
+  border-radius: 6px;
+  object-fit: contain;
+  margin-right: 6px;
+  vertical-align: -5px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.55));
 }
 
 .container {
@@ -130,7 +201,7 @@ header p {
   padding: 24px;
   border-radius: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(234, 179, 8, 0.08);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 
 h2 {
@@ -138,7 +209,10 @@ h2 {
   color: #ffffff;
   font-size: 20px;
   margin-top: 0;
-  font-weight: 700;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 p {
@@ -168,7 +242,7 @@ input:focus {
 
 button {
   width: 100%;
-  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  background: linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
   color: #0b1329 !important;
   font-weight: 800;
   padding: 14px 24px;
@@ -176,24 +250,28 @@ button {
   border-radius: 12px;
   font-size: 15px;
   cursor: pointer;
-  box-shadow: 0 4px 14px var(--gold-glow);
-  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 0 #854d0e, 0 6px 14px var(--gold-glow), inset 0 1px 1px rgba(255,255,255,0.7);
+  transition: all 0.2s ease;
   margin: 10px 0;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(250, 204, 21, 0.5);
-  background: linear-gradient(135deg, #fef08a 0%, var(--gold-primary) 100%);
+  box-shadow: 0 6px 0 #854d0e, 0 8px 20px rgba(250, 204, 21, 0.55);
+  background: linear-gradient(145deg, #fef08a 0%, var(--gold-primary) 100%);
 }
 
 /* ఫలితాల కార్డ్ */
 .result {
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(234, 179, 8, 0.3);
+  background: linear-gradient(145deg, rgba(22, 34, 68, 0.9), rgba(11, 19, 41, 0.95));
+  border: 1px solid rgba(234, 179, 8, 0.35);
   padding: 18px;
-  border-radius: 14px;
+  border-radius: 16px;
   margin-top: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
   transition: border-color 0.2s;
 }
 
@@ -202,13 +280,17 @@ button:hover {
 }
 
 .result p {
-  margin: 6px 0;
+  margin: 8px 0;
   font-size: 14px;
   color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .result p strong {
   color: var(--gold-primary);
+  margin-right: 6px;
 }
 
 .status-msg {
@@ -216,6 +298,9 @@ button:hover {
   color: var(--text-muted);
   font-size: 14px;
   padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* లింక్ బటన్లు */
@@ -226,7 +311,7 @@ button:hover {
 
 .link-button {
   flex: 1;
-  background: rgba(15, 23, 42, 0.85);
+  background: linear-gradient(145deg, #1e293b, #0f172a);
   color: var(--gold-primary);
   border: 1.5px solid var(--card-border);
   text-align: center;
@@ -235,6 +320,10 @@ button:hover {
   border-radius: 12px;
   font-weight: 700;
   font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 0 #060a14, 0 6px 12px rgba(0,0,0,0.4);
   transition: all 0.2s ease;
 }
 
@@ -242,6 +331,7 @@ button:hover {
   background: rgba(234, 179, 8, 0.2);
   border-color: var(--gold-primary);
   color: #ffffff;
+  transform: translateY(-2px);
 }
 </style>
 </head>
@@ -250,39 +340,45 @@ button:hover {
 
 <div class="top-bar">
   <a href="index.html" class="btn-back" id="btnBack">← హోమ్</a>
-  <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
-    <option value="te">🇮🇳 తెలుగు</option>
-    <option value="en">🌐 English</option>
-    <option value="ta">🇮🇳 தமிழ்</option>
-    <option value="hi">🇮🇳 हिन्दी</option>
-  </select>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <img data-ico="globe" class="ico-img-md" style="margin:0;" alt="Language">
+    <select id="langSelect" class="lang-select" style="margin:0;" onchange="changeLanguage(this.value)">
+      <option value="te">తెలుగు (Telugu)</option>
+      <option value="en">English</option>
+      <option value="ta">தமிழ் (Tamil)</option>
+      <option value="hi">हिन्दी (Hindi)</option>
+    </select>
+  </div>
 </div>
 
 <header>
-  <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
-  <h1>LOGOS QUEST</h1>
+  <div class="logo-3d-wrap">
+    <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
+  </div>
+  <h1 class="brand-3d-title">LOGOS QUEST</h1>
   <p id="hdrSubtitle">నా ఫలితాలు</p>
 </header>
 
 <div class="container">
 
   <div class="card">
-    <h2 id="txtResultsTitle">మీ పరీక్ష ఫలితాలు</h2>
-    <p id="txtResultsDesc">
-      పరీక్ష సమయంలో ఇచ్చిన మొబైల్ నంబర్ నమోదు చేయండి.
+    <h2 id="txtResultsTitle">
+      <img data-ico="chart" class="ico-img-lg" alt="Results"><span>మీ పరీక్ష ఫలితాలు</span>
+    </h2>
+    <p class="status-msg" style="padding:4px 0 8px;" id="txtResultsDesc">
+      పరీక్ష సమయంలో ఇచ్చిన మొబైల్ నంబర్ లేదా Email నమోదు చేయండి.
     </p>
 
     <form id="searchForm">
       <input
         id="mobile"
-        type="tel"
-        placeholder="10 అంకెల మొబైల్ నంబర్"
-        maxlength="10"
-        pattern="[0-9]{10}"
-        inputmode="numeric"
+        type="text"
+        placeholder="10 అంకెల మొబైల్ నంబర్ / Email"
         required
       >
-      <button type="submit" id="btnSubmit">ఫలితాలు చూడండి</button>
+      <button type="submit" id="btnSubmit">
+        <img data-ico="search" class="ico-img-sm" alt="Search"><span>ఫలితాలు చూడండి</span>
+      </button>
     </form>
 
     <div id="results"></div>
@@ -290,14 +386,133 @@ button:hover {
 
   <div class="card">
     <div class="nav-grid">
-      <a class="link-button" href="index.html" id="btnNavNew">📝 కొత్త పరీక్ష</a>
-      <a class="link-button" href="index.html" id="btnNavHome">🏠 హోమ్ పేజీ</a>
+      <a class="link-button" href="index.html" id="btnNavNew">
+        <img data-ico="bible" class="ico-img-sm" alt="New Exam"><span>కొత్త పరీక్ష</span>
+      </a>
+      <a class="link-button" href="index.html" id="btnNavHome">
+        <img data-ico="home" class="ico-img-sm" alt="Home"><span>హోమ్ పేజీ</span>
+      </a>
     </div>
   </div>
 
 </div>
 
 <script>
+// ==========================================
+// BEVELED 3D ROYAL BLUE & METALLIC GOLD IMAGE ICON ENGINE
+// ==========================================
+const ICON_3D_DESIGNS = {
+  globe: `
+    <circle cx="32" cy="32" r="14" fill="none" stroke="url(#goldEmb)" stroke-width="2.6" filter="url(#emboss)"/>
+    <ellipse cx="32" cy="32" rx="6.5" ry="14" fill="none" stroke="url(#goldEmb)" stroke-width="2.2"/>
+    <line x1="18" y1="32" x2="46" y2="32" stroke="url(#goldEmb)" stroke-width="2.2"/>
+  `,
+  chart: `
+    <line x1="17" y1="45" x2="47" y2="45" stroke="url(#goldEmb)" stroke-width="2.6" stroke-linecap="round"/>
+    <rect x="19" y="34" width="4.5" height="10" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
+    <rect x="26.5" y="28" width="4.5" height="16" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
+    <rect x="34" y="22" width="4.5" height="22" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
+    <rect x="41.5" y="16" width="4.5" height="28" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
+  `,
+  search: `
+    <circle cx="29" cy="29" r="10.5" fill="none" stroke="url(#goldEmb)" stroke-width="3.6" filter="url(#emboss)"/>
+    <line x1="37" y1="37" x2="46" y2="46" stroke="url(#goldEmb)" stroke-width="4.2" stroke-linecap="round" filter="url(#emboss)"/>
+  `,
+  bible: `
+    <path d="M20 17l13-3 11 4v25l-11 4-13-4V17z" fill="url(#royalBook)" stroke="url(#goldEmb)" stroke-width="1.4" filter="url(#emboss)"/>
+    <path d="M20 41l13 4 11-4v4l-11 4-13-4v-4z" fill="#fef9c3" stroke="#ca8a04" stroke-width="0.8"/>
+    <path d="M32 20.5v9M28.5 24h7" stroke="url(#goldEmb)" stroke-width="2.6" stroke-linecap="round"/>
+  `,
+  home: `
+    <path d="M16 31l16-14 16 14v15H36V36h-8v10H16V31z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" stroke-linejoin="round" filter="url(#emboss)"/>
+  `,
+  user: `
+    <circle cx="32" cy="24.5" r="6.8" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+    <path d="M18.5 44.5c0-6.8 6-11.2 13.5-11.2s13.5 4.4 13.5 11.2c0 1.4-1.1 2.5-2.5 2.5H21c-1.4 0-2.5-1.1-2.5-2.5z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+  `,
+  trophy: `
+    <path d="M22 17h20v10c0 6-4.5 10.5-10 10.5S22 33 22 27V17z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+    <path d="M22 20h-4.5c0 4.5 2 7.5 5 8M42 20h4.5c0 4.5-2 7.5-5 8" fill="none" stroke="url(#goldEmb)" stroke-width="2.8" stroke-linecap="round"/>
+    <rect x="29.5" y="37" width="5" height="6" fill="url(#goldEmb)"/>
+    <rect x="23" y="43" width="18" height="4.5" rx="2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
+  `,
+  clock: `
+    <circle cx="32" cy="34" r="13.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="3.2" filter="url(#emboss)"/>
+    <path d="M32 26v8l5.5 3.5" fill="none" stroke="#0f235a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  `,
+  calendar: `
+    <rect x="17" y="19" width="30" height="27" rx="3.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <path d="M17 22.5a3.5 3.5 0 013.5-3.5h23a3.5 3.5 0 013.5 3.5V26H17v-3.5z" fill="url(#goldEmb)"/>
+    <path d="M23 16v5M29 16v5M35 16v5M41 16v5" stroke="#fef9c3" stroke-width="2.4" stroke-linecap="round"/>
+  `,
+  warn: `
+    <path d="M32 16L16 45h32L32 16z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" stroke-linejoin="round" filter="url(#emboss)"/>
+    <line x1="32" y1="26" x2="32" y2="35" stroke="#0b1329" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="32" cy="40" r="2" fill="#0b1329"/>
+  `
+};
+
+const ICON_IMAGE_CACHE = {};
+function get3DIconUrl(name) {
+  if (ICON_IMAGE_CACHE[name]) return ICON_IMAGE_CACHE[name];
+  const inner = ICON_3D_DESIGNS[name] || ICON_3D_DESIGNS.chart;
+
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+    <defs>
+      <linearGradient id="goldRim" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fef9c3"/>
+        <stop offset="30%" stop-color="#facc15"/>
+        <stop offset="70%" stop-color="#ca8a04"/>
+        <stop offset="100%" stop-color="#713f12"/>
+      </linearGradient>
+      <linearGradient id="goldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fef9c3"/>
+        <stop offset="45%" stop-color="#facc15"/>
+        <stop offset="100%" stop-color="#a16207"/>
+      </linearGradient>
+      <radialGradient id="royalFace" cx="35%" cy="25%" r="75%">
+        <stop offset="0%" stop-color="#25489c"/>
+        <stop offset="60%" stop-color="#142966"/>
+        <stop offset="100%" stop-color="#091336"/>
+      </radialGradient>
+      <linearGradient id="royalBook" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#3b82f6"/>
+        <stop offset="100%" stop-color="#172554"/>
+      </linearGradient>
+      <filter id="emboss" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-color="#040814" flood-opacity="0.75"/>
+      </filter>
+    </defs>
+
+    <rect x="3" y="6" width="58" height="56" rx="15" fill="#5c330a"/>
+    <rect x="3" y="3" width="58" height="56" rx="15" fill="url(#goldRim)"/>
+    <rect x="7" y="7" width="50" height="48" rx="11.5" fill="url(#royalFace)" stroke="#713f12" stroke-width="1"/>
+    <rect x="9" y="9" width="46" height="44" rx="10" fill="none" stroke="url(#goldRim)" stroke-width="1.5"/>
+
+    ${inner}
+
+    <path d="M10 14a6 6 0 016-6h32a6 6 0 016 6v10c-14 4-30 4-44 0V14z" fill="#ffffff" opacity="0.12"/>
+  </svg>`;
+
+  const uri = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svgStr);
+  ICON_IMAGE_CACHE[name] = uri;
+  return uri;
+}
+
+function icoImgHtml(name, cls = "ico-img-sm") {
+  return `<img src="${get3DIconUrl(name)}" class="${cls}" alt="${name}">`;
+}
+
+function hydrateAll3DImageIcons(root = document) {
+  root.querySelectorAll("img[data-ico]").forEach(img => {
+    const key = img.getAttribute("data-ico");
+    if (key) img.src = get3DIconUrl(key);
+  });
+}
+
+const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
+const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
+
 const $ = id => document.getElementById(id);
 let currentLang = localStorage.getItem("logos_quest_lang") || "te";
 
@@ -307,18 +522,20 @@ const i18n = {
     back: "← హోమ్",
     hdrSub: "నా ఫలితాలు",
     title: "మీ పరీక్ష ఫలితాలు",
-    desc: "పరీక్ష సమయంలో ఇచ్చిన మొబైల్ నంబర్ నమోదు చేయండి.",
-    placeholder: "10 అంకెల మొబైల్ నంబర్",
+    desc: "పరీక్ష సమయంలో ఇచ్చిన మొబైల్ నంబర్ లేదా Email నమోదు చేయండి.",
+    placeholder: "10 అంకెల మొబైల్ నంబర్ / Email",
     btnSearch: "ఫలితాలు చూడండి",
-    errMobile: "సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి.",
-    noResults: "ఈ మొబైల్ నంబర్‌కు సేవ్ అయిన ఫలితాలు లేవు.",
+    loading: "ఫలితాలు లోడ్ అవుతున్నాయి...",
+    errMobile: "సరైన 10 అంకెల మొబైల్ నంబర్ లేదా Email ఇవ్వండి.",
+    noResults: "ఈ వివరాలు గల ఫలితాలు కనుగొనబడలేదు.",
+    lblExam: "పరీక్ష",
     lblName: "పేరు",
     lblScore: "మార్కులు",
     lblPercentage: "శాతం",
     lblTime: "సమయం",
     lblDate: "తేదీ",
-    btnNew: "📝 కొత్త పరీక్ష",
-    btnHome: "🏠 హోమ్ పేజీ",
+    btnNew: "కొత్త పరీక్ష",
+    btnHome: "హోమ్ పేజీ",
     mins: "నిమిషాలు",
     secs: "సెకన్లు"
   },
@@ -326,18 +543,20 @@ const i18n = {
     back: "← Home",
     hdrSub: "My Results",
     title: "Your Exam Results",
-    desc: "Enter the mobile number provided during the exam.",
-    placeholder: "10-digit mobile number",
+    desc: "Enter the mobile number or Email provided during the exam.",
+    placeholder: "10-digit mobile number / Email",
     btnSearch: "View Results",
-    errMobile: "Please enter a valid 10-digit mobile number.",
-    noResults: "No saved results found for this mobile number.",
+    loading: "Loading your exam results...",
+    errMobile: "Please enter a valid 10-digit mobile number or Email.",
+    noResults: "No saved results found for this mobile number / Email.",
+    lblExam: "Exam",
     lblName: "Name",
     lblScore: "Score",
     lblPercentage: "Percentage",
     lblTime: "Time",
     lblDate: "Date",
-    btnNew: "📝 New Exam",
-    btnHome: "🏠 Home Page",
+    btnNew: "New Exam",
+    btnHome: "Home Page",
     mins: "mins",
     secs: "secs"
   },
@@ -345,18 +564,20 @@ const i18n = {
     back: "← முகப்பு",
     hdrSub: "எனது முடிவுகள்",
     title: "உங்கள் தேர்வு முடிவுகள்",
-    desc: "தேர்வின் போது வழங்கிய தொலைபேசி எண்ணை உள்ளிடவும்.",
-    placeholder: "10 இலக்க தொலைபேசி எண்",
+    desc: "தேர்வின் போது வழங்கிய தொலைபேசி எண் அல்லது Email உள்ளிடவும்.",
+    placeholder: "10 இலக்க தொலைபேசி எண் / Email",
     btnSearch: "முடிவுகளைக் காண்க",
-    errMobile: "சரியான 10 இலக்க தொலைபேசி எண்ணை உள்ளிடவும்.",
-    noResults: "இந்த எண்ணுக்கு முடிவுகள் எதுவும் சேமிக்கப்படவில்லை.",
+    loading: "முடிவுகள் ஏற்றப்படுகின்றன...",
+    errMobile: "சரியான தொலைபேசி எண் அல்லது Email உள்ளிடவும்.",
+    noResults: "இந்த விவரங்களுக்கு முடிவுகள் எதுவும் சேமிக்கப்படவில்லை.",
+    lblExam: "தேர்வு",
     lblName: "பெயர்",
     lblScore: "மதிப்பெண்",
     lblPercentage: "சதவீதம்",
     lblTime: "நேரம்",
     lblDate: "தேதி",
-    btnNew: "📝 புதிய தேர்வு",
-    btnHome: "🏠 முகப்புப் பக்கம்",
+    btnNew: "புதிய தேர்வு",
+    btnHome: "முகப்புப் பக்கம்",
     mins: "நிமிடங்கள்",
     secs: "வினாடிகள்"
   },
@@ -364,4 +585,165 @@ const i18n = {
     back: "← होम",
     hdrSub: "मेरे परिणाम",
     title: "आपके परीक्षा परिणाम",
-    desc: "परीक्षा के दौरान दिया गया मोबाइल नंबर दर्ज
+    desc: "परीक्षा के दौरान दिया गया मोबाइल नंबर या Email दर्ज करें।",
+    placeholder: "10 अंकों का मोबाइल नंबर / Email",
+    btnSearch: "परिणाम देखें",
+    loading: "परिणाम लोड हो रहे हैं...",
+    errMobile: "कृपया सही मोबाइल नंबर या Email दर्ज करें।",
+    noResults: "इस विवरण के लिए कोई परिणाम नहीं मिला।",
+    lblExam: "परीक्षा",
+    lblName: "नाम",
+    lblScore: "स्कोर",
+    lblPercentage: "प्रतिशत",
+    lblTime: "समय",
+    lblDate: "दिनांक",
+    btnNew: "नई परीक्षा",
+    btnHome: "होम पेज",
+    mins: "मिनट",
+    secs: "सेकंड"
+  }
+};
+
+function changeLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("logos_quest_lang", lang);
+  applyTranslations();
+  if ($("mobile").value.trim()) {
+    fetchResults($("mobile").value.trim());
+  }
+}
+
+function applyTranslations() {
+  const t = i18n[currentLang] || i18n.te;
+  $("langSelect").value = currentLang;
+
+  $("btnBack").textContent = t.back;
+  $("hdrSubtitle").textContent = t.hdrSub;
+  $("txtResultsTitle").innerHTML = `${icoImgHtml("chart", "ico-img-lg")}<span>${t.title}</span>`;
+  $("txtResultsDesc").textContent = t.desc;
+  $("mobile").placeholder = t.placeholder;
+  $("btnSubmit").innerHTML = `${icoImgHtml("search")}<span>${t.btnSearch}</span>`;
+  $("btnNavNew").innerHTML = `${icoImgHtml("bible")}<span>${t.btnNew}</span>`;
+  $("btnNavHome").innerHTML = `${icoImgHtml("home")}<span>${t.btnHome}</span>`;
+}
+
+function formatDuration(sec) {
+  const t = i18n[currentLang] || i18n.te;
+  const num = Number(sec);
+  if (!Number.isFinite(num) || num < 0) return "-";
+  const m = Math.floor(num / 60);
+  const s = Math.floor(num % 60);
+  return `${m} ${t.mins} ${s} ${t.secs}`;
+}
+
+function formatDateIST(iso) {
+  if (!iso) return "-";
+  try {
+    return new Intl.DateTimeFormat("en-IN", {
+      timeZone: "Asia/Kolkata",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    }).format(new Date(iso));
+  } catch (_) {
+    return iso;
+  }
+}
+
+async function fetchResults(queryVal) {
+  const t = i18n[currentLang] || i18n.te;
+  const resultsDiv = $("results");
+  const clean = (queryVal || "").trim();
+
+  if (!clean) {
+    resultsDiv.innerHTML = `<p class="status-msg">${icoImgHtml("warn")}${t.errMobile}</p>`;
+    return;
+  }
+
+  localStorage.setItem("logos_quest_mobile", clean);
+  resultsDiv.innerHTML = `<p class="status-msg">${icoImgHtml("clock")}${t.loading}</p>`;
+
+  try {
+    const [attemptsRes, examsRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/secure_exam_attempts?select=*&status=eq.submitted&order=submitted_at.desc&limit=500`, {
+        headers: { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY }
+      }),
+      fetch(`${SUPABASE_URL}/rest/v1/exam_schedules?select=id,exam_name`, {
+        headers: { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY }
+      })
+    ]);
+
+    const attempts = attemptsRes.ok ? await attemptsRes.json() : [];
+    const examsList = examsRes.ok ? await examsRes.json() : [];
+    const examNameById = {};
+    examsList.forEach(e => { examNameById[e.id] = e.exam_name; });
+
+    const needleLower = clean.toLowerCase();
+    const needleDigits = clean.replace(/\D/g, "").slice(-10);
+
+    const matched = attempts.filter(a => {
+      const mob = (a.student_mobile || "").toLowerCase().trim();
+      const eml = (a.student_email || "").toLowerCase().trim();
+      const mobDigits = mob.replace(/\D/g, "").slice(-10);
+      return (
+        mob === needleLower ||
+        eml === needleLower ||
+        (needleDigits.length >= 8 && mobDigits === needleDigits)
+      );
+    });
+
+    if (matched.length === 0) {
+      resultsDiv.innerHTML = `<p class="status-msg">${icoImgHtml("warn")}${t.noResults}</p>`;
+      return;
+    }
+
+    resultsDiv.replaceChildren();
+    matched.forEach(item => {
+      const totalQ = Number(item.total_questions) || 10;
+      const score = Number(item.score) || 0;
+      const pct = item.percentage != null ? item.percentage : ((score / totalQ) * 100).toFixed(1);
+      const examTitle = examNameById[item.exam_id] || "LOGOS QUEST Bible Quiz";
+
+      const div = document.createElement("div");
+      div.className = "result";
+      div.innerHTML = `
+        <p>${icoImgHtml("bible")}<strong>${t.lblExam}:</strong> <span>${examTitle}</span></p>
+        <p>${icoImgHtml("user")}<strong>${t.lblName}:</strong> <span>${item.student_name || "Participant"}</span></p>
+        <p>${icoImgHtml("trophy")}<strong>${t.lblScore}:</strong> <span>${score} / ${totalQ} (${pct}%)</span></p>
+        <p>${icoImgHtml("clock")}<strong>${t.lblTime}:</strong> <span>${formatDuration(item.time_seconds)}</span></p>
+        <p>${icoImgHtml("calendar")}<strong>${t.lblDate}:</strong> <span>${formatDateIST(item.submitted_at || item.created_at)}</span></p>
+      `;
+      resultsDiv.appendChild(div);
+    });
+  } catch (err) {
+    resultsDiv.innerHTML = `<p class="status-msg">${icoImgHtml("warn")}${err.message}</p>`;
+  }
+}
+
+$("searchForm").addEventListener("submit", e => {
+  e.preventDefault();
+  fetchResults($("mobile").value);
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  hydrateAll3DImageIcons();
+  applyTranslations();
+
+  let savedId = localStorage.getItem("logos_quest_mobile") || "";
+  if (!savedId) {
+    try {
+      const u = JSON.parse(localStorage.getItem("logos_quest_user") || "{}");
+      savedId = u.phone || u.email || "";
+    } catch (_) {}
+  }
+  if (savedId) {
+    $("mobile").value = savedId;
+    fetchResults(savedId);
+  }
+});
+</script>
+</body>
+</html>
