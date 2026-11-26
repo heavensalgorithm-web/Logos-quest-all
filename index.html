@@ -145,19 +145,19 @@ body {
 
 /* ================= BEVELED 3D ROYAL BLUE & GOLD IMAGE ICONS ================= */
 img.ico-img-lg {
-  width: 38px;
-  height: 38px;
-  border-radius: 11px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
   object-fit: contain;
-  margin-right: 10px;
+  margin-right: 9px;
   vertical-align: middle;
   flex-shrink: 0;
-  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.75));
+  filter: drop-shadow(0 4px 7px rgba(0,0,0,0.75));
 }
 
 img.ico-img-md {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 7px;
   object-fit: contain;
   margin-right: 7px;
@@ -167,14 +167,65 @@ img.ico-img-md {
 }
 
 img.ico-img-sm {
-  width: 21px;
-  height: 21px;
+  width: 20px;
+  height: 20px;
   border-radius: 6px;
   object-fit: contain;
   margin-right: 6px;
-  vertical-align: -5px;
+  vertical-align: -4px;
   flex-shrink: 0;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.55));
+}
+
+/* ================= FEATURE SECTION TRIGGER BUTTONS ================= */
+.section-trigger-btn {
+  width: 100%;
+  background: linear-gradient(145deg, #1d367a 0%, #0f1c42 65%, #080f26 100%);
+  color: var(--gold-primary);
+  border: 1.5px solid rgba(250, 204, 21, 0.5);
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 5px 0 #713f12, 0 8px 18px rgba(0,0,0,0.45), inset 0 1px 2px rgba(255,255,255,0.22);
+  transition: all 0.2s ease;
+}
+
+.section-trigger-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold-primary);
+  box-shadow: 0 7px 0 #854d0e, 0 12px 24px rgba(250, 204, 21, 0.35);
+}
+
+.section-trigger-left {
+  display: inline-flex;
+  align-items: center;
+}
+
+.section-trigger-arrow {
+  font-size: 14px;
+  color: #fef08a;
+  font-weight: 900;
+  transition: transform 0.2s ease;
+}
+
+.section-trigger-btn.open .section-trigger-arrow {
+  transform: rotate(90deg);
+}
+
+.section-collapsible-body {
+  display: none;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.section-collapsible-body.open {
+  display: block;
 }
 
 h1 {
@@ -720,36 +771,57 @@ a {
     </div>
   </div>
 
+  <!-- 1. LIVE BIBLE EXAMS BUTTON + COLLAPSIBLE CONTENT -->
   <div class="card">
-    <h2 id="dashExamsTitle">
-      <img data-ico="bible" class="ico-img-lg" alt="Exams"><span>లైవ్ బైబిల్ పరీక్షలు</span>
-    </h2>
-    <p class="center" id="dashIstNotice">పరీక్షల సమయాలు IST ప్రకారం</p>
+    <button type="button" class="section-trigger-btn open" id="btnTriggerExams" onclick="toggleHomeSection('examsBodyPanel', 'btnTriggerExams')">
+      <span class="section-trigger-left">
+        <img data-ico="bible" class="ico-img-md" alt="Exams"><span id="dashExamsTitle">లైవ్ బైబిల్ పరీక్షలు</span>
+      </span>
+      <span class="section-trigger-arrow">▼</span>
+    </button>
 
-    <div class="center">
-      <button type="button" class="btn-action" style="max-width:240px;" id="refreshBtn" onclick="loadExams()">
-        <img data-ico="refresh" class="ico-img-sm" alt="Refresh"><span>పరీక్షలను రిఫ్రెష్ చేయండి</span>
-      </button>
+    <div id="examsBodyPanel" class="section-collapsible-body open">
+      <p class="center" id="dashIstNotice">పరీక్షల సమయాలు IST ప్రకారం</p>
+
+      <div class="center">
+        <button type="button" class="btn-action" style="max-width:240px;" id="refreshBtn" onclick="loadExams()">
+          <img data-ico="refresh" class="ico-img-sm" alt="Refresh"><span>పరీక్షలను రిఫ్రెష్ చేయండి</span>
+        </button>
+      </div>
+
+      <p id="examStatus" class="center"></p>
+      <div id="examList"></div>
     </div>
-
-    <p id="examStatus" class="center"></p>
-    <div id="examList"></div>
   </div>
 
-  <div class="card center">
-    <h2 id="dashWinnersTitle">
-      <img data-ico="trophy" class="ico-img-lg" alt="Winners"><span>విజేతలు</span>
-    </h2>
-    <p id="dashWinnersDesc">ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
-    <a href="leaderboard.html" id="linkLeaderboard">లీడర్‌బోర్డ్ చూడండి →</a>
+  <!-- 2. WINNERS BUTTON + COLLAPSIBLE CONTENT -->
+  <div class="card">
+    <button type="button" class="section-trigger-btn" id="btnTriggerWinners" onclick="toggleHomeSection('winnersBodyPanel', 'btnTriggerWinners')">
+      <span class="section-trigger-left">
+        <img data-ico="trophy" class="ico-img-md" alt="Winners"><span id="dashWinnersTitle">విజేతలు</span>
+      </span>
+      <span class="section-trigger-arrow">▶</span>
+    </button>
+
+    <div id="winnersBodyPanel" class="section-collapsible-body center">
+      <p id="dashWinnersDesc">ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.</p>
+      <a href="leaderboard.html" id="linkLeaderboard">లీడర్‌బోర్డ్ చూడండి →</a>
+    </div>
   </div>
 
-  <div class="card center">
-    <h2 id="dashResultsTitle">
-      <img data-ico="chart" class="ico-img-lg" alt="Results"><span>నా ఫలితాలు</span>
-    </h2>
-    <p id="dashResultsDesc">మీ పరీక్ష ఫలితాలు ఇక్కడ చూడవచ్చు.</p>
-    <a href="results.html" id="linkResults">ఫలితాలు చూడండి →</a>
+  <!-- 3. MY RESULTS BUTTON + COLLAPSIBLE CONTENT -->
+  <div class="card">
+    <button type="button" class="section-trigger-btn" id="btnTriggerResults" onclick="toggleHomeSection('resultsBodyPanel', 'btnTriggerResults')">
+      <span class="section-trigger-left">
+        <img data-ico="chart" class="ico-img-md" alt="Results"><span id="dashResultsTitle">నా ఫలితాలు</span>
+      </span>
+      <span class="section-trigger-arrow">▶</span>
+    </button>
+
+    <div id="resultsBodyPanel" class="section-collapsible-body center">
+      <p id="dashResultsDesc">మీ పరీక్ష ఫలితాలు ఇక్కడ చూడవచ్చు.</p>
+      <a href="results.html" id="linkResults">ఫలితాలు చూడండి →</a>
+    </div>
   </div>
 
   <div class="footer-links">
@@ -871,14 +943,12 @@ const ICON_3D_DESIGNS = {
   logout: `
     <path d="M35 17H23a3 3 0 00-3 3v24a3 3 0 003 3h12" fill="none" stroke="url(#goldEmb)" stroke-width="3" stroke-linecap="round" filter="url(#emboss)"/>
     <polygon points="22,19 31,15 31,49 22,45" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
-    <circle cx="28.5" cy="32" r="1.3" fill="#0f235a"/>
     <path d="M33 32h11M40 26.5L45.5 32 40 37.5" fill="none" stroke="url(#goldEmb)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
   `,
   bible: `
     <path d="M20 17l13-3 11 4v25l-11 4-13-4V17z" fill="url(#royalBook)" stroke="url(#goldEmb)" stroke-width="1.4" filter="url(#emboss)"/>
     <path d="M20 41l13 4 11-4v4l-11 4-13-4v-4z" fill="#fef9c3" stroke="#ca8a04" stroke-width="0.8"/>
     <path d="M32 20.5v9M28.5 24h7" stroke="url(#goldEmb)" stroke-width="2.6" stroke-linecap="round"/>
-    <path d="M31 45v5l2-1.5 2 1.5v-5" fill="url(#goldEmb)"/>
   `,
   refresh: `
     <path d="M20 27a13 13 0 0122.5-8.5" fill="none" stroke="url(#goldEmb)" stroke-width="4" stroke-linecap="round" filter="url(#emboss)"/>
@@ -902,12 +972,10 @@ const ICON_3D_DESIGNS = {
   camera: `
     <circle cx="32" cy="32" r="14.5" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
     <circle cx="32" cy="32" r="10.5" fill="#08122b" stroke="#ca8a04" stroke-width="1.2"/>
-    <circle cx="32" cy="32" r="6.5" fill="url(#lensGrad)"/>
-    <circle cx="29.5" cy="29.5" r="2.2" fill="#ffffff" opacity="0.7"/>
+    <circle cx="32" cy="32" r="6" fill="#38bdf8"/>
   `,
   folder: `
     <path d="M16 21a3 3 0 013-3h8l3.5 3.5H45a3 3 0 013 3V42a3 3 0 01-3 3H19a3 3 0 01-3-3V21z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
-    <path d="M16 26h32v16a3 3 0 01-3 3H19a3 3 0 01-3-3V26z" fill="url(#goldFront)" opacity="0.9"/>
   `,
   key: `
     <circle cx="23.5" cy="37.5" r="7.5" fill="none" stroke="url(#goldEmb)" stroke-width="4" filter="url(#emboss)"/>
@@ -916,48 +984,33 @@ const ICON_3D_DESIGNS = {
   save: `
     <path d="M18 16h23l5 5v25a2.5 2.5 0 01-2.5 2.5h-25.5A2.5 2.5 0 0115.5 46V18.5A2.5 2.5 0 0118 16z" fill="url(#royalBook)" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
     <rect x="22" y="16" width="16" height="9" rx="1" fill="url(#goldEmb)"/>
-    <rect x="32" y="18" width="3.5" height="5" fill="#0f235a"/>
     <rect x="21" y="31" width="22" height="14" rx="1.5" fill="#fef9c3"/>
-    <line x1="24" y1="35.5" x2="40" y2="35.5" stroke="#1e3a8a" stroke-width="1.8"/>
-    <line x1="24" y1="40" x2="36" y2="40" stroke="#1e3a8a" stroke-width="1.8"/>
+  `,
+  note: `
+    <rect x="19" y="18" width="24" height="29" rx="3" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <line x1="23" y1="27" x2="35" y2="27" stroke="#1e3a8a" stroke-width="2"/>
+    <line x1="23" y1="33" x2="32" y2="33" stroke="#1e3a8a" stroke-width="2"/>
   `,
   play: `
     <polygon points="24,18 46,32 24,46" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1.2" stroke-linejoin="round" filter="url(#emboss)"/>
+  `,
+  clock: `
+    <circle cx="32" cy="34" r="13.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="3.2" filter="url(#emboss)"/>
+    <path d="M32 26v8l5.5 3.5" fill="none" stroke="#0f235a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
   `,
   calendar: `
     <rect x="17" y="19" width="30" height="27" rx="3.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
     <path d="M17 22.5a3.5 3.5 0 013.5-3.5h23a3.5 3.5 0 013.5 3.5V26H17v-3.5z" fill="url(#goldEmb)"/>
     <path d="M23 16v5M29 16v5M35 16v5M41 16v5" stroke="#fef9c3" stroke-width="2.4" stroke-linecap="round"/>
-    <rect x="22" y="30" width="4" height="3.5" rx="0.8" fill="#1e3a8a"/>
-    <rect x="30" y="30" width="4" height="3.5" rx="0.8" fill="#1e3a8a"/>
-    <rect x="38" y="30" width="4" height="3.5" rx="0.8" fill="#ca8a04"/>
-    <rect x="22" y="37" width="4" height="3.5" rx="0.8" fill="#1e3a8a"/>
-    <rect x="30" y="37" width="4" height="3.5" rx="0.8" fill="#2563eb"/>
-    <rect x="38" y="37" width="4" height="3.5" rx="0.8" fill="#1e3a8a"/>
-  `,
-  clock: `
-    <circle cx="32" cy="34" r="13.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="3.2" filter="url(#emboss)"/>
-    <path d="M18 21l5-4M46 21l-5-4" stroke="url(#goldEmb)" stroke-width="3.6" stroke-linecap="round"/>
-    <path d="M32 26v8l5.5 3.5" fill="none" stroke="#0f235a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="32" cy="34" r="1.8" fill="#ca8a04"/>
-  `,
-  note: `
-    <rect x="19" y="18" width="24" height="29" rx="3" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
-    <path d="M24 15v5M29 15v5M34 15v5M39 15v5" stroke="url(#goldEmb)" stroke-width="2.4" stroke-linecap="round"/>
-    <line x1="23" y1="27" x2="35" y2="27" stroke="#94a3b8" stroke-width="2"/>
-    <line x1="23" y1="33" x2="32" y2="33" stroke="#94a3b8" stroke-width="2"/>
-    <path d="M32 41l11-11 3.5 3.5-11 11-4.5 1z" fill="url(#goldEmb)" stroke="#0f235a" stroke-width="0.8" filter="url(#emboss)"/>
   `,
   online: `
     <circle cx="32" cy="32" r="13" fill="url(#emeraldEmb)" stroke="#a7f3d0" stroke-width="2.4" filter="url(#emboss)"/>
-    <circle cx="28" cy="28" r="3.5" fill="#ffffff" opacity="0.5"/>
   `,
   upcoming: `
     <circle cx="32" cy="32" r="13" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="2.4" filter="url(#emboss)"/>
-    <circle cx="28" cy="28" r="3.5" fill="#ffffff" opacity="0.5"/>
   `,
   check: `
-    <path d="M20 33l8 8 17-18" fill="none" stroke="url(#emeraldEmb)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
+    <path d="M20 33l8 8 17-18" fill="none" stroke="url(#emeraldEmb)" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
   `
 };
 
@@ -966,61 +1019,32 @@ function get3DIconUrl(name) {
   if (ICON_IMAGE_CACHE[name]) return ICON_IMAGE_CACHE[name];
   const inner = ICON_3D_DESIGNS[name] || ICON_3D_DESIGNS.bible;
 
-  // Beveled 3D Royal Blue Tile with Outer & Inner Metallic Gold Frame matching the reference preview
   const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
     <defs>
       <linearGradient id="goldRim" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#fef9c3"/>
-        <stop offset="30%" stop-color="#facc15"/>
-        <stop offset="70%" stop-color="#ca8a04"/>
-        <stop offset="100%" stop-color="#713f12"/>
+        <stop offset="0%" stop-color="#fef9c3"/><stop offset="30%" stop-color="#facc15"/><stop offset="70%" stop-color="#ca8a04"/><stop offset="100%" stop-color="#713f12"/>
       </linearGradient>
       <linearGradient id="goldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#fef9c3"/>
-        <stop offset="45%" stop-color="#facc15"/>
-        <stop offset="100%" stop-color="#a16207"/>
-      </linearGradient>
-      <linearGradient id="goldFront" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#fde047"/>
-        <stop offset="100%" stop-color="#b45309"/>
+        <stop offset="0%" stop-color="#fef9c3"/><stop offset="45%" stop-color="#facc15"/><stop offset="100%" stop-color="#a16207"/>
       </linearGradient>
       <radialGradient id="royalFace" cx="35%" cy="25%" r="75%">
-        <stop offset="0%" stop-color="#25489c"/>
-        <stop offset="60%" stop-color="#142966"/>
-        <stop offset="100%" stop-color="#091336"/>
+        <stop offset="0%" stop-color="#25489c"/><stop offset="60%" stop-color="#142966"/><stop offset="100%" stop-color="#091336"/>
       </radialGradient>
       <linearGradient id="royalBook" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#3b82f6"/>
-        <stop offset="100%" stop-color="#172554"/>
+        <stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#172554"/>
       </linearGradient>
-      <radialGradient id="lensGrad" cx="35%" cy="35%" r="70%">
-        <stop offset="0%" stop-color="#38bdf8"/>
-        <stop offset="55%" stop-color="#1e3a8a"/>
-        <stop offset="100%" stop-color="#050a18"/>
-      </radialGradient>
       <linearGradient id="emeraldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#6ee7b7"/>
-        <stop offset="50%" stop-color="#10b981"/>
-        <stop offset="100%" stop-color="#065f46"/>
+        <stop offset="0%" stop-color="#6ee7b7"/><stop offset="50%" stop-color="#10b981"/><stop offset="100%" stop-color="#065f46"/>
       </linearGradient>
       <filter id="emboss" x="-20%" y="-20%" width="140%" height="140%">
         <feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-color="#040814" flood-opacity="0.75"/>
       </filter>
     </defs>
-
-    <!-- 3D Extruded Bottom Gold Base -->
     <rect x="3" y="6" width="58" height="56" rx="15" fill="#5c330a"/>
-    <!-- Outer Metallic Gold Bevel -->
     <rect x="3" y="3" width="58" height="56" rx="15" fill="url(#goldRim)"/>
-    <!-- Deep Royal Blue Inset Face -->
     <rect x="7" y="7" width="50" height="48" rx="11.5" fill="url(#royalFace)" stroke="#713f12" stroke-width="1"/>
-    <!-- Inner Gold Trim Line -->
     <rect x="9" y="9" width="46" height="44" rx="10" fill="none" stroke="url(#goldRim)" stroke-width="1.5"/>
-
-    <!-- Center 3D Embossed Symbol -->
     ${inner}
-
-    <!-- Top Glass Specular Highlight -->
     <path d="M10 14a6 6 0 016-6h32a6 6 0 016 6v10c-14 4-30 4-44 0V14z" fill="#ffffff" opacity="0.12"/>
   </svg>`;
 
@@ -1039,6 +1063,17 @@ function hydrateAll3DImageIcons(root = document) {
     if (key) img.src = get3DIconUrl(key);
   });
 }
+
+window.toggleHomeSection = function(panelId, btnId) {
+  const panel = $(panelId);
+  const btn = $(btnId);
+  if (!panel || !btn) return;
+  const willOpen = !panel.classList.contains("open");
+  panel.classList.toggle("open", willOpen);
+  btn.classList.toggle("open", willOpen);
+  const arrow = btn.querySelector(".section-trigger-arrow");
+  if (arrow) arrow.textContent = willOpen ? "▼" : "▶";
+};
 
 const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
@@ -1075,7 +1110,7 @@ const i18n = {
     btnLogout: "లాగౌట్",
     lblTapProfile: "ప్రొఫైల్ చూడండి",
     dashSubtitle: "బైబిల్ క్విజ్ పోటీలకు స్వాగతం",
-    dashExamsTitle: "లైవ్ బైబిల్ పరీక్షలు",
+    dashExamsTitle: "Live Bible Exam",
     dashIstNotice: "పరీక్షల సమయాలు IST ప్రకారం",
     btnRefresh: "పరీక్షలను రిఫ్రెష్ చేయండి",
     loadingExams: "పరీక్షల వివరాలు లోడ్ అవుతున్నాయి...",
@@ -1084,10 +1119,10 @@ const i18n = {
     upcomingOnly: "రాబోయే పరీక్షలు క్రింద చూడండి.",
     btnJoin: "పరీక్షలో పాల్గొనండి",
     btnNotStarted: "ప్రారంభం కాలేదు",
-    dashWinnersTitle: "విజేతలు",
+    dashWinnersTitle: "Winners",
     dashWinnersDesc: "ఈ వారపు విజేతలు త్వరలో కనిపిస్తారు.",
     linkLeaderboard: "లీడర్‌బోర్డ్ చూడండి →",
-    dashResultsTitle: "నా ఫలితాలు",
+    dashResultsTitle: "My Results",
     dashResultsDesc: "మీ పరీక్ష ఫలితాలు ఇక్కడ చూడవచ్చు.",
     linkResults: "ఫలితాలు చూడండి →",
     examNotStartedAlert: "ఈ పరీక్ష ఇంకా ప్రారంభం కాలేదు.",
@@ -1132,7 +1167,7 @@ const i18n = {
     btnLogout: "Logout",
     lblTapProfile: "View Profile",
     dashSubtitle: "Welcome to Logos Quest Quiz Arena",
-    dashExamsTitle: "Live Bible Exams",
+    dashExamsTitle: "Live Bible Exam",
     dashIstNotice: "All exam timings are in IST",
     btnRefresh: "Refresh Exams",
     loadingExams: "Loading exam schedules...",
@@ -1189,7 +1224,7 @@ const i18n = {
     btnLogout: "வெளியேறு",
     lblTapProfile: "சுயவிவரம் காண்க",
     dashSubtitle: "பைபிள் வினாடி வினா போட்டிக்கு வரவேற்கிறோம்",
-    dashExamsTitle: "நேரலை பைபிள் தேர்வுகள்",
+    dashExamsTitle: "Live Bible Exam",
     dashIstNotice: "தேர்வு நேரங்கள் IST படி அமைக்கப்பட்டவை",
     btnRefresh: "தேர்வுகளைப் புதுப்பிக்கவும்",
     loadingExams: "தேர்வு அட்டவணைகள் ஏற்றப்படுகின்றன...",
@@ -1198,10 +1233,10 @@ const i18n = {
     upcomingOnly: "வரவிருக்கும் தேர்வுகளை கீழே காண்க.",
     btnJoin: "தேர்வில் சேரவும்",
     btnNotStarted: "இன்னும் தொடங்கவில்லை",
-    dashWinnersTitle: "வெற்றியாளர்கள்",
+    dashWinnersTitle: "Winners",
     dashWinnersDesc: "இந்த வார வெற்றியாளர்கள் விரைவில் தோன்றுவார்கள்.",
     linkLeaderboard: "முன்னணிப் பலகையைப் பார்க்கவும் →",
-    dashResultsTitle: "எனது முடிவுகள்",
+    dashResultsTitle: "My Results",
     dashResultsDesc: "உங்கள் தேர்வு முடிவுகளை இங்கே பார்க்கலாம்.",
     linkResults: "முடிவுகளைக் காண்க →",
     examNotStartedAlert: "இந்தத் தேர்வு இன்னும் தொடங்கவில்லை.",
@@ -1246,7 +1281,7 @@ const i18n = {
     btnLogout: "लॉग आउट",
     lblTapProfile: "प्रोफ़ाइल देखें",
     dashSubtitle: "लोगोस क्वेस्ट क्विज़ में आपका स्वागत है",
-    dashExamsTitle: "लाइव बाइबिल परीक्षाएं",
+    dashExamsTitle: "Live Bible Exam",
     dashIstNotice: "परीक्षा का समय IST के अनुसार है",
     btnRefresh: "परीक्षाएं रीफ्रेश करें",
     loadingExams: "परीक्षा विवरण लोड हो रहा है...",
@@ -1255,10 +1290,10 @@ const i18n = {
     upcomingOnly: "आगामी परीक्षाएं नीचे देखें।",
     btnJoin: "परीक्षा में शामिल हों",
     btnNotStarted: "शुरू नहीं हुआ",
-    dashWinnersTitle: "विजेता",
+    dashWinnersTitle: "Winners",
     dashWinnersDesc: "इस सप्ताह के विजेता जल्द ही दिखाई देंगे।",
     linkLeaderboard: "लीडरबोर्ड देखें →",
-    dashResultsTitle: "मेरे परिणाम",
+    dashResultsTitle: "My Results",
     dashResultsDesc: "अपने परीक्षा परिणाम यहां देखें।",
     linkResults: "परिणाम देखें →",
     examNotStartedAlert: "यह परीक्षा अभी शुरू नहीं हुई है।",
@@ -1340,13 +1375,13 @@ function applyTranslations() {
   setHtml("lblTapProfile", `${icoImgHtml("user")}<span>${t.lblTapProfile}</span>`);
   setHtml("btnLogout", `${icoImgHtml("logout")}<span>${t.btnLogout}</span>`);
   setTxt("dashSubtitle", t.dashSubtitle);
-  setHtml("dashExamsTitle", `${icoImgHtml("bible", "ico-img-lg")}<span>${t.dashExamsTitle}</span>`);
+  setTxt("dashExamsTitle", t.dashExamsTitle);
   setTxt("dashIstNotice", t.dashIstNotice);
   setHtml("refreshBtn", `${icoImgHtml("refresh")}<span>${t.btnRefresh}</span>`);
-  setHtml("dashWinnersTitle", `${icoImgHtml("trophy", "ico-img-lg")}<span>${t.dashWinnersTitle}</span>`);
+  setTxt("dashWinnersTitle", t.dashWinnersTitle);
   setTxt("dashWinnersDesc", t.dashWinnersDesc);
   setTxt("linkLeaderboard", t.linkLeaderboard);
-  setHtml("dashResultsTitle", `${icoImgHtml("chart", "ico-img-lg")}<span>${t.dashResultsTitle}</span>`);
+  setTxt("dashResultsTitle", t.dashResultsTitle);
   setTxt("dashResultsDesc", t.dashResultsDesc);
   setTxt("linkResults", t.linkResults);
 
