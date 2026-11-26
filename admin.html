@@ -15,10 +15,10 @@
 :root {
   --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
   --card-bg: rgba(22, 33, 62, 0.78);
-  --card-border: rgba(234, 179, 8, 0.25);
+  --card-border: rgba(234, 179, 8, 0.28);
   --gold-primary: #facc15;
   --gold-dark: #ca8a04;
-  --gold-glow: rgba(250, 204, 21, 0.35);
+  --gold-glow: rgba(250, 204, 21, 0.4);
   --text-main: #f8fafc;
   --text-muted: #cbd5e1;
   --live-green: #10b981;
@@ -45,52 +45,162 @@ body{
 }
 
 .btn-back {
-  background: rgba(15, 23, 42, 0.85);
+  background: linear-gradient(145deg, #162244, #0a1022);
   color: var(--gold-primary);
   border: 1.5px solid var(--card-border);
   padding: 8px 16px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.45), inset 0 1px 1px rgba(255,255,255,0.15);
   transition: all 0.2s ease;
 }
 
 .btn-back:hover {
   background: rgba(234, 179, 8, 0.2);
   border-color: var(--gold-primary);
+  transform: translateY(-1px);
 }
 
+/* ================= PREMIUM 3D LOGO & HEADER ================= */
 header{
   text-align:center;
-  padding:15px;
+  padding:18px 15px 12px;
+  perspective: 900px;
+}
+
+@keyframes float3D {
+  0%, 100% {
+    transform: translateY(0px) rotateX(4deg) rotateY(-4deg);
+  }
+  50% {
+    transform: translateY(-6px) rotateX(-3deg) rotateY(5deg);
+  }
+}
+
+.logo-3d-wrap {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 14px;
+  padding: 5px;
+  border-radius: 26px;
+  background: linear-gradient(145deg, #fef08a 0%, #eab308 45%, #854d0e 100%);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.65),
+    0 6px 0 #713f12,
+    0 0 28px rgba(250, 204, 21, 0.45),
+    inset 0 2px 4px rgba(255, 255, 255, 0.75);
+  animation: float3D 4.5s ease-in-out infinite;
+  transition: transform 0.35s ease;
+  position: relative;
+}
+
+.logo-3d-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 21px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0) 48%);
+  pointer-events: none;
+}
+
+.logo-3d-wrap:hover {
+  transform: scale(1.07) rotateY(10deg);
 }
 
 .logo-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 20px;
-  margin: 0 auto 10px;
+  width: 100%;
+  height: 100%;
+  border-radius: 21px;
   display: block;
-  box-shadow: 0 6px 20px var(--gold-glow);
-  border: 2px solid var(--gold-primary);
-  background: #0f172a;
+  object-fit: cover;
+  background: #0b1329;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,0.6);
 }
 
-header h1{
-  color:var(--gold-primary);
-  margin:0 0 4px 0;
-  font-size:26px;
-  letter-spacing:1px;
-  text-shadow:0 2px 10px var(--gold-glow);
+.brand-3d-title {
+  margin: 0 0 6px 0;
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  background: linear-gradient(180deg, #fef9c3 0%, #facc15 48%, #ca8a04 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 0 #713f12) drop-shadow(0 4px 0 #422006) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cross-3d {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #fde047, #a16207);
+  -webkit-text-fill-color: #0b1329;
+  color: #0b1329;
+  font-size: 20px;
+  font-weight: 900;
+  box-shadow: 0 3px 0 #713f12, 0 6px 14px rgba(250, 204, 21, 0.45), inset 0 1px 2px rgba(255,255,255,0.85);
 }
 
 header p{
   color:var(--text-muted);
   font-size:14px;
   margin:0;
+  letter-spacing: 0.4px;
+}
+
+/* ================= PREMIUM 3D SECTION & INLINE ICONS ================= */
+.icon-3d {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #243b7a 0%, #0f172a 100%);
+  border: 1.5px solid rgba(250, 204, 21, 0.55);
+  box-shadow:
+    0 4px 0 #060a14,
+    0 7px 14px rgba(0, 0, 0, 0.55),
+    inset 0 1px 2px rgba(255, 255, 255, 0.35),
+    0 0 12px rgba(250, 204, 21, 0.22);
+  font-size: 17px;
+  margin-right: 8px;
+  vertical-align: middle;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  flex-shrink: 0;
+}
+
+.icon-3d-gold {
+  background: linear-gradient(145deg, #fef08a 0%, #eab308 50%, #92400e 100%);
+  border-color: #fef9c3;
+  box-shadow:
+    0 4px 0 #713f12,
+    0 7px 16px rgba(250, 204, 21, 0.35),
+    inset 0 1px 2px rgba(255, 255, 255, 0.85);
+}
+
+.icon-3d-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.28), rgba(0,0,0,0.22));
+  box-shadow: 0 2px 4px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.45);
+  font-size: 13px;
+  margin-right: 6px;
+  vertical-align: middle;
 }
 
 main{
@@ -104,29 +214,36 @@ main{
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
   border:1px solid var(--card-border);
-  border-radius:18px;
+  border-radius:20px;
   padding:24px;
   margin-bottom:20px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.4), 0 0 15px rgba(234,179,8,0.08);
+  box-shadow:0 12px 28px rgba(0,0,0,0.45), inset 0 1px 1px rgba(255,255,255,0.1);
 }
 
 h2{
   color:var(--gold-primary);
   font-size:20px;
   margin-top:0;
-  font-weight:700;
+  font-weight:800;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.45);
 }
 
 h3{
   color:#ffffff;
   font-size:17px;
   margin:12px 0 6px 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 input,select,button,textarea{
   padding:13px;
   font-size:15px;
-  border-radius:10px;
+  border-radius:12px;
   font-family:inherit;
 }
 
@@ -165,20 +282,25 @@ textarea{
 }
 
 button{
-  background:linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  background:linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
   color:#0b1329 !important;
-  font-weight:700;
+  font-weight:800;
   border:0;
   cursor:pointer;
   margin:8px 6px 8px 0;
-  box-shadow:0 4px 12px var(--gold-glow);
-  transition:all 0.2s ease;
+  box-shadow:0 4px 0 #854d0e, 0 6px 14px var(--gold-glow), inset 0 1px 1px rgba(255,255,255,0.7);
+  transition:all 0.18s ease;
 }
 
 button:hover:not(:disabled){
   transform:translateY(-2px);
-  box-shadow:0 6px 18px rgba(250,204,21,0.5);
-  background:linear-gradient(135deg, #fef08a 0%, var(--gold-primary) 100%);
+  box-shadow:0 6px 0 #854d0e, 0 8px 20px rgba(250,204,21,0.55), inset 0 1px 2px rgba(255,255,255,0.85);
+  background:linear-gradient(145deg, #fef08a 0%, var(--gold-primary) 100%);
+}
+
+button:active:not(:disabled){
+  transform:translateY(2px);
+  box-shadow:0 2px 0 #854d0e;
 }
 
 button:disabled{
@@ -198,13 +320,14 @@ button:disabled{
 }
 
 .stat{
-  background:rgba(15,23,42,0.7);
+  background:linear-gradient(145deg, rgba(22, 34, 68, 0.85), rgba(11, 19, 41, 0.9));
   border:1px solid var(--card-border);
   padding:16px;
-  border-radius:14px;
+  border-radius:16px;
   flex:1;
   min-width:130px;
   color:var(--text-muted);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.1);
 }
 
 .stat strong{
@@ -212,12 +335,13 @@ button:disabled{
   font-size:20px;
   color:var(--gold-primary);
   margin-top:4px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
 .table-wrap{
   overflow-x:auto;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.1);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.12);
   margin:12px 0;
 }
 
@@ -225,7 +349,7 @@ table{
   width:100%;
   border-collapse:collapse;
   min-width:650px;
-  background:rgba(15,23,42,0.6);
+  background:rgba(15,23,42,0.65);
 }
 
 th,td{
@@ -236,7 +360,7 @@ th,td{
 }
 
 th{
-  background:rgba(30,41,59,0.9);
+  background:rgba(30,41,59,0.95);
   color:var(--gold-primary);
   text-transform:uppercase;
   font-size:12px;
@@ -255,45 +379,48 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 .error{color:#f87171;font-weight:600}
 
 .link-button{
-  display:inline-block;
-  background:rgba(15,23,42,0.85);
+  display:inline-flex;
+  align-items: center;
+  background:linear-gradient(145deg, #1e293b, #0f172a);
   color:var(--gold-primary);
   border:1.5px solid var(--card-border);
   text-decoration:none;
-  padding:12px 18px;
-  border-radius:10px;
+  padding:11px 18px;
+  border-radius:12px;
   margin:8px 5px 8px 0;
   font-weight:700;
+  box-shadow: 0 4px 0 #060a14, 0 6px 12px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.15);
   transition:all 0.2s ease;
 }
 
 .link-button:hover{
   background:rgba(234,179,8,0.2);
   color:#ffffff;
+  transform: translateY(-2px);
 }
 
 .danger{
-  background:#ef4444 !important;
+  background:linear-gradient(145deg, #f87171, #dc2626) !important;
   color:#ffffff !important;
-  box-shadow:none;
+  box-shadow: 0 4px 0 #7f1d1d, 0 6px 12px rgba(239,68,68,0.35) !important;
 }
 .danger:hover:not(:disabled){
-  background:#dc2626 !important;
+  background:linear-gradient(145deg, #fca5a5, #ef4444) !important;
 }
 
 .secondary{
-  background:rgba(255,255,255,0.1) !important;
+  background:linear-gradient(145deg, rgba(51,65,85,0.9), rgba(30,41,59,0.95)) !important;
   color:#ffffff !important;
   border:1px solid rgba(255,255,255,0.2);
-  box-shadow:none;
+  box-shadow: 0 4px 0 #0f172a, 0 5px 10px rgba(0,0,0,0.35) !important;
 }
 
 .ai-box{
   margin:20px 0;
   padding:18px;
-  background:rgba(15,23,42,0.7);
-  border:1px solid rgba(234,179,8,0.3);
-  border-radius:14px;
+  background:rgba(15,23,42,0.75);
+  border:1px solid rgba(234,179,8,0.35);
+  border-radius:16px;
 }
 
 .ai-preview-item{
@@ -318,16 +445,18 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 }
 
 .folder-card {
-  background: rgba(15, 23, 42, 0.85);
+  background: linear-gradient(145deg, rgba(22, 34, 68, 0.9), rgba(11, 19, 41, 0.95));
   border: 1.5px solid rgba(250, 204, 21, 0.35);
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
   transition: all 0.2s ease;
 }
 
 .folder-card:hover {
   border-color: var(--gold-primary);
-  box-shadow: 0 4px 16px rgba(250, 204, 21, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(250, 204, 21, 0.2);
 }
 
 .folder-lang-pills {
@@ -350,7 +479,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 .scanner-dropzone {
   border: 2px dashed rgba(250, 204, 21, 0.5);
   background: rgba(15, 23, 42, 0.75);
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 20px;
   text-align: center;
   margin: 12px 0;
@@ -359,30 +488,30 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 .scanner-btn-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .btn-scan-label {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  background: linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
   color: #0b1329;
   font-weight: 800;
   padding: 13px 20px;
   border-radius: 12px;
   cursor: pointer;
   font-size: 14px;
-  box-shadow: 0 4px 12px var(--gold-glow);
+  box-shadow: 0 4px 0 #854d0e, 0 6px 14px var(--gold-glow);
 }
 
 .btn-scan-label.alt {
-  background: rgba(56, 189, 248, 0.18);
+  background: linear-gradient(145deg, rgba(56, 189, 248, 0.28), rgba(14, 116, 144, 0.35));
   color: #7dd3fc;
-  border: 1.5px solid rgba(56, 189, 248, 0.45);
-  box-shadow: none;
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 4px 0 #0c4a6e, 0 6px 12px rgba(0,0,0,0.35);
 }
 
 .scan-page-strip {
@@ -473,7 +602,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 .gallery-section-box {
   margin-top: 16px;
   padding: 16px;
-  border-radius: 14px;
+  border-radius: 16px;
   background: rgba(15, 23, 42, 0.72);
 }
 
@@ -540,17 +669,18 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 }
 
 .cand-card {
-  background: rgba(22, 33, 62, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(26, 40, 78, 0.95), rgba(14, 22, 46, 0.98));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
   padding: 14px;
   text-align: center;
   position: relative;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.45);
 }
 
 .cand-card-online {
   border-color: rgba(16, 185, 129, 0.55);
-  box-shadow: 0 0 14px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.2);
 }
 
 .cand-card-completed {
@@ -558,8 +688,8 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 }
 
 .cand-photo {
-  width: 86px;
-  height: 86px;
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--gold-primary);
@@ -567,6 +697,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   display: block;
   background: #0f172a;
   cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.55);
 }
 
 .cand-card-online .cand-photo {
@@ -578,18 +709,19 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 }
 
 .cand-avatar-fallback {
-  width: 86px;
-  height: 86px;
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
   border: 3px solid var(--gold-primary);
   margin: 0 auto 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #1e293b;
+  background: linear-gradient(145deg, #1e293b, #0f172a);
   color: var(--gold-primary);
   font-size: 28px;
   font-weight: 800;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.55);
 }
 
 .status-dot {
@@ -610,7 +742,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <div class="top-bar">
   <a href="index.html" class="btn-back" id="navHomeBtn">← Home</a>
   <div style="display:flex; align-items:center; gap:8px;">
-    <span style="font-size:13px; color:var(--gold-primary); font-weight:700;">🌐</span>
+    <span class="icon-3d-sm" style="margin:0;">🌐</span>
     <select id="adminUiLangSelect" style="width:auto; padding:7px 12px; margin:0; font-size:13px; border-radius:10px; border:1.5px solid var(--card-border);">
       <option value="te">తెలుగు (Telugu)</option>
       <option value="en">English</option>
@@ -619,21 +751,22 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
     </select>
   </div>
 </div>
-  
 
 <header>
-<img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
-<h1>✝ LOGOS QUEST</h1>
-<p>Secure Admin Dashboard</p>
+  <div class="logo-3d-wrap">
+    <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
+  </div>
+  <h1 class="brand-3d-title"><span class="cross-3d">✝</span> LOGOS QUEST</h1>
+  <p id="headerSub">Secure Admin Dashboard</p>
 </header>
 
 <main>
 <section id="loginSection" class="card" style="max-width:440px; margin:20px auto;">
-<h2 id="loginHeading">Admin Login</h2>
+<h2><span class="icon-3d icon-3d-gold">🔐</span> <span id="loginHeading">Admin Login</span></h2>
 <form id="loginForm">
 <input id="email" type="email" placeholder="Admin Email" required>
 <input id="password" type="password" placeholder="Password" required>
-<button type="submit" style="width:100%;">Login</button>
+<button type="submit" id="loginSubmitBtn" style="width:100%;">Login</button>
 </form>
 <p id="message"></p>
 </section>
@@ -641,56 +774,56 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <section id="dashboard" class="hidden">
 
 <div class="card">
-<h2 id="adminStatusHeading">Admin Status</h2>
+<h2><span class="icon-3d icon-3d-gold">🛡️</span> <span id="adminStatusHeading">Admin Status</span></h2>
 <p id="adminEmail" style="color:var(--gold-primary); font-weight:600;"></p>
-<button id="refreshBtn" type="button">Refresh Results</button>
-<button id="logoutBtn" type="button" class="secondary">Logout</button>
-<a class="link-button" href="leaderboard.html">🏆 View Leaderboard</a>
+<button id="refreshBtn" type="button"><span class="icon-3d-sm">🔄</span><span id="refreshBtnText">Refresh Results</span></button>
+<button id="logoutBtn" type="button" class="secondary"><span class="icon-3d-sm">🚪</span><span id="logoutBtnText">Logout</span></button>
+<a class="link-button" href="leaderboard.html"><span class="icon-3d-sm">🏆</span><span id="viewLeaderboardText">View Leaderboard</span></a>
 </div>
 
 <!-- 1. LIVE EXAM PARTICIPANTS (REAL-TIME ONLINE & COMPLETED SEPARATE PHOTO GALLERIES) -->
 
 <div class="card" id="liveParticipantsCard">
   <div class="live-header-row">
-    <h2 id="liveParticipantsHeading" style="margin:0;">📡 Live Exam Participants</h2>
+    <h2 style="margin:0;"><span class="icon-3d">📡</span> <span id="liveParticipantsHeading">Live Exam Participants</span></h2>
     <span class="live-pill"><span class="pulse-dot"></span> Auto-Live Tracking (8s)</span>
   </div>
-  <p class="small">పరీక్షలో జాయిన్ అయినప్పటి నుండి ముగిసే వరకు అభ్యర్థులందరినీ లైవ్‌లో చూడండి. Online (పరీక్ష రాస్తున్నవారు) మరియు Completed (పూర్తి చేసినవారు) వేర్వేరు Photo Galleries లో కనిపిస్తారు.</p>
+  <p class="small" id="liveParticipantsSub">పరీక్షలో జాయిన్ అయినప్పటి నుండి ముగిసే వరకు అభ్యర్థులందరినీ లైవ్‌లో చూడండి. Online (పరీక్ష రాస్తున్నవారు) మరియు Completed (పూర్తి చేసినవారు) వేర్వేరు Photo Galleries లో కనిపిస్తారు.</p>
 
-  <label for="liveMonitorExamSelect">Select Live / Recent Exam</label>
+  <label for="liveMonitorExamSelect" id="liveMonitorExamLabel">Select Live / Recent Exam</label>
   <select id="liveMonitorExamSelect">
     <option value="">Loading Exams...</option>
   </select>
 
   <div style="display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:8px 0;">
-    <button id="refreshLiveMonitorBtn" type="button">🔄 Refresh Live Gallery</button>
+    <button id="refreshLiveMonitorBtn" type="button"><span class="icon-3d-sm">🔄</span><span id="refreshLiveBtnText">Refresh Live Gallery</span></button>
     <span id="liveMonitorStatus" class="small"></span>
   </div>
 
   <div class="stats">
     <div class="stat">
-      Total Joined
+      <span id="statTotalJoinedLbl">Total Joined</span>
       <strong id="liveTotalCount">0</strong>
     </div>
     <div class="stat" style="border-color:rgba(16,185,129,0.45);">
-      🟢 Online (Writing Now)
+      <span id="statOnlineLbl">🟢 Online (Writing Now)</span>
       <strong id="liveOnlineCount" style="color:#34d399;">0</strong>
     </div>
     <div class="stat" style="border-color:rgba(239,68,68,0.45);">
-      🔴 Completed (Submitted)
+      <span id="statCompletedLbl">🔴 Completed (Submitted)</span>
       <strong id="liveCompletedCount" style="color:#f87171;">0</strong>
     </div>
   </div>
 
   <!-- SEPARATE GALLERY 1: ONLINE / WRITING NOW -->
   <div class="gallery-section-box gallery-online-box">
-    <h3 class="gallery-title-online"><span class="pulse-dot"></span> 🟢 Online Participants Gallery (ప్రస్తుతం పరీక్ష రాస్తున్నవారు)</h3>
+    <h3 class="gallery-title-online"><span class="pulse-dot"></span> <span id="onlineGalleryTitleText">🟢 Online Participants Gallery (ప్రస్తుతం పరీక్ష రాస్తున్నవారు)</span></h3>
     <div id="onlineGalleryGrid" class="cand-grid"></div>
   </div>
 
   <!-- SEPARATE GALLERY 2: COMPLETED / SUBMITTED -->
   <div class="gallery-section-box gallery-completed-box">
-    <h3 class="gallery-title-completed"><span class="status-dot dot-red"></span> 🔴 Completed Participants Gallery (పరీక్ష పూర్తి చేసినవారు)</h3>
+    <h3 class="gallery-title-completed"><span class="status-dot dot-red"></span> <span id="completedGalleryTitleText">🔴 Completed Participants Gallery (పరీక్ష పూర్తి చేసినవారు)</span></h3>
     <div id="completedGalleryGrid" class="cand-grid"></div>
   </div>
 </div>
@@ -698,25 +831,25 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <!-- 2. LIVE EXAM WINNERS DASHBOARD -->
 
 <div class="card">
-  <h2 id="winnersHeading">🏆 Live Exam Results & Winners</h2>
+  <h2><span class="icon-3d icon-3d-gold">🏆</span> <span id="winnersHeading">Live Exam Results & Winners</span></h2>
 
-  <label for="winnerExamSelect">Select Exam</label>
+  <label for="winnerExamSelect" id="winnerExamLabel">Select Exam</label>
   <select id="winnerExamSelect">
     <option value="">Select Exam</option>
   </select>
 
-  <button id="loadWinnersBtn" type="button">🔄 View Exam Winners</button>
-  <button id="releaseAnswersBtn" type="button" class="secondary">🔓 Release Correct Answers</button>
-  <button id="releaseCertificatesBtn" type="button">🏅 Release / Send Certificates</button>
+  <button id="loadWinnersBtn" type="button"><span class="icon-3d-sm">🔄</span><span id="loadWinnersBtnText">View Exam Winners</span></button>
+  <button id="releaseAnswersBtn" type="button" class="secondary"><span class="icon-3d-sm">🔓</span><span id="releaseAnswersBtnText">Release Correct Answers</span></button>
+  <button id="releaseCertificatesBtn" type="button"><span class="icon-3d-sm">🏅</span><span id="releaseCertBtnText">Release / Send Certificates</span></button>
   <p id="releaseCertificatesStatus" role="status"></p>
 
   <p id="releaseAnswersStatus" role="status"></p>
- <p id="winnersStatus" role="status"></p>
+  <p id="winnersStatus" role="status"></p>
 
-  <h3>🥇 Top 3 Winners</h3>
+  <h3><span class="icon-3d-sm">🥇</span> <span id="top3Heading">Top 3 Winners</span></h3>
   <div id="top3Winners" class="stats"></div>
 
-  <h3>🏅 Top 10 Participants</h3>
+  <h3><span class="icon-3d-sm">🏅</span> <span id="top10Heading">Top 10 Participants</span></h3>
   <div class="table-wrap">
     <table>
       <thead>
@@ -737,21 +870,21 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
 <div class="card stats">
 <div class="stat">
-Total Attempts
+<span id="statAttemptsLbl">Total Attempts</span>
 <strong id="attempts">0</strong>
 </div>
 <div class="stat">
-Average Score
+<span id="statAvgLbl">Average Score</span>
 <strong id="average">0</strong>
 </div>
 <div class="stat">
-Highest Score
+<span id="statHighLbl">Highest Score</span>
 <strong id="highest">0</strong>
 </div>
 </div>
 
 <div class="card">
-<h2 id="resultsHistoryHeading">Student Results History</h2>
+<h2><span class="icon-3d">📊</span> <span id="resultsHistoryHeading">Student Results History</span></h2>
 <input id="search" placeholder="Search by name or mobile number">
 <p id="status" class="small"></p>
 <div class="table-wrap">
@@ -772,21 +905,21 @@ Highest Score
 <!-- 4. MULTI-PAGE & MULTI-LANGUAGE QUESTION PAPER SCANNER WITH EXAM FOLDERS -->
 
 <div class="card" id="paperScannerCard">
-  <h2 id="scannerHeading">📁 Question Paper Folders & Scanner (Telugu / English / Tamil)</h2>
-  <p class="small">
+  <h2><span class="icon-3d icon-3d-gold">📁</span> <span id="scannerHeading">Question Paper Folders & Scanner (Telugu / English / Tamil)</span></h2>
+  <p class="small" id="scannerSubDesc">
     ఒక ఎగ్జామ్‌కి ఒక <strong>Exam Folder Name</strong> ఇచ్చి, అందులోనే <strong>Telugu Paper</strong>, <strong>English Paper</strong>, <strong>Tamil Paper</strong> పేజీ బై పేజీ స్కాన్ చేసి సేవ్ చేయండి.<br>
     ఆ తర్వాత కింద <strong>Schedule Live Bible Exam</strong> లో ఆ Folder సెలెక్ట్ చేసి Date & Time పెడితే చాలు — ఆ టైమ్‌కి ప్రతి విద్యార్థికి వారు ఎంచుకున్న భాష పేపర్ మాత్రమే వస్తుంది!
   </p>
 
   <div class="grid">
     <div>
-      <label for="scanFolderName">📁 Exam Folder Name (ఒకే ఎగ్జామ్‌కి అన్ని భాషలకూ ఇదే పేరు ఇవ్వండి)</label>
+      <label for="scanFolderName" id="scanFolderLabel">📁 Exam Folder Name (ఒకే ఎగ్జామ్‌కి అన్ని భాషలకూ ఇదే పేరు ఇవ్వండి)</label>
       <input id="scanFolderName" type="text" placeholder="Example: Sunday Grand Quiz Nov 22" list="existingFoldersDatalist" required>
       <datalist id="existingFoldersDatalist"></datalist>
     </div>
 
     <div>
-      <label for="scanLanguage">🌐 Paper Language (ఇప్పుడు స్కాన్ చేసే పేపర్ భాష)</label>
+      <label for="scanLanguage" id="scanLangLabel">🌐 Paper Language (ఇప్పుడు స్కాన్ చేసే పేపర్ భాష)</label>
       <select id="scanLanguage">
         <option value="telugu">తెలుగు (Telugu Paper)</option>
         <option value="english">English (English Paper)</option>
@@ -796,27 +929,27 @@ Highest Score
     </div>
 
     <div>
-      <label for="scanBibleBook">Bible Book (Optional / Reference)</label>
+      <label for="scanBibleBook" id="scanBookLabel">Bible Book (Optional / Reference)</label>
       <input id="scanBibleBook" type="text" placeholder="Example: Genesis / General" value="General">
     </div>
 
     <div>
-      <label for="scanChapterNumber">Chapter Number (Optional)</label>
+      <label for="scanChapterNumber" id="scanChapLabel">Chapter Number (Optional)</label>
       <input id="scanChapterNumber" type="number" min="1" max="150" value="1">
     </div>
   </div>
 
   <div class="scanner-dropzone">
     <p style="margin:0; font-weight:700; color:var(--gold-primary);">
-      📄 పేజీ 1, పేజీ 2, పేజీ 3... ఒక్కొక్కటిగా స్కాన్ చేయండి (Scanned Pages: <span id="scannedPagesCount">0</span> | Questions Ready: <span id="scannedQuestionsCount">0</span>)
+      <span class="icon-3d-sm">📄</span> <span id="scanDropTitle">పేజీ 1, పేజీ 2, పేజీ 3... ఒక్కొక్కటిగా స్కాన్ చేయండి</span> (Scanned Pages: <span id="scannedPagesCount">0</span> | Questions Ready: <span id="scannedQuestionsCount">0</span>)
     </p>
-    <p class="small" style="margin:4px 0 8px;">100 ప్రశ్నలు (5 పేజీలు) ఒకేసారి Queue లో యాడ్ చేసి సేవ్ చేసుకోవచ్చు.</p>
+    <p class="small" id="scanDropSub" style="margin:4px 0 8px;">100 ప్రశ్నలు (5 పేజీలు) ఒకేసారి Queue లో యాడ్ చేసి సేవ్ చేసుకోవచ్చు.</p>
 
     <div class="scanner-btn-row">
-      <label for="scanCameraInput" class="btn-scan-label">📷 Take Page Photo (Camera)</label>
+      <label for="scanCameraInput" class="btn-scan-label"><span class="icon-3d-sm">📷</span><span id="scanCamBtnLbl">Take Page Photo (Camera)</span></label>
       <input type="file" id="scanCameraInput" accept="image/*" capture="environment" style="display:none;">
 
-      <label for="scanGalleryInput" class="btn-scan-label alt">🖼️ Upload Page Image(s) (Gallery)</label>
+      <label for="scanGalleryInput" class="btn-scan-label alt"><span class="icon-3d-sm">🖼️</span><span id="scanGalBtnLbl">Upload Page Image(s) (Gallery)</span></label>
       <input type="file" id="scanGalleryInput" accept="image/*" multiple style="display:none;">
     </div>
 
@@ -826,8 +959,8 @@ Highest Score
   <p id="scannerStatus" role="status"></p>
 
   <details style="margin:10px 0;">
-    <summary style="cursor:pointer; color:var(--gold-primary); font-size:13px; font-weight:600;">📝 Scanned OCR Text చూడండి / లేదా నేరుగా Text పేస్ట్ చేసి Parse చేయండి</summary>
-    <textarea id="scanRawOcrText" placeholder="స్కాన్ చేసిన టెక్స్ట్ ఇక్కడ కనిపిస్తుంది... లేదా మీ దగ్గర ఉన్న ప్రశ్నల టెక్స్ట్ పేస్ట్ చేసి 'Parse Text to Questions' నొక్కండి."></textarea>
+    <summary id="ocrDetailsSummary" style="cursor:pointer; color:var(--gold-primary); font-size:13px; font-weight:600;">📝 Scanned OCR Text చూడండి / లేదా నేరుగా Text పేస్ట్ చేసి Parse చేయండి</summary>
+    <textarea id="scanRawOcrText" placeholder="Paste or review scanned text here..."></textarea>
     <button type="button" id="parseManualTextBtn" class="secondary btn-sm">⚙️ Parse Text to Questions</button>
   </details>
 
@@ -841,8 +974,8 @@ Highest Score
 
   <!-- SAVED EXAM PAPER FOLDERS OVERVIEW -->
   <div style="margin-top:22px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.12);">
-    <h3 style="color:var(--gold-primary); margin:0 0 6px 0;">📂 Saved Exam Paper Folders (ఎగ్జామ్ ఫోల్డర్లు)</h3>
-    <p class="small">ఏ ఫోల్డర్‌లో ఏయే భాషల పేపర్లు ఎన్ని ప్రశ్నలు సిద్ధంగా ఉన్నాయో ఇక్కడ చూడండి:</p>
+    <h3 style="color:var(--gold-primary); margin:0 0 6px 0;"><span class="icon-3d-sm">📂</span> <span id="savedFoldersTitle">Saved Exam Paper Folders (ఎగ్జామ్ ఫోల్డర్లు)</span></h3>
+    <p class="small" id="savedFoldersSub">ఏ ఫోల్డర్‌లో ఏయే భాషల పేపర్లు ఎన్ని ప్రశ్నలు సిద్ధంగా ఉన్నాయో ఇక్కడ చూడండి:</p>
     <div id="savedFoldersGrid" class="folder-grid"></div>
   </div>
 </div>
@@ -850,14 +983,14 @@ Highest Score
 <!-- 5. BIBLE QUESTION MANAGEMENT & AI GENERATOR -->
 
 <div class="card" id="questionManager">
-<h2 id="questionManagerHeading">📖 Bible Question Management</h2>
-<p class="small">
-Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. Correct Answers Studentsకి ఈ Page ద్వారా చూపించబడవు.
+<h2><span class="icon-3d">📖</span> <span id="questionManagerHeading">Bible Question Management</span></h2>
+<p class="small" id="questionManagerSub">
+Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from students on this page.
 </p>
 
 <div class="ai-box">
-  <h3 style="color:var(--gold-primary);">✨ AI Bible Question Generator</h3>
-  <p class="small">Generate unique Bible quiz questions based on Scripture verses & events with randomized A/B/C/D options.</p>
+  <h3 style="color:var(--gold-primary);"><span class="icon-3d-sm">✨</span> <span id="aiBoxHeading">AI Bible Question Generator</span></h3>
+  <p class="small" id="aiBoxSub">Generate unique Bible quiz questions based on Scripture verses & events with randomized A/B/C/D options.</p>
 
   <div class="grid">
     <div>
@@ -899,7 +1032,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
     <option value="100">100 Questions</option>
   </select>
 
-  <button type="button" id="aiGenerateBtn">✨ Generate Questions with AI</button>
+  <button type="button" id="aiGenerateBtn"><span class="icon-3d-sm">✨</span>Generate Questions with AI</button>
   <p id="aiGenerateStatus"></p>
 
   <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">
@@ -944,7 +1077,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 </div>
 
 <label for="questionText">Bible Question</label>
-<textarea id="questionText" required placeholder="ప్రశ్న ఇక్కడ నమోదు చేయండి"></textarea>
+<textarea id="questionText" required placeholder="Enter question here"></textarea>
 
 <div class="grid">
 <div>
@@ -981,7 +1114,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 </div>
 
 <div class="card">
-<h2 id="savedQuestionsHeading">📚 Saved Bible Questions</h2>
+<h2><span class="icon-3d">📚</span> <span id="savedQuestionsHeading">Saved Bible Questions</span></h2>
 
 <div class="grid">
 <div>
@@ -1041,9 +1174,9 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 <!-- 6. LIVE EXAM SCHEDULING -->
 
 <div class="card">
-<h2 id="scheduleExamHeading">📅 Schedule Live Bible Exam</h2>
-<p class="small">
-పైన స్కాన్ చేసి సేవ్ చేసిన <strong>Exam Paper Folder</strong> సెలెక్ట్ చేసి Date & Time పెడితే, ఆ టైమ్‌కి ఆ ఫోల్డర్‌లోని Telugu / English / Tamil ప్రశ్నలే ఎగ్జామ్‌లో వస్తాయి!
+<h2><span class="icon-3d icon-3d-gold">📅</span> <span id="scheduleExamHeading">Schedule Live Bible Exam</span></h2>
+<p class="small" id="scheduleExamSub">
+Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time — participants will automatically get the paper in their chosen language!
 </p>
 
 <form id="scheduleForm">
@@ -1051,7 +1184,7 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 <input id="examName" type="text" placeholder="Example: Sunday Grand Bible Quiz" required maxlength="150">
 
 <div style="background:rgba(250,204,21,0.08); border:1.5px solid rgba(250,204,21,0.35); border-radius:12px; padding:12px; margin:8px 0;">
-  <label for="examPaperFolderSelect" style="margin-top:0;">📁 Select Scanned Exam Paper Folder (Optional - ఫోల్డర్ ఎంచుకుంటే Book/Chapter తో పనిలేకుండా ఆ ఫోల్డర్ పేపర్లు వస్తాయి)</label>
+  <label for="examPaperFolderSelect" id="examFolderSelectLabel" style="margin-top:0;">📁 Select Scanned Exam Paper Folder (Optional - uses folder papers instead of Book/Chapter below)</label>
   <select id="examPaperFolderSelect">
     <option value="">-- Use Bible Book & Chapter Below (No Folder) --</option>
   </select>
@@ -1140,8 +1273,8 @@ Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. C
 <!-- 7. SCHEDULED EXAMS WITH PARTICIPANT COUNT, DETAILS & PHOTOS -->
 
 <div class="card" id="scheduledExamsCard">
-<h2 id="scheduledExamsHeading">📋 Scheduled Exams & Participants</h2>
-<p class="small">ప్రతి ఎగ్జామ్‌కి ఎంతమంది హాజరయ్యారో చూడండి మరియు "👁️ View Details & Photos" క్లిక్ చేసి వారి పేరు, వివరాలు & ఫోటో చూడండి.</p>
+<h2><span class="icon-3d">📋</span> <span id="scheduledExamsHeading">Scheduled Exams & Participants</span></h2>
+<p class="small" id="scheduledExamsSub">View participant counts for each exam and click "👁️ View Details & Photos" to see candidate names, details & photos.</p>
 <button id="refreshExamsBtn" type="button">🔄 Refresh Exams</button>
 <p id="examListStatus" class="small"></p>
 
@@ -1190,6 +1323,7 @@ let editingQuestionId = null;
 let generatedAiQuestions = [];
 let liveMonitorTimer = null;
 let liveRealtimeChannel = null;
+let currentAdminUiLang = localStorage.getItem("logos_admin_ui_lang") || "en";
 
 // Multi-Page Question Paper Scanner State
 let scannedQuestionQueue = [];
@@ -1266,6 +1400,7 @@ $("logoutBtn").addEventListener("click", async () => {
 // SAVED EXAM PAPER FOLDERS OVERVIEW & DROPDOWN SYNC
 // ==========================================
 function refreshPaperFoldersUI() {
+  const t = ADMIN_UI_TRANSLATIONS[currentAdminUiLang] || ADMIN_UI_TRANSLATIONS.en;
   const folderMap = {};
   allQuestions.forEach(q => {
     const fName = (q.paper_folder || "").trim();
@@ -1314,7 +1449,7 @@ function refreshPaperFoldersUI() {
   grid.replaceChildren();
 
   if (folderNames.length === 0) {
-    grid.innerHTML = `<p class="small" style="grid-column:1/-1;">ఇంకా ఏ Exam Paper Folder క్రియేట్ చేయలేదు. పైన Folder Name ఇచ్చి పేపర్లు స్కాన్ చేసి సేవ్ చేయండి.</p>`;
+    grid.innerHTML = `<p class="small" style="grid-column:1/-1;">${t.noFoldersMsg}</p>`;
     return;
   }
 
@@ -1359,7 +1494,7 @@ window.selectFolderForSchedule = function(folderName) {
 };
 
 window.deletePaperFolder = async function(folderName) {
-  if (!confirm(`"${folderName}" ఫోల్డర్‌లోని అన్ని ప్రశ్నలను తొలగించాలా?`)) return;
+  if (!confirm(`Delete all questions in folder "${folderName}"?`)) return;
   const { error } = await db.from("bible_questions").delete().eq("paper_folder", folderName);
   if (error) {
     alert("Delete Error: " + error.message);
@@ -1688,7 +1823,7 @@ async function processScannedFiles(fileList) {
     const file = fileList[i];
     const pageNumber = scannedPageNames.length + 1;
     statusEl.className = "";
-    statusEl.textContent = `⏳ Scanning Page ${pageNumber} (${file.name})... దయచేసి వేచి ఉండండి...`;
+    statusEl.textContent = `⏳ Scanning Page ${pageNumber} (${file.name})... Please wait...`;
 
     try {
       const processedDataUrl = await preprocessImageForOcr(file);
@@ -1730,7 +1865,7 @@ async function processScannedFiles(fileList) {
   }
 
   statusEl.className = "success";
-  statusEl.textContent = `✅ స్కాన్ పూర్తయింది! కొత్తగా ${totalNewlyParsed} ప్రశ్నలు Queue లోకి యాడ్ అయ్యాయి (మొత్తం: ${scannedQuestionQueue.length} ప్రశ్నలు). కింద చెక్ చేసి Save నొక్కండి.`;
+  statusEl.textContent = `✅ Scan complete! ${totalNewlyParsed} new questions added to queue (Total: ${scannedQuestionQueue.length} questions). Review below and click Save.`;
 }
 
 $("scanCameraInput").addEventListener("change", e => {
@@ -1748,23 +1883,23 @@ $("parseManualTextBtn").addEventListener("click", () => {
   const statusEl = $("scannerStatus");
   if (!raw) {
     statusEl.className = "error";
-    statusEl.textContent = "ముందుగా ప్రశ్నల టెక్స్ట్ పేస్ట్ చేయండి.";
+    statusEl.textContent = "Please paste question text first.";
     return;
   }
   const parsed = parseQuestionsFromRawText(raw);
   if (parsed.length === 0) {
     statusEl.className = "error";
-    statusEl.textContent = "ప్రశ్నలు మరియు A, B, C, D ఆప్షన్స్ గుర్తించబడలేదు. ఫార్మాట్ చెక్ చేయండి.";
+    statusEl.textContent = "No questions and A, B, C, D options detected. Please check the format.";
     return;
   }
   parsed.forEach(p => scannedQuestionQueue.push({ ...p, pageTag: "Manual Text" }));
   renderScannedQueue();
   statusEl.className = "success";
-  statusEl.textContent = `✅ ${parsed.length} ప్రశ్నలు Queue లోకి యాడ్ అయ్యాయి!`;
+  statusEl.textContent = `✅ ${parsed.length} questions added to queue!`;
 });
 
 $("clearScannedQueueBtn").addEventListener("click", () => {
-  if (!confirm("స్కాన్ చేసిన ప్రశ్నల లిస్ట్ మొత్తాన్ని క్లియర్ చేయాలా?")) return;
+  if (!confirm("Clear all scanned questions in the queue?")) return;
   scannedQuestionQueue = [];
   scannedPageNames = [];
   $("scanRawOcrText").value = "";
@@ -1782,7 +1917,7 @@ $("saveScannedQuestionsBtn").addEventListener("click", async () => {
   const language = $("scanLanguage").value || "telugu";
 
   if (!folderName) {
-    alert("దయచేసి Exam Folder Name (ఉదా: Sunday Grand Quiz) నమోదు చేయండి.");
+    alert("Please enter an Exam Folder Name (e.g. Sunday Grand Quiz).");
     $("scanFolderName").focus();
     return;
   }
@@ -1812,7 +1947,7 @@ $("saveScannedQuestionsBtn").addEventListener("click", async () => {
     if (error) throw error;
 
     saveStatus.className = "success";
-    saveStatus.textContent = `✅ అద్భుతం! ${rowsToInsert.length} ప్రశ్నలు [${folderName} • ${language.toUpperCase()}] ఫోల్డర్‌లోకి సేవ్ అయ్యాయి! ఇప్పుడు ఇదే ఫోల్డర్‌లో మరో భాష పేపర్ కూడా స్కాన్ చేయవచ్చు.`;
+    saveStatus.textContent = `✅ Saved ${rowsToInsert.length} questions into [${folderName} • ${language.toUpperCase()}]! You can now scan another language paper into the same folder.`;
 
     scannedQuestionQueue = [];
     scannedPageNames = [];
@@ -1904,6 +2039,7 @@ function buildParticipantGalleryCard(cand, isOnline, photoByMobile, detailsByMob
 }
 
 async function refreshLiveParticipantsGallery(silent = false) {
+  const t = ADMIN_UI_TRANSLATIONS[currentAdminUiLang] || ADMIN_UI_TRANSLATIONS.en;
   const examId = $("liveMonitorExamSelect").value;
   const statusEl = $("liveMonitorStatus");
   const onlineGrid = $("onlineGalleryGrid");
@@ -1942,7 +2078,7 @@ async function refreshLiveParticipantsGallery(silent = false) {
 
     onlineGrid.replaceChildren();
     if (onlineList.length === 0) {
-      onlineGrid.innerHTML = `<p class="small" style="grid-column:1/-1; margin:4px 0;">ప్రస్తుతం ఎవరూ పరీక్ష రాయడం లేదు (0 Online).</p>`;
+      onlineGrid.innerHTML = `<p class="small" style="grid-column:1/-1; margin:4px 0;">${t.noOnlineMsg}</p>`;
     } else {
       onlineList.forEach((cand, idx) => {
         onlineGrid.appendChild(buildParticipantGalleryCard(cand, true, photoByMobile, detailsByMobile, idx));
@@ -1951,7 +2087,7 @@ async function refreshLiveParticipantsGallery(silent = false) {
 
     completedGrid.replaceChildren();
     if (completedList.length === 0) {
-      completedGrid.innerHTML = `<p class="small" style="grid-column:1/-1; margin:4px 0;">ఇంకా ఎవరూ పరీక్ష పూర్తి చేయలేదు (0 Completed).</p>`;
+      completedGrid.innerHTML = `<p class="small" style="grid-column:1/-1; margin:4px 0;">${t.noCompletedMsg}</p>`;
     } else {
       completedList.forEach((cand, idx) => {
         completedGrid.appendChild(buildParticipantGalleryCard(cand, false, photoByMobile, detailsByMobile, idx));
@@ -2023,6 +2159,16 @@ $("liveMonitorExamSelect").addEventListener("change", () => refreshLiveParticipa
 $("refreshLiveMonitorBtn").addEventListener("click", () => refreshLiveParticipantsGallery(false));
 
 // RESULTS
+function formatLocalizedDuration(rawTime) {
+  if (rawTime == null) return "";
+  const str = String(rawTime);
+  if (currentAdminUiLang === "te") return str;
+  const t = ADMIN_UI_TRANSLATIONS[currentAdminUiLang] || ADMIN_UI_TRANSLATIONS.en;
+  return str
+    .replace(/నిమిషాలు/g, t.minsUnit)
+    .replace(/సెకన్లు/g, t.secsUnit);
+}
+
 async function loadResults(){
   $("status").textContent = "Loading results...";
 
@@ -2052,7 +2198,7 @@ function renderResults(){
 
   filtered.forEach(r=>{
     const tr = document.createElement("tr");
-    [r.Name,r.Mobile,r.Score,r.Time].forEach(value=>{
+    [r.Name, r.Mobile, r.Score, formatLocalizedDuration(r.Time)].forEach(value=>{
       const td = document.createElement("td");
       td.textContent = value == null ? "" : String(value);
       tr.appendChild(td);
@@ -2186,13 +2332,13 @@ async function openExamCandidates(exam, attemptsForExam) {
   grid.replaceChildren();
 
   if (!attemptsForExam || attemptsForExam.length === 0) {
-    summary.textContent = "⚠️ ఈ ఎగ్జామ్ ఇంకా ఎవరూ రాయలేదు (0 Participants).";
+    summary.textContent = "⚠️ No participants have joined this exam yet (0 Participants).";
     return;
   }
 
   const submittedCount = attemptsForExam.filter(a => a.status === "submitted").length;
   const activeCount = attemptsForExam.length - submittedCount;
-  summary.innerHTML = `మొత్తం రాసినవారు: <strong>${attemptsForExam.length}</strong> &nbsp;|&nbsp; 🔴 Submitted: <strong>${submittedCount}</strong> &nbsp;|&nbsp; 🟢 Active: <strong>${activeCount}</strong>`;
+  summary.innerHTML = `Total Joined: <strong>${attemptsForExam.length}</strong> &nbsp;|&nbsp; 🔴 Submitted: <strong>${submittedCount}</strong> &nbsp;|&nbsp; 🟢 Active: <strong>${activeCount}</strong>`;
 
   const { photoByMobile, detailsByMobile } = await fetchStudentPhotoMap(attemptsForExam);
 
@@ -2756,7 +2902,6 @@ function renderQuestions(){
     const tr = document.createElement("tr");
     if (isChecked) tr.classList.add("selected-row");
 
-    // Checkbox Cell
     const chkTd = document.createElement("td");
     chkTd.style.textAlign = "center";
     const chk = document.createElement("input");
@@ -2819,7 +2964,7 @@ function renderQuestions(){
     delBtn.type = "button";
     delBtn.className = "danger";
     delBtn.onclick = async () => {
-      if(confirm("మీరు నిజంగా ఈ ప్రశ్నను తొలగించాలనుకుంటున్నారా?")){
+      if(confirm("Are you sure you want to delete this question?")){
         const {error} = await db.from("bible_questions").delete().eq("id", q.id);
         if(!error) {
           selectedQuestionIds.delete(qIdStr);
@@ -2867,7 +3012,7 @@ $("deleteSelectedQuestionsBtn").addEventListener("click", async () => {
   const idsToDelete = [...selectedQuestionIds];
   if (idsToDelete.length === 0) return;
 
-  if (!confirm(`మీరు ఎంచుకున్న ${idsToDelete.length} ప్రశ్నలను ఒకేసారి తొలగించాలనుకుంటున్నారా?`)) return;
+  if (!confirm(`Delete all ${idsToDelete.length} selected questions?`)) return;
 
   const delBtn = $("deleteSelectedQuestionsBtn");
   const statusEl = $("questionListStatus");
@@ -2875,7 +3020,6 @@ $("deleteSelectedQuestionsBtn").addEventListener("click", async () => {
   statusEl.textContent = `⏳ Deleting ${idsToDelete.length} selected questions...`;
 
   try {
-    // Clean any reference in secure_attempt_questions first if foreign key exists
     try {
       await db.from("secure_attempt_questions").delete().in("question_id", idsToDelete);
     } catch (_) {}
@@ -2888,7 +3032,7 @@ $("deleteSelectedQuestionsBtn").addEventListener("click", async () => {
     if (error) throw error;
 
     selectedQuestionIds.clear();
-    statusEl.textContent = `✅ ${idsToDelete.length} ప్రశ్నలు విజయవంతంగా తొలగించబడ్డాయి!`;
+    statusEl.textContent = `✅ Successfully deleted ${idsToDelete.length} questions!`;
     await loadQuestions();
   } catch (err) {
     alert("Delete Error: " + err.message);
@@ -3081,109 +3225,327 @@ $("releaseCertificatesBtn").addEventListener("click", async () => {
 });
 
 // ==========================================
-// ADMIN DASHBOARD UI LANGUAGE SWITCHER
+// COMPLETE ADMIN DASHBOARD UI TRANSLATION (4 LANGUAGES)
 // ==========================================
 const ADMIN_UI_TRANSLATIONS = {
   te: {
     navHome: "← హోమ్",
+    headerSub: "సురక్షిత అడ్మిన్ డాష్‌బోర్డ్",
     loginHeading: "అడ్మిన్ లాగిన్",
+    loginBtn: "లాగిన్",
     adminStatusHeading: "అడ్మిన్ వివరాలు",
     refreshBtn: "ఫలితాలు రిఫ్రెష్",
     logoutBtn: "లాగౌట్",
-    liveHeading: "📡 లైవ్ ఎగ్జామ్ అభ్యర్థులు",
-    winnersHeading: "🏆 లైవ్ ఎగ్జామ్ ఫలితాలు & విజేతలు",
+    viewLeaderboard: "లీడర్‌బోర్డ్ చూడండి",
+    liveHeading: "లైవ్ ఎగ్జామ్ అభ్యర్థులు",
+    liveSub: "పరీక్షలో జాయిన్ అయినప్పటి నుండి ముగిసే వరకు అభ్యర్థులందరినీ లైవ్‌లో చూడండి. Online (పరీక్ష రాస్తున్నవారు) మరియు Completed (పూర్తి చేసినవారు) వేర్వేరు Photo Galleries లో కనిపిస్తారు.",
+    liveExamLabel: "లైవ్ / ఇటీవలి ఎగ్జామ్ ఎంచుకోండి",
+    refreshLiveBtn: "లైవ్ గ్యాలరీ రిఫ్రెష్",
+    statTotalJoined: "మొత్తం జాయిన్ అయినవారు",
+    statOnline: "🟢 ఆన్‌లైన్ (ప్రస్తుతం రాస్తున్నవారు)",
+    statCompleted: "🔴 పూర్తయినవారు (సబ్మిట్ చేసినవారు)",
+    onlineGalleryTitle: "🟢 Online Participants Gallery (ప్రస్తుతం పరీక్ష రాస్తున్నవారు)",
+    completedGalleryTitle: "🔴 Completed Participants Gallery (పరీక్ష పూర్తి చేసినవారు)",
+    noOnlineMsg: "ప్రస్తుతం ఎవరూ పరీక్ష రాయడం లేదు (0 Online).",
+    noCompletedMsg: "ఇంకా ఎవరూ పరీక్ష పూర్తి చేయలేదు (0 Completed).",
+    winnersHeading: "లైవ్ ఎగ్జామ్ ఫలితాలు & విజేతలు",
+    winnerExamLabel: "ఎగ్జామ్ ఎంచుకోండి",
+    loadWinnersBtn: "విజేతలను చూడండి",
+    releaseAnswersBtn: "సరైన సమాధానాలు విడుదల చేయండి",
+    releaseCertBtn: "సర్టిఫికెట్లు విడుదల / పంపండి",
+    top3Heading: "టాప్ 3 విజేతలు",
+    top10Heading: "టాప్ 10 అభ్యర్థులు",
+    statAttempts: "మొత్తం ప్రయత్నాలు",
+    statAvg: "సగటు స్కోర్",
+    statHigh: "అత్యధిక స్కోర్",
     resultsHistoryHeading: "విద్యార్థుల ఫలితాల చరిత్ర",
-    scannerHeading: "📁 క్వశ్చన్ పేపర్ ఫోల్డర్లు & స్కానర్ (తెలుగు / English / தமிழ்)",
-    questionManagerHeading: "📖 బైబిల్ ప్రశ్నల నిర్వహణ",
-    savedQuestionsHeading: "📚 సేవ్ చేసిన బైబిల్ ప్రశ్నలు",
-    scheduleExamHeading: "📅 లైవ్ బైబిల్ ఎగ్జామ్ షెడ్యూల్",
-    scheduledExamsHeading: "📋 షెడ్యూల్ చేసిన ఎగ్జామ్స్ & అభ్యర్థులు",
+    scannerHeading: "క్వశ్చన్ పేపర్ ఫోల్డర్లు & స్కానర్ (తెలుగు / English / தமிழ்)",
+    scannerSubHtml: "ఒక ఎగ్జామ్‌కి ఒక <strong>Exam Folder Name</strong> ఇచ్చి, అందులోనే <strong>Telugu Paper</strong>, <strong>English Paper</strong>, <strong>Tamil Paper</strong> పేజీ బై పేజీ స్కాన్ చేసి సేవ్ చేయండి.<br>ఆ తర్వాత కింద <strong>Schedule Live Bible Exam</strong> లో ఆ Folder సెలెక్ట్ చేసి Date & Time పెడితే చాలు — ఆ టైమ్‌కి ప్రతి విద్యార్థికి వారు ఎంచుకున్న భాష పేపర్ మాత్రమే వస్తుంది!",
+    scanFolderLabel: "📁 Exam Folder Name (ఒకే ఎగ్జామ్‌కి అన్ని భాషలకూ ఇదే పేరు ఇవ్వండి)",
+    scanLangLabel: "🌐 Paper Language (ఇప్పుడు స్కాన్ చేసే పేపర్ భాష)",
+    scanBookLabel: "బైబిల్ పుస్తకం (ఐచ్ఛికం)",
+    scanChapLabel: "అధ్యాయం సంఖ్య (ఐచ్ఛికం)",
+    scanDropTitle: "పేజీ 1, పేజీ 2, పేజీ 3... ఒక్కొక్కటిగా స్కాన్ చేయండి",
+    scanDropSub: "100 ప్రశ్నలు (5 పేజీలు) ఒకేసారి Queue లో యాడ్ చేసి సేవ్ చేసుకోవచ్చు.",
+    scanCamBtn: "పేజీ ఫోటో తీయండి (Camera)",
+    scanGalBtn: "పేజీ ఇమేజ్ అప్‌లోడ్ (Gallery)",
+    ocrSummary: "📝 Scanned OCR Text చూడండి / లేదా నేరుగా Text పేస్ట్ చేసి Parse చేయండి",
+    savedFoldersTitle: "Saved Exam Paper Folders (ఎగ్జామ్ ఫోల్డర్లు)",
+    savedFoldersSub: "ఏ ఫోల్డర్‌లో ఏయే భాషల పేపర్లు ఎన్ని ప్రశ్నలు సిద్ధంగా ఉన్నాయో ఇక్కడ చూడండి:",
+    noFoldersMsg: "ఇంకా ఏ Exam Paper Folder క్రియేట్ చేయలేదు. పైన Folder Name ఇచ్చి పేపర్లు స్కాన్ చేసి సేవ్ చేయండి.",
+    questionManagerHeading: "బైబిల్ ప్రశ్నల నిర్వహణ",
+    questionManagerSub: "Admin మాత్రమే Questions Add, Edit, Delete చేయగలరు. Correct Answers Studentsకి ఈ Page ద్వారా చూపించబడవు.",
+    aiBoxHeading: "AI బైబిల్ ప్రశ్నల జనరేటర్",
+    aiBoxSub: "బైబిల్ వచనాలు మరియు సంఘటనల ఆధారంగా A/B/C/D ఆప్షన్లతో కొత్త ప్రశ్నలను రూపొందించండి.",
+    savedQuestionsHeading: "సేవ్ చేసిన బైబిల్ ప్రశ్నలు",
+    scheduleExamHeading: "లైవ్ బైబిల్ ఎగ్జామ్ షెడ్యూల్",
+    scheduleExamSubHtml: "పైన స్కాన్ చేసి సేవ్ చేసిన <strong>Exam Paper Folder</strong> సెలెక్ట్ చేసి Date & Time పెడితే, ఆ టైమ్‌కి ఆ ఫోల్డర్‌లోని ప్రశ్నలే ఎగ్జామ్‌లో వస్తాయి!",
+    examFolderSelectLabel: "📁 స్కాన్ చేసిన Exam Paper Folder ఎంచుకోండి (ఐచ్ఛికం)",
+    scheduledExamsHeading: "షెడ్యూల్ చేసిన ఎగ్జామ్స్ & అభ్యర్థులు",
+    scheduledExamsSub: "ప్రతి ఎగ్జామ్‌కి ఎంతమంది హాజరయ్యారో చూడండి మరియు '👁️ View Details & Photos' క్లిక్ చేసి వారి వివరాలు & ఫోటో చూడండి.",
+    minsUnit: "నిమిషాలు",
+    secsUnit: "సెకన్లు",
     defaultScanLang: "telugu"
   },
   en: {
     navHome: "← Home",
+    headerSub: "Secure Admin Dashboard",
     loginHeading: "Admin Login",
+    loginBtn: "Login",
     adminStatusHeading: "Admin Status",
     refreshBtn: "Refresh Results",
     logoutBtn: "Logout",
-    liveHeading: "📡 Live Exam Participants",
-    winnersHeading: "🏆 Live Exam Results & Winners",
+    viewLeaderboard: "View Leaderboard",
+    liveHeading: "Live Exam Participants",
+    liveSub: "Monitor all candidates in real time from exam join to submission. Online (currently writing) and Completed (submitted) appear in separate Photo Galleries.",
+    liveExamLabel: "Select Live / Recent Exam",
+    refreshLiveBtn: "Refresh Live Gallery",
+    statTotalJoined: "Total Joined",
+    statOnline: "🟢 Online (Writing Now)",
+    statCompleted: "🔴 Completed (Submitted)",
+    onlineGalleryTitle: "🟢 Online Participants Gallery (Currently Writing)",
+    completedGalleryTitle: "🔴 Completed Participants Gallery (Submitted)",
+    noOnlineMsg: "No one is currently taking the exam (0 Online).",
+    noCompletedMsg: "No candidates have completed the exam yet (0 Completed).",
+    winnersHeading: "Live Exam Results & Winners",
+    winnerExamLabel: "Select Exam",
+    loadWinnersBtn: "View Exam Winners",
+    releaseAnswersBtn: "Release Correct Answers",
+    releaseCertBtn: "Release / Send Certificates",
+    top3Heading: "Top 3 Winners",
+    top10Heading: "Top 10 Participants",
+    statAttempts: "Total Attempts",
+    statAvg: "Average Score",
+    statHigh: "Highest Score",
     resultsHistoryHeading: "Student Results History",
-    scannerHeading: "📁 Question Paper Folders & Scanner (Telugu / English / Tamil)",
-    questionManagerHeading: "📖 Bible Question Management",
-    savedQuestionsHeading: "📚 Saved Bible Questions",
-    scheduleExamHeading: "📅 Schedule Live Bible Exam",
-    scheduledExamsHeading: "📋 Scheduled Exams & Participants",
+    scannerHeading: "Question Paper Folders & Scanner (Telugu / English / Tamil / Hindi)",
+    scannerSubHtml: "Create one <strong>Exam Folder Name</strong> per exam, then scan and save <strong>Telugu</strong>, <strong>English</strong>, <strong>Tamil</strong>, and <strong>Hindi</strong> papers page by page inside it.<br>Then select that Folder in <strong>Schedule Live Bible Exam</strong> below and set Date & Time — each student will automatically get the paper in their chosen language!",
+    scanFolderLabel: "📁 Exam Folder Name (Use the same name for all languages of an exam)",
+    scanLangLabel: "🌐 Paper Language (Language of the paper being scanned now)",
+    scanBookLabel: "Bible Book (Optional / Reference)",
+    scanChapLabel: "Chapter Number (Optional)",
+    scanDropTitle: "Scan Page 1, Page 2, Page 3... one by one",
+    scanDropSub: "You can queue and save up to 100 questions (5 pages) at once.",
+    scanCamBtn: "Take Page Photo (Camera)",
+    scanGalBtn: "Upload Page Image(s) (Gallery)",
+    ocrSummary: "📝 View Scanned OCR Text / Or Paste Text Directly to Parse",
+    savedFoldersTitle: "Saved Exam Paper Folders",
+    savedFoldersSub: "Check which language papers and question counts are ready in each folder:",
+    noFoldersMsg: "No Exam Paper Folder created yet. Enter a Folder Name above, scan pages, and save.",
+    questionManagerHeading: "Bible Question Management",
+    questionManagerSub: "Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from students on this page.",
+    aiBoxHeading: "AI Bible Question Generator",
+    aiBoxSub: "Generate unique Bible quiz questions based on Scripture verses & events with randomized A/B/C/D options.",
+    savedQuestionsHeading: "Saved Bible Questions",
+    scheduleExamHeading: "Schedule Live Bible Exam",
+    scheduleExamSubHtml: "Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time — participants will automatically get the questions in their chosen language!",
+    examFolderSelectLabel: "📁 Select Scanned Exam Paper Folder (Optional - uses folder papers instead of Book/Chapter below)",
+    scheduledExamsHeading: "Scheduled Exams & Participants",
+    scheduledExamsSub: "View participant counts for each exam and click '👁️ View Details & Photos' to inspect candidate names, details & photos.",
+    minsUnit: "mins",
+    secsUnit: "secs",
     defaultScanLang: "english"
   },
   ta: {
     navHome: "← முகப்பு",
+    headerSub: "பாதுகாப்பான நிர்வாகி டாஷ்போர்டு",
     loginHeading: "நிர்வாகி உள்நுழைவு",
+    loginBtn: "உள்நுழை",
     adminStatusHeading: "நிர்வாகி நிலை",
     refreshBtn: "முடிவுகளை புதுப்பி",
     logoutBtn: "வெளியேறு",
-    liveHeading: "📡 நேரடி தேர்வு பங்கேற்பாளர்கள்",
-    winnersHeading: "🏆 நேரடி தேர்வு முடிவுகள் & வெற்றியாளர்கள்",
+    viewLeaderboard: "தரவரிசைப் பட்டியல்",
+    liveHeading: "நேரடி தேர்வு பங்கேற்பாளர்கள்",
+    liveSub: "தேர்வில் இணைந்தது முதல் முடியும் வரை அனைத்து பங்கேற்பாளர்களையும் நேரலையில் காண்க.",
+    liveExamLabel: "நேரடி / சமீபத்திய தேர்வைத் தேர்ந்தெடுக்கவும்",
+    refreshLiveBtn: "நேரடி கேலரியை புதுப்பி",
+    statTotalJoined: "மொத்தம் இணைந்தவர்கள்",
+    statOnline: "🟢 ஆன்லைன் (எழுதுபவர்கள்)",
+    statCompleted: "🔴 முடித்தவர்கள்",
+    onlineGalleryTitle: "🟢 Online Participants Gallery (தற்போது தேர்வு எழுதுபவர்கள்)",
+    completedGalleryTitle: "🔴 Completed Participants Gallery (தேர்வு முடித்தவர்கள்)",
+    noOnlineMsg: "தற்போது யாரும் தேர்வு எழுதவில்லை (0 Online).",
+    noCompletedMsg: "இதுவரை யாரும் தேர்வை முடிக்கவில்லை (0 Completed).",
+    winnersHeading: "நேரடி தேர்வு முடிவுகள் & வெற்றியாளர்கள்",
+    winnerExamLabel: "தேர்வைத் தேர்ந்தெடுக்கவும்",
+    loadWinnersBtn: "வெற்றியாளர்களைக் காண்க",
+    releaseAnswersBtn: "சரியான பதில்களை வெளியிடு",
+    releaseCertBtn: "சான்றிதழ்களை வெளியிடு / அனுப்பு",
+    top3Heading: "முதல் 3 வெற்றியாளர்கள்",
+    top10Heading: "முதல் 10 பங்கேற்பாளர்கள்",
+    statAttempts: "மொத்த முயற்சிகள்",
+    statAvg: "சராசரி மதிப்பெண்",
+    statHigh: "அதிகபட்ச மதிப்பெண்",
     resultsHistoryHeading: "மாணவர் முடிவுகள் வரலாறு",
-    scannerHeading: "📁 வினாத்தாள் கோப்புறைகள் & ஸ்கேனர்",
-    questionManagerHeading: "📖 வேதாகம கேள்விகள் மேலாண்மை",
-    savedQuestionsHeading: "📚 சேமிக்கப்பட்ட வேதாகம கேள்விகள்",
-    scheduleExamHeading: "📅 நேரடி வேதாகம தேர்வு அட்டவணை",
-    scheduledExamsHeading: "📋 திட்டமிடப்பட்ட தேர்வுகள்",
+    scannerHeading: "வினாத்தாள் கோப்புறைகள் & ஸ்கேனர்",
+    scannerSubHtml: "ஒரு தேர்விற்கு ஒரு <strong>Exam Folder Name</strong> கொடுத்து, அதில் அனைத்து மொழி வினாத்தாள்களையும் பக்கம் பக்கமாக ஸ்கேன் செய்து சேமிக்கவும்.",
+    scanFolderLabel: "📁 Exam Folder Name",
+    scanLangLabel: "🌐 வினாத்தாள் மொழி",
+    scanBookLabel: "வேதாகம புத்தகம் (விருப்பத்தேர்வு)",
+    scanChapLabel: "அதிகாரம் எண் (விருப்பத்தேர்வு)",
+    scanDropTitle: "பக்கம் 1, பக்கம் 2, பக்கம் 3... ஒவ்வொன்றாக ஸ்கேன் செய்யவும்",
+    scanDropSub: "ஒரே நேரத்தில் 100 கேள்விகள் வரை சேமிக்கலாம்.",
+    scanCamBtn: "புகைப்படம் எடு (Camera)",
+    scanGalBtn: "படத்தை பதிவேற்று (Gallery)",
+    ocrSummary: "📝 ஸ்கேன் செய்த உரையைப் பார்க்கவும் / ஒட்டவும்",
+    savedFoldersTitle: "சேமிக்கப்பட்ட தேர்வு கோப்புறைகள்",
+    savedFoldersSub: "ஒவ்வொரு கோப்புறையிலும் உள்ள மொழி வினாத்தாள்களை இங்கே காண்க:",
+    noFoldersMsg: "இன்னும் தேர்வு கோப்புறை எதுவும் உருவாக்கப்படவில்லை.",
+    questionManagerHeading: "வேதாகம கேள்விகள் மேலாண்மை",
+    questionManagerSub: "நிர்வாகி மட்டுமே கேள்விகளைச் சேர்க்க, திருத்த அல்லது நீக்க முடியும்.",
+    aiBoxHeading: "AI வேதாகம கேள்வி உருவாக்கி",
+    aiBoxSub: "வேதாகம வசனங்களின் அடிப்படையில் புதிய வினாடி வினா கேள்விகளை உருவாக்கவும்.",
+    savedQuestionsHeading: "சேமிக்கப்பட்ட வேதாகம கேள்விகள்",
+    scheduleExamHeading: "நேரடி வேதாகம தேர்வு அட்டவணை",
+    scheduleExamSubHtml: "மேலே சேமித்த <strong>Exam Paper Folder</strong> தேர்ந்தெடுத்து தேதி & நேரம் அமைக்கவும்.",
+    examFolderSelectLabel: "📁 ஸ்கேன் செய்த Exam Paper Folder தேர்ந்தெடுக்கவும் (விருப்பத்தேர்வு)",
+    scheduledExamsHeading: "திட்டமிடப்பட்ட தேர்வுகள் & பங்கேற்பாளர்கள்",
+    scheduledExamsSub: "ஒவ்வொரு தேர்விலும் பங்கேற்றவர்களின் விவரங்கள் & புகைப்படங்களைக் காண்க.",
+    minsUnit: "நிமிடங்கள்",
+    secsUnit: "வினாடிகள்",
     defaultScanLang: "tamil"
   },
   hi: {
     navHome: "← होम",
+    headerSub: "सुरक्षित एडमिन डैशबोर्ड",
     loginHeading: "एडमिन लॉगिन",
+    loginBtn: "लॉगिन",
     adminStatusHeading: "एडमिन स्थिति",
     refreshBtn: "परिणाम रीफ़्रेश करें",
     logoutBtn: "लॉगआउट",
-    liveHeading: "📡 लाइव परीक्षा प्रतिभागी",
-    winnersHeading: "🏆 लाइव परीक्षा परिणाम और विजेता",
+    viewLeaderboard: "लीडरबोर्ड देखें",
+    liveHeading: "लाइव परीक्षा प्रतिभागी",
+    liveSub: "परीक्षा में शामिल होने से लेकर सबमिट करने तक सभी उम्मीदवारों को लाइव देखें।",
+    liveExamLabel: "लाइव / हालिया परीक्षा चुनें",
+    refreshLiveBtn: "लाइव गैलरी रीफ़्रेश करें",
+    statTotalJoined: "कुल शामिल हुए",
+    statOnline: "🟢 ऑनलाइन (अभी लिख रहे हैं)",
+    statCompleted: "🔴 पूर्ण (सबमिट किया गया)",
+    onlineGalleryTitle: "🟢 Online Participants Gallery (वर्तमान में परीक्षा दे रहे हैं)",
+    completedGalleryTitle: "🔴 Completed Participants Gallery (परीक्षा पूर्ण कर चुके हैं)",
+    noOnlineMsg: "वर्तमान में कोई भी परीक्षा नहीं दे रहा है (0 Online)।",
+    noCompletedMsg: "अभी तक किसी ने परीक्षा पूरी नहीं की है (0 Completed)।",
+    winnersHeading: "लाइव परीक्षा परिणाम और विजेता",
+    winnerExamLabel: "परीक्षा चुनें",
+    loadWinnersBtn: "विजेता देखें",
+    releaseAnswersBtn: "सही उत्तर जारी करें",
+    releaseCertBtn: "प्रमाण पत्र जारी करें / भेजें",
+    top3Heading: "शीर्ष 3 विजेता",
+    top10Heading: "शीर्ष 10 प्रतिभागी",
+    statAttempts: "कुल प्रयास",
+    statAvg: "औसत स्कोर",
+    statHigh: "उच्चतम स्कोर",
     resultsHistoryHeading: "छात्र परिणाम इतिहास",
-    scannerHeading: "📁 प्रश्न पत्र फ़ोल्डर और स्कैनर",
-    questionManagerHeading: "📖 बाइबल प्रश्न प्रबंधन",
-    savedQuestionsHeading: "📚 सहेजे गए बाइबल प्रश्न",
-    scheduleExamHeading: "📅 लाइव बाइबल परीक्षा शेड्यूल करें",
-    scheduledExamsHeading: "📋 निर्धारित परीक्षाएं और प्रतिभागी",
+    scannerHeading: "प्रश्न पत्र फ़ोल्डर और स्कैनर",
+    scannerSubHtml: "प्रत्येक परीक्षा के लिए एक <strong>Exam Folder Name</strong> दें और उसमें सभी भाषाओं के पेपर पेज-दर-पेज स्कैन करके सहेजें।",
+    scanFolderLabel: "📁 Exam Folder Name",
+    scanLangLabel: "🌐 पेपर की भाषा",
+    scanBookLabel: "बाइबल पुस्तक (वैकल्पिक)",
+    scanChapLabel: "अध्याय संख्या (वैकल्पिक)",
+    scanDropTitle: "पेज 1, पेज 2, पेज 3... एक-एक करके स्कैन करें",
+    scanDropSub: "एक साथ 100 प्रश्न तक सहेजे जा सकते हैं।",
+    scanCamBtn: "फोटो लें (Camera)",
+    scanGalBtn: "इमेज अपलोड करें (Gallery)",
+    ocrSummary: "📝 स्कैन किया गया टेक्स्ट देखें / पेस्ट करें",
+    savedFoldersTitle: "सहेजे गए परीक्षा फ़ोल्डर",
+    savedFoldersSub: "प्रत्येक फ़ोल्डर में तैयार भाषाओं के प्रश्न यहाँ देखें:",
+    noFoldersMsg: "अभी तक कोई परीक्षा फ़ोल्डर नहीं बनाया गया है।",
+    questionManagerHeading: "बाइबल प्रश्न प्रबंधन",
+    questionManagerSub: "केवल एडमिन ही प्रश्न जोड़, संपादित या हटा सकते हैं।",
+    aiBoxHeading: "AI बाइबल प्रश्न जनरेटर",
+    aiBoxSub: "पवित्र शास्त्र के वचनों के आधार पर नए प्रश्न बनाएं।",
+    savedQuestionsHeading: "सहेजे गए बाइबल प्रश्न",
+    scheduleExamHeading: "लाइव बाइबल परीक्षा शेड्यूल करें",
+    scheduleExamSubHtml: "ऊपर सहेजे गए <strong>Exam Paper Folder</strong> को चुनें और दिनांक व समय निर्धारित करें।",
+    examFolderSelectLabel: "📁 स्कैन किया गया Exam Paper Folder चुनें (वैकल्पिक)",
+    scheduledExamsHeading: "निर्धारित परीक्षाएं और प्रतिभागी",
+    scheduledExamsSub: "प्रत्येक परीक्षा के प्रतिभागियों की संख्या, विवरण और फोटो देखें।",
+    minsUnit: "मिनट",
+    secsUnit: "सेकंड",
     defaultScanLang: "hindi"
   }
 };
 
 function applyAdminUiLanguage(langCode) {
-  const t = ADMIN_UI_TRANSLATIONS[langCode] || ADMIN_UI_TRANSLATIONS.te;
+  currentAdminUiLang = langCode;
+  const t = ADMIN_UI_TRANSLATIONS[langCode] || ADMIN_UI_TRANSLATIONS.en;
   localStorage.setItem("logos_admin_ui_lang", langCode);
 
-  const map = {
+  const textMap = {
     navHomeBtn: t.navHome,
+    headerSub: t.headerSub,
     loginHeading: t.loginHeading,
+    loginSubmitBtn: t.loginBtn,
     adminStatusHeading: t.adminStatusHeading,
-    refreshBtn: t.refreshBtn,
-    logoutBtn: t.logoutBtn,
+    refreshBtnText: t.refreshBtn,
+    logoutBtnText: t.logoutBtn,
+    viewLeaderboardText: t.viewLeaderboard,
     liveParticipantsHeading: t.liveHeading,
+    liveParticipantsSub: t.liveSub,
+    liveMonitorExamLabel: t.liveExamLabel,
+    refreshLiveBtnText: t.refreshLiveBtn,
+    statTotalJoinedLbl: t.statTotalJoined,
+    statOnlineLbl: t.statOnline,
+    statCompletedLbl: t.statCompleted,
+    onlineGalleryTitleText: t.onlineGalleryTitle,
+    completedGalleryTitleText: t.completedGalleryTitle,
     winnersHeading: t.winnersHeading,
+    winnerExamLabel: t.winnerExamLabel,
+    loadWinnersBtnText: t.loadWinnersBtn,
+    releaseAnswersBtnText: t.releaseAnswersBtn,
+    releaseCertBtnText: t.releaseCertBtn,
+    top3Heading: t.top3Heading,
+    top10Heading: t.top10Heading,
+    statAttemptsLbl: t.statAttempts,
+    statAvgLbl: t.statAvg,
+    statHighLbl: t.statHigh,
     resultsHistoryHeading: t.resultsHistoryHeading,
     scannerHeading: t.scannerHeading,
+    scanFolderLabel: t.scanFolderLabel,
+    scanLangLabel: t.scanLangLabel,
+    scanBookLabel: t.scanBookLabel,
+    scanChapLabel: t.scanChapLabel,
+    scanDropTitle: t.scanDropTitle,
+    scanDropSub: t.scanDropSub,
+    scanCamBtnLbl: t.scanCamBtn,
+    scanGalBtnLbl: t.scanGalBtn,
+    ocrDetailsSummary: t.ocrSummary,
+    savedFoldersTitle: t.savedFoldersTitle,
+    savedFoldersSub: t.savedFoldersSub,
     questionManagerHeading: t.questionManagerHeading,
+    questionManagerSub: t.questionManagerSub,
+    aiBoxHeading: t.aiBoxHeading,
+    aiBoxSub: t.aiBoxSub,
     savedQuestionsHeading: t.savedQuestionsHeading,
     scheduleExamHeading: t.scheduleExamHeading,
-    scheduledExamsHeading: t.scheduledExamsHeading
+    examFolderSelectLabel: t.examFolderSelectLabel,
+    scheduledExamsHeading: t.scheduledExamsHeading,
+    scheduledExamsSub: t.scheduledExamsSub
   };
 
-  Object.entries(map).forEach(([elId, text]) => {
+  Object.entries(textMap).forEach(([elId, text]) => {
     const el = $(elId);
     if (el) el.textContent = text;
   });
 
+  if ($("scannerSubDesc")) $("scannerSubDesc").innerHTML = t.scannerSubHtml;
+  if ($("scheduleExamSub")) $("scheduleExamSub").innerHTML = t.scheduleExamSubHtml;
+
   if ($("scanLanguage")) $("scanLanguage").value = t.defaultScanLang;
   if ($("questionLanguage")) $("questionLanguage").value = t.defaultScanLang;
+
+  if (allResults.length > 0) renderResults();
+  if (allQuestions.length > 0) refreshPaperFoldersUI();
+  if ($("liveMonitorExamSelect") && $("liveMonitorExamSelect").value) {
+    refreshLiveParticipantsGallery(true);
+  }
 }
 
 $("adminUiLangSelect").addEventListener("change", function() {
   applyAdminUiLanguage(this.value);
 });
 
-const savedAdminLang = localStorage.getItem("logos_admin_ui_lang") || "te";
+const savedAdminLang = localStorage.getItem("logos_admin_ui_lang") || "en";
 $("adminUiLangSelect").value = savedAdminLang;
 applyAdminUiLanguage(savedAdminLang);
 
