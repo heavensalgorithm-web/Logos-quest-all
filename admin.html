@@ -1808,9 +1808,17 @@ function hydrateAll3DImageIcons(root = document) {
 }
 
 // ==========================================
-// 9-BUTTON MENU NAVIGATION CONTROLLER
+// 9-BUTTON MENU NAVIGATION CONTROLLER (LOCKS TABLET/MOBILE BACK TO MENU)
 // ==========================================
-window.openAdminSection = function(sectionId) {
+function showAdminMenuUI() {
+  document.querySelectorAll(".admin-feature-section").forEach(sec => {
+    sec.classList.add("hidden");
+  });
+  $("adminMenuGridView").classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+window.openAdminSection = function(sectionId, skipPush = false) {
   $("adminMenuGridView").classList.add("hidden");
   document.querySelectorAll(".admin-feature-section").forEach(sec => {
     sec.classList.add("hidden");
@@ -1819,6 +1827,9 @@ window.openAdminSection = function(sectionId) {
   if (target) {
     target.classList.remove("hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
+    if (!skipPush) {
+      history.pushState({ view: "section", sectionId: sectionId }, "", "#section-" + sectionId);
+    }
   }
   if (sectionId === "liveParticipantsCard") {
     refreshLiveParticipantsGallery(false);
@@ -1826,12 +1837,21 @@ window.openAdminSection = function(sectionId) {
 };
 
 window.backToAdminMenu = function() {
-  document.querySelectorAll(".admin-feature-section").forEach(sec => {
-    sec.classList.add("hidden");
-  });
-  $("adminMenuGridView").classList.remove("hidden");
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  showAdminMenuUI();
+  history.replaceState({ view: "menu" }, "", "#menu");
 };
+
+window.addEventListener("popstate", function(event) {
+  const isDashboardVisible = !$("dashboard").classList.contains("hidden");
+  if (!isDashboardVisible) return;
+
+  if (event.state && event.state.view === "section" && event.state.sectionId) {
+    openAdminSection(event.state.sectionId, true);
+  } else {
+    showAdminMenuUI();
+    history.pushState({ view: "menu" }, "", "#menu");
+  }
+});
 
 const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
@@ -1863,7 +1883,9 @@ function showDashboard(user) {
   $("dashboard").classList.remove("hidden");
   $("adminEmail").textContent = "Admin: " + (user.email || "");
   $("adminMenuWelcome").textContent = "Admin: " + (user.email || "");
-  backToAdminMenu();
+  history.replaceState({ view: "base" }, "", "#admin");
+  history.pushState({ view: "menu" }, "", "#menu");
+  showAdminMenuUI();
 }
 
 async function verifyAdmin() {
