@@ -17,10 +17,10 @@
 :root {
   --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
   --card-bg: rgba(22, 33, 62, 0.78);
-  --card-border: rgba(234, 179, 8, 0.25);
+  --card-border: rgba(234, 179, 8, 0.28);
   --gold-primary: #facc15;
   --gold-dark: #ca8a04;
-  --gold-glow: rgba(250, 204, 21, 0.35);
+  --gold-glow: rgba(250, 204, 21, 0.4);
   --text-main: #f8fafc;
   --text-muted: #cbd5e1;
 }
@@ -46,22 +46,24 @@ body {
 }
 
 .btn-back {
-  background: rgba(15, 23, 42, 0.85);
+  background: linear-gradient(145deg, #162244, #0a1022);
   color: var(--gold-primary);
   border: 1.5px solid var(--card-border);
   padding: 8px 16px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.45), inset 0 1px 1px rgba(255,255,255,0.15);
   transition: all 0.2s ease;
 }
 
 .btn-back:hover {
   background: rgba(234, 179, 8, 0.2);
   border-color: var(--gold-primary);
+  transform: translateY(-1px);
 }
 
 .lang-select {
@@ -82,34 +84,104 @@ body {
   color: #f8fafc;
 }
 
+/* ================= PREMIUM 3D LOGO & HEADER ================= */
 header {
   text-align: center;
   margin-bottom: 20px;
+  perspective: 900px;
+}
+
+@keyframes float3D {
+  0%, 100% { transform: translateY(0px) rotateX(4deg) rotateY(-4deg); }
+  50% { transform: translateY(-6px) rotateX(-3deg) rotateY(5deg); }
+}
+
+.logo-3d-wrap {
+  width: 94px;
+  height: 94px;
+  margin: 0 auto 14px;
+  padding: 5px;
+  border-radius: 26px;
+  background: linear-gradient(145deg, #fef08a 0%, #eab308 45%, #854d0e 100%);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.65),
+    0 6px 0 #713f12,
+    0 0 28px rgba(250, 204, 21, 0.45),
+    inset 0 2px 4px rgba(255, 255, 255, 0.75);
+  animation: float3D 4.5s ease-in-out infinite;
+  position: relative;
+}
+
+.logo-3d-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 21px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0) 48%);
+  pointer-events: none;
 }
 
 .logo-img {
-  width: 85px;
-  height: 85px;
-  border-radius: 20px;
-  margin: 0 auto 10px;
+  width: 100%;
+  height: 100%;
+  border-radius: 21px;
   display: block;
-  box-shadow: 0 6px 20px var(--gold-glow);
-  border: 2px solid var(--gold-primary);
-  background: #0f172a;
+  object-fit: cover;
+  background: #0b1329;
 }
 
-header h1 {
-  color: var(--gold-primary);
-  margin: 0 0 4px 0;
-  font-size: 26px;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 10px var(--gold-glow);
+.brand-3d-title {
+  margin: 0 0 6px 0;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  background: linear-gradient(180deg, #fef9c3 0%, #facc15 48%, #ca8a04 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 0 #713f12) drop-shadow(0 4px 0 #422006) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 header p {
   color: var(--text-muted);
   font-size: 14px;
   margin: 0;
+}
+
+/* ================= BEVELED 3D ROYAL BLUE & GOLD IMAGE ICONS ================= */
+img.ico-img-lg {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  object-fit: contain;
+  margin-right: 10px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.75));
+}
+
+img.ico-img-md {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  object-fit: contain;
+  margin-right: 7px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,0.6));
+}
+
+img.ico-img-sm {
+  width: 21px;
+  height: 21px;
+  border-radius: 6px;
+  object-fit: contain;
+  margin-right: 6px;
+  vertical-align: -5px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.55));
 }
 
 main {
@@ -125,7 +197,7 @@ main {
   padding: 24px;
   border-radius: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(234, 179, 8, 0.08);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 
 h2 {
@@ -133,7 +205,10 @@ h2 {
   color: #ffffff;
   font-size: 20px;
   margin-top: 0;
-  font-weight: 700;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .note {
@@ -176,7 +251,7 @@ select option {
 
 button {
   width: 100%;
-  background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+  background: linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
   color: #0b1329 !important;
   font-weight: 800;
   padding: 14px 24px;
@@ -184,25 +259,32 @@ button {
   border-radius: 12px;
   font-size: 15px;
   cursor: pointer;
-  box-shadow: 0 4px 14px var(--gold-glow);
-  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 0 #854d0e, 0 6px 14px var(--gold-glow), inset 0 1px 1px rgba(255,255,255,0.7);
+  transition: all 0.2s ease;
   margin-top: 14px;
 }
 
 button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(250, 204, 21, 0.5);
-  background: linear-gradient(135deg, #fef08a 0%, var(--gold-primary) 100%);
+  box-shadow: 0 6px 0 #854d0e, 0 8px 20px rgba(250, 204, 21, 0.55);
+  background: linear-gradient(145deg, #fef08a 0%, var(--gold-primary) 100%);
 }
 
 .notice {
   background: rgba(234, 179, 8, 0.12);
   border: 1px solid rgba(234, 179, 8, 0.3);
   color: #fef08a;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 12px;
   margin: 14px 0;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   text-align: center;
 }
 
@@ -237,7 +319,7 @@ button:hover:not(:disabled) {
 }
 
 .podium-card {
-  background: rgba(15, 23, 42, 0.85);
+  background: linear-gradient(145deg, rgba(26, 40, 78, 0.92), rgba(14, 22, 46, 0.96));
   border-radius: 18px;
   padding: 16px 12px;
   text-align: center;
@@ -257,7 +339,7 @@ button:hover:not(:disabled) {
   box-shadow: 0 8px 24px var(--gold-glow);
   order: 2;
   transform: scale(1.05);
-  background: linear-gradient(180deg, rgba(250, 204, 21, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%);
+  background: linear-gradient(180deg, rgba(250, 204, 21, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%);
 }
 
 .podium-card.rank-2 {
@@ -274,14 +356,14 @@ button:hover:not(:disabled) {
 
 .podium-avatar-box {
   position: relative;
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 10px;
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 12px;
 }
 
 .podium-card.rank-1 .podium-avatar-box {
-  width: 86px;
-  height: 86px;
+  width: 88px;
+  height: 88px;
 }
 
 .podium-photo {
@@ -305,11 +387,14 @@ button:hover:not(:disabled) {
   border: 3px solid #b45309;
 }
 
-.podium-badge {
+.podium-badge-img {
   position: absolute;
   bottom: -6px;
   right: -6px;
-  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.8));
 }
 
 .podium-name {
@@ -345,16 +430,16 @@ button:hover:not(:disabled) {
 }
 
 .btn-download-cert {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(145deg, #34d399 0%, #10b981 55%, #059669 100%);
   color: #ffffff !important;
   max-width: 340px;
   margin: 14px auto 0;
-  display: block;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+  display: inline-flex;
+  box-shadow: 0 4px 0 #064e3b, 0 6px 16px rgba(16, 185, 129, 0.4);
 }
 
 .btn-download-cert:hover {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  background: linear-gradient(145deg, #6ee7b7 0%, #10b981 100%);
 }
 
 /* ================= టేబుల్ స్టైలింగ్ ================= */
@@ -468,7 +553,8 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
 }
 
 .ak-ans {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   background: rgba(52, 211, 153, 0.16);
   border: 1px solid rgba(52, 211, 153, 0.45);
   color: #6ee7b7;
@@ -479,7 +565,8 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
 }
 
 .ak-selected-right {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   background: rgba(16, 185, 129, 0.22);
   border: 1px solid #10b981;
   color: #a7f3d0;
@@ -490,7 +577,8 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
 }
 
 .ak-selected-wrong {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   background: rgba(239, 68, 68, 0.18);
   border: 1px solid rgba(248, 113, 113, 0.55);
   color: #fca5a5;
@@ -501,7 +589,8 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
 }
 
 .ak-selected-none {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   background: rgba(148, 163, 184, 0.15);
   border: 1px solid rgba(148, 163, 184, 0.35);
   color: #cbd5e1;
@@ -518,7 +607,7 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
 
 .link-button {
   flex: 1;
-  background: rgba(15, 23, 42, 0.85);
+  background: linear-gradient(145deg, #1e293b, #0f172a);
   color: var(--gold-primary);
   border: 1.5px solid var(--card-border);
   text-align: center;
@@ -527,12 +616,17 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
   border-radius: 12px;
   font-weight: 700;
   font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 0 #060a14, 0 6px 12px rgba(0,0,0,0.4);
   transition: all 0.2s ease;
 }
 
 .link-button:hover {
   background: rgba(234, 179, 8, 0.2);
   color: #ffffff;
+  transform: translateY(-2px);
 }
 
 .hidden { display: none; }
@@ -543,24 +637,31 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
 
 <div class="top-bar">
   <a href="index.html" class="btn-back" id="btnBack">← హోమ్</a>
-  <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
-    <option value="te">🇮🇳 తెలుగు</option>
-    <option value="en">🌐 English</option>
-    <option value="ta">🇮🇳 தமிழ்</option>
-    <option value="hi">🇮🇳 हिन्दी</option>
-  </select>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <img data-ico="globe" class="ico-img-md" style="margin:0;" alt="Language">
+    <select id="langSelect" class="lang-select" style="margin:0;" onchange="changeLanguage(this.value)">
+      <option value="te">తెలుగు (Telugu)</option>
+      <option value="en">English</option>
+      <option value="ta">தமிழ் (Tamil)</option>
+      <option value="hi">हिन्दी (Hindi)</option>
+    </select>
+  </div>
 </div>
 
 <header>
-  <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
-  <h1>LOGOS QUEST</h1>
+  <div class="logo-3d-wrap">
+    <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
+  </div>
+  <h1 class="brand-3d-title">LOGOS QUEST</h1>
   <p id="hdrSubtitle">LIVE BIBLE QUIZ LEADERBOARD</p>
 </header>
 
 <main>
 
 <section class="card">
-  <h2 id="txtLiveTop10">🏆 LIVE EXAM TOP 10</h2>
+  <h2 id="txtLiveTop10">
+    <img data-ico="trophy" class="ico-img-lg" alt="Trophy"><span>LIVE EXAM TOP 10</span>
+  </h2>
 
   <p class="note" id="txtLiveNote">
     ప్రతి Exam ముగిసిన తర్వాత Top 10 Results కనిపిస్తాయి.
@@ -592,36 +693,48 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
     </table>
   </div>
 
-  <button id="refreshLive" type="button">🔄 Refresh Live Exam Results</button>
+  <button id="refreshLive" type="button">
+    <img data-ico="refresh" class="ico-img-sm" alt="Refresh"><span>Refresh Live Exam Results</span>
+  </button>
 </section>
 
 <!-- DIGITAL CERTIFICATE GENERATOR SECTION -->
 <section class="card" id="certificateCard">
-  <h2 id="txtCertTitle">📜 డిజిటల్ సర్టిఫికెట్ (Digital Certificate)</h2>
+  <h2 id="txtCertTitle">
+    <img data-ico="scroll" class="ico-img-lg" alt="Certificate"><span>డిజిటల్ సర్టిఫికెట్ (Digital Certificate)</span>
+  </h2>
   <p class="note" id="txtCertDesc">
     Admin సర్టిఫికెట్లను విడుదల చేసిన తర్వాత మీ Mobile Number లేదా Email నమోదు చేసి మీ అధికారిక LOGOS QUEST సర్టిఫికెట్‌ను డౌన్‌లోడ్ చేసుకోండి.
   </p>
 
   <div class="ak-lookup-box">
     <input type="text" id="certIdentityInput" placeholder="మీ Mobile Number / Email నమోదు చేయండి">
-    <button type="button" id="generateCertBtn">🎓 సర్టిఫికెట్ తయారుచేయి</button>
+    <button type="button" id="generateCertBtn">
+      <img data-ico="medal" class="ico-img-sm" alt="Generate"><span>సర్టిఫికెట్ తయారుచేయి</span>
+    </button>
   </div>
 
   <p id="certStatus" class="status"></p>
 
   <div id="certPreviewContainer" class="cert-preview-wrap hidden">
     <canvas id="certificateCanvas" width="1200" height="850" class="cert-canvas"></canvas>
-    <button type="button" id="downloadCertBtn" class="btn-download-cert">⬇️ సర్టిఫికెట్ డౌన్‌లోడ్ (Download PNG)</button>
+    <button type="button" id="downloadCertBtn" class="btn-download-cert">
+      <img data-ico="download" class="ico-img-sm" alt="Download"><span>సర్టిఫికెట్ డౌన్‌లోడ్ (Download PNG)</span>
+    </button>
   </div>
 </section>
 
 <!-- RELEASED CORRECT ANSWERS SECTION -->
 <section class="card" id="answerKeyCard">
-  <h2 id="txtAnswerKeyTitle">📖 Exam Correct Answers (Answer Key)</h2>
+  <h2 id="txtAnswerKeyTitle">
+    <img data-ico="bible" class="ico-img-lg" alt="Answer Key"><span>Exam Correct Answers (Answer Key)</span>
+  </h2>
 
   <div class="ak-lookup-box">
     <input type="text" id="studentMobileInput" placeholder="మీ Mobile Number / Email నమోదు చేసి మీ Answers చూడండి">
-    <button type="button" id="checkMyAnswersBtn">🔍 నా Answers చూపించు</button>
+    <button type="button" id="checkMyAnswersBtn">
+      <img data-ico="search" class="ico-img-sm" alt="Search"><span>నా Answers చూపించు</span>
+    </button>
   </div>
 
   <p id="answerKeyStatus" class="status">Select an exam to view released answers.</p>
@@ -630,14 +743,193 @@ tr.bronze { background: rgba(180, 83, 9, 0.15) !important; font-weight: 600; col
 
 <section class="card">
   <div class="nav-grid">
-    <a class="link-button" href="index.html" id="btnNavExams">📝 Live Exams</a>
-    <a class="link-button" href="index.html" id="btnNavHome">🏠 Home Page</a>
+    <a class="link-button" href="index.html" id="btnNavExams">
+      <img data-ico="bible" class="ico-img-sm" alt="Exams"><span>Live Exams</span>
+    </a>
+    <a class="link-button" href="index.html" id="btnNavHome">
+      <img data-ico="home" class="ico-img-sm" alt="Home"><span>Home Page</span>
+    </a>
   </div>
 </section>
 
 </main>
 
 <script>
+// ==========================================
+// BEVELED 3D ROYAL BLUE & METALLIC GOLD IMAGE ICON ENGINE
+// ==========================================
+const ICON_3D_DESIGNS = {
+  globe: `
+    <circle cx="32" cy="32" r="14" fill="none" stroke="url(#goldEmb)" stroke-width="2.6" filter="url(#emboss)"/>
+    <ellipse cx="32" cy="32" rx="6.5" ry="14" fill="none" stroke="url(#goldEmb)" stroke-width="2.2"/>
+    <line x1="18" y1="32" x2="46" y2="32" stroke="url(#goldEmb)" stroke-width="2.2"/>
+  `,
+  trophy: `
+    <path d="M22 17h20v10c0 6-4.5 10.5-10 10.5S22 33 22 27V17z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+    <path d="M22 20h-4.5c0 4.5 2 7.5 5 8M42 20h4.5c0 4.5-2 7.5-5 8" fill="none" stroke="url(#goldEmb)" stroke-width="2.8" stroke-linecap="round"/>
+    <rect x="29.5" y="37" width="5" height="6" fill="url(#goldEmb)"/>
+    <rect x="23" y="43" width="18" height="4.5" rx="2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
+  `,
+  crown: `
+    <path d="M16 41l3-17 8 7 5-11 5 11 8-7 3 17H16z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" stroke-linejoin="round" filter="url(#emboss)"/>
+    <rect x="16" y="42.5" width="32" height="4.5" rx="2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8"/>
+    <circle cx="19" cy="22" r="2.2" fill="#fef9c3"/>
+    <circle cx="32" cy="18" r="2.5" fill="#fef9c3"/>
+    <circle cx="45" cy="22" r="2.2" fill="#fef9c3"/>
+  `,
+  medal1: `
+    <path d="M24 14l8 9 8-9" fill="none" stroke="#60a5fa" stroke-width="3.2" stroke-linecap="round"/>
+    <circle cx="32" cy="34" r="12" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1.2" filter="url(#emboss)"/>
+    <text x="32" y="39" text-anchor="middle" font-size="15" font-weight="900" fill="#0b1329">1</text>
+  `,
+  medal2: `
+    <path d="M24 14l8 9 8-9" fill="none" stroke="#60a5fa" stroke-width="3.2" stroke-linecap="round"/>
+    <circle cx="32" cy="34" r="12" fill="url(#silverEmb)" stroke="#ffffff" stroke-width="1.2" filter="url(#emboss)"/>
+    <text x="32" y="39" text-anchor="middle" font-size="15" font-weight="900" fill="#0b1329">2</text>
+  `,
+  medal3: `
+    <path d="M24 14l8 9 8-9" fill="none" stroke="#60a5fa" stroke-width="3.2" stroke-linecap="round"/>
+    <circle cx="32" cy="34" r="12" fill="url(#bronzeEmb)" stroke="#fed7aa" stroke-width="1.2" filter="url(#emboss)"/>
+    <text x="32" y="39" text-anchor="middle" font-size="15" font-weight="900" fill="#0b1329">3</text>
+  `,
+  medal: `
+    <circle cx="32" cy="28" r="11" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1.1" filter="url(#emboss)"/>
+    <path d="M26 38l-4 11 10-5 10 5-4-11" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8"/>
+  `,
+  scroll: `
+    <rect x="19" y="16" width="26" height="32" rx="3" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="2" filter="url(#emboss)"/>
+    <path d="M16 19a3 3 0 016 0v3h-6v-3zM42 42a3 3 0 016 0v3h-6v-3z" fill="url(#goldEmb)"/>
+    <line x1="24" y1="24" x2="40" y2="24" stroke="#1e3a8a" stroke-width="2.2"/>
+    <line x1="24" y1="30" x2="40" y2="30" stroke="#1e3a8a" stroke-width="2.2"/>
+    <circle cx="36" cy="39" r="4" fill="url(#goldEmb)"/>
+  `,
+  bible: `
+    <path d="M20 17l13-3 11 4v25l-11 4-13-4V17z" fill="url(#royalBook)" stroke="url(#goldEmb)" stroke-width="1.4" filter="url(#emboss)"/>
+    <path d="M20 41l13 4 11-4v4l-11 4-13-4v-4z" fill="#fef9c3" stroke="#ca8a04" stroke-width="0.8"/>
+    <path d="M32 20.5v9M28.5 24h7" stroke="url(#goldEmb)" stroke-width="2.6" stroke-linecap="round"/>
+  `,
+  refresh: `
+    <path d="M20 27a13 13 0 0122.5-8.5" fill="none" stroke="url(#goldEmb)" stroke-width="4" stroke-linecap="round" filter="url(#emboss)"/>
+    <polygon points="45,14 45,23 36,23" fill="url(#goldEmb)" filter="url(#emboss)"/>
+    <path d="M44 37a13 13 0 01-22.5 8.5" fill="none" stroke="url(#goldEmb)" stroke-width="4" stroke-linecap="round" filter="url(#emboss)"/>
+    <polygon points="19,50 19,41 28,41" fill="url(#goldEmb)" filter="url(#emboss)"/>
+  `,
+  search: `
+    <circle cx="29" cy="29" r="10.5" fill="none" stroke="url(#goldEmb)" stroke-width="3.6" filter="url(#emboss)"/>
+    <line x1="37" y1="37" x2="46" y2="46" stroke="url(#goldEmb)" stroke-width="4.2" stroke-linecap="round" filter="url(#emboss)"/>
+  `,
+  download: `
+    <path d="M32 16v22M23 30l9 9 9-9M19 45h26" fill="none" stroke="url(#goldEmb)" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
+  `,
+  calendar: `
+    <rect x="17" y="19" width="30" height="27" rx="3.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <path d="M17 22.5a3.5 3.5 0 013.5-3.5h23a3.5 3.5 0 013.5 3.5V26H17v-3.5z" fill="url(#goldEmb)"/>
+    <path d="M23 16v5M29 16v5M35 16v5M41 16v5" stroke="#fef9c3" stroke-width="2.4" stroke-linecap="round"/>
+    <rect x="22" y="30" width="4" height="3.5" rx="0.8" fill="#1e3a8a"/>
+    <rect x="30" y="30" width="4" height="3.5" rx="0.8" fill="#1e3a8a"/>
+    <rect x="38" y="30" width="4" height="3.5" rx="0.8" fill="#ca8a04"/>
+  `,
+  home: `
+    <path d="M16 31l16-14 16 14v15H36V36h-8v10H16V31z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" stroke-linejoin="round" filter="url(#emboss)"/>
+  `,
+  check: `
+    <path d="M20 33l8 8 17-18" fill="none" stroke="url(#emeraldEmb)" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
+  `,
+  crossMark: `
+    <path d="M21 21l22 22M43 21L21 43" fill="none" stroke="url(#crimsonEmb)" stroke-width="4.6" stroke-linecap="round" filter="url(#emboss)"/>
+  `,
+  lock: `
+    <rect x="20" y="29" width="24" height="17" rx="3.5" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+    <path d="M25 29v-5a7 7 0 0114 0v5" fill="none" stroke="url(#goldEmb)" stroke-width="3.2" stroke-linecap="round"/>
+    <circle cx="32" cy="37" r="2.2" fill="#0b1329"/>
+  `,
+  clock: `
+    <circle cx="32" cy="34" r="13.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="3.2" filter="url(#emboss)"/>
+    <path d="M32 26v8l5.5 3.5" fill="none" stroke="#0f235a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  `,
+  pointer: `
+    <path d="M20 32h22M35 25l8 7-8 7" fill="none" stroke="url(#goldEmb)" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
+  `
+};
+
+const ICON_IMAGE_CACHE = {};
+function get3DIconUrl(name) {
+  if (ICON_IMAGE_CACHE[name]) return ICON_IMAGE_CACHE[name];
+  const inner = ICON_3D_DESIGNS[name] || ICON_3D_DESIGNS.trophy;
+
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+    <defs>
+      <linearGradient id="goldRim" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fef9c3"/>
+        <stop offset="30%" stop-color="#facc15"/>
+        <stop offset="70%" stop-color="#ca8a04"/>
+        <stop offset="100%" stop-color="#713f12"/>
+      </linearGradient>
+      <linearGradient id="goldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fef9c3"/>
+        <stop offset="45%" stop-color="#facc15"/>
+        <stop offset="100%" stop-color="#a16207"/>
+      </linearGradient>
+      <linearGradient id="silverEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="50%" stop-color="#cbd5e1"/>
+        <stop offset="100%" stop-color="#475569"/>
+      </linearGradient>
+      <linearGradient id="bronzeEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fed7aa"/>
+        <stop offset="50%" stop-color="#d97706"/>
+        <stop offset="100%" stop-color="#78350f"/>
+      </linearGradient>
+      <radialGradient id="royalFace" cx="35%" cy="25%" r="75%">
+        <stop offset="0%" stop-color="#25489c"/>
+        <stop offset="60%" stop-color="#142966"/>
+        <stop offset="100%" stop-color="#091336"/>
+      </radialGradient>
+      <linearGradient id="royalBook" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#3b82f6"/>
+        <stop offset="100%" stop-color="#172554"/>
+      </linearGradient>
+      <linearGradient id="emeraldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#6ee7b7"/>
+        <stop offset="50%" stop-color="#10b981"/>
+        <stop offset="100%" stop-color="#065f46"/>
+      </linearGradient>
+      <linearGradient id="crimsonEmb" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fca5a5"/>
+        <stop offset="50%" stop-color="#ef4444"/>
+        <stop offset="100%" stop-color="#991b1b"/>
+      </linearGradient>
+      <filter id="emboss" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-color="#040814" flood-opacity="0.75"/>
+      </filter>
+    </defs>
+
+    <rect x="3" y="6" width="58" height="56" rx="15" fill="#5c330a"/>
+    <rect x="3" y="3" width="58" height="56" rx="15" fill="url(#goldRim)"/>
+    <rect x="7" y="7" width="50" height="48" rx="11.5" fill="url(#royalFace)" stroke="#713f12" stroke-width="1"/>
+    <rect x="9" y="9" width="46" height="44" rx="10" fill="none" stroke="url(#goldRim)" stroke-width="1.5"/>
+
+    ${inner}
+
+    <path d="M10 14a6 6 0 016-6h32a6 6 0 016 6v10c-14 4-30 4-44 0V14z" fill="#ffffff" opacity="0.12"/>
+  </svg>`;
+
+  const uri = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svgStr);
+  ICON_IMAGE_CACHE[name] = uri;
+  return uri;
+}
+
+function icoImgHtml(name, cls = "ico-img-sm") {
+  return `<img src="${get3DIconUrl(name)}" class="${cls}" alt="${name}">`;
+}
+
+function hydrateAll3DImageIcons(root = document) {
+  root.querySelectorAll("img[data-ico]").forEach(img => {
+    const key = img.getAttribute("data-ico");
+    if (key) img.src = get3DIconUrl(key);
+  });
+}
+
 const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
@@ -698,174 +990,174 @@ const i18n = {
   te: {
     back: "← హోమ్",
     hdrSub: "లైవ్ బైబిల్ క్విజ్ లీడర్‌బోర్డ్",
-    liveTop10: "🏆 లైవ్ ఎగ్జామ్ TOP 10",
+    liveTop10: "లైవ్ ఎగ్జామ్ TOP 10",
     liveNote: "ప్రతి Exam ముగిసిన తర్వాత Top 10 Results కనిపిస్తాయి.",
     lblSelectExam: "పరీక్షను ఎంచుకోండి (Select Exam)",
     loadingExams: "పరీక్షలు లోడ్ అవుతున్నాయి...",
     noExams: "ప్రస్తుతం పరీక్షలు లేవు",
     selectPrompt: "ముందుగా Exam Select చేయండి.",
     noDetails: "Exam వివరాలు అందుబాటులో లేవు.",
-    examNotEnded: "⏳ Exam ఇంకా ముగియలేదు. Exam ముగిసిన తర్వాత Results కనిపిస్తాయి.",
+    examNotEnded: "Exam ఇంకా ముగియలేదు. Exam ముగిసిన తర్వాత Results కనిపిస్తాయి.",
     loadingResults: "Top 10 Results లోడ్ అవుతున్నాయి...",
     noResults: "ఈ Examకి ఇంకా Results లేవు.",
-    participantsCount: "🏆 Top {count} మంది విజేతలు",
-    refreshLive: "🔄 లైవ్ ఫలితాలను రీఫ్రెష్ చేయండి",
-    navExams: "📝 లైవ్ పరీక్షలు",
-    navHome: "🏠 హోమ్ పేజీ",
+    participantsCount: "Top {count} మంది విజేతలు",
+    refreshLive: "లైవ్ ఫలితాలను రీఫ్రెష్ చేయండి",
+    navExams: "లైవ్ పరీక్షలు",
+    navHome: "హోమ్ పేజీ",
     thRank: "ర్యాంక్",
     thName: "పార్టిసిపెంట్",
     thLocation: "ప్రాంతం / రాష్ట్రం",
     thScore: "స్కోరు",
     thTime: "సమయం",
-    certTitle: "📜 డిజిటల్ సర్టిఫికెట్ (Digital Certificate)",
+    certTitle: "డిజిటల్ సర్టిఫికెట్ (Digital Certificate)",
     certDesc: "Admin సర్టిఫికెట్లను విడుదల చేసిన తర్వాత మీ Mobile Number లేదా Email నమోదు చేసి మీ అధికారిక LOGOS QUEST సర్టిఫికెట్‌ను డౌన్‌లోడ్ చేసుకోండి.",
     certPlaceholder: "మీ Mobile Number / Email నమోదు చేయండి",
-    certGenBtn: "🎓 సర్టిఫికెట్ తయారుచేయి",
-    certDownBtn: "⬇️ సర్టిఫికెట్ డౌన్‌లోడ్ (Download PNG)",
-    certLocked: "🔒 Admin ఇంకా ఈ పరీక్షకు సర్టిఫికెట్లను విడుదల చేయలేదు. Admin పంపిన తర్వాత మీ సర్టిఫికెట్ ఇక్కడ అందుబాటులోకి వస్తుంది.",
-    certNotEnded: "⏳ పరీక్ష సమయం ముగిసి, Admin సర్టిఫికెట్లు పంపిన తర్వాత అందుబాటులోకి వస్తుంది.",
-    certNotFound: "❌ ఈ పరీక్షకు మీ రికార్డ్ కనుగొనబడలేదు. సరైన Mobile Number / Email ఇవ్వండి.",
-    certReady: "✅ మీ సర్టిఫికెట్ సిద్ధంగా ఉంది! కింద డౌన్‌లోడ్ చేసుకోండి.",
-    akTitle: "📖 పరీక్ష సరైన సమాధానాలు (Answer Key)",
-    akLocked: "🔒 Admin ఇంకా ఈ పరీక్షకు Correct Answers విడుదల చేయలేదు.",
+    certGenBtn: "సర్టిఫికెట్ తయారుచేయి",
+    certDownBtn: "సర్టిఫికెట్ డౌన్‌లోడ్ (Download PNG)",
+    certLocked: "Admin ఇంకా ఈ పరీక్షకు సర్టిఫికెట్లను విడుదల చేయలేదు. Admin పంపిన తర్వాత మీ సర్టిఫికెట్ ఇక్కడ అందుబాటులోకి వస్తుంది.",
+    certNotEnded: "పరీక్ష సమయం ముగిసి, Admin సర్టిఫికెట్లు పంపిన తర్వాత అందుబాటులోకి వస్తుంది.",
+    certNotFound: "ఈ పరీక్షకు మీ రికార్డ్ కనుగొనబడలేదు. సరైన Mobile Number / Email ఇవ్వండి.",
+    certReady: "మీ సర్టిఫికెట్ సిద్ధంగా ఉంది! కింద డౌన్‌లోడ్ చేసుకోండి.",
+    akTitle: "పరీక్ష సరైన సమాధానాలు (Answer Key)",
+    akLocked: "Admin ఇంకా ఈ పరీక్షకు Correct Answers విడుదల చేయలేదు.",
     akLoading: "సరైన సమాధానాలు లోడ్ అవుతున్నాయి...",
     akEmpty: "ఈ పరీక్షకు ప్రశ్నలు కనుగొనబడలేదు.",
-    akLabel: "✅ సరైన సమాధానం",
-    akYourChoice: "👉 మీరు ఎంచుకున్నది",
+    akLabel: "సరైన సమాధానం",
+    akYourChoice: "మీరు ఎంచుకున్నది",
     akRightTag: "సరైనది!",
     akWrongTag: "తప్పు",
-    akNotAnswered: "⚪ మీరు ఈ ప్రశ్నకు సమాధానం ఇవ్వలేదు",
+    akNotAnswered: "మీరు ఈ ప్రశ్నకు సమాధానం ఇవ్వలేదు",
     akLookupPlaceholder: "మీ Mobile Number / Email నమోదు చేసి మీ Answers చూడండి",
-    akLookupBtn: "🔍 నా Answers చూపించు"
+    akLookupBtn: "నా Answers చూపించు"
   },
   en: {
     back: "← Home",
     hdrSub: "LIVE BIBLE QUIZ LEADERBOARD",
-    liveTop10: "🏆 LIVE EXAM TOP 10",
+    liveTop10: "LIVE EXAM TOP 10",
     liveNote: "Top 10 rankings appear after each live exam ends.",
     lblSelectExam: "Select Exam",
     loadingExams: "Loading Exams...",
     noExams: "No Exams Available",
     selectPrompt: "Please select an exam first.",
     noDetails: "Exam details not found.",
-    examNotEnded: "⏳ Exam has not ended yet. Rankings unlock after completion.",
+    examNotEnded: "Exam has not ended yet. Rankings unlock after completion.",
     loadingResults: "Loading Top 10 rankings...",
     noResults: "No results submitted for this exam yet.",
-    participantsCount: "🏆 Top {count} Participants",
-    refreshLive: "🔄 Refresh Live Results",
-    navExams: "📝 Live Bible Exams",
-    navHome: "🏠 Home Page",
+    participantsCount: "Top {count} Participants",
+    refreshLive: "Refresh Live Results",
+    navExams: "Live Bible Exams",
+    navHome: "Home Page",
     thRank: "Rank",
     thName: "Participant",
     thLocation: "Town / State",
     thScore: "Score",
     thTime: "Time",
-    certTitle: "📜 Digital Certificate",
+    certTitle: "Digital Certificate",
     certDesc: "Once the Admin releases certificates for this exam, enter your Mobile Number or Email to download your official certificate.",
     certPlaceholder: "Enter your Mobile Number / Email",
-    certGenBtn: "🎓 Generate Certificate",
-    certDownBtn: "⬇️ Download Certificate (PNG)",
-    certLocked: "🔒 Admin has not released certificates for this exam yet. Please check back once Admin sends them.",
-    certNotEnded: "⏳ Certificate unlocks after the exam ends and Admin releases it.",
-    certNotFound: "❌ No completed attempt found for this exam with that Mobile / Email.",
-    certReady: "✅ Your Digital Certificate is ready! Click Download below.",
-    akTitle: "📖 Exam Correct Answers (Answer Key)",
-    akLocked: "🔒 Admin has not released the correct answers for this exam yet.",
+    certGenBtn: "Generate Certificate",
+    certDownBtn: "Download Certificate (PNG)",
+    certLocked: "Admin has not released certificates for this exam yet. Please check back once Admin sends them.",
+    certNotEnded: "Certificate unlocks after the exam ends and Admin releases it.",
+    certNotFound: "No completed attempt found for this exam with that Mobile / Email.",
+    certReady: "Your Digital Certificate is ready! Click Download below.",
+    akTitle: "Exam Correct Answers (Answer Key)",
+    akLocked: "Admin has not released the correct answers for this exam yet.",
     akLoading: "Loading correct answers...",
     akEmpty: "No questions found for this exam.",
-    akLabel: "✅ Correct Answer",
-    akYourChoice: "👉 Your Selected Option",
+    akLabel: "Correct Answer",
+    akYourChoice: "Your Selected Option",
     akRightTag: "Correct!",
     akWrongTag: "Wrong",
-    akNotAnswered: "⚪ You did not answer this question",
+    akNotAnswered: "You did not answer this question",
     akLookupPlaceholder: "Enter your Mobile Number / Email to see your selected options",
-    akLookupBtn: "🔍 Show My Answers"
+    akLookupBtn: "Show My Answers"
   },
   ta: {
     back: "← முகப்பு",
     hdrSub: "நேரலை பைபிள் வினாடி வினா முன்னணிப் பலகை",
-    liveTop10: "🏆 நேரலைத் தேர்வு TOP 10",
+    liveTop10: "நேரலைத் தேர்வு TOP 10",
     liveNote: "ஒவ்வொரு தேர்வு முடிந்த பிறகும் முதல் 10 முடிவுகள் தோன்றும்.",
     lblSelectExam: "தேர்வைத் தேர்ந்தெடுக்கவும்",
     loadingExams: "தேர்வுகள் ஏற்றப்படுகின்றன...",
     noExams: "தேர்வுகள் எதுவும் இல்லை",
     selectPrompt: "முதலில் ஒரு தேர்வைத் தேர்ந்தெடுக்கவும்.",
     noDetails: "தேர்வு விவரங்கள் இல்லை.",
-    examNotEnded: "⏳ தேர்வு இன்னும் முடியவில்லை. தேர்வு முடிந்ததும் முடிவுகள் தோன்றும்.",
+    examNotEnded: "தேர்வு இன்னும் முடியவில்லை. தேர்வு முடிந்ததும் முடிவுகள் தோன்றும்.",
     loadingResults: "முதல் 10 முடிவுகள் ஏற்றப்படுகின்றன...",
     noResults: "இந்தத் தேர்வுக்கு இதுவரை முடிவுகள் இல்லை.",
-    participantsCount: "🏆 முதல் {count} வெற்றியாளர்கள்",
-    refreshLive: "🔄 நேரலை முடிவுகளைப் புதுப்பிக்கவும்",
-    navExams: "📝 நேரலைத் தேர்வுகள்",
-    navHome: "🏠 முகப்புப் பக்கம்",
+    participantsCount: "முதல் {count} வெற்றியாளர்கள்",
+    refreshLive: "நேரலை முடிவுகளைப் புதுப்பிக்கவும்",
+    navExams: "நேரலைத் தேர்வுகள்",
+    navHome: "முகப்புப் பக்கம்",
     thRank: "தரம்",
     thName: "பங்கேற்பாளர்",
     thLocation: "ஊர் / மாநிலம்",
     thScore: "மதிப்பெண்",
     thTime: "நேரம்",
-    certTitle: "📜 டிஜிட்டல் சான்றிதழ் (Digital Certificate)",
+    certTitle: "டிஜிட்டல் சான்றிதழ் (Digital Certificate)",
     certDesc: "நிர்வாகி சான்றிதழ்களை வெளியிட்ட பிறகு உங்கள் Mobile Number அல்லது Email உள்ளிட்டு சான்றிதழைப் பதிவிறக்கவும்.",
     certPlaceholder: "Mobile Number / Email உள்ளிடவும்",
-    certGenBtn: "🎓 சான்றிதழ் உருவாக்கு",
-    certDownBtn: "⬇️ சான்றிதழைப் பதிவிறக்கவும் (PNG)",
-    certLocked: "🔒 நிர்வாகி இன்னும் இந்தத் தேர்விற்கான சான்றிதழ்களை வெளியிடவில்லை.",
-    certNotEnded: "⏳ தேர்வு முடிந்து நிர்வாகி வெளியிட்ட பிறகே சான்றிதழ் கிடைக்கும்.",
-    certNotFound: "❌ இந்தத் தேர்விற்கான பதிவு கிடைக்கவில்லை.",
-    certReady: "✅ உங்கள் சான்றிதழ் தயாராக உள்ளது!",
-    akTitle: "📖 தேர்வு சரியான பதில்கள் (Answer Key)",
-    akLocked: "🔒 நிர்வாகி இன்னும் இந்தத் தேர்விற்கான சரியான பதில்களை வெளியிடவில்லை.",
+    certGenBtn: "சான்றிதழ் உருவாக்கு",
+    certDownBtn: "சான்றிதழைப் பதிவிறக்கவும் (PNG)",
+    certLocked: "நிர்வாகி இன்னும் இந்தத் தேர்விற்கான சான்றிதழ்களை வெளியிடவில்லை.",
+    certNotEnded: "தேர்வு முடிந்து நிர்வாகி வெளியிட்ட பிறகே சான்றிதழ் கிடைக்கும்.",
+    certNotFound: "இந்தத் தேர்விற்கான பதிவு கிடைக்கவில்லை.",
+    certReady: "உங்கள் சான்றிதழ் தயாராக உள்ளது!",
+    akTitle: "தேர்வு சரியான பதில்கள் (Answer Key)",
+    akLocked: "நிர்வாகி இன்னும் இந்தத் தேர்விற்கான சரியான பதில்களை வெளியிடவில்லை.",
     akLoading: "சரியான பதில்கள் ஏற்றப்படுகின்றன...",
     akEmpty: "இந்தத் தேர்விற்கான கேள்விகள் இல்லை.",
-    akLabel: "✅ சரியான பதில்",
-    akYourChoice: "👉 நீங்கள் தேர்ந்தெடுத்தது",
+    akLabel: "சரியான பதில்",
+    akYourChoice: "நீங்கள் தேர்ந்தெடுத்தது",
     akRightTag: "சரி!",
     akWrongTag: "தவறு",
-    akNotAnswered: "⚪ நீங்கள் இதற்கு பதிலளிக்கவில்லை",
+    akNotAnswered: "நீங்கள் இதற்கு பதிலளிக்கவில்லை",
     akLookupPlaceholder: "உங்கள் பதில்களைப் பார்க்க Mobile Number / Email உள்ளிடவும்",
-    akLookupBtn: "🔍 என் பதில்களைக் காட்டு"
+    akLookupBtn: "என் பதில்களைக் காட்டு"
   },
   hi: {
     back: "← होम",
     hdrSub: "लाइव बाइबिल क्विज़ लीडरबोर्ड",
-    liveTop10: "🏆 लाइव परीक्षा TOP 10",
+    liveTop10: "लाइव परीक्षा TOP 10",
     liveNote: "प्रत्येक परीक्षा समाप्त होने के बाद टॉप 10 परिणाम दिखाई देंगे।",
     lblSelectExam: "परीक्षा चुनें (Select Exam)",
     loadingExams: "परीक्षाएं लोड हो रही हैं...",
     noExams: "कोई परीक्षा उपलब्ध नहीं है",
     selectPrompt: "कृपया पहले परीक्षा चुनें।",
     noDetails: "परीक्षा विवरण नहीं मिला।",
-    examNotEnded: "⏳ परीक्षा अभी समाप्त नहीं हुई है। परिणाम बाद में दिखाई देंगे।",
+    examNotEnded: "परीक्षा अभी समाप्त नहीं हुई है। परिणाम बाद में दिखाई देंगे।",
     loadingResults: "शीर्ष 10 परिणाम लोड हो रहे हैं...",
     noResults: "इस परीक्षा के लिए अभी तक कोई परिणाम नहीं है।",
-    participantsCount: "🏆 शीर्ष {count} प्रतिभागी",
-    refreshLive: "🔄 लाइव परिणाम रीफ्रेश करें",
-    navExams: "📝 लाइव परीक्षाएं",
-    navHome: "🏠 होम पेज",
+    participantsCount: "शीर्ष {count} प्रतिभागी",
+    refreshLive: "लाइव परिणाम रीफ्रेश करें",
+    navExams: "लाइव परीक्षाएं",
+    navHome: "होम पेज",
     thRank: "रैंक",
     thName: "प्रतिभागी",
     thLocation: "शहर / राज्य",
     thScore: "स्कोर",
     thTime: "समय",
-    certTitle: "📜 डिजिटल प्रमाण पत्र (Digital Certificate)",
+    certTitle: "डिजिटल प्रमाण पत्र (Digital Certificate)",
     certDesc: "एडमिन द्वारा प्रमाण पत्र जारी किए जाने के बाद अपना Mobile Number या Email दर्ज करके प्रमाण पत्र डाउनलोड करें।",
     certPlaceholder: "अपना Mobile Number / Email दर्ज करें",
-    certGenBtn: "🎓 प्रमाण पत्र बनाएं",
-    certDownBtn: "⬇️ प्रमाण पत्र डाउनलोड करें (PNG)",
-    certLocked: "🔒 एडमिन ने अभी तक इस परीक्षा के प्रमाण पत्र जारी नहीं किए हैं।",
-    certNotEnded: "⏳ परीक्षा समाप्त होने और एडमिन द्वारा जारी करने के बाद प्रमाण पत्र उपलब्ध होगा।",
-    certNotFound: "❌ इस परीक्षा के लिए आपका रिकॉर्ड नहीं मिला।",
-    certReady: "✅ आपका प्रमाण पत्र तैयार है!",
-    akTitle: "📖 परीक्षा के सही उत्तर (Answer Key)",
-    akLocked: "🔒 एडमिन ने अभी तक इस परीक्षा के सही उत्तर जारी नहीं किए हैं।",
+    certGenBtn: "प्रमाण पत्र बनाएं",
+    certDownBtn: "प्रमाण पत्र डाउनलोड करें (PNG)",
+    certLocked: "एडमिन ने अभी तक इस परीक्षा के प्रमाण पत्र जारी नहीं किए हैं।",
+    certNotEnded: "परीक्षा समाप्त होने और एडमिन द्वारा जारी करने के बाद प्रमाण पत्र उपलब्ध होगा।",
+    certNotFound: "इस परीक्षा के लिए आपका रिकॉर्ड नहीं मिला।",
+    certReady: "आपका प्रमाण पत्र तैयार है!",
+    akTitle: "परीक्षा के सही उत्तर (Answer Key)",
+    akLocked: "एडमिन ने अभी तक इस परीक्षा के सही उत्तर जारी नहीं किए हैं।",
     akLoading: "सही उत्तर लोड हो रहे हैं...",
     akEmpty: "इस परीक्षा के लिए कोई प्रश्न नहीं मिला।",
-    akLabel: "✅ सही उत्तर",
-    akYourChoice: "👉 आपका चुना हुआ विकल्प",
+    akLabel: "सही उत्तर",
+    akYourChoice: "आपका चुना हुआ विकल्प",
     akRightTag: "सही!",
     akWrongTag: "गलत",
-    akNotAnswered: "⚪ आपने इस प्रश्न का उत्तर नहीं दिया",
+    akNotAnswered: "आपने इस प्रश्न का उत्तर नहीं दिया",
     akLookupPlaceholder: "अपने उत्तर देखने के लिए Mobile Number / Email दर्ज करें",
-    akLookupBtn: "🔍 मेरे उत्तर दिखाएं"
+    akLookupBtn: "मेरे उत्तर दिखाएं"
   }
 };
 
@@ -882,20 +1174,20 @@ function applyTranslations() {
 
   $("btnBack").textContent = t.back;
   $("hdrSubtitle").textContent = t.hdrSub;
-  $("txtLiveTop10").textContent = t.liveTop10;
+  $("txtLiveTop10").innerHTML = `${icoImgHtml("trophy", "ico-img-lg")}<span>${t.liveTop10}</span>`;
   $("txtLiveNote").textContent = t.liveNote;
   $("lblSelectExam").textContent = t.lblSelectExam;
-  $("refreshLive").textContent = t.refreshLive;
-  $("btnNavExams").textContent = t.navExams;
-  $("btnNavHome").textContent = t.navHome;
-  $("txtCertTitle").textContent = t.certTitle;
+  $("refreshLive").innerHTML = `${icoImgHtml("refresh")}<span>${t.refreshLive}</span>`;
+  $("btnNavExams").innerHTML = `${icoImgHtml("bible")}<span>${t.navExams}</span>`;
+  $("btnNavHome").innerHTML = `${icoImgHtml("home")}<span>${t.navHome}</span>`;
+  $("txtCertTitle").innerHTML = `${icoImgHtml("scroll", "ico-img-lg")}<span>${t.certTitle}</span>`;
   $("txtCertDesc").textContent = t.certDesc;
   $("certIdentityInput").placeholder = t.certPlaceholder;
-  $("generateCertBtn").textContent = t.certGenBtn;
-  $("downloadCertBtn").textContent = t.certDownBtn;
-  $("txtAnswerKeyTitle").textContent = t.akTitle;
+  $("generateCertBtn").innerHTML = `${icoImgHtml("medal")}<span>${t.certGenBtn}</span>`;
+  $("downloadCertBtn").innerHTML = `${icoImgHtml("download")}<span>${t.certDownBtn}</span>`;
+  $("txtAnswerKeyTitle").innerHTML = `${icoImgHtml("bible", "ico-img-lg")}<span>${t.akTitle}</span>`;
   $("studentMobileInput").placeholder = t.akLookupPlaceholder;
-  $("checkMyAnswersBtn").textContent = t.akLookupBtn;
+  $("checkMyAnswersBtn").innerHTML = `${icoImgHtml("search")}<span>${t.akLookupBtn}</span>`;
 
   $("thRank1").textContent = t.thRank;
   $("thName1").textContent = t.thName;
@@ -937,10 +1229,10 @@ function clearTable(id) {
   $(id).replaceChildren();
 }
 
-function medal(rank) {
-  if (rank === 1) return "🥇 1";
-  if (rank === 2) return "🥈 2";
-  if (rank === 3) return "🥉 3";
+function medalHtml(rank) {
+  if (rank === 1) return `${icoImgHtml("medal1", "ico-img-md")}<strong>1</strong>`;
+  if (rank === 2) return `${icoImgHtml("medal2", "ico-img-md")}<strong>2</strong>`;
+  if (rank === 3) return `${icoImgHtml("medal3", "ico-img-md")}<strong>3</strong>`;
   return String(rank);
 }
 
@@ -970,16 +1262,15 @@ async function generateDigitalCertificate() {
     return;
   }
 
-  // CHECK IF ADMIN HAS RELEASED CERTIFICATES
   if (!exam.certificates_released) {
     statusEl.className = "status";
-    statusEl.textContent = t.certLocked;
+    statusEl.innerHTML = `${icoImgHtml("lock")}${t.certLocked}`;
     return;
   }
 
   if (Date.now() < Date.parse(exam.end_time)) {
     statusEl.className = "status";
-    statusEl.textContent = t.certNotEnded;
+    statusEl.innerHTML = `${icoImgHtml("clock")}${t.certNotEnded}`;
     return;
   }
 
@@ -995,7 +1286,7 @@ async function generateDigitalCertificate() {
   localStorage.setItem("logos_quest_mobile", rawInput);
 
   statusEl.className = "status";
-  statusEl.textContent = "⏳ Generating Certificate...";
+  statusEl.innerHTML = `${icoImgHtml("clock")}Generating Certificate...`;
 
   try {
     const url = `${SUPABASE_URL}/rest/v1/secure_exam_attempts?select=id,student_name,student_mobile,student_email,student_town,student_state,score,total_questions,time_seconds,photo_url,student_photo,submitted_at&exam_id=eq.${exam.id}&status=eq.submitted&order=score.desc,time_seconds.asc&limit=500`;
@@ -1025,7 +1316,7 @@ async function generateDigitalCertificate() {
 
     if (matchedIdx === -1) {
       statusEl.className = "status error";
-      statusEl.textContent = t.certNotFound;
+      statusEl.innerHTML = `${icoImgHtml("crossMark")}${t.certNotFound}`;
       return;
     }
 
@@ -1035,11 +1326,11 @@ async function generateDigitalCertificate() {
 
     lastGeneratedCertName = `LOGOS_QUEST_${(student.student_name || "Participant").replace(/\s+/g, "_")}_Rank${rank}.png`;
     statusEl.className = "status success";
-    statusEl.textContent = t.certReady;
+    statusEl.innerHTML = `${icoImgHtml("check")}${t.certReady}`;
     previewWrap.classList.remove("hidden");
   } catch (err) {
     statusEl.className = "status error";
-    statusEl.textContent = "❌ " + err.message;
+    statusEl.innerHTML = `${icoImgHtml("crossMark")}${err.message}`;
   }
 }
 
@@ -1197,7 +1488,7 @@ async function drawCertificateOnCanvas(exam, student, rank, totalParticipants) {
   ctx.fillStyle = "#facc15";
   ctx.font = "bold 24px system-ui, -apple-system, sans-serif";
   ctx.fillText(
-    `🏆 ${rankLabel}   •   SCORE: ${student.score}/${student.total_questions}`,
+    `${rankLabel}   •   SCORE: ${student.score}/${student.total_questions}`,
     W / 2,
     620
   );
@@ -1281,7 +1572,7 @@ async function loadExams() {
 
     await loadLiveLeaderboard();
   } catch (error) {
-    $("liveStatus").textContent = "❌ " + error.message;
+    $("liveStatus").innerHTML = `${icoImgHtml("crossMark")}${error.message}`;
     $("liveStatus").className = "status error";
   }
 }
@@ -1296,12 +1587,12 @@ async function loadReleasedAnswerKey(exam) {
 
   if (!exam || !exam.answers_released) {
     statusEl.className = "status";
-    statusEl.textContent = t.akLocked;
+    statusEl.innerHTML = `${icoImgHtml("lock")}${t.akLocked}`;
     return;
   }
 
   statusEl.className = "status";
-  statusEl.textContent = t.akLoading;
+  statusEl.innerHTML = `${icoImgHtml("clock")}${t.akLoading}`;
 
   const studentIdentifier = ($("studentMobileInput").value || "").trim() || getStoredStudentIdentity();
   if (studentIdentifier && !$("studentMobileInput").value) {
@@ -1350,9 +1641,9 @@ async function loadReleasedAnswerKey(exam) {
       : 0;
 
     statusEl.className = "status success";
-    statusEl.textContent = hasStudentAttempt
-      ? `✅ ${uniqueRows.length} Questions & Answers • మీ స్కోరు: ${correctCount}/${uniqueRows.length}`
-      : `✅ ${uniqueRows.length} Questions & Answers`;
+    statusEl.innerHTML = hasStudentAttempt
+      ? `${icoImgHtml("check")}${uniqueRows.length} Questions & Answers • మీ స్కోరు: ${correctCount}/${uniqueRows.length}`
+      : `${icoImgHtml("check")}${uniqueRows.length} Questions & Answers`;
 
     uniqueRows.forEach((q, idx) => {
       const optMap = {
@@ -1376,10 +1667,10 @@ async function loadReleasedAnswerKey(exam) {
           selectedHtml = `<div class="ak-selected-none">${t.akNotAnswered}</div>`;
         } else if (selectedLetter === correctLetter) {
           cardStateClass = "ak-correct-card";
-          selectedHtml = `<div class="ak-selected-right">${t.akYourChoice}: ${selectedLetter}${selectedText ? " — " + selectedText : ""} (${t.akRightTag})</div>`;
+          selectedHtml = `<div class="ak-selected-right">${icoImgHtml("pointer")}${t.akYourChoice}: ${selectedLetter}${selectedText ? " — " + selectedText : ""} (${t.akRightTag})</div>`;
         } else {
           cardStateClass = "ak-wrong-card";
-          selectedHtml = `<div class="ak-selected-wrong">${t.akYourChoice}: ${selectedLetter}${selectedText ? " — " + selectedText : ""} (❌ ${t.akWrongTag})</div>`;
+          selectedHtml = `<div class="ak-selected-wrong">${icoImgHtml("crossMark")}${t.akYourChoice}: ${selectedLetter}${selectedText ? " — " + selectedText : ""} (${t.akWrongTag})</div>`;
         }
       }
 
@@ -1388,7 +1679,7 @@ async function loadReleasedAnswerKey(exam) {
       item.innerHTML = `
         <div class="ak-q">${idx + 1}. ${q.question_text || ""}</div>
         <div class="ak-badges">
-          <div class="ak-ans">${t.akLabel}: ${correctLetter}${correctText ? " — " + correctText : ""}</div>
+          <div class="ak-ans">${icoImgHtml("check")}${t.akLabel}: ${correctLetter}${correctText ? " — " + correctText : ""}</div>
           ${selectedHtml}
         </div>
       `;
@@ -1397,7 +1688,7 @@ async function loadReleasedAnswerKey(exam) {
   } catch (err) {
     if (reqId !== akRequestSeq) return;
     statusEl.className = "status error";
-    statusEl.textContent = "❌ " + err.message;
+    statusEl.innerHTML = `${icoImgHtml("crossMark")}${err.message}`;
   }
 }
 
@@ -1426,17 +1717,16 @@ async function loadLiveLeaderboard() {
   loadReleasedAnswerKey(exam);
 
   $("examInfo").classList.remove("hidden");
-  $("examInfo").textContent = "📅 " + exam.exam_name + " | Start: " + formatIST(exam.start_time) + " | End: " + formatIST(exam.end_time);
+  $("examInfo").innerHTML = `${icoImgHtml("calendar")}<span>${exam.exam_name} | Start: ${formatIST(exam.start_time)} | End: ${formatIST(exam.end_time)}</span>`;
 
   if (Date.now() < Date.parse(exam.end_time)) {
-    $("liveStatus").textContent = t.examNotEnded;
+    $("liveStatus").innerHTML = `${icoImgHtml("clock")}${t.examNotEnded}`;
     return;
   }
 
-  // Only show/auto-generate certificate if Admin has released certificates for this exam
   if (!exam.certificates_released) {
     $("certStatus").className = "status";
-    $("certStatus").textContent = t.certLocked;
+    $("certStatus").innerHTML = `${icoImgHtml("lock")}${t.certLocked}`;
   } else {
     const storedId = ($("certIdentityInput").value || "").trim() || getStoredStudentIdentity();
     if (storedId) {
@@ -1445,7 +1735,7 @@ async function loadLiveLeaderboard() {
     }
   }
 
-  $("liveStatus").textContent = t.loadingResults;
+  $("liveStatus").innerHTML = `${icoImgHtml("clock")}${t.loadingResults}`;
 
   try {
     const response = await fetch(SUPABASE_URL + "/rest/v1/rpc/get_secure_exam_top10", {
@@ -1472,12 +1762,12 @@ async function loadLiveLeaderboard() {
       card.className = `podium-card rank-${rank}`;
 
       const avatar = s.photo_url || "icon-512.png";
-      const medalIcon = rank === 1 ? "👑" : rank === 2 ? "🥈" : "🥉";
+      const badgeKey = rank === 1 ? "crown" : rank === 2 ? "medal2" : "medal3";
 
       card.innerHTML = `
         <div class="podium-avatar-box">
           <img src="${avatar}" class="podium-photo" alt="${s.student_name}">
-          <span class="podium-badge">${medalIcon}</span>
+          <img src="${get3DIconUrl(badgeKey)}" class="podium-badge-img" alt="Rank ${rank}">
         </div>
         <div class="podium-name">${s.student_name}</div>
         <div class="podium-score">${s.score}/${s.total_questions} Pts</div>
@@ -1497,7 +1787,7 @@ async function loadLiveLeaderboard() {
       const avatarSrc = student.photo_url || "icon-512.png";
 
       tr.innerHTML = `
-        <td>${medal(rank)}</td>
+        <td>${medalHtml(rank)}</td>
         <td>
           <div class="table-user-cell">
             <img src="${avatarSrc}" class="table-avatar" alt="Avatar">
@@ -1512,10 +1802,10 @@ async function loadLiveLeaderboard() {
       $("liveLeaderboardBody").appendChild(tr);
     });
 
-    $("liveStatus").textContent = t.participantsCount.replace("{count}", results.length);
+    $("liveStatus").innerHTML = `${icoImgHtml("trophy")}${t.participantsCount.replace("{count}", results.length)}`;
     $("liveStatus").className = "status success";
   } catch (error) {
-    $("liveStatus").textContent = "❌ " + error.message;
+    $("liveStatus").innerHTML = `${icoImgHtml("crossMark")}${error.message}`;
     $("liveStatus").className = "status error";
   }
 }
@@ -1538,6 +1828,7 @@ $("refreshLive").addEventListener("click", async () => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
+  hydrateAll3DImageIcons();
   const savedId = getStoredStudentIdentity();
   if (savedId) {
     $("studentMobileInput").value = savedId;
