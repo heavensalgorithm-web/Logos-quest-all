@@ -73,12 +73,8 @@ header{
 }
 
 @keyframes float3D {
-  0%, 100% {
-    transform: translateY(0px) rotateX(4deg) rotateY(-4deg);
-  }
-  50% {
-    transform: translateY(-6px) rotateX(-3deg) rotateY(5deg);
-  }
+  0%, 100% { transform: translateY(0px) rotateX(4deg) rotateY(-4deg); }
+  50% { transform: translateY(-6px) rotateX(-3deg) rotateY(5deg); }
 }
 
 .logo-3d-wrap {
@@ -107,10 +103,6 @@ header{
   pointer-events: none;
 }
 
-.logo-3d-wrap:hover {
-  transform: scale(1.07) rotateY(10deg);
-}
-
 .logo-img {
   width: 100%;
   height: 100%;
@@ -118,7 +110,6 @@ header{
   display: block;
   object-fit: cover;
   background: #0b1329;
-  box-shadow: inset 0 3px 8px rgba(0,0,0,0.6);
 }
 
 .brand-3d-title {
@@ -136,17 +127,6 @@ header{
   gap: 10px;
 }
 
-.cross-3d {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 11px;
-  background: linear-gradient(145deg, #fde047, #a16207);
-  box-shadow: 0 3px 0 #713f12, 0 6px 14px rgba(250, 204, 21, 0.45), inset 0 1px 2px rgba(255,255,255,0.85);
-}
-
 header p{
   color:var(--text-muted);
   font-size:14px;
@@ -154,47 +134,38 @@ header p{
   letter-spacing: 0.4px;
 }
 
-/* ================= CUSTOM 3D SVG ICON CONTAINERS ================= */
-.svg-3d-box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* ================= 3D IMAGE ICON BADGES ================= */
+img.ico-img-lg {
   width: 38px;
   height: 38px;
-  border-radius: 12px;
-  background: linear-gradient(145deg, #243b7a 0%, #0b1329 100%);
-  border: 1.5px solid rgba(250, 204, 21, 0.55);
-  box-shadow:
-    0 4px 0 #050811,
-    0 8px 16px rgba(0, 0, 0, 0.6),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.35),
-    0 0 14px rgba(250, 204, 21, 0.25);
+  border-radius: 11px;
+  object-fit: contain;
   margin-right: 10px;
   vertical-align: middle;
   flex-shrink: 0;
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.65));
 }
 
-.svg-3d-box svg {
-  width: 22px;
-  height: 22px;
-  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.65));
-}
-
-.svg-3d-inline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  margin-right: 6px;
+img.ico-img-md {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  object-fit: contain;
+  margin-right: 7px;
   vertical-align: middle;
   flex-shrink: 0;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,0.5));
 }
 
-.svg-3d-inline svg {
-  width: 19px;
-  height: 19px;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.45));
+img.ico-img-sm {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  object-fit: contain;
+  margin-right: 5px;
+  vertical-align: -3px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.45));
 }
 
 main{
@@ -371,7 +342,7 @@ tr.selected-row {
 #message{color:#f87171}
 .small{font-size:13px;color:var(--text-muted);line-height:1.5}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--gold-primary)}
+label{display:flex;align-items:center;font-weight:600;margin-top:8px;font-size:13px;color:var(--gold-primary)}
 .success{color:#34d399;font-weight:600}
 .error{color:#f87171;font-weight:600}
 
@@ -527,6 +498,8 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
 }
 
 .scan-edit-card {
@@ -634,7 +607,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 .cand-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   background: rgba(250, 204, 21, 0.15);
   color: var(--gold-primary);
   border: 1px solid rgba(250, 204, 21, 0.35);
@@ -736,42 +709,10 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 </head>
 <body>
 
-<!-- SHARED 3D METALLIC SVG GRADIENT DEFINITIONS -->
-<svg width="0" height="0" style="position:absolute; visibility:hidden;" aria-hidden="true">
-  <defs>
-    <linearGradient id="gold3d" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fef9c3"/>
-      <stop offset="45%" stop-color="#facc15"/>
-      <stop offset="100%" stop-color="#a16207"/>
-    </linearGradient>
-    <linearGradient id="blue3d" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#60a5fa"/>
-      <stop offset="50%" stop-color="#2563eb"/>
-      <stop offset="100%" stop-color="#1e3a8a"/>
-    </linearGradient>
-    <linearGradient id="emerald3d" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6ee7b7"/>
-      <stop offset="50%" stop-color="#10b981"/>
-      <stop offset="100%" stop-color="#065f46"/>
-    </linearGradient>
-    <linearGradient id="crimson3d" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fca5a5"/>
-      <stop offset="50%" stop-color="#ef4444"/>
-      <stop offset="100%" stop-color="#991b1b"/>
-    </linearGradient>
-    <linearGradient id="dark3d" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#334155"/>
-      <stop offset="100%" stop-color="#090d16"/>
-    </linearGradient>
-  </defs>
-</svg>
-
 <div class="top-bar">
   <a href="index.html" class="btn-back" id="navHomeBtn">← Home</a>
   <div style="display:flex; align-items:center; gap:8px;">
-    <span class="svg-3d-inline" style="margin:0;">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="url(#blue3d)" stroke="url(#gold3d)" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="4.5" ry="9.5" fill="none" stroke="#fef08a" stroke-width="1.2"/><line x1="2.5" y1="12" x2="21.5" y2="12" stroke="#fef08a" stroke-width="1.2"/></svg>
-    </span>
+    <img data-ico="globe" class="ico-img-md" style="margin:0;" alt="Language">
     <select id="adminUiLangSelect" style="width:auto; padding:7px 12px; margin:0; font-size:13px; border-radius:10px; border:1.5px solid var(--card-border);">
       <option value="te">తెలుగు (Telugu)</option>
       <option value="en">English</option>
@@ -786,9 +727,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
     <img src="icon-512.png" alt="LOGOS QUEST Logo" class="logo-img">
   </div>
   <h1 class="brand-3d-title">
-    <span class="cross-3d">
-      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M10 2h4v6h6v4h-6v10h-4V12H4V8h6V2z" fill="url(#dark3d)"/></svg>
-    </span>
+    <img data-ico="cross" class="ico-img-lg" style="margin:0;" alt="Cross">
     LOGOS QUEST
   </h1>
   <p id="headerSub">Secure Admin Dashboard</p>
@@ -797,9 +736,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <main>
 <section id="loginSection" class="card" style="max-width:440px; margin:20px auto;">
 <h2>
-  <span class="svg-3d-box">
-    <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3" fill="url(#gold3d)"/><path d="M8 10V7a4 4 0 018 0v3" fill="none" stroke="#fef08a" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="15.5" r="1.6" fill="#0b1329"/></svg>
-  </span>
+  <img data-ico="lock" class="ico-img-lg" alt="Login">
   <span id="loginHeading">Admin Login</span>
 </h2>
 <form id="loginForm">
@@ -814,22 +751,20 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
 <div class="card">
 <h2>
-  <span class="svg-3d-box">
-    <svg viewBox="0 0 24 24"><path d="M12 2L4 5.5v6c0 5.2 3.4 10 8 11.5 4.6-1.5 8-6.3 8-11.5v-6L12 2z" fill="url(#gold3d)"/><path d="M9 12l2 2 4-4" fill="none" stroke="#0b1329" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </span>
+  <img data-ico="shield" class="ico-img-lg" alt="Admin Status">
   <span id="adminStatusHeading">Admin Status</span>
 </h2>
 <p id="adminEmail" style="color:var(--gold-primary); font-weight:600;"></p>
 <button id="refreshBtn" type="button">
-  <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114.9-4M20 4v5h-5M20 12a8 8 0 01-14.9 4M4 20v-5h5" fill="none" stroke="#0b1329" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  <img data-ico="refresh" class="ico-img-sm" alt="Refresh">
   <span id="refreshBtnText">Refresh Results</span>
 </button>
 <button id="logoutBtn" type="button" class="secondary">
-  <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M15 3H6a2 2 0 00-2 2v14a2 2 0 002 2h9M10 17l5-5-5-5M15 12H3" fill="none" stroke="#fca5a5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  <img data-ico="logout" class="ico-img-sm" alt="Logout">
   <span id="logoutBtnText">Logout</span>
 </button>
 <a class="link-button" href="leaderboard.html">
-  <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 01-10 0V4z" fill="url(#gold3d)"/><path d="M12 14v4M8 21h8" stroke="#fef08a" stroke-width="2" stroke-linecap="round"/></svg></span>
+  <img data-ico="trophy" class="ico-img-sm" alt="Leaderboard">
   <span id="viewLeaderboardText">View Leaderboard</span>
 </a>
 </div>
@@ -839,9 +774,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 <div class="card" id="liveParticipantsCard">
   <div class="live-header-row">
     <h2 style="margin:0;">
-      <span class="svg-3d-box">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="url(#emerald3d)"/><path d="M7.8 7.8a6 6 0 000 8.4M16.2 7.8a6 6 0 010 8.4M4.9 4.9a10 10 0 000 14.2M19.1 4.9a10 10 0 010 14.2" fill="none" stroke="url(#gold3d)" stroke-width="2" stroke-linecap="round"/></svg>
-      </span>
+      <img data-ico="radar" class="ico-img-lg" alt="Live Radar">
       <span id="liveParticipantsHeading">Live Exam Participants</span>
     </h2>
     <span class="live-pill"><span class="pulse-dot"></span> Auto-Live Tracking (8s)</span>
@@ -855,7 +788,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
   <div style="display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:8px 0;">
     <button id="refreshLiveMonitorBtn" type="button">
-      <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114.9-4M20 4v5h-5M20 12a8 8 0 01-14.9 4M4 20v-5h5" fill="none" stroke="#0b1329" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <img data-ico="refresh" class="ico-img-sm" alt="Refresh">
       <span id="refreshLiveBtnText">Refresh Live Gallery</span>
     </button>
     <span id="liveMonitorStatus" class="small"></span>
@@ -867,24 +800,24 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
       <strong id="liveTotalCount">0</strong>
     </div>
     <div class="stat" style="border-color:rgba(16,185,129,0.45);">
-      <span id="statOnlineLbl">🟢 Online (Writing Now)</span>
+      <span id="statOnlineLbl"><img data-ico="online" class="ico-img-sm" alt="Online">Online (Writing Now)</span>
       <strong id="liveOnlineCount" style="color:#34d399;">0</strong>
     </div>
     <div class="stat" style="border-color:rgba(239,68,68,0.45);">
-      <span id="statCompletedLbl">🔴 Completed (Submitted)</span>
+      <span id="statCompletedLbl"><img data-ico="offline" class="ico-img-sm" alt="Completed">Completed (Submitted)</span>
       <strong id="liveCompletedCount" style="color:#f87171;">0</strong>
     </div>
   </div>
 
   <!-- SEPARATE GALLERY 1: ONLINE / WRITING NOW -->
   <div class="gallery-section-box gallery-online-box">
-    <h3 class="gallery-title-online"><span class="pulse-dot"></span> <span id="onlineGalleryTitleText">🟢 Online Participants Gallery (ప్రస్తుతం పరీక్ష రాస్తున్నవారు)</span></h3>
+    <h3 class="gallery-title-online"><span class="pulse-dot"></span> <span id="onlineGalleryTitleText">Online Participants Gallery (ప్రస్తుతం పరీక్ష రాస్తున్నవారు)</span></h3>
     <div id="onlineGalleryGrid" class="cand-grid"></div>
   </div>
 
   <!-- SEPARATE GALLERY 2: COMPLETED / SUBMITTED -->
   <div class="gallery-section-box gallery-completed-box">
-    <h3 class="gallery-title-completed"><span class="status-dot dot-red"></span> <span id="completedGalleryTitleText">🔴 Completed Participants Gallery (పరీక్ష పూర్తి చేసినవారు)</span></h3>
+    <h3 class="gallery-title-completed"><span class="status-dot dot-red"></span> <span id="completedGalleryTitleText">Completed Participants Gallery (పరీక్ష పూర్తి చేసినవారు)</span></h3>
     <div id="completedGalleryGrid" class="cand-grid"></div>
   </div>
 </div>
@@ -893,9 +826,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
 <div class="card">
   <h2>
-    <span class="svg-3d-box">
-      <svg viewBox="0 0 24 24"><path d="M6 3h12v6a6 6 0 01-12 0V3z" fill="url(#gold3d)"/><path d="M6 5H3v2a3 3 0 003 3M18 5h3v2a3 3 0 01-3 3M12 15v4M8 21h8" fill="none" stroke="#fef08a" stroke-width="1.8" stroke-linecap="round"/></svg>
-    </span>
+    <img data-ico="trophy" class="ico-img-lg" alt="Winners">
     <span id="winnersHeading">Live Exam Results & Winners</span>
   </h2>
 
@@ -905,15 +836,15 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   </select>
 
   <button id="loadWinnersBtn" type="button">
-    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 01-10 0V4z" fill="#0b1329"/><path d="M12 14v4M8 20h8" stroke="#0b1329" stroke-width="2" stroke-linecap="round"/></svg></span>
+    <img data-ico="refresh" class="ico-img-sm" alt="Load">
     <span id="loadWinnersBtnText">View Exam Winners</span>
   </button>
   <button id="releaseAnswersBtn" type="button" class="secondary">
-    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2.5" fill="url(#emerald3d)"/><path d="M8 11V7a4 4 0 017.5-1.8" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"/></svg></span>
+    <img data-ico="unlock" class="ico-img-sm" alt="Unlock">
     <span id="releaseAnswersBtnText">Release Correct Answers</span>
   </button>
   <button id="releaseCertificatesBtn" type="button">
-    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6" fill="#0b1329"/><path d="M9 14.5L7 21l5-2.5L17 21l-2-6.5" fill="#0b1329"/></svg></span>
+    <img data-ico="medal" class="ico-img-sm" alt="Certificate">
     <span id="releaseCertBtnText">Release / Send Certificates</span>
   </button>
   <p id="releaseCertificatesStatus" role="status"></p>
@@ -921,13 +852,13 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   <p id="winnersStatus" role="status"></p>
 
   <h3>
-    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7" fill="url(#gold3d)"/><path d="M8 3l4 4 4-4" fill="none" stroke="#60a5fa" stroke-width="2.2" stroke-linecap="round"/><text x="12" y="16" text-anchor="middle" font-size="9" font-weight="900" fill="#0b1329">1</text></svg></span>
+    <img data-ico="medal1" class="ico-img-md" alt="Top 3">
     <span id="top3Heading">Top 3 Winners</span>
   </h3>
   <div id="top3Winners" class="stats"></div>
 
   <h3>
-    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><polygon points="12,2 15,8.5 22,9.3 17,14 18.3,21 12,17.6 5.7,21 7,14 2,9.3 9,8.5" fill="url(#gold3d)"/></svg></span>
+    <img data-ico="medal" class="ico-img-md" alt="Top 10">
     <span id="top10Heading">Top 10 Participants</span>
   </h3>
   <div class="table-wrap">
@@ -965,9 +896,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
 <div class="card">
 <h2>
-  <span class="svg-3d-box">
-    <svg viewBox="0 0 24 24"><rect x="3" y="12" width="4" height="8" rx="1" fill="url(#blue3d)"/><rect x="10" y="7" width="4" height="13" rx="1" fill="url(#gold3d)"/><rect x="17" y="4" width="4" height="16" rx="1" fill="url(#emerald3d)"/></svg>
-  </span>
+  <img data-ico="chart" class="ico-img-lg" alt="Chart">
   <span id="resultsHistoryHeading">Student Results History</span>
 </h2>
 <input id="search" placeholder="Search by name or mobile number">
@@ -991,9 +920,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
 <div class="card" id="paperScannerCard">
   <h2>
-    <span class="svg-3d-box">
-      <svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6z" fill="url(#gold3d)"/><rect x="6" y="10" width="12" height="2" rx="1" fill="#0b1329" opacity="0.45"/></svg>
-    </span>
+    <img data-ico="folder" class="ico-img-lg" alt="Folder">
     <span id="scannerHeading">Question Paper Folders & Scanner (Telugu / English / Tamil)</span>
   </h2>
   <p class="small" id="scannerSubDesc">
@@ -1003,13 +930,13 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
   <div class="grid">
     <div>
-      <label for="scanFolderName" id="scanFolderLabel">📁 Exam Folder Name (ఒకే ఎగ్జామ్‌కి అన్ని భాషలకూ ఇదే పేరు ఇవ్వండి)</label>
+      <label for="scanFolderName" id="scanFolderLabel"><img data-ico="folder" class="ico-img-sm" alt="Folder">Exam Folder Name (ఒకే ఎగ్జామ్‌కి అన్ని భాషలకూ ఇదే పేరు ఇవ్వండి)</label>
       <input id="scanFolderName" type="text" placeholder="Example: Sunday Grand Quiz Nov 22" list="existingFoldersDatalist" required>
       <datalist id="existingFoldersDatalist"></datalist>
     </div>
 
     <div>
-      <label for="scanLanguage" id="scanLangLabel">🌐 Paper Language (ఇప్పుడు స్కాన్ చేసే పేపర్ భాష)</label>
+      <label for="scanLanguage" id="scanLangLabel"><img data-ico="globe" class="ico-img-sm" alt="Language">Paper Language (ఇప్పుడు స్కాన్ చేసే పేపర్ భాష)</label>
       <select id="scanLanguage">
         <option value="telugu">తెలుగు (Telugu Paper)</option>
         <option value="english">English (English Paper)</option>
@@ -1031,20 +958,20 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
   <div class="scanner-dropzone">
     <p style="margin:0; font-weight:700; color:var(--gold-primary);">
-      <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M6 2h8l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z" fill="url(#gold3d)"/><line x1="8" y1="12" x2="15" y2="12" stroke="#0b1329" stroke-width="1.8"/><line x1="8" y1="16" x2="13" y2="16" stroke="#0b1329" stroke-width="1.8"/></svg></span>
+      <img data-ico="doc" class="ico-img-md" alt="Page">
       <span id="scanDropTitle">పేజీ 1, పేజీ 2, పేజీ 3... ఒక్కొక్కటిగా స్కాన్ చేయండి</span> (Scanned Pages: <span id="scannedPagesCount">0</span> | Questions Ready: <span id="scannedQuestionsCount">0</span>)
     </p>
     <p class="small" id="scanDropSub" style="margin:4px 0 8px;">100 ప్రశ్నలు (5 పేజీలు) ఒకేసారి Queue లో యాడ్ చేసి సేవ్ చేసుకోవచ్చు.</p>
 
     <div class="scanner-btn-row">
       <label for="scanCameraInput" class="btn-scan-label">
-        <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3" fill="#0b1329"/><circle cx="12" cy="12.5" r="3.5" fill="url(#gold3d)"/><path d="M8 6l1.5-2h5L16 6" fill="#0b1329"/></svg></span>
+        <img data-ico="camera" class="ico-img-md" alt="Camera">
         <span id="scanCamBtnLbl">Take Page Photo (Camera)</span>
       </label>
       <input type="file" id="scanCameraInput" accept="image/*" capture="environment" style="display:none;">
 
       <label for="scanGalleryInput" class="btn-scan-label alt">
-        <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3" fill="url(#blue3d)"/><circle cx="8.5" cy="9" r="1.8" fill="#fef08a"/><path d="M4 18l5-5 4 4 3-3 4 4" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <img data-ico="gallery" class="ico-img-md" alt="Gallery">
         <span id="scanGalBtnLbl">Upload Page Image(s) (Gallery)</span>
       </label>
       <input type="file" id="scanGalleryInput" accept="image/*" multiple style="display:none;">
@@ -1056,14 +983,26 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   <p id="scannerStatus" role="status"></p>
 
   <details style="margin:10px 0;">
-    <summary id="ocrDetailsSummary" style="cursor:pointer; color:var(--gold-primary); font-size:13px; font-weight:600;">📝 Scanned OCR Text చూడండి / లేదా నేరుగా Text పేస్ట్ చేసి Parse చేయండి</summary>
+    <summary id="ocrDetailsSummary" style="cursor:pointer; color:var(--gold-primary); font-size:13px; font-weight:600; display:flex; align-items:center;">
+      <img data-ico="note" class="ico-img-sm" alt="Text">
+      <span id="ocrSummaryText">Scanned OCR Text చూడండి / లేదా నేరుగా Text పేస్ట్ చేసి Parse చేయండి</span>
+    </summary>
     <textarea id="scanRawOcrText" placeholder="Paste or review scanned text here..."></textarea>
-    <button type="button" id="parseManualTextBtn" class="secondary btn-sm">⚙️ Parse Text to Questions</button>
+    <button type="button" id="parseManualTextBtn" class="secondary btn-sm">
+      <img data-ico="gear" class="ico-img-sm" alt="Parse">
+      <span>Parse Text to Questions</span>
+    </button>
   </details>
 
   <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;">
-    <button type="button" id="saveScannedQuestionsBtn" class="hidden">💾 Save Questions into Exam Folder</button>
-    <button type="button" id="clearScannedQueueBtn" class="danger hidden">🗑️ Clear Queue</button>
+    <button type="button" id="saveScannedQuestionsBtn" class="hidden">
+      <img data-ico="save" class="ico-img-sm" alt="Save">
+      <span>Save Questions into Exam Folder</span>
+    </button>
+    <button type="button" id="clearScannedQueueBtn" class="danger hidden">
+      <img data-ico="trash" class="ico-img-sm" alt="Clear">
+      <span>Clear Queue</span>
+    </button>
   </div>
 
   <p id="scannerSaveStatus" role="status"></p>
@@ -1072,7 +1011,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
   <!-- SAVED EXAM PAPER FOLDERS OVERVIEW -->
   <div style="margin-top:22px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.12);">
     <h3 style="color:var(--gold-primary); margin:0 0 6px 0;">
-      <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6z" fill="url(#gold3d)"/></svg></span>
+      <img data-ico="folderOpen" class="ico-img-md" alt="Folders">
       <span id="savedFoldersTitle">Saved Exam Paper Folders (ఎగ్జామ్ ఫోల్డర్లు)</span>
     </h3>
     <p class="small" id="savedFoldersSub">ఏ ఫోల్డర్‌లో ఏయే భాషల పేపర్లు ఎన్ని ప్రశ్నలు సిద్ధంగా ఉన్నాయో ఇక్కడ చూడండి:</p>
@@ -1084,9 +1023,7 @@ label{display:block;font-weight:600;margin-top:8px;font-size:13px;color:var(--go
 
 <div class="card" id="questionManager">
 <h2>
-  <span class="svg-3d-box">
-    <svg viewBox="0 0 24 24"><path d="M2 5c4-1 7 0 10 2 3-2 6-3 10-2v14c-4-1-7 0-10 2-3-2-6-3-10-2V5z" fill="url(#gold3d)"/><line x1="12" y1="7" x2="12" y2="21" stroke="#0b1329" stroke-width="1.8"/></svg>
-  </span>
+  <img data-ico="bible" class="ico-img-lg" alt="Bible">
   <span id="questionManagerHeading">Bible Question Management</span>
 </h2>
 <p class="small" id="questionManagerSub">
@@ -1095,7 +1032,7 @@ Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from s
 
 <div class="ai-box">
   <h3 style="color:var(--gold-primary);">
-    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 6.2L20.5 10l-6.3 2.2L12 18.5l-2.2-6.3L3.5 10l6.3-1.8L12 2z" fill="url(#gold3d)"/><circle cx="19" cy="18" r="2" fill="#60a5fa"/></svg></span>
+    <img data-ico="sparkles" class="ico-img-md" alt="AI">
     <span id="aiBoxHeading">AI Bible Question Generator</span>
   </h3>
   <p class="small" id="aiBoxSub">Generate unique Bible quiz questions based on Scripture verses & events with randomized A/B/C/D options.</p>
@@ -1141,14 +1078,20 @@ Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from s
   </select>
 
   <button type="button" id="aiGenerateBtn">
-    <span class="svg-3d-inline"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 6.2L20.5 10l-6.3 2.2L12 18.5l-2.2-6.3L3.5 10l6.3-1.8L12 2z" fill="#0b1329"/></svg></span>
+    <img data-ico="sparkles" class="ico-img-sm" alt="Generate">
     <span>Generate Questions with AI</span>
   </button>
   <p id="aiGenerateStatus"></p>
 
   <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">
-    <button type="button" id="aiSaveTrilingualBtn" class="hidden">💾 Save Multi-Language Questions</button> 
-    <button type="button" id="aiDownloadCsvBtn" class="hidden secondary">📥 Download Questions CSV</button>
+    <button type="button" id="aiSaveTrilingualBtn" class="hidden">
+      <img data-ico="save" class="ico-img-sm" alt="Save">
+      <span>Save Multi-Language Questions</span>
+    </button> 
+    <button type="button" id="aiDownloadCsvBtn" class="hidden secondary">
+      <img data-ico="download" class="ico-img-sm" alt="CSV">
+      <span>Download Questions CSV</span>
+    </button>
   </div>
 
   <p id="aiSaveStatus" role="status"></p>
@@ -1217,7 +1160,10 @@ Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from s
 <option value="D">Option D</option>
 </select>
 
-<button id="saveQuestionBtn" type="submit">💾 Save Bible Question</button>
+<button id="saveQuestionBtn" type="submit">
+  <img data-ico="save" class="ico-img-sm" alt="Save">
+  <span id="saveQuestionBtnText">Save Bible Question</span>
+</button>
 <button id="cancelEditBtn" class="secondary hidden" type="button">Cancel Edit</button>
 </form>
 
@@ -1226,9 +1172,7 @@ Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from s
 
 <div class="card">
 <h2>
-  <span class="svg-3d-box">
-    <svg viewBox="0 0 24 24"><rect x="4" y="3" width="14" height="5" rx="1.5" fill="url(#gold3d)"/><rect x="6" y="9.5" width="14" height="5" rx="1.5" fill="url(#blue3d)"/><rect x="4" y="16" width="14" height="5" rx="1.5" fill="url(#emerald3d)"/></svg>
-  </span>
+  <img data-ico="books" class="ico-img-lg" alt="Books">
   <span id="savedQuestionsHeading">Saved Bible Questions</span>
 </h2>
 
@@ -1258,9 +1202,18 @@ Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from s
 <input id="questionSearch" placeholder="Search Bible Book, Folder or Question">
 
 <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:8px 0;">
-  <button id="refreshQuestionsBtn" type="button">🔄 Refresh Questions</button>
-  <button id="selectAllQuestionsBtn" type="button" class="secondary">☑️ Select All Visible</button>
-  <button id="deleteSelectedQuestionsBtn" type="button" class="danger hidden">🗑️ Delete Selected (0)</button>
+  <button id="refreshQuestionsBtn" type="button">
+    <img data-ico="refresh" class="ico-img-sm" alt="Refresh">
+    <span>Refresh Questions</span>
+  </button>
+  <button id="selectAllQuestionsBtn" type="button" class="secondary">
+    <img data-ico="check" class="ico-img-sm" alt="Select">
+    <span id="selectAllQuestionsText">Select All Visible</span>
+  </button>
+  <button id="deleteSelectedQuestionsBtn" type="button" class="danger hidden">
+    <img data-ico="trash" class="ico-img-sm" alt="Delete">
+    <span id="deleteSelectedText">Delete Selected (0)</span>
+  </button>
 </div>
 
 <p id="questionListStatus" class="small"></p>
@@ -1291,9 +1244,7 @@ Only Admin can Add, Edit, or Delete questions. Correct answers are hidden from s
 
 <div class="card">
 <h2>
-  <span class="svg-3d-box">
-    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="url(#blue3d)"/><path d="M3 8a3 3 0 013-3h12a3 3 0 013 3v2H3V8z" fill="url(#gold3d)"/><circle cx="8" cy="14" r="1.4" fill="#fef08a"/><circle cx="12" cy="14" r="1.4" fill="#fef08a"/><circle cx="16" cy="14" r="1.4" fill="#fef08a"/></svg>
-  </span>
+  <img data-ico="calendar" class="ico-img-lg" alt="Calendar">
   <span id="scheduleExamHeading">Schedule Live Bible Exam</span>
 </h2>
 <p class="small" id="scheduleExamSub">
@@ -1305,7 +1256,7 @@ Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time �
 <input id="examName" type="text" placeholder="Example: Sunday Grand Bible Quiz" required maxlength="150">
 
 <div style="background:rgba(250,204,21,0.08); border:1.5px solid rgba(250,204,21,0.35); border-radius:12px; padding:12px; margin:8px 0;">
-  <label for="examPaperFolderSelect" id="examFolderSelectLabel" style="margin-top:0;">📁 Select Scanned Exam Paper Folder (Optional - uses folder papers instead of Book/Chapter below)</label>
+  <label for="examPaperFolderSelect" id="examFolderSelectLabel" style="margin-top:0;"><img data-ico="folder" class="ico-img-sm" alt="Folder">Select Scanned Exam Paper Folder (Optional - uses folder papers instead of Book/Chapter below)</label>
   <select id="examPaperFolderSelect">
     <option value="">-- Use Bible Book & Chapter Below (No Folder) --</option>
   </select>
@@ -1386,7 +1337,10 @@ Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time �
 </div>
 </div>
 
-<button id="saveExamBtn" type="submit">💾 Save Exam Schedule</button>
+<button id="saveExamBtn" type="submit">
+  <img data-ico="save" class="ico-img-sm" alt="Save">
+  <span>Save Exam Schedule</span>
+</button>
 </form>
 <p id="scheduleStatus" role="status"></p>
 </div>
@@ -1395,19 +1349,23 @@ Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time �
 
 <div class="card" id="scheduledExamsCard">
 <h2>
-  <span class="svg-3d-box">
-    <svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.5" fill="url(#gold3d)"/><rect x="9" y="2" width="6" height="4" rx="1.5" fill="url(#blue3d)"/><line x1="8" y1="10" x2="16" y2="10" stroke="#0b1329" stroke-width="1.8"/><line x1="8" y1="14" x2="14" y2="14" stroke="#0b1329" stroke-width="1.8"/></svg>
-  </span>
+  <img data-ico="clipboard" class="ico-img-lg" alt="Scheduled">
   <span id="scheduledExamsHeading">Scheduled Exams & Participants</span>
 </h2>
-<p class="small" id="scheduledExamsSub">View participant counts for each exam and click "👁️ View Details & Photos" to see candidate names, details & photos.</p>
-<button id="refreshExamsBtn" type="button">🔄 Refresh Exams</button>
+<p class="small" id="scheduledExamsSub">View participant counts for each exam and click "View Details & Photos" to see candidate names, details & photos.</p>
+<button id="refreshExamsBtn" type="button">
+  <img data-ico="refresh" class="ico-img-sm" alt="Refresh">
+  <span>Refresh Exams</span>
+</button>
 <p id="examListStatus" class="small"></p>
 
 <div id="examCandidatesDrawer" class="cand-drawer hidden">
   <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-    <h3 id="candDrawerTitle" style="color:var(--gold-primary); margin:0;">👥 Exam Participants</h3>
-    <button type="button" id="closeCandDrawerBtn" class="secondary btn-sm">✖ Close</button>
+    <h3 id="candDrawerTitle" style="color:var(--gold-primary); margin:0;">Exam Participants</h3>
+    <button type="button" id="closeCandDrawerBtn" class="secondary btn-sm">
+      <img data-ico="close" class="ico-img-sm" alt="Close">
+      <span>Close</span>
+    </button>
   </div>
   <p id="candDrawerSummary" class="small" style="margin-top:6px;"></p>
   <div id="candPhotoGrid" class="cand-grid"></div>
@@ -1436,6 +1394,87 @@ Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time �
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
+// ==========================================
+// 3D GLOSSY IMAGE ICON GENERATOR (APPLIES TO ALL <img data-ico="...">)
+// ==========================================
+const ICON_3D_DESIGNS = {
+  globe: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="url(#gGold)" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="none" stroke="#fef08a" stroke-width="2"/><ellipse cx="24" cy="24" rx="6" ry="13" fill="none" stroke="#fef08a" stroke-width="1.8"/><line x1="11" y1="24" x2="37" y2="24" stroke="#fef08a" stroke-width="1.8"/>`,
+  cross: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGold)" stroke="#fef9c3" stroke-width="2"/><path d="M21 10h6v9h9v6h-9v13h-6V25h-9v-6h9v-9z" fill="#0b1329"/>`,
+  lock: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="13" y="21" width="22" height="16" rx="4" fill="url(#gGold)"/><path d="M18 21v-4a6 6 0 0112 0v4" fill="none" stroke="#fef08a" stroke-width="2.6" stroke-linecap="round"/><circle cx="24" cy="29" r="2.2" fill="#0b1329"/>`,
+  unlock: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGreen)" stroke="#6ee7b7" stroke-width="2"/><rect x="13" y="21" width="22" height="16" rx="4" fill="#fef9c3"/><path d="M18 21v-4a6 6 0 0111-3" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/><circle cx="24" cy="29" r="2.2" fill="#065f46"/>`,
+  shield: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M24 9l12 5v9c0 8-5 14-12 16-7-2-12-8-12-16v-9l12-5z" fill="url(#gGold)"/><path d="M19 24l3.5 3.5L30 20" fill="none" stroke="#0b1329" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
+  refresh: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M13 24a11 11 0 0119.5-7M35 12v6h-6M35 24a11 11 0 01-19.5 7M13 36v-6h6" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
+  logout: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gRed)" stroke="#fca5a5" stroke-width="2"/><path d="M26 12H15a3 3 0 00-3 3v18a3 3 0 003 3h11M22 30l7-6-7-6M29 24H16" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>`,
+  trophy: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M16 12h16v8a8 8 0 01-16 0v-8z" fill="url(#gGold)"/><path d="M16 14h-4v3a4 4 0 004 4M32 14h4v3a4 4 0 01-4 4M24 28v6M18 36h12" fill="none" stroke="#fef08a" stroke-width="2.4" stroke-linecap="round"/>`,
+  radar: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGreen)" stroke-width="2"/><circle cx="24" cy="24" r="4.5" fill="url(#gGreen)"/><path d="M17 17a10 10 0 000 14M31 17a10 10 0 010 14M12 12a17 17 0 000 24M36 12a17 17 0 010 24" fill="none" stroke="url(#gGold)" stroke-width="2.4" stroke-linecap="round"/>`,
+  online: `<circle cx="24" cy="24" r="18" fill="url(#gGreen)" stroke="#a7f3d0" stroke-width="3"/><circle cx="19" cy="18" r="5" fill="#ffffff" opacity="0.45"/>`,
+  offline: `<circle cx="24" cy="24" r="18" fill="url(#gRed)" stroke="#fecaca" stroke-width="3"/><circle cx="19" cy="18" r="5" fill="#ffffff" opacity="0.45"/>`,
+  clock: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="none" stroke="#fef08a" stroke-width="2.4"/><path d="M24 17v7l5 3" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>`,
+  phone: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><rect x="15" y="9" width="18" height="30" rx="4" fill="url(#gGold)"/><rect x="18" y="13" width="12" height="19" rx="1.5" fill="#0b1329"/><circle cx="24" cy="35" r="1.5" fill="#0b1329"/>`,
+  pin: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gRed)" stroke="#fca5a5" stroke-width="2"/><path d="M24 10a9 9 0 00-9 9c0 7 9 19 9 19s9-12 9-19a9 9 0 00-9-9z" fill="#fef9c3"/><circle cx="24" cy="19" r="3.5" fill="#dc2626"/>`,
+  church: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M24 8v6M21 11h6M14 23l10-8 10 8v14H14V23z" fill="url(#gGold)" stroke="#fef08a" stroke-width="1.5"/><rect x="21" y="28" width="6" height="9" fill="#0b1329"/>`,
+  users: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="url(#gGold)" stroke-width="2"/><circle cx="19" cy="19" r="5" fill="url(#gGold)"/><path d="M10 34c0-5 4-8 9-8s9 3 9 8" fill="url(#gGold)"/><circle cx="31" cy="20" r="4" fill="#fef08a"/><path d="M30 27c4 0 8 2.5 8 7" fill="none" stroke="#fef08a" stroke-width="2.4" stroke-linecap="round"/>`,
+  medal: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><circle cx="24" cy="21" r="10" fill="url(#gGold)"/><path d="M19 30l-3 9 8-4 8 4-3-9" fill="#60a5fa"/>`,
+  medal1: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGold)" stroke="#fef9c3" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="#0b1329"/><text x="24" y="30" text-anchor="middle" font-size="18" font-weight="900" fill="#facc15">1</text>`,
+  medal2: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gSilver)" stroke="#ffffff" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="#0b1329"/><text x="24" y="30" text-anchor="middle" font-size="18" font-weight="900" fill="#e2e8f0">2</text>`,
+  medal3: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBronze)" stroke="#fed7aa" stroke-width="2"/><circle cx="24" cy="24" r="13" fill="#0b1329"/><text x="24" y="30" text-anchor="middle" font-size="18" font-weight="900" fill="#fb923c">3</text>`,
+  chart: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="11" y="24" width="6" height="13" rx="2" fill="url(#gBlue)"/><rect x="21" y="16" width="6" height="21" rx="2" fill="url(#gGold)"/><rect x="31" y="11" width="6" height="26" rx="2" fill="url(#gGreen)"/>`,
+  folder: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M10 15a3 3 0 013-3h7l3 3h12a3 3 0 013 3v15a3 3 0 01-3 3H13a3 3 0 01-3-3V15z" fill="url(#gGold)"/>`,
+  folderOpen: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="url(#gGold)" stroke-width="2"/><path d="M10 15a3 3 0 013-3h7l3 3h11a2 2 0 012 2v3H12l-2 13V15z" fill="#fde047"/><path d="M12 20h26l-3 15H9l3-15z" fill="url(#gGold)"/>`,
+  doc: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M15 10h12l7 7v19a2 2 0 01-2 2H15a2 2 0 01-2-2V12a2 2 0 012-2z" fill="#fef9c3"/><line x1="18" y1="23" x2="29" y2="23" stroke="#1e3a8a" stroke-width="2.4"/><line x1="18" y1="29" x2="26" y2="29" stroke="#1e3a8a" stroke-width="2.4"/>`,
+  camera: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="10" y="16" width="28" height="20" rx="4" fill="url(#gGold)"/><circle cx="24" cy="26" r="5.5" fill="#0b1329"/><path d="M17 16l2-4h10l2 4" fill="url(#gGold)"/>`,
+  gallery: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><rect x="10" y="12" width="28" height="24" rx="4" fill="#0b1329"/><circle cx="18" cy="19" r="3" fill="url(#gGold)"/><path d="M12 33l8-8 5 5 4-4 7 7" fill="none" stroke="url(#gGreen)" stroke-width="2.6" stroke-linecap="round"/>`,
+  note: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGold)" stroke="#fef9c3" stroke-width="2"/><rect x="13" y="11" width="22" height="26" rx="3" fill="#0b1329"/><line x1="18" y1="19" x2="30" y2="19" stroke="#facc15" stroke-width="2.4"/><line x1="18" y1="25" x2="30" y2="25" stroke="#facc15" stroke-width="2.4"/><line x1="18" y1="31" x2="25" y2="31" stroke="#facc15" stroke-width="2.4"/>`,
+  gear: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><circle cx="24" cy="24" r="6" fill="none" stroke="url(#gGold)" stroke-width="4"/><path d="M24 10v4M24 34v4M10 24h4M34 24h4M14 14l3 3M31 31l3 3M34 14l-3 3M17 31l-3 3" stroke="#fef08a" stroke-width="2.6" stroke-linecap="round"/>`,
+  plus: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGreen)" stroke="#6ee7b7" stroke-width="2"/><path d="M24 13v22M13 24h22" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round"/>`,
+  bible: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M10 14c5-1.5 9 0 14 3 5-3 9-4.5 14-3v20c-5-1.5-9 0-14 3-5-3-9-4.5-14-3V14z" fill="url(#gGold)"/><line x1="24" y1="17" x2="24" y2="37" stroke="#0b1329" stroke-width="2.4"/>`,
+  sparkles: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><path d="M24 9l3.5 9.5L37 22l-9.5 3.5L24 35l-3.5-9.5L11 22l9.5-3.5L24 9z" fill="url(#gGold)"/><circle cx="34" cy="13" r="2.5" fill="#60a5fa"/>`,
+  save: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M12 12h19l5 5v19a2 2 0 01-2 2H12a2 2 0 01-2-2V14a2 2 0 012-2z" fill="url(#gGold)"/><rect x="16" y="12" width="12" height="7" fill="#0b1329"/><rect x="16" y="25" width="16" height="9" rx="1.5" fill="#fef9c3"/>`,
+  download: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGreen)" stroke="#6ee7b7" stroke-width="2"/><path d="M24 11v18M17 23l7 7 7-7M13 35h22" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`,
+  books: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="11" y="10" width="22" height="7" rx="2" fill="url(#gGold)"/><rect x="15" y="20" width="22" height="7" rx="2" fill="url(#gBlue)"/><rect x="11" y="30" width="22" height="7" rx="2" fill="url(#gGreen)"/>`,
+  check: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGreen)" stroke="#6ee7b7" stroke-width="2"/><path d="M14 24l7 7 13-14" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>`,
+  edit: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M14 34l3-9L29 13l6 6-12 12-9 3z" fill="url(#gGold)"/>`,
+  trash: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gRed)" stroke="#fca5a5" stroke-width="2"/><path d="M14 17h20M19 17v-3h10v3M17 17l1.5 19h11L31 17" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`,
+  calendar: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="10" y="13" width="28" height="24" rx="4" fill="url(#gBlue)"/><path d="M10 17a4 4 0 014-4h20a4 4 0 014 4v4H10v-4z" fill="url(#gGold)"/><circle cx="18" cy="28" r="2" fill="#fef08a"/><circle cx="24" cy="28" r="2" fill="#fef08a"/><circle cx="30" cy="28" r="2" fill="#fef08a"/>`,
+  clipboard: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gDark)" stroke="url(#gGold)" stroke-width="2"/><rect x="13" y="12" width="22" height="26" rx="3" fill="url(#gGold)"/><rect x="19" y="9" width="10" height="5" rx="2" fill="url(#gBlue)"/><line x1="18" y1="22" x2="30" y2="22" stroke="#0b1329" stroke-width="2.4"/><line x1="18" y1="28" x2="27" y2="28" stroke="#0b1329" stroke-width="2.4"/>`,
+  eye: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gBlue)" stroke="#93c5fd" stroke-width="2"/><path d="M9 24c4-7 9-10 15-10s11 3 15 10c-4 7-9 10-15 10S13 31 9 24z" fill="#fef9c3"/><circle cx="24" cy="24" r="4.5" fill="#1e3a8a"/>`,
+  close: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gRed)" stroke="#fca5a5" stroke-width="2"/><path d="M16 16l16 16M32 16L16 32" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round"/>`,
+  warn: `<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#gGold)" stroke="#fef9c3" stroke-width="2"/><path d="M24 10L10 35h28L24 10z" fill="#0b1329"/><line x1="24" y1="19" x2="24" y2="27" stroke="#facc15" stroke-width="2.8" stroke-linecap="round"/><circle cx="24" cy="31" r="1.8" fill="#facc15"/>`
+};
+
+const ICON_IMAGE_CACHE = {};
+function get3DIconUrl(name) {
+  if (ICON_IMAGE_CACHE[name]) return ICON_IMAGE_CACHE[name];
+  const inner = ICON_3D_DESIGNS[name] || ICON_3D_DESIGNS.sparkles;
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="96" height="96">
+    <defs>
+      <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="50%" stop-color="#facc15"/><stop offset="100%" stop-color="#a16207"/></linearGradient>
+      <linearGradient id="gBlue" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="50%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1e3a8a"/></linearGradient>
+      <linearGradient id="gGreen" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6ee7b7"/><stop offset="50%" stop-color="#10b981"/><stop offset="100%" stop-color="#065f46"/></linearGradient>
+      <linearGradient id="gRed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fca5a5"/><stop offset="50%" stop-color="#ef4444"/><stop offset="100%" stop-color="#991b1b"/></linearGradient>
+      <linearGradient id="gSilver" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff"/><stop offset="50%" stop-color="#cbd5e1"/><stop offset="100%" stop-color="#475569"/></linearGradient>
+      <linearGradient id="gBronze" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fed7aa"/><stop offset="50%" stop-color="#d97706"/><stop offset="100%" stop-color="#78350f"/></linearGradient>
+      <linearGradient id="gDark" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1e3a8a"/><stop offset="100%" stop-color="#090d16"/></linearGradient>
+    </defs>
+    ${inner}
+    <rect x="3" y="3" width="42" height="20" rx="11" fill="#ffffff" opacity="0.14"/>
+  </svg>`;
+  const uri = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svgStr);
+  ICON_IMAGE_CACHE[name] = uri;
+  return uri;
+}
+
+function icoImgHtml(name, cls = "ico-img-sm") {
+  return `<img src="${get3DIconUrl(name)}" class="${cls}" alt="${name}">`;
+}
+
+function hydrateAll3DImageIcons(root = document) {
+  root.querySelectorAll("img[data-ico]").forEach(img => {
+    const key = img.getAttribute("data-ico");
+    if (key) img.src = get3DIconUrl(key);
+  });
+}
+
 const SUPABASE_URL = "https://jfhlesmfgwxlqdccfgit.supabase.co";
 const SUPABASE_KEY = "sb_publishable_WJ8KhxWCP1tgi04LwHIx9Q_Os4FNKfp";
 
@@ -1563,7 +1602,7 @@ function refreshPaperFoldersUI() {
       .join(", ");
     const opt = document.createElement("option");
     opt.value = name;
-    opt.textContent = `📁 ${name} (${langSummary})`;
+    opt.textContent = `${name} (${langSummary})`;
     folderSelect.appendChild(opt);
   });
   if (prevVal && folderMap[prevVal]) {
@@ -1588,13 +1627,15 @@ function refreshPaperFoldersUI() {
       .join("");
 
     card.innerHTML = `
-      <div style="font-weight:800; color:var(--gold-primary); font-size:15px;">📁 ${name}</div>
+      <div style="font-weight:800; color:var(--gold-primary); font-size:15px; display:flex; align-items:center;">
+        ${icoImgHtml("folder", "ico-img-md")}<span>${name}</span>
+      </div>
       <div class="small">Total Questions: <strong>${info.total}</strong></div>
       <div class="folder-lang-pills">${pillsHtml}</div>
       <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
-        <button type="button" class="btn-sm secondary" onclick="selectFolderForScan('${name.replace(/'/g, "\\'")}')">➕ Add Language Paper</button>
-        <button type="button" class="btn-sm" onclick="selectFolderForSchedule('${name.replace(/'/g, "\\'")}')">📅 Schedule Exam</button>
-        <button type="button" class="btn-sm danger" onclick="deletePaperFolder('${name.replace(/'/g, "\\'")}')">🗑️ Delete</button>
+        <button type="button" class="btn-sm secondary" onclick="selectFolderForScan('${name.replace(/'/g, "\\'")}')">${icoImgHtml("plus")}Add Language Paper</button>
+        <button type="button" class="btn-sm" onclick="selectFolderForSchedule('${name.replace(/'/g, "\\'")}')">${icoImgHtml("calendar")}Schedule Exam</button>
+        <button type="button" class="btn-sm danger" onclick="deletePaperFolder('${name.replace(/'/g, "\\'")}')">${icoImgHtml("trash")}Delete</button>
       </div>
     `;
 
@@ -1865,7 +1906,7 @@ function renderScannedQueue() {
   scannedPageNames.forEach((pName, i) => {
     const pill = document.createElement("span");
     pill.className = "scan-page-pill";
-    pill.textContent = `📄 Page ${i + 1}: ${pName}`;
+    pill.innerHTML = `${icoImgHtml("doc")}Page ${i + 1}: ${pName}`;
     pagesStrip.appendChild(pill);
   });
 
@@ -1884,7 +1925,7 @@ function renderScannedQueue() {
     card.innerHTML = `
       <div class="scan-edit-header">
         <strong style="color:var(--gold-primary);">Question #${idx + 1} (${item.pageTag || "Page"})</strong>
-        <button type="button" class="danger btn-sm" onclick="removeScannedQuestion(${idx})">🗑️ Remove</button>
+        <button type="button" class="danger btn-sm" onclick="removeScannedQuestion(${idx})">${icoImgHtml("trash")}Remove</button>
       </div>
       <textarea onchange="updateScannedField(${idx}, 'question_text', this.value)" placeholder="Question Text">${item.question_text}</textarea>
       <div class="grid">
@@ -1948,7 +1989,7 @@ async function processScannedFiles(fileList) {
     const file = fileList[i];
     const pageNumber = scannedPageNames.length + 1;
     statusEl.className = "";
-    statusEl.textContent = `⏳ Scanning Page ${pageNumber} (${file.name})... Please wait...`;
+    statusEl.innerHTML = `${icoImgHtml("clock")}Scanning Page ${pageNumber} (${file.name})... Please wait...`;
 
     try {
       const processedDataUrl = await preprocessImageForOcr(file);
@@ -1985,12 +2026,12 @@ async function processScannedFiles(fileList) {
       renderScannedQueue();
     } catch (err) {
       statusEl.className = "error";
-      statusEl.textContent = `❌ Page ${pageNumber} Scan Error: ${err.message}`;
+      statusEl.innerHTML = `${icoImgHtml("close")}Page ${pageNumber} Scan Error: ${err.message}`;
     }
   }
 
   statusEl.className = "success";
-  statusEl.textContent = `✅ Scan complete! ${totalNewlyParsed} new questions added to queue (Total: ${scannedQuestionQueue.length} questions). Review below and click Save.`;
+  statusEl.innerHTML = `${icoImgHtml("check")}Scan complete! ${totalNewlyParsed} new questions added to queue (Total: ${scannedQuestionQueue.length} questions). Review below and click Save.`;
 }
 
 $("scanCameraInput").addEventListener("change", e => {
@@ -2020,7 +2061,7 @@ $("parseManualTextBtn").addEventListener("click", () => {
   parsed.forEach(p => scannedQuestionQueue.push({ ...p, pageTag: "Manual Text" }));
   renderScannedQueue();
   statusEl.className = "success";
-  statusEl.textContent = `✅ ${parsed.length} questions added to queue!`;
+  statusEl.innerHTML = `${icoImgHtml("check")}${parsed.length} questions added to queue!`;
 });
 
 $("clearScannedQueueBtn").addEventListener("click", () => {
@@ -2051,7 +2092,7 @@ $("saveScannedQuestionsBtn").addEventListener("click", async () => {
   const saveStatus = $("scannerSaveStatus");
   saveBtn.disabled = true;
   saveStatus.className = "";
-  saveStatus.textContent = `💾 Saving ${scannedQuestionQueue.length} (${language.toUpperCase()}) questions into folder "${folderName}"...`;
+  saveStatus.innerHTML = `${icoImgHtml("save")}Saving ${scannedQuestionQueue.length} (${language.toUpperCase()}) questions into folder "${folderName}"...`;
 
   try {
     const rowsToInsert = scannedQuestionQueue.map(item => ({
@@ -2072,7 +2113,7 @@ $("saveScannedQuestionsBtn").addEventListener("click", async () => {
     if (error) throw error;
 
     saveStatus.className = "success";
-    saveStatus.textContent = `✅ Saved ${rowsToInsert.length} questions into [${folderName} • ${language.toUpperCase()}]! You can now scan another language paper into the same folder.`;
+    saveStatus.innerHTML = `${icoImgHtml("check")}Saved ${rowsToInsert.length} questions into [${folderName} • ${language.toUpperCase()}]! You can now scan another language paper into the same folder.`;
 
     scannedQuestionQueue = [];
     scannedPageNames = [];
@@ -2081,7 +2122,7 @@ $("saveScannedQuestionsBtn").addEventListener("click", async () => {
     await loadQuestions();
   } catch (err) {
     saveStatus.className = "error";
-    saveStatus.textContent = "❌ Save Error: " + err.message;
+    saveStatus.innerHTML = `${icoImgHtml("close")}Save Error: ${err.message}`;
   } finally {
     saveBtn.disabled = false;
   }
@@ -2149,16 +2190,16 @@ function buildParticipantGalleryCard(cand, isOnline, photoByMobile, detailsByMob
 
   const badgeHtml = isOnline
     ? `<div style="font-size:12px; color:#34d399; font-weight:700; margin:4px 0;"><span class="pulse-dot" style="width:8px;height:8px;margin-right:4px;"></span> Writing Exam Live...</div>
-       <div class="small">🕒 Joined: ${formatTimeShortIST(cand.started_at || cand.created_at) || "Just now"}</div>`
+       <div class="small">${icoImgHtml("clock")}Joined: ${formatTimeShortIST(cand.started_at || cand.created_at) || "Just now"}</div>`
     : `<div style="font-size:12px; color:#f87171; font-weight:700; margin:4px 0;"><span class="status-dot dot-red"></span> Exam Completed</div>
-       <div style="margin-top:6px; font-size:13px; color:var(--gold-primary); font-weight:700;">🏆 Score: ${cand.score ?? 0}/${totalQ} • ⏱️ ${cand.time_seconds ?? 0}s</div>`;
+       <div style="margin-top:6px; font-size:13px; color:var(--gold-primary); font-weight:700;">${icoImgHtml("trophy")}Score: ${cand.score ?? 0}/${totalQ} • ${icoImgHtml("clock")}${cand.time_seconds ?? 0}s</div>`;
 
   card.innerHTML = `
     ${photoHtml}
     <div style="font-weight:700; font-size:15px; color:#fff;">${isOnline ? "" : "#" + (idx + 1) + " "}${name}</div>
     ${badgeHtml}
-    ${mobile ? `<div class="small">📱 ${mobile}</div>` : ""}
-    ${loc ? `<div class="small">📍 ${loc}</div>` : ""}
+    ${mobile ? `<div class="small">${icoImgHtml("phone")}${mobile}</div>` : ""}
+    ${loc ? `<div class="small">${icoImgHtml("pin")}${loc}</div>` : ""}
   `;
   return card;
 }
@@ -2173,7 +2214,7 @@ async function refreshLiveParticipantsGallery(silent = false) {
   if (!examId) return;
 
   if (!silent) {
-    statusEl.textContent = "⏳ Updating live gallery...";
+    statusEl.innerHTML = `${icoImgHtml("clock")}Updating live gallery...`;
   }
 
   try {
@@ -2255,7 +2296,7 @@ async function initLiveParticipantsMonitor() {
 
     const opt = document.createElement("option");
     opt.value = e.id;
-    opt.textContent = `${isLiveNow ? "🟢 [LIVE NOW] " : ""}${e.exam_name} - ${formatIST(e.start_time)}`;
+    opt.textContent = `${isLiveNow ? "[LIVE NOW] " : ""}${e.exam_name} - ${formatIST(e.start_time)}`;
     sel.appendChild(opt);
   });
 
@@ -2422,9 +2463,9 @@ $("scheduleForm").addEventListener("submit",async event=>{
     const {error} = await db.from("exam_schedules").insert(exam);
     if(error) throw error;
 
-    status.textContent = selectedFolder
-      ? `✅ Exam scheduled successfully using Folder "${selectedFolder}"!`
-      : "✅ Exam scheduled successfully!";
+    status.innerHTML = selectedFolder
+      ? `${icoImgHtml("check")}Exam scheduled successfully using Folder "${selectedFolder}"!`
+      : `${icoImgHtml("check")}Exam scheduled successfully!`;
     status.className = "success";
     $("scheduleForm").reset();
     refreshPaperFoldersUI();
@@ -2453,17 +2494,17 @@ async function openExamCandidates(exam, attemptsForExam) {
   const grid = $("candPhotoGrid");
 
   drawer.classList.remove("hidden");
-  title.textContent = `👥 ${exam.exam_name} (${formatIST(exam.start_time)})`;
+  title.innerHTML = `${icoImgHtml("users", "ico-img-md")}<span>${exam.exam_name} (${formatIST(exam.start_time)})</span>`;
   grid.replaceChildren();
 
   if (!attemptsForExam || attemptsForExam.length === 0) {
-    summary.textContent = "⚠️ No participants have joined this exam yet (0 Participants).";
+    summary.innerHTML = `${icoImgHtml("warn")}No participants have joined this exam yet (0 Participants).`;
     return;
   }
 
   const submittedCount = attemptsForExam.filter(a => a.status === "submitted").length;
   const activeCount = attemptsForExam.length - submittedCount;
-  summary.innerHTML = `Total Joined: <strong>${attemptsForExam.length}</strong> &nbsp;|&nbsp; 🔴 Submitted: <strong>${submittedCount}</strong> &nbsp;|&nbsp; 🟢 Active: <strong>${activeCount}</strong>`;
+  summary.innerHTML = `Total Joined: <strong>${attemptsForExam.length}</strong> &nbsp;|&nbsp; ${icoImgHtml("offline")}Submitted: <strong>${submittedCount}</strong> &nbsp;|&nbsp; ${icoImgHtml("online")}Active: <strong>${activeCount}</strong>`;
 
   const { photoByMobile, detailsByMobile } = await fetchStudentPhotoMap(attemptsForExam);
 
@@ -2503,11 +2544,11 @@ async function openExamCandidates(exam, attemptsForExam) {
         <span class="status-dot ${isSubmitted ? 'dot-red' : 'dot-green'}"></span>
         <span>${isSubmitted ? 'Completed' : 'Active'}</span>
       </div>
-      ${mobile ? `<div class="small">📱 ${mobile}</div>` : ""}
-      ${loc ? `<div class="small">📍 ${loc}</div>` : ""}
-      ${church ? `<div class="small">⛪ ${church}</div>` : ""}
+      ${mobile ? `<div class="small">${icoImgHtml("phone")}${mobile}</div>` : ""}
+      ${loc ? `<div class="small">${icoImgHtml("pin")}${loc}</div>` : ""}
+      ${church ? `<div class="small">${icoImgHtml("church")}${church}</div>` : ""}
       <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1); font-size:13px; color:var(--gold-primary); font-weight:700;">
-        🏆 Score: ${scoreTxt} • ⏱️ ${timeTxt}
+        ${icoImgHtml("trophy")}Score: ${scoreTxt} • ${icoImgHtml("clock")}${timeTxt}
       </div>
     `;
     grid.appendChild(card);
@@ -2548,12 +2589,14 @@ async function loadExams(){
   examsList.forEach(exam => {
     const tr = document.createElement("tr");
     const examAttempts = attemptsByExam[exam.id] || [];
-    const displayExamTitle = exam.paper_folder
-      ? `${exam.exam_name} [📁 ${exam.paper_folder}]`
-      : exam.exam_name;
+
+    const nameTd = document.createElement("td");
+    nameTd.innerHTML = exam.paper_folder
+      ? `${exam.exam_name} [${icoImgHtml("folder")}${exam.paper_folder}]`
+      : String(exam.exam_name ?? "");
+    tr.appendChild(nameTd);
 
     [
-      displayExamTitle,
       formatIST(exam.start_time),
       formatIST(exam.end_time),
       exam.question_count
@@ -2564,16 +2607,16 @@ async function loadExams(){
     });
 
     const countTd = document.createElement("td");
-    countTd.innerHTML = `<span class="cand-badge">👥 ${examAttempts.length} Students</span>`;
+    countTd.innerHTML = `<span class="cand-badge">${icoImgHtml("users")}${examAttempts.length} Students</span>`;
     tr.appendChild(countTd);
 
     const actionTd = document.createElement("td");
     const viewBtn = document.createElement("button");
     viewBtn.type = "button";
     viewBtn.className = "btn-sm";
-    viewBtn.textContent = examAttempts.length > 0
-      ? `👁️ View Details & Photos (${examAttempts.length})`
-      : "👁️ View (0)";
+    viewBtn.innerHTML = examAttempts.length > 0
+      ? `${icoImgHtml("eye")}View Details & Photos (${examAttempts.length})`
+      : `${icoImgHtml("eye")}View (0)`;
     viewBtn.onclick = () => openExamCandidates(exam, examAttempts);
     actionTd.appendChild(viewBtn);
     tr.appendChild(actionTd);
@@ -2741,7 +2784,7 @@ function renderAiPreview() {
         A) ${q.option_a} &nbsp;|&nbsp; B) ${q.option_b} &nbsp;|&nbsp;
         C) ${q.option_c} &nbsp;|&nbsp; D) ${q.option_d}
       </p>
-      <p style="color:#34d399; font-size:13px; font-weight:700;">✅ Correct Answer: Option ${q.correct_answer}</p>
+      <p style="color:#34d399; font-size:13px; font-weight:700;">${icoImgHtml("check")}Correct Answer: Option ${q.correct_answer}</p>
     `;
     preview.appendChild(div);
   });
@@ -2760,7 +2803,7 @@ $("aiGenerateBtn").addEventListener("click", async () => {
 
   btn.disabled = true;
   status.className = "";
-  status.textContent = `✨ Generating ${count} AI Bible questions for ${book} Chapter ${chapter}...`;
+  status.innerHTML = `${icoImgHtml("sparkles")}Generating ${count} AI Bible questions for ${book} Chapter ${chapter}...`;
 
   try {
     let aiData = null;
@@ -2799,7 +2842,7 @@ $("aiGenerateBtn").addEventListener("click", async () => {
     $("aiDownloadCsvBtn").classList.remove("hidden");
 
     status.className = "success";
-    status.textContent = `✅ Generated ${generatedAiQuestions.length} Bible questions with shuffled options! Click "Save Multi-Language Questions" below to store them.`;
+    status.innerHTML = `${icoImgHtml("check")}Generated ${generatedAiQuestions.length} Bible questions with shuffled options! Click "Save Multi-Language Questions" below to store them.`;
   } catch (err) {
     status.className = "error";
     status.textContent = "Error: " + err.message;
@@ -2818,14 +2861,14 @@ $("aiSaveTrilingualBtn").addEventListener("click", async () => {
   const saveStatus = $("aiSaveStatus");
   saveBtn.disabled = true;
   saveStatus.className = "";
-  saveStatus.textContent = `💾 Saving ${generatedAiQuestions.length} questions to Supabase...`;
+  saveStatus.innerHTML = `${icoImgHtml("save")}Saving ${generatedAiQuestions.length} questions to Supabase...`;
 
   try {
     const { error } = await db.from("bible_questions").insert(generatedAiQuestions);
     if (error) throw error;
 
     saveStatus.className = "success";
-    saveStatus.textContent = `✅ Successfully saved ${generatedAiQuestions.length} questions to Bible Questions repository!`;
+    saveStatus.innerHTML = `${icoImgHtml("check")}Successfully saved ${generatedAiQuestions.length} questions to Bible Questions repository!`;
     await loadQuestions();
   } catch (err) {
     saveStatus.className = "error";
@@ -2902,7 +2945,7 @@ function getQuestionFormData(){
 function resetQuestionForm(){
   $("questionForm").reset();
   editingQuestionId = null;
-  $("saveQuestionBtn").textContent = "💾 Save Bible Question";
+  $("saveQuestionBtnText").textContent = "Save Bible Question";
   $("cancelEditBtn").classList.add("hidden");
 }
 
@@ -2937,7 +2980,9 @@ $("questionForm").addEventListener("submit",async event=>{
     const {error} = await query;
     if(error) throw error;
 
-    status.textContent = editingQuestionId ? "✅ Bible Question Updated!" : "✅ Bible Question Saved!";
+    status.innerHTML = editingQuestionId
+      ? `${icoImgHtml("check")}Bible Question Updated!`
+      : `${icoImgHtml("check")}Bible Question Saved!`;
     status.className = "success";
 
     resetQuestionForm();
@@ -2972,12 +3017,12 @@ function getFilteredQuestions() {
 function updateBulkSelectionUI() {
   const count = selectedQuestionIds.size;
   const delBtn = $("deleteSelectedQuestionsBtn");
-  const selectAllBtn = $("selectAllQuestionsBtn");
+  const selectAllText = $("selectAllQuestionsText");
   const headerChk = $("selectAllCheckbox");
 
   if (count > 0) {
     delBtn.classList.remove("hidden");
-    delBtn.textContent = `🗑️ Delete Selected (${count})`;
+    $("deleteSelectedText").textContent = `Delete Selected (${count})`;
   } else {
     delBtn.classList.add("hidden");
   }
@@ -2989,8 +3034,8 @@ function updateBulkSelectionUI() {
     headerChk.checked = allVisibleSelected;
     headerChk.indeterminate = count > 0 && !allVisibleSelected;
   }
-  if (selectAllBtn) {
-    selectAllBtn.textContent = allVisibleSelected ? "⬜ Deselect All" : "☑️ Select All Visible";
+  if (selectAllText) {
+    selectAllText.textContent = allVisibleSelected ? "Deselect All" : "Select All Visible";
   }
 }
 
@@ -3046,10 +3091,13 @@ function renderQuestions(){
     chkTd.appendChild(chk);
     tr.appendChild(chkTd);
 
-    const bookOrFolder = q.paper_folder ? `📁 ${q.paper_folder}` : q.bible_book;
+    const bookTd = document.createElement("td");
+    bookTd.innerHTML = q.paper_folder
+      ? `${icoImgHtml("folder")}${q.paper_folder}`
+      : String(q.bible_book ?? "");
+    tr.appendChild(bookTd);
 
     [
-      bookOrFolder,
       q.chapter_number,
       q.language,
       q.difficulty,
@@ -3065,7 +3113,7 @@ function renderQuestions(){
     actTd.className = "question-actions";
 
     const editBtn = document.createElement("button");
-    editBtn.textContent = "✏️ Edit";
+    editBtn.innerHTML = `${icoImgHtml("edit")}Edit`;
     editBtn.type = "button";
     editBtn.onclick = () => {
       editingQuestionId = q.id;
@@ -3079,13 +3127,13 @@ function renderQuestions(){
       $("optionC").value = q.option_c;
       $("optionD").value = q.option_d;
       $("correctAnswer").value = q.correct_answer;
-      $("saveQuestionBtn").textContent = "💾 Update Bible Question";
+      $("saveQuestionBtnText").textContent = "Update Bible Question";
       $("cancelEditBtn").classList.remove("hidden");
       window.scrollTo({top: $("questionManager").offsetTop, behavior: "smooth"});
     };
 
     const delBtn = document.createElement("button");
-    delBtn.textContent = "🗑️ Delete";
+    delBtn.innerHTML = `${icoImgHtml("trash")}Delete`;
     delBtn.type = "button";
     delBtn.className = "danger";
     delBtn.onclick = async () => {
@@ -3142,7 +3190,7 @@ $("deleteSelectedQuestionsBtn").addEventListener("click", async () => {
   const delBtn = $("deleteSelectedQuestionsBtn");
   const statusEl = $("questionListStatus");
   delBtn.disabled = true;
-  statusEl.textContent = `⏳ Deleting ${idsToDelete.length} selected questions...`;
+  statusEl.innerHTML = `${icoImgHtml("clock")}Deleting ${idsToDelete.length} selected questions...`;
 
   try {
     try {
@@ -3157,11 +3205,11 @@ $("deleteSelectedQuestionsBtn").addEventListener("click", async () => {
     if (error) throw error;
 
     selectedQuestionIds.clear();
-    statusEl.textContent = `✅ Successfully deleted ${idsToDelete.length} questions!`;
+    statusEl.innerHTML = `${icoImgHtml("check")}Successfully deleted ${idsToDelete.length} questions!`;
     await loadQuestions();
   } catch (err) {
     alert("Delete Error: " + err.message);
-    statusEl.textContent = "❌ Error: " + err.message;
+    statusEl.textContent = "Error: " + err.message;
   } finally {
     delBtn.disabled = false;
   }
@@ -3205,7 +3253,7 @@ async function fetchExamWinners(examId) {
 
   btn.disabled = true;
   statusEl.className = "";
-  statusEl.textContent = "⏳ Loading exam winners...";
+  statusEl.innerHTML = `${icoImgHtml("clock")}Loading exam winners...`;
   top3Div.replaceChildren();
   body.replaceChildren();
 
@@ -3226,12 +3274,13 @@ async function fetchExamWinners(examId) {
 
     if (list.length === 0) {
       statusEl.className = "error";
-      statusEl.textContent = "⚠️ No submitted attempts found for this exam yet.";
+      statusEl.innerHTML = `${icoImgHtml("warn")}No submitted attempts found for this exam yet.`;
       top3Div.innerHTML = `<div class="stat"><span>Status</span><strong>0 Participants</strong><span class="small">Students haven't submitted this exam slot yet.</span></div>`;
       return;
     }
 
-    const medals = ["🥇 1st Place", "🥈 2nd Place", "🥉 3rd Place"];
+    const medalIcons = ["medal1", "medal2", "medal3"];
+    const medalLabels = ["1st Place", "2nd Place", "3rd Place"];
     list.slice(0, 3).forEach((w, i) => {
       const box = document.createElement("div");
       box.className = "stat";
@@ -3239,7 +3288,7 @@ async function fetchExamWinners(examId) {
       const totalQ = w.total_questions || 10;
       const timeSec = w.time_seconds != null ? `${w.time_seconds}s` : "-";
       box.innerHTML = `
-        <span>${medals[i]}</span>
+        <span style="display:flex;align-items:center;">${icoImgHtml(medalIcons[i], "ico-img-md")}<strong>${medalLabels[i]}</strong></span>
         <strong>${name}</strong>
         <span class="small">Score: ${w.score ?? 0}/${totalQ} • Time: ${timeSec}</span>
       `;
@@ -3262,10 +3311,10 @@ async function fetchExamWinners(examId) {
     });
 
     statusEl.className = "success";
-    statusEl.textContent = `✅ Loaded ${list.length} winner(s) successfully!`;
+    statusEl.innerHTML = `${icoImgHtml("check")}Loaded ${list.length} winner(s) successfully!`;
   } catch (e) {
     statusEl.className = "error";
-    statusEl.textContent = "❌ Error loading winners: " + e.message;
+    statusEl.textContent = "Error loading winners: " + e.message;
   } finally {
     btn.disabled = false;
   }
@@ -3297,7 +3346,7 @@ $("releaseAnswersBtn").addEventListener("click", async () => {
 
   btn.disabled = true;
   status.className = "";
-  status.textContent = "🔓 Releasing correct answers for students...";
+  status.innerHTML = `${icoImgHtml("unlock")}Releasing correct answers for students...`;
 
   try {
     const { error } = await db
@@ -3308,7 +3357,7 @@ $("releaseAnswersBtn").addEventListener("click", async () => {
     if (error) throw error;
 
     status.className = "success";
-    status.textContent = "✅ Correct Answers have been released for this exam!";
+    status.innerHTML = `${icoImgHtml("check")}Correct Answers have been released for this exam!`;
   } catch (err) {
     status.className = "error";
     status.textContent = "Error: " + err.message;
@@ -3329,7 +3378,7 @@ $("releaseCertificatesBtn").addEventListener("click", async () => {
 
   btn.disabled = true;
   status.className = "";
-  status.textContent = "🏅 Releasing certificates for participants...";
+  status.innerHTML = `${icoImgHtml("medal")}Releasing certificates for participants...`;
 
   try {
     const { error } = await db
@@ -3340,7 +3389,7 @@ $("releaseCertificatesBtn").addEventListener("click", async () => {
     if (error) throw error;
 
     status.className = "success";
-    status.textContent = "✅ Certificates have been released & sent! Participants can now download their certificates.";
+    status.innerHTML = `${icoImgHtml("check")}Certificates have been released & sent! Participants can now download their certificates.`;
   } catch (err) {
     status.className = "error";
     status.textContent = "Error: " + err.message;
@@ -3367,10 +3416,10 @@ const ADMIN_UI_TRANSLATIONS = {
     liveExamLabel: "లైవ్ / ఇటీవలి ఎగ్జామ్ ఎంచుకోండి",
     refreshLiveBtn: "లైవ్ గ్యాలరీ రిఫ్రెష్",
     statTotalJoined: "మొత్తం జాయిన్ అయినవారు",
-    statOnline: "🟢 ఆన్‌లైన్ (ప్రస్తుతం రాస్తున్నవారు)",
-    statCompleted: "🔴 పూర్తయినవారు (సబ్మిట్ చేసినవారు)",
-    onlineGalleryTitle: "🟢 Online Participants Gallery (ప్రస్తుతం పరీక్ష రాస్తున్నవారు)",
-    completedGalleryTitle: "🔴 Completed Participants Gallery (పరీక్ష పూర్తి చేసినవారు)",
+    statOnlineHtml: `${icoImgHtml("online")}ఆన్‌లైన్ (ప్రస్తుతం రాస్తున్నవారు)`,
+    statCompletedHtml: `${icoImgHtml("offline")}పూర్తయినవారు (సబ్మిట్ చేసినవారు)`,
+    onlineGalleryTitle: "Online Participants Gallery (ప్రస్తుతం పరీక్ష రాస్తున్నవారు)",
+    completedGalleryTitle: "Completed Participants Gallery (పరీక్ష పూర్తి చేసినవారు)",
     noOnlineMsg: "ప్రస్తుతం ఎవరూ పరీక్ష రాయడం లేదు (0 Online).",
     noCompletedMsg: "ఇంకా ఎవరూ పరీక్ష పూర్తి చేయలేదు (0 Completed).",
     winnersHeading: "లైవ్ ఎగ్జామ్ ఫలితాలు & విజేతలు",
@@ -3386,15 +3435,15 @@ const ADMIN_UI_TRANSLATIONS = {
     resultsHistoryHeading: "విద్యార్థుల ఫలితాల చరిత్ర",
     scannerHeading: "క్వశ్చన్ పేపర్ ఫోల్డర్లు & స్కానర్ (తెలుగు / English / தமிழ்)",
     scannerSubHtml: "ఒక ఎగ్జామ్‌కి ఒక <strong>Exam Folder Name</strong> ఇచ్చి, అందులోనే <strong>Telugu Paper</strong>, <strong>English Paper</strong>, <strong>Tamil Paper</strong> పేజీ బై పేజీ స్కాన్ చేసి సేవ్ చేయండి.<br>ఆ తర్వాత కింద <strong>Schedule Live Bible Exam</strong> లో ఆ Folder సెలెక్ట్ చేసి Date & Time పెడితే చాలు — ఆ టైమ్‌కి ప్రతి విద్యార్థికి వారు ఎంచుకున్న భాష పేపర్ మాత్రమే వస్తుంది!",
-    scanFolderLabel: "📁 Exam Folder Name (ఒకే ఎగ్జామ్‌కి అన్ని భాషలకూ ఇదే పేరు ఇవ్వండి)",
-    scanLangLabel: "🌐 Paper Language (ఇప్పుడు స్కాన్ చేసే పేపర్ భాష)",
+    scanFolderHtml: `${icoImgHtml("folder")}Exam Folder Name (ఒకే ఎగ్జామ్‌కి అన్ని భాషలకూ ఇదే పేరు ఇవ్వండి)`,
+    scanLangHtml: `${icoImgHtml("globe")}Paper Language (ఇప్పుడు స్కాన్ చేసే పేపర్ భాష)`,
     scanBookLabel: "బైబిల్ పుస్తకం (ఐచ్ఛికం)",
     scanChapLabel: "అధ్యాయం సంఖ్య (ఐచ్ఛికం)",
     scanDropTitle: "పేజీ 1, పేజీ 2, పేజీ 3... ఒక్కొక్కటిగా స్కాన్ చేయండి",
     scanDropSub: "100 ప్రశ్నలు (5 పేజీలు) ఒకేసారి Queue లో యాడ్ చేసి సేవ్ చేసుకోవచ్చు.",
     scanCamBtn: "పేజీ ఫోటో తీయండి (Camera)",
     scanGalBtn: "పేజీ ఇమేజ్ అప్‌లోడ్ (Gallery)",
-    ocrSummary: "📝 Scanned OCR Text చూడండి / లేదా నేరుగా Text పేస్ట్ చేసి Parse చేయండి",
+    ocrSummary: "Scanned OCR Text చూడండి / లేదా నేరుగా Text పేస్ట్ చేసి Parse చేయండి",
     savedFoldersTitle: "Saved Exam Paper Folders (ఎగ్జామ్ ఫోల్డర్లు)",
     savedFoldersSub: "ఏ ఫోల్డర్‌లో ఏయే భాషల పేపర్లు ఎన్ని ప్రశ్నలు సిద్ధంగా ఉన్నాయో ఇక్కడ చూడండి:",
     noFoldersMsg: "ఇంకా ఏ Exam Paper Folder క్రియేట్ చేయలేదు. పైన Folder Name ఇచ్చి పేపర్లు స్కాన్ చేసి సేవ్ చేయండి.",
@@ -3405,9 +3454,9 @@ const ADMIN_UI_TRANSLATIONS = {
     savedQuestionsHeading: "సేవ్ చేసిన బైబిల్ ప్రశ్నలు",
     scheduleExamHeading: "లైవ్ బైబిల్ ఎగ్జామ్ షెడ్యూల్",
     scheduleExamSubHtml: "పైన స్కాన్ చేసి సేవ్ చేసిన <strong>Exam Paper Folder</strong> సెలెక్ట్ చేసి Date & Time పెడితే, ఆ టైమ్‌కి ఆ ఫోల్డర్‌లోని ప్రశ్నలే ఎగ్జామ్‌లో వస్తాయి!",
-    examFolderSelectLabel: "📁 స్కాన్ చేసిన Exam Paper Folder ఎంచుకోండి (ఐచ్ఛికం)",
+    examFolderSelectHtml: `${icoImgHtml("folder")}స్కాన్ చేసిన Exam Paper Folder ఎంచుకోండి (ఐచ్ఛికం)`,
     scheduledExamsHeading: "షెడ్యూల్ చేసిన ఎగ్జామ్స్ & అభ్యర్థులు",
-    scheduledExamsSub: "ప్రతి ఎగ్జామ్‌కి ఎంతమంది హాజరయ్యారో చూడండి మరియు '👁️ View Details & Photos' క్లిక్ చేసి వారి వివరాలు & ఫోటో చూడండి.",
+    scheduledExamsSub: "ప్రతి ఎగ్జామ్‌కి ఎంతమంది హాజరయ్యారో చూడండి మరియు 'View Details & Photos' క్లిక్ చేసి వారి వివరాలు & ఫోటో చూడండి.",
     minsUnit: "నిమిషాలు",
     secsUnit: "సెకన్లు",
     defaultScanLang: "telugu"
@@ -3426,10 +3475,10 @@ const ADMIN_UI_TRANSLATIONS = {
     liveExamLabel: "Select Live / Recent Exam",
     refreshLiveBtn: "Refresh Live Gallery",
     statTotalJoined: "Total Joined",
-    statOnline: "🟢 Online (Writing Now)",
-    statCompleted: "🔴 Completed (Submitted)",
-    onlineGalleryTitle: "🟢 Online Participants Gallery (Currently Writing)",
-    completedGalleryTitle: "🔴 Completed Participants Gallery (Submitted)",
+    statOnlineHtml: `${icoImgHtml("online")}Online (Writing Now)`,
+    statCompletedHtml: `${icoImgHtml("offline")}Completed (Submitted)`,
+    onlineGalleryTitle: "Online Participants Gallery (Currently Writing)",
+    completedGalleryTitle: "Completed Participants Gallery (Submitted)",
     noOnlineMsg: "No one is currently taking the exam (0 Online).",
     noCompletedMsg: "No candidates have completed the exam yet (0 Completed).",
     winnersHeading: "Live Exam Results & Winners",
@@ -3445,15 +3494,15 @@ const ADMIN_UI_TRANSLATIONS = {
     resultsHistoryHeading: "Student Results History",
     scannerHeading: "Question Paper Folders & Scanner (Telugu / English / Tamil / Hindi)",
     scannerSubHtml: "Create one <strong>Exam Folder Name</strong> per exam, then scan and save <strong>Telugu</strong>, <strong>English</strong>, <strong>Tamil</strong>, and <strong>Hindi</strong> papers page by page inside it.<br>Then select that Folder in <strong>Schedule Live Bible Exam</strong> below and set Date & Time — each student will automatically get the paper in their chosen language!",
-    scanFolderLabel: "📁 Exam Folder Name (Use the same name for all languages of an exam)",
-    scanLangLabel: "🌐 Paper Language (Language of the paper being scanned now)",
+    scanFolderHtml: `${icoImgHtml("folder")}Exam Folder Name (Use the same name for all languages of an exam)`,
+    scanLangHtml: `${icoImgHtml("globe")}Paper Language (Language of the paper being scanned now)`,
     scanBookLabel: "Bible Book (Optional / Reference)",
     scanChapLabel: "Chapter Number (Optional)",
     scanDropTitle: "Scan Page 1, Page 2, Page 3... one by one",
     scanDropSub: "You can queue and save up to 100 questions (5 pages) at once.",
     scanCamBtn: "Take Page Photo (Camera)",
     scanGalBtn: "Upload Page Image(s) (Gallery)",
-    ocrSummary: "📝 View Scanned OCR Text / Or Paste Text Directly to Parse",
+    ocrSummary: "View Scanned OCR Text / Or Paste Text Directly to Parse",
     savedFoldersTitle: "Saved Exam Paper Folders",
     savedFoldersSub: "Check which language papers and question counts are ready in each folder:",
     noFoldersMsg: "No Exam Paper Folder created yet. Enter a Folder Name above, scan pages, and save.",
@@ -3464,9 +3513,9 @@ const ADMIN_UI_TRANSLATIONS = {
     savedQuestionsHeading: "Saved Bible Questions",
     scheduleExamHeading: "Schedule Live Bible Exam",
     scheduleExamSubHtml: "Select a scanned <strong>Exam Paper Folder</strong> above and set Date & Time — participants will automatically get the questions in their chosen language!",
-    examFolderSelectLabel: "📁 Select Scanned Exam Paper Folder (Optional - uses folder papers instead of Book/Chapter below)",
+    examFolderSelectHtml: `${icoImgHtml("folder")}Select Scanned Exam Paper Folder (Optional - uses folder papers instead of Book/Chapter below)`,
     scheduledExamsHeading: "Scheduled Exams & Participants",
-    scheduledExamsSub: "View participant counts for each exam and click '👁️ View Details & Photos' to inspect candidate names, details & photos.",
+    scheduledExamsSub: "View participant counts for each exam and click 'View Details & Photos' to inspect candidate names, details & photos.",
     minsUnit: "mins",
     secsUnit: "secs",
     defaultScanLang: "english"
@@ -3485,10 +3534,10 @@ const ADMIN_UI_TRANSLATIONS = {
     liveExamLabel: "நேரடி / சமீபத்திய தேர்வைத் தேர்ந்தெடுக்கவும்",
     refreshLiveBtn: "நேரடி கேலரியை புதுப்பி",
     statTotalJoined: "மொத்தம் இணைந்தவர்கள்",
-    statOnline: "🟢 ஆன்லைன் (எழுதுபவர்கள்)",
-    statCompleted: "🔴 முடித்தவர்கள்",
-    onlineGalleryTitle: "🟢 Online Participants Gallery (தற்போது தேர்வு எழுதுபவர்கள்)",
-    completedGalleryTitle: "🔴 Completed Participants Gallery (தேர்வு முடித்தவர்கள்)",
+    statOnlineHtml: `${icoImgHtml("online")}ஆன்லைன் (எழுதுபவர்கள்)`,
+    statCompletedHtml: `${icoImgHtml("offline")}முடித்தவர்கள்`,
+    onlineGalleryTitle: "Online Participants Gallery (தற்போது தேர்வு எழுதுபவர்கள்)",
+    completedGalleryTitle: "Completed Participants Gallery (தேர்வு முடித்தவர்கள்)",
     noOnlineMsg: "தற்போது யாரும் தேர்வு எழுதவில்லை (0 Online).",
     noCompletedMsg: "இதுவரை யாரும் தேர்வை முடிக்கவில்லை (0 Completed).",
     winnersHeading: "நேரடி தேர்வு முடிவுகள் & வெற்றியாளர்கள்",
@@ -3504,15 +3553,15 @@ const ADMIN_UI_TRANSLATIONS = {
     resultsHistoryHeading: "மாணவர் முடிவுகள் வரலாறு",
     scannerHeading: "வினாத்தாள் கோப்புறைகள் & ஸ்கேனர்",
     scannerSubHtml: "ஒரு தேர்விற்கு ஒரு <strong>Exam Folder Name</strong> கொடுத்து, அதில் அனைத்து மொழி வினாத்தாள்களையும் பக்கம் பக்கமாக ஸ்கேன் செய்து சேமிக்கவும்.",
-    scanFolderLabel: "📁 Exam Folder Name",
-    scanLangLabel: "🌐 வினாத்தாள் மொழி",
+    scanFolderHtml: `${icoImgHtml("folder")}Exam Folder Name`,
+    scanLangHtml: `${icoImgHtml("globe")}வினாத்தாள் மொழி`,
     scanBookLabel: "வேதாகம புத்தகம் (விருப்பத்தேர்வு)",
     scanChapLabel: "அதிகாரம் எண் (விருப்பத்தேர்வு)",
     scanDropTitle: "பக்கம் 1, பக்கம் 2, பக்கம் 3... ஒவ்வொன்றாக ஸ்கேன் செய்யவும்",
     scanDropSub: "ஒரே நேரத்தில் 100 கேள்விகள் வரை சேமிக்கலாம்.",
     scanCamBtn: "புகைப்படம் எடு (Camera)",
     scanGalBtn: "படத்தை பதிவேற்று (Gallery)",
-    ocrSummary: "📝 ஸ்கேன் செய்த உரையைப் பார்க்கவும் / ஒட்டவும்",
+    ocrSummary: "ஸ்கேன் செய்த உரையைப் பார்க்கவும் / ஒட்டவும்",
     savedFoldersTitle: "சேமிக்கப்பட்ட தேர்வு கோப்புறைகள்",
     savedFoldersSub: "ஒவ்வொரு கோப்புறையிலும் உள்ள மொழி வினாத்தாள்களை இங்கே காண்க:",
     noFoldersMsg: "இன்னும் தேர்வு கோப்புறை எதுவும் உருவாக்கப்படவில்லை.",
@@ -3523,7 +3572,7 @@ const ADMIN_UI_TRANSLATIONS = {
     savedQuestionsHeading: "சேமிக்கப்பட்ட வேதாகம கேள்விகள்",
     scheduleExamHeading: "நேரடி வேதாகம தேர்வு அட்டவணை",
     scheduleExamSubHtml: "மேலே சேமித்த <strong>Exam Paper Folder</strong> தேர்ந்தெடுத்து தேதி & நேரம் அமைக்கவும்.",
-    examFolderSelectLabel: "📁 ஸ்கேன் செய்த Exam Paper Folder தேர்ந்தெடுக்கவும் (விருப்பத்தேர்வு)",
+    examFolderSelectHtml: `${icoImgHtml("folder")}ஸ்கேன் செய்த Exam Paper Folder தேர்ந்தெடுக்கவும் (விருப்பத்தேர்வு)`,
     scheduledExamsHeading: "திட்டமிடப்பட்ட தேர்வுகள் & பங்கேற்பாளர்கள்",
     scheduledExamsSub: "ஒவ்வொரு தேர்விலும் பங்கேற்றவர்களின் விவரங்கள் & புகைப்படங்களைக் காண்க.",
     minsUnit: "நிமிடங்கள்",
@@ -3544,10 +3593,10 @@ const ADMIN_UI_TRANSLATIONS = {
     liveExamLabel: "लाइव / हालिया परीक्षा चुनें",
     refreshLiveBtn: "लाइव गैलरी रीफ़्रेश करें",
     statTotalJoined: "कुल शामिल हुए",
-    statOnline: "🟢 ऑनलाइन (अभी लिख रहे हैं)",
-    statCompleted: "🔴 पूर्ण (सबमिट किया गया)",
-    onlineGalleryTitle: "🟢 Online Participants Gallery (वर्तमान में परीक्षा दे रहे हैं)",
-    completedGalleryTitle: "🔴 Completed Participants Gallery (परीक्षा पूर्ण कर चुके हैं)",
+    statOnlineHtml: `${icoImgHtml("online")}ऑनलाइन (अभी लिख रहे हैं)`,
+    statCompletedHtml: `${icoImgHtml("offline")}पूर्ण (सबमिट किया गया)`,
+    onlineGalleryTitle: "Online Participants Gallery (वर्तमान में परीक्षा दे रहे हैं)",
+    completedGalleryTitle: "Completed Participants Gallery (परीक्षा पूर्ण कर चुके हैं)",
     noOnlineMsg: "वर्तमान में कोई भी परीक्षा नहीं दे रहा है (0 Online)।",
     noCompletedMsg: "अभी तक किसी ने परीक्षा पूरी नहीं की है (0 Completed)।",
     winnersHeading: "लाइव परीक्षा परिणाम और विजेता",
@@ -3563,15 +3612,15 @@ const ADMIN_UI_TRANSLATIONS = {
     resultsHistoryHeading: "छात्र परिणाम इतिहास",
     scannerHeading: "प्रश्न पत्र फ़ोल्डर और स्कैनर",
     scannerSubHtml: "प्रत्येक परीक्षा के लिए एक <strong>Exam Folder Name</strong> दें और उसमें सभी भाषाओं के पेपर पेज-दर-पेज स्कैन करके सहेजें।",
-    scanFolderLabel: "📁 Exam Folder Name",
-    scanLangLabel: "🌐 पेपर की भाषा",
+    scanFolderHtml: `${icoImgHtml("folder")}Exam Folder Name`,
+    scanLangHtml: `${icoImgHtml("globe")}पेपर की भाषा`,
     scanBookLabel: "बाइबल पुस्तक (वैकल्पिक)",
     scanChapLabel: "अध्याय संख्या (वैकल्पिक)",
     scanDropTitle: "पेज 1, पेज 2, पेज 3... एक-एक करके स्कैन करें",
     scanDropSub: "एक साथ 100 प्रश्न तक सहेजे जा सकते हैं।",
     scanCamBtn: "फोटो लें (Camera)",
     scanGalBtn: "इमेज अपलोड करें (Gallery)",
-    ocrSummary: "📝 स्कैन किया गया टेक्स्ट देखें / पेस्ट करें",
+    ocrSummary: "स्कैन किया गया टेक्स्ट देखें / पेस्ट करें",
     savedFoldersTitle: "सहेजे गए परीक्षा फ़ोल्डर",
     savedFoldersSub: "प्रत्येक फ़ोल्डर में तैयार भाषाओं के प्रश्न यहाँ देखें:",
     noFoldersMsg: "अभी तक कोई परीक्षा फ़ोल्डर नहीं बनाया गया है।",
@@ -3582,7 +3631,7 @@ const ADMIN_UI_TRANSLATIONS = {
     savedQuestionsHeading: "सहेजे गए बाइबल प्रश्न",
     scheduleExamHeading: "लाइव बाइबल परीक्षा शेड्यूल करें",
     scheduleExamSubHtml: "ऊपर सहेजे गए <strong>Exam Paper Folder</strong> को चुनें और दिनांक व समय निर्धारित करें।",
-    examFolderSelectLabel: "📁 स्कैन किया गया Exam Paper Folder चुनें (वैकल्पिक)",
+    examFolderSelectHtml: `${icoImgHtml("folder")}स्कैन किया गया Exam Paper Folder चुनें (वैकल्पिक)`,
     scheduledExamsHeading: "निर्धारित परीक्षाएं और प्रतिभागी",
     scheduledExamsSub: "प्रत्येक परीक्षा के प्रतिभागियों की संख्या, विवरण और फोटो देखें।",
     minsUnit: "मिनट",
@@ -3610,8 +3659,6 @@ function applyAdminUiLanguage(langCode) {
     liveMonitorExamLabel: t.liveExamLabel,
     refreshLiveBtnText: t.refreshLiveBtn,
     statTotalJoinedLbl: t.statTotalJoined,
-    statOnlineLbl: t.statOnline,
-    statCompletedLbl: t.statCompleted,
     onlineGalleryTitleText: t.onlineGalleryTitle,
     completedGalleryTitleText: t.completedGalleryTitle,
     winnersHeading: t.winnersHeading,
@@ -3626,15 +3673,13 @@ function applyAdminUiLanguage(langCode) {
     statHighLbl: t.statHigh,
     resultsHistoryHeading: t.resultsHistoryHeading,
     scannerHeading: t.scannerHeading,
-    scanFolderLabel: t.scanFolderLabel,
-    scanLangLabel: t.scanLangLabel,
     scanBookLabel: t.scanBookLabel,
     scanChapLabel: t.scanChapLabel,
     scanDropTitle: t.scanDropTitle,
     scanDropSub: t.scanDropSub,
     scanCamBtnLbl: t.scanCamBtn,
     scanGalBtnLbl: t.scanGalBtn,
-    ocrDetailsSummary: t.ocrSummary,
+    ocrSummaryText: t.ocrSummary,
     savedFoldersTitle: t.savedFoldersTitle,
     savedFoldersSub: t.savedFoldersSub,
     questionManagerHeading: t.questionManagerHeading,
@@ -3643,7 +3688,6 @@ function applyAdminUiLanguage(langCode) {
     aiBoxSub: t.aiBoxSub,
     savedQuestionsHeading: t.savedQuestionsHeading,
     scheduleExamHeading: t.scheduleExamHeading,
-    examFolderSelectLabel: t.examFolderSelectLabel,
     scheduledExamsHeading: t.scheduledExamsHeading,
     scheduledExamsSub: t.scheduledExamsSub
   };
@@ -3653,6 +3697,11 @@ function applyAdminUiLanguage(langCode) {
     if (el) el.textContent = text;
   });
 
+  if ($("statOnlineLbl")) $("statOnlineLbl").innerHTML = t.statOnlineHtml;
+  if ($("statCompletedLbl")) $("statCompletedLbl").innerHTML = t.statCompletedHtml;
+  if ($("scanFolderLabel")) $("scanFolderLabel").innerHTML = t.scanFolderHtml;
+  if ($("scanLangLabel")) $("scanLangLabel").innerHTML = t.scanLangHtml;
+  if ($("examFolderSelectLabel")) $("examFolderSelectLabel").innerHTML = t.examFolderSelectHtml;
   if ($("scannerSubDesc")) $("scannerSubDesc").innerHTML = t.scannerSubHtml;
   if ($("scheduleExamSub")) $("scheduleExamSub").innerHTML = t.scheduleExamSubHtml;
 
@@ -3672,10 +3721,11 @@ $("adminUiLangSelect").addEventListener("change", function() {
 
 const savedAdminLang = localStorage.getItem("logos_admin_ui_lang") || "en";
 $("adminUiLangSelect").value = savedAdminLang;
-applyAdminUiLanguage(savedAdminLang);
 
-// STARTUP VERIFICATION
+// STARTUP VERIFICATION & HYDRATE ALL 3D IMAGE ICONS
 window.addEventListener("DOMContentLoaded", () => {
+  hydrateAll3DImageIcons();
+  applyAdminUiLanguage(savedAdminLang);
   verifyAdmin();
 });
 </script>
