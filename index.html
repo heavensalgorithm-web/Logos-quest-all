@@ -1,3 +1,5 @@
+మీ index.html పూర్తి కోడ్ ఇక్కడ ఉంది — ఇందులో 100 Golden Crosses Backside Close-up Animation, క్లిక్ చేసిన వెంటనే అదే 100 గోల్డెన్ క్రాస్‌లు బటన్ మీదకు ఎగిరి అతుక్కునే (trigger100CrossesDockToButton) యానిమేషన్, Live Bible Exam / Winners / My Results బటన్‌లు, క్రాస్ కనెక్టర్లు, 3D రాయల్ బ్లూ & గోల్డ్ ఇమేజ్ ఐకాన్‌లు, మరియు 4 భాషల ట్రాన్స్‌లేషన్ అన్నీ పూర్తిగా కలిపి ఇచ్చాను.
+GitHub లోని index.html లో పాత కోడ్ మొత్తం తొలగించి, దీన్ని పేస్ట్ చేసి Commit changes నొక్కండి:
 <!DOCTYPE html>
 <html lang="te">
 <head>
@@ -83,29 +85,6 @@ body {
   animation-name: goldenCrossCloseZoom;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-}
-
-/* ================= INSTANT 100 CROSSES DOCK TO CLICKED BUTTON ================= */
-.cross-dock-burst-layer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9998;
-  overflow: hidden;
-}
-
-.docking-cross-item {
-  position: fixed;
-  left: 0;
-  top: 0;
-  font-weight: 900;
-  line-height: 1;
-  background: linear-gradient(180deg, #fef9c3 0%, #facc15 50%, #ca8a04 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.95));
-  transition: transform 0.38s cubic-bezier(0.18, 0.9, 0.32, 1.05), opacity 0.42s ease;
-  will-change: transform, opacity;
 }
 
 .btn-cross-docked {
@@ -826,9 +805,6 @@ a {
 <!-- 100 BACKSIDE GOLDEN CROSSES ANIMATION LAYER -->
 <div id="goldenCrossSky" class="golden-cross-sky" aria-hidden="true"></div>
 
-<!-- INSTANT 100 CROSSES DOCK TO CLICKED BUTTON LAYER -->
-<div id="crossDockBurstLayer" class="cross-dock-burst-layer" aria-hidden="true"></div>
-
 <div class="lang-selector-box">
   <img data-ico="globe" class="ico-img-md" style="margin:0;" alt="Language">
   <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
@@ -944,7 +920,7 @@ a {
 
   <!-- 1. LIVE BIBLE EXAMS BUTTON + CROSS-SNAPPED OPTIONS -->
   <div class="card">
-    <button type="button" class="section-trigger-btn open" id="btnTriggerExams" onclick="toggleHomeSection('examsBodyPanel', 'btnTriggerExams', this)">
+    <button type="button" class="section-trigger-btn open" id="btnTriggerExams" onclick="toggleHomeSection('examsBodyPanel', 'btnTriggerExams')">
       <span class="section-trigger-left">
         <img data-ico="bible" class="ico-img-md" alt="Exams"><span id="dashExamsTitle">లైవ్ బైబిల్ పరీక్షలు</span>
         <span class="cross-tag-pill">✚</span>
@@ -970,7 +946,7 @@ a {
 
   <!-- 2. WINNERS BUTTON + CROSS-SNAPPED OPTIONS -->
   <div class="card">
-    <button type="button" class="section-trigger-btn" id="btnTriggerWinners" onclick="toggleHomeSection('winnersBodyPanel', 'btnTriggerWinners', this)">
+    <button type="button" class="section-trigger-btn" id="btnTriggerWinners" onclick="toggleHomeSection('winnersBodyPanel', 'btnTriggerWinners')">
       <span class="section-trigger-left">
         <img data-ico="trophy" class="ico-img-md" alt="Winners"><span id="dashWinnersTitle">విజేతలు</span>
         <span class="cross-tag-pill">✚</span>
@@ -990,7 +966,7 @@ a {
 
   <!-- 3. MY RESULTS BUTTON + CROSS-SNAPPED OPTIONS -->
   <div class="card">
-    <button type="button" class="section-trigger-btn" id="btnTriggerResults" onclick="toggleHomeSection('resultsBodyPanel', 'btnTriggerResults', this)">
+    <button type="button" class="section-trigger-btn" id="btnTriggerResults" onclick="toggleHomeSection('resultsBodyPanel', 'btnTriggerResults')">
       <span class="section-trigger-left">
         <img data-ico="chart" class="ico-img-md" alt="Results"><span id="dashResultsTitle">నా ఫలితాలు</span>
         <span class="cross-tag-pill">✚</span>
@@ -1249,7 +1225,7 @@ function hydrateAll3DImageIcons(root = document) {
 }
 
 function inject100GoldenCrosses() {
-  const sky = $("goldenCrossSky");
+  const sky = document.getElementById("goldenCrossSky");
   if (!sky || sky.children.length > 0) return;
 
   const frag = document.createDocumentFragment();
@@ -1275,53 +1251,57 @@ function inject100GoldenCrosses() {
   sky.appendChild(frag);
 }
 
+let crossReturnTimer = null;
+
 window.trigger100CrossesDockToButton = function(targetEl) {
-  const burstLayer = $("crossDockBurstLayer");
-  if (!burstLayer || !targetEl) return;
+  const crosses = Array.from(document.querySelectorAll("#goldenCrossSky .bg-golden-cross"));
+  if (!crosses.length || !targetEl) return;
 
   const rect = targetEl.getBoundingClientRect();
   const destX = rect.left + rect.width / 2;
   const destY = rect.top + rect.height / 2;
 
   targetEl.classList.add("btn-cross-docked");
-  setTimeout(() => targetEl.classList.remove("btn-cross-docked"), 550);
+  setTimeout(() => targetEl.classList.remove("btn-cross-docked"), 650);
 
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const frag = document.createDocumentFragment();
-  const spawned = [];
+  if (crossReturnTimer) clearTimeout(crossReturnTimer);
 
-  for (let i = 0; i < 100; i++) {
-    const angle = (i / 100) * Math.PI * 2;
-    const radiusX = vw * (0.25 + ((i * 19) % 35) / 100);
-    const radiusY = vh * (0.25 + ((i * 29) % 35) / 100);
-    const startX = Math.max(8, Math.min(vw - 24, destX + Math.cos(angle) * radiusX));
-    const startY = Math.max(8, Math.min(vh - 24, destY + Math.sin(angle) * radiusY));
+  crosses.forEach((cross, i) => {
+    const curRect = cross.getBoundingClientRect();
+    const curX = curRect.left + curRect.width / 2;
+    const curY = curRect.top + curRect.height / 2;
 
-    const el = document.createElement("span");
-    el.className = "docking-cross-item";
-    el.textContent = "✝";
-    el.style.fontSize = `${14 + (i % 4) * 4}px`;
-    el.style.opacity = "0.95";
-    el.style.transform = `translate3d(${startX}px, ${startY}px, 0) scale(0.85)`;
-    frag.appendChild(el);
-    spawned.push({ el, startX, startY, offsetX: ((i % 9) - 4) * 6, offsetY: ((i % 7) - 3) * 4 });
-  }
+    const jitterX = ((i % 11) - 5) * 7;
+    const jitterY = ((i % 9) - 4) * 5;
+    const dx = (destX + jitterX) - curX;
+    const dy = (destY + jitterY) - curY;
 
-  burstLayer.appendChild(frag);
+    cross.style.animation = "none";
+    cross.style.zIndex = "9997";
+    cross.style.opacity = "0.96";
+    cross.style.transition = `transform ${0.34 + (i % 6) * 0.03}s cubic-bezier(0.18, 0.9, 0.32, 1.08), opacity 0.45s ease`;
 
-  requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      spawned.forEach(item => {
-        item.el.style.transform = `translate3d(${destX + item.offsetX - 8}px, ${destY + item.offsetY - 10}px, 0) scale(1.15)`;
-        item.el.style.opacity = "0.15";
-      });
+      cross.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(1.15)`;
     });
   });
 
-  setTimeout(() => {
-    spawned.forEach(item => item.el.remove());
-  }, 460);
+  crossReturnTimer = setTimeout(() => {
+    crosses.forEach((cross, i) => {
+      const durationSec = 5.5 + (i % 7) * 0.9;
+      const delaySec = -((i * 0.43) % 8);
+      cross.style.transition = "transform 0.35s ease, opacity 0.35s ease";
+      cross.style.transform = "translate3d(0, 0, 0) scale(1)";
+      cross.style.zIndex = "";
+
+      setTimeout(() => {
+        cross.style.transition = "";
+        cross.style.transform = "";
+        cross.style.opacity = "";
+        cross.style.animation = `goldenCrossCloseZoom ${durationSec}s ease-in-out ${delaySec}s infinite`;
+      }, 360);
+    });
+  }, 520);
 };
 
 document.addEventListener("click", function(e) {
@@ -1332,8 +1312,8 @@ document.addEventListener("click", function(e) {
 }, true);
 
 window.toggleHomeSection = function(panelId, btnId) {
-  const panel = $(panelId);
-  const btn = $(btnId);
+  const panel = document.getElementById(panelId);
+  const btn = document.getElementById(btnId);
   if (!panel || !btn) return;
   const willOpen = !panel.classList.contains("open");
   panel.classList.toggle("open", willOpen);
@@ -2309,3 +2289,4 @@ if ("serviceWorker" in navigator) {
 </script>
 </body>
 </html>
+
