@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="te">
 <head>
@@ -8,7 +7,7 @@
 
 <!-- PWA Settings -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b1329">
+<meta name="theme-color" content="#042f24">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,16 +15,18 @@
 
 <style>
 :root {
-  --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #090d16 100%);
-  --card-bg: rgba(22, 33, 62, 0.78);
-  --card-border: rgba(234, 179, 8, 0.28);
-  --gold-primary: #facc15;
-  --gold-dark: #ca8a04;
-  --gold-glow: rgba(250, 204, 21, 0.4);
-  --text-main: #f8fafc;
-  --text-muted: #cbd5e1;
-  --live-green: #10b981;
-  --upcoming-gold: #f59e0b;
+  --bg-gradient: radial-gradient(circle at top, #065f46 0%, #042f24 48%, #02140f 100%);
+  --card-bg: rgba(244, 241, 232, 0.11);
+  --card-border: rgba(253, 230, 138, 0.34);
+  --gold-primary: #fde68a;
+  --gold-accent: #facc15;
+  --gold-dark: #b45309;
+  --gold-glow: rgba(250, 204, 21, 0.38);
+  --ivory-soft: #f7f4eb;
+  --text-main: #fdfbf7;
+  --text-muted: #d1fae5;
+  --live-green: #34d399;
+  --upcoming-gold: #fbbf24;
 }
 
 *{
@@ -50,10 +51,10 @@ body {
     opacity: 0;
   }
   25% {
-    opacity: 0.45;
+    opacity: 0.48;
   }
   75% {
-    opacity: 0.35;
+    opacity: 0.36;
   }
   100% {
     transform: translate3d(0, -18px, 0) scale(2.25);
@@ -86,8 +87,8 @@ body {
 }
 
 .btn-cross-docked {
-  box-shadow: 0 0 28px rgba(250, 204, 21, 0.85), 0 6px 0 #854d0e !important;
-  border-color: #fef08a !important;
+  box-shadow: 0 0 28px rgba(250, 204, 21, 0.9), 0 6px 0 #78350f !important;
+  border-color: #fef9c3 !important;
 }
 
 .lang-selector-box,
@@ -103,12 +104,12 @@ body {
   background: var(--card-bg);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--card-border);
+  border: 1.5px solid var(--card-border);
   padding: 24px;
   margin: 14px auto;
   border-radius: 20px;
   max-width: 620px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(254, 249, 195, 0.16);
 }
 
 .lang-selector-box {
@@ -121,7 +122,7 @@ body {
 }
 
 .lang-select {
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(6, 46, 36, 0.95);
   color: var(--gold-primary);
   border: 1.5px solid var(--card-border);
   padding: 8px 14px;
@@ -130,12 +131,12 @@ body {
   font-weight: 600;
   outline: none;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
 }
 
 .lang-select option {
-  background: #0f172a;
-  color: #f8fafc;
+  background: #064e3b;
+  color: #fdfbf7;
 }
 
 /* ================= PREMIUM 3D MAIN LOGO & TITLE ================= */
@@ -150,10 +151,10 @@ body {
   margin: 0 auto 14px;
   padding: 5px;
   border-radius: 26px;
-  background: linear-gradient(145deg, #fef08a 0%, #eab308 45%, #854d0e 100%);
+  background: linear-gradient(145deg, #fef9c3 0%, #facc15 48%, #92400e 100%);
   box-shadow:
     0 14px 28px rgba(0, 0, 0, 0.65),
-    0 6px 0 #713f12,
+    0 6px 0 #78350f,
     0 0 28px rgba(250, 204, 21, 0.45),
     inset 0 2px 4px rgba(255, 255, 255, 0.75);
   animation: float3D 4.5s ease-in-out infinite;
@@ -182,7 +183,7 @@ body {
   border-radius: 21px;
   display: block;
   object-fit: cover;
-  background: #0b1329;
+  background: #064e3b;
 }
 
 .brand-3d-title {
@@ -190,17 +191,17 @@ body {
   font-size: 28px;
   font-weight: 900;
   letter-spacing: 1.5px;
-  background: linear-gradient(180deg, #fef9c3 0%, #facc15 48%, #ca8a04 100%);
+  background: linear-gradient(180deg, #fffbeb 0%, #fde68a 48%, #eab308 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 0 #713f12) drop-shadow(0 4px 0 #422006) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 2px 0 #78350f) drop-shadow(0 4px 0 #451a03) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 }
 
-/* ================= BEVELED 3D ROYAL BLUE & GOLD IMAGE ICONS ================= */
+/* ================= BEVELED 3D EMERALD & IVORY-GOLD IMAGE ICONS ================= */
 img.ico-img-lg {
   width: 34px;
   height: 34px;
@@ -266,28 +267,28 @@ img.ico-img-sm {
   content: "";
   height: 1.5px;
   flex: 1;
-  background: linear-gradient(90deg, transparent, rgba(250, 204, 21, 0.55), transparent);
+  background: linear-gradient(90deg, transparent, rgba(253, 230, 138, 0.55), transparent);
 }
 
 .cross-pin-badge {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #fde047, #ca8a04);
-  color: #0b1329;
+  background: linear-gradient(145deg, #fffbeb, #fde68a 55%, #d97706);
+  color: #042f24;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   font-weight: 900;
-  box-shadow: 0 0 12px rgba(250, 204, 21, 0.55);
+  box-shadow: 0 0 12px rgba(253, 230, 138, 0.55);
 }
 
 .section-trigger-btn {
   width: 100%;
-  background: linear-gradient(145deg, #1d367a 0%, #0f1c42 65%, #080f26 100%);
-  color: var(--gold-primary);
-  border: 1.5px solid rgba(250, 204, 21, 0.55);
+  background: linear-gradient(145deg, #f7f4eb 0%, #e7e1cf 55%, #d6cfb9 100%);
+  color: #064e3b;
+  border: 1.5px solid rgba(254, 249, 195, 0.85);
   border-radius: 14px;
   padding: 14px 18px;
   font-size: 17px;
@@ -296,19 +297,19 @@ img.ico-img-sm {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 5px 0 #713f12, 0 8px 18px rgba(0,0,0,0.45), inset 0 1px 2px rgba(255,255,255,0.22);
+  box-shadow: 0 5px 0 #78350f, 0 8px 18px rgba(0,0,0,0.45), inset 0 1px 2px rgba(255,255,255,0.85);
   transition: all 0.2s ease;
 }
 
 .section-trigger-btn:hover {
   transform: translateY(-2px);
-  border-color: var(--gold-primary);
-  box-shadow: 0 7px 0 #854d0e, 0 12px 24px rgba(250, 204, 21, 0.35);
+  border-color: #fde047;
+  box-shadow: 0 7px 0 #92400e, 0 12px 24px rgba(250, 204, 21, 0.35);
 }
 
 .section-trigger-btn.open {
-  border-color: #fef08a;
-  box-shadow: 0 5px 0 #854d0e, 0 0 20px rgba(250, 204, 21, 0.35);
+  border-color: #fde047;
+  box-shadow: 0 5px 0 #92400e, 0 0 20px rgba(250, 204, 21, 0.35);
 }
 
 .section-trigger-left {
@@ -318,9 +319,9 @@ img.ico-img-sm {
 }
 
 .cross-tag-pill {
-  background: rgba(250, 204, 21, 0.16);
-  border: 1px solid rgba(250, 204, 21, 0.5);
-  color: #fef08a;
+  background: rgba(6, 78, 59, 0.12);
+  border: 1px solid rgba(180, 83, 9, 0.45);
+  color: #064e3b;
   font-size: 12px;
   font-weight: 900;
   padding: 2px 7px;
@@ -329,7 +330,7 @@ img.ico-img-sm {
 
 .section-trigger-arrow {
   font-size: 14px;
-  color: #fef08a;
+  color: #065f46;
   font-weight: 900;
   transition: transform 0.2s ease;
 }
@@ -343,8 +344,8 @@ img.ico-img-sm {
   margin-top: 6px;
   padding: 14px;
   border-radius: 16px;
-  border: 1.5px solid rgba(250, 204, 21, 0.42);
-  background: rgba(11, 19, 41, 0.72);
+  border: 1.5px solid rgba(253, 230, 138, 0.42);
+  background: rgba(4, 47, 36, 0.72);
   box-shadow: 0 0 18px rgba(250, 204, 21, 0.14);
 }
 
@@ -381,7 +382,7 @@ h1 {
 
 h2 {
   text-align: center;
-  color: #ffffff;
+  color: var(--ivory-soft);
   font-size: 18px;
   margin-top: 0;
   font-weight: 700;
@@ -400,11 +401,11 @@ p {
 
 .auth-tabs {
   display: flex;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(4, 47, 36, 0.85);
   border-radius: 14px;
   padding: 4px;
   margin-bottom: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(253, 230, 138, 0.22);
   gap: 4px;
 }
 
@@ -426,10 +427,10 @@ p {
 }
 
 .tab-btn.active {
-  background: linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
-  color: #0b1329 !important;
+  background: linear-gradient(145deg, #fffbeb 0%, #fde68a 55%, #eab308 100%);
+  color: #042f24 !important;
   font-weight: 800;
-  box-shadow: 0 3px 0 #854d0e, 0 4px 10px var(--gold-glow);
+  box-shadow: 0 3px 0 #78350f, 0 4px 10px var(--gold-glow);
 }
 
 .input-group {
@@ -448,8 +449,8 @@ p {
 .input-field {
   width: 100%;
   padding: 13px 16px;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  background: rgba(4, 47, 36, 0.85);
+  border: 1.5px solid rgba(253, 230, 138, 0.24);
   border-radius: 12px;
   color: #ffffff;
   font-size: 15px;
@@ -474,8 +475,8 @@ p {
   justify-content: center;
   margin: 14px 0 18px;
   padding: 16px;
-  background: rgba(15, 23, 42, 0.65);
-  border: 2px dashed rgba(234, 179, 8, 0.4);
+  background: rgba(4, 47, 36, 0.65);
+  border: 2px dashed rgba(253, 230, 138, 0.45);
   border-radius: 16px;
 }
 
@@ -498,7 +499,7 @@ p {
 
 .btn-photo {
   flex: 1;
-  background: linear-gradient(145deg, #1e293b, #0f172a);
+  background: linear-gradient(145deg, #065f46, #042f24);
   color: var(--gold-primary);
   border: 1px solid var(--card-border);
   padding: 10px 6px;
@@ -509,18 +510,18 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 3px 0 #060a14, 0 4px 10px rgba(0,0,0,0.4);
+  box-shadow: 0 3px 0 #02140f, 0 4px 10px rgba(0,0,0,0.4);
   transition: all 0.2s;
 }
 
 .btn-photo:hover {
-  background: rgba(234, 179, 8, 0.2);
+  background: rgba(253, 230, 138, 0.16);
   border-color: var(--gold-primary);
 }
 
 .btn-action {
-  background: linear-gradient(145deg, #fde047 0%, #eab308 55%, #ca8a04 100%);
-  color: #0b1329 !important;
+  background: linear-gradient(145deg, #fffbeb 0%, #fde68a 52%, #eab308 100%);
+  color: #042f24 !important;
   font-weight: 800;
   padding: 14px 24px;
   border: none;
@@ -531,7 +532,7 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 0 #854d0e, 0 6px 14px var(--gold-glow), inset 0 1px 1px rgba(255,255,255,0.7);
+  box-shadow: 0 4px 0 #78350f, 0 6px 14px var(--gold-glow), inset 0 1px 1px rgba(255,255,255,0.85);
   transition: all 0.2s ease;
   width: 100%;
   text-align: center;
@@ -539,13 +540,13 @@ p {
 
 .btn-action:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 0 #854d0e, 0 8px 20px rgba(250, 204, 21, 0.55);
-  background: linear-gradient(145deg, #fef08a 0%, var(--gold-primary) 100%);
+  box-shadow: 0 6px 0 #78350f, 0 8px 20px rgba(250, 204, 21, 0.55);
+  background: linear-gradient(145deg, #ffffff 0%, var(--gold-primary) 100%);
 }
 
 .btn-action:disabled {
-  background: #334155;
-  color: #64748b !important;
+  background: #134e4a;
+  color: #5eead4 !important;
   cursor: not-allowed;
   box-shadow: none;
 }
@@ -564,9 +565,9 @@ p {
 }
 
 .btn-secondary {
-  background: linear-gradient(145deg, rgba(51,65,85,0.9), rgba(30,41,59,0.95));
-  color: var(--text-main);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(145deg, #f7f4eb, #dfd8c3);
+  color: #064e3b;
+  border: 1px solid rgba(254, 249, 195, 0.8);
   padding: 8px 14px;
   font-size: 13px;
   font-weight: 700;
@@ -575,14 +576,14 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 3px 0 #0f172a, 0 4px 10px rgba(0,0,0,0.35);
+  box-shadow: 0 3px 0 #78350f, 0 4px 10px rgba(0,0,0,0.35);
 }
 
 .user-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(15, 23, 42, 0.75);
+  background: rgba(244, 241, 232, 0.14);
   border: 1px solid var(--card-border);
   padding: 10px 14px;
   border-radius: 16px;
@@ -603,7 +604,7 @@ p {
 }
 
 .user-info:hover {
-  background: rgba(250, 204, 21, 0.12);
+  background: rgba(253, 230, 138, 0.14);
 }
 
 .user-avatar {
@@ -613,7 +614,7 @@ p {
   object-fit: cover;
   border: 2.5px solid var(--gold-primary);
   box-shadow: 0 2px 10px var(--gold-glow);
-  background: #0f172a;
+  background: #064e3b;
 }
 
 .profile-badge-hint {
@@ -630,7 +631,7 @@ p {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(5, 10, 24, 0.85);
+  background: rgba(2, 20, 15, 0.88);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 9999;
@@ -641,7 +642,7 @@ p {
 }
 
 .modal-card {
-  background: linear-gradient(160deg, #16213e 0%, #0b1329 100%);
+  background: linear-gradient(160deg, #064e3b 0%, #042f24 100%);
   border: 1.5px solid var(--gold-primary);
   border-radius: 22px;
   max-width: 460px;
@@ -656,8 +657,8 @@ p {
   position: absolute;
   top: 16px;
   right: 16px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
   color: #fff;
   width: 34px;
   height: 34px;
@@ -681,7 +682,7 @@ p {
   object-fit: cover;
   border: 3px solid var(--gold-primary);
   box-shadow: 0 0 20px var(--gold-glow);
-  background: #0f172a;
+  background: #064e3b;
   margin-bottom: 10px;
 }
 
@@ -693,8 +694,8 @@ p {
 }
 
 .stat-box {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(250, 204, 21, 0.2);
+  background: rgba(4, 47, 36, 0.8);
+  border: 1px solid rgba(253, 230, 138, 0.25);
   border-radius: 14px;
   padding: 12px 8px;
   text-align: center;
@@ -715,8 +716,8 @@ p {
 }
 
 .profile-section {
-  background: rgba(15, 23, 42, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(4, 47, 36, 0.58);
+  border: 1px solid rgba(253, 230, 138, 0.14);
   border-radius: 16px;
   padding: 16px;
   margin-top: 14px;
@@ -732,8 +733,8 @@ p {
 }
 
 .exam {
-  background: rgba(15, 23, 42, 0.65);
-  border: 1px solid rgba(250, 204, 21, 0.25);
+  background: rgba(4, 47, 36, 0.72);
+  border: 1px solid rgba(253, 230, 138, 0.3);
   border-radius: 16px;
   padding: 18px;
   margin-top: 14px;
@@ -744,10 +745,10 @@ p {
   font-weight: 700;
   display: inline-flex;
   align-items: center;
-  background: rgba(16, 185, 129, 0.12);
+  background: rgba(52, 211, 153, 0.14);
   padding: 4px 10px;
   border-radius: 8px;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(52, 211, 153, 0.35);
 }
 
 .upcoming {
@@ -755,26 +756,26 @@ p {
   font-weight: 700;
   display: inline-flex;
   align-items: center;
-  background: rgba(245, 158, 11, 0.12);
+  background: rgba(251, 191, 36, 0.14);
   padding: 4px 10px;
   border-radius: 8px;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  border: 1px solid rgba(251, 191, 36, 0.35);
 }
 
 .error {
-  color: #f87171;
-  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.25);
 }
 
 .success-msg {
-  color: #34d399;
-  background: rgba(16, 185, 129, 0.12);
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.14);
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.35);
 }
 
 a {
@@ -786,13 +787,13 @@ a {
 .footer-links {
   text-align: center;
   font-size: 13px;
-  color: #64748b;
+  color: #a7f3d0;
   margin-top: 28px;
   padding-bottom: 24px;
 }
 
 .footer-links a {
-  color: #94a3b8;
+  color: #fde68a;
   margin: 0 8px;
 }
 </style>
@@ -1064,7 +1065,7 @@ a {
       <div class="input-group" style="margin-bottom:8px;">
         <input type="password" id="profNewPassword" class="input-field" placeholder="కొత్త పాస్‌వర్డ్ (New Password)">
       </div>
-      <button type="button" class="btn-secondary" style="width:100%; padding:11px; font-weight:700; color:var(--gold-primary); border-color:var(--card-border);" id="btnProfUpdatePwd" onclick="updatePasswordFromProfile()">
+      <button type="button" class="btn-secondary" style="width:100%; padding:11px; font-weight:700; color:#064e3b;" id="btnProfUpdatePwd" onclick="updatePasswordFromProfile()">
         <img data-ico="key" class="ico-img-sm" alt="Lock"><span>పాస్‌వర్డ్ అప్‌డేట్ చేయండి</span>
       </button>
     </div>
@@ -1086,7 +1087,7 @@ a {
 
 <script>
 // ==========================================
-// BEVELED 3D ROYAL BLUE & METALLIC GOLD IMAGE ICON ENGINE
+// BEVELED 3D SACRED EMERALD & IVORY-GOLD IMAGE ICON ENGINE
 // ==========================================
 const ICON_3D_DESIGNS = {
   globe: `
@@ -1095,17 +1096,17 @@ const ICON_3D_DESIGNS = {
     <line x1="18" y1="32" x2="46" y2="32" stroke="url(#goldEmb)" stroke-width="2.2"/>
   `,
   user: `
-    <circle cx="32" cy="24.5" r="6.8" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
-    <path d="M18.5 44.5c0-6.8 6-11.2 13.5-11.2s13.5 4.4 13.5 11.2c0 1.4-1.1 2.5-2.5 2.5H21c-1.4 0-2.5-1.1-2.5-2.5z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+    <circle cx="32" cy="24.5" r="6.8" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="0.9" filter="url(#emboss)"/>
+    <path d="M18.5 44.5c0-6.8 6-11.2 13.5-11.2s13.5 4.4 13.5 11.2c0 1.4-1.1 2.5-2.5 2.5H21c-1.4 0-2.5-1.1-2.5-2.5z" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="0.9" filter="url(#emboss)"/>
   `,
   logout: `
     <path d="M35 17H23a3 3 0 00-3 3v24a3 3 0 003 3h12" fill="none" stroke="url(#goldEmb)" stroke-width="3" stroke-linecap="round" filter="url(#emboss)"/>
-    <polygon points="22,19 31,15 31,49 22,45" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
+    <polygon points="22,19 31,15 31,49 22,45" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="0.8" filter="url(#emboss)"/>
     <path d="M33 32h11M40 26.5L45.5 32 40 37.5" fill="none" stroke="url(#goldEmb)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
   `,
   bible: `
-    <path d="M20 17l13-3 11 4v25l-11 4-13-4V17z" fill="url(#royalBook)" stroke="url(#goldEmb)" stroke-width="1.4" filter="url(#emboss)"/>
-    <path d="M20 41l13 4 11-4v4l-11 4-13-4v-4z" fill="#fef9c3" stroke="#ca8a04" stroke-width="0.8"/>
+    <path d="M20 17l13-3 11 4v25l-11 4-13-4V17z" fill="url(#emeraldBook)" stroke="url(#goldEmb)" stroke-width="1.4" filter="url(#emboss)"/>
+    <path d="M20 41l13 4 11-4v4l-11 4-13-4v-4z" fill="#fffbeb" stroke="#d97706" stroke-width="0.8"/>
     <path d="M32 20.5v9M28.5 24h7" stroke="url(#goldEmb)" stroke-width="2.6" stroke-linecap="round"/>
   `,
   refresh: `
@@ -1115,57 +1116,57 @@ const ICON_3D_DESIGNS = {
     <polygon points="19,50 19,41 28,41" fill="url(#goldEmb)" filter="url(#emboss)"/>
   `,
   trophy: `
-    <path d="M22 17h20v10c0 6-4.5 10.5-10 10.5S22 33 22 27V17z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+    <path d="M22 17h20v10c0 6-4.5 10.5-10 10.5S22 33 22 27V17z" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="0.9" filter="url(#emboss)"/>
     <path d="M22 20h-4.5c0 4.5 2 7.5 5 8M42 20h4.5c0 4.5-2 7.5-5 8" fill="none" stroke="url(#goldEmb)" stroke-width="2.8" stroke-linecap="round"/>
     <rect x="29.5" y="37" width="5" height="6" fill="url(#goldEmb)"/>
-    <rect x="23" y="43" width="18" height="4.5" rx="2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.8" filter="url(#emboss)"/>
+    <rect x="23" y="43" width="18" height="4.5" rx="2" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="0.8" filter="url(#emboss)"/>
   `,
   chart: `
     <line x1="17" y1="45" x2="47" y2="45" stroke="url(#goldEmb)" stroke-width="2.6" stroke-linecap="round"/>
-    <rect x="19" y="34" width="4.5" height="10" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
-    <rect x="26.5" y="28" width="4.5" height="16" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
-    <rect x="34" y="22" width="4.5" height="22" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
-    <rect x="41.5" y="16" width="4.5" height="28" rx="1.2" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.6" filter="url(#emboss)"/>
+    <rect x="19" y="34" width="4.5" height="10" rx="1.2" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="0.6" filter="url(#emboss)"/>
+    <rect x="26.5" y="28" width="4.5" height="16" rx="1.2" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="0.6" filter="url(#emboss)"/>
+    <rect x="34" y="22" width="4.5" height="22" rx="1.2" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="0.6" filter="url(#emboss)"/>
+    <rect x="41.5" y="16" width="4.5" height="28" rx="1.2" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="0.6" filter="url(#emboss)"/>
   `,
   camera: `
-    <circle cx="32" cy="32" r="14.5" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1" filter="url(#emboss)"/>
-    <circle cx="32" cy="32" r="10.5" fill="#08122b" stroke="#ca8a04" stroke-width="1.2"/>
-    <circle cx="32" cy="32" r="6" fill="#38bdf8"/>
+    <circle cx="32" cy="32" r="14.5" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="1" filter="url(#emboss)"/>
+    <circle cx="32" cy="32" r="10.5" fill="#042f24" stroke="#d97706" stroke-width="1.2"/>
+    <circle cx="32" cy="32" r="6" fill="#6ee7b7"/>
   `,
   folder: `
-    <path d="M16 21a3 3 0 013-3h8l3.5 3.5H45a3 3 0 013 3V42a3 3 0 01-3 3H19a3 3 0 01-3-3V21z" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="0.9" filter="url(#emboss)"/>
+    <path d="M16 21a3 3 0 013-3h8l3.5 3.5H45a3 3 0 013 3V42a3 3 0 01-3 3H19a3 3 0 01-3-3V21z" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="0.9" filter="url(#emboss)"/>
   `,
   key: `
     <circle cx="23.5" cy="37.5" r="7.5" fill="none" stroke="url(#goldEmb)" stroke-width="4" filter="url(#emboss)"/>
     <path d="M29 32l14-14M38 23l4 4M42 19l4 4" stroke="url(#goldEmb)" stroke-width="4" stroke-linecap="round" filter="url(#emboss)"/>
   `,
   save: `
-    <path d="M18 16h23l5 5v25a2.5 2.5 0 01-2.5 2.5h-25.5A2.5 2.5 0 0115.5 46V18.5A2.5 2.5 0 0118 16z" fill="url(#royalBook)" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <path d="M18 16h23l5 5v25a2.5 2.5 0 01-2.5 2.5h-25.5A2.5 2.5 0 0115.5 46V18.5A2.5 2.5 0 0118 16z" fill="url(#emeraldBook)" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
     <rect x="22" y="16" width="16" height="9" rx="1" fill="url(#goldEmb)"/>
-    <rect x="21" y="31" width="22" height="14" rx="1.5" fill="#fef9c3"/>
+    <rect x="21" y="31" width="22" height="14" rx="1.5" fill="#fffbeb"/>
   `,
   note: `
-    <rect x="19" y="18" width="24" height="29" rx="3" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
-    <line x1="23" y1="27" x2="35" y2="27" stroke="#1e3a8a" stroke-width="2"/>
-    <line x1="23" y1="33" x2="32" y2="33" stroke="#1e3a8a" stroke-width="2"/>
+    <rect x="19" y="18" width="24" height="29" rx="3" fill="#fffbeb" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <line x1="23" y1="27" x2="35" y2="27" stroke="#065f46" stroke-width="2"/>
+    <line x1="23" y1="33" x2="32" y2="33" stroke="#065f46" stroke-width="2"/>
   `,
   play: `
-    <polygon points="24,18 46,32 24,46" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="1.2" stroke-linejoin="round" filter="url(#emboss)"/>
+    <polygon points="24,18 46,32 24,46" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="1.2" stroke-linejoin="round" filter="url(#emboss)"/>
   `,
   clock: `
-    <circle cx="32" cy="34" r="13.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="3.2" filter="url(#emboss)"/>
-    <path d="M32 26v8l5.5 3.5" fill="none" stroke="#0f235a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="32" cy="34" r="13.5" fill="#fffbeb" stroke="url(#goldEmb)" stroke-width="3.2" filter="url(#emboss)"/>
+    <path d="M32 26v8l5.5 3.5" fill="none" stroke="#064e3b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
   `,
   calendar: `
-    <rect x="17" y="19" width="30" height="27" rx="3.5" fill="#fef9c3" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
+    <rect x="17" y="19" width="30" height="27" rx="3.5" fill="#fffbeb" stroke="url(#goldEmb)" stroke-width="1.6" filter="url(#emboss)"/>
     <path d="M17 22.5a3.5 3.5 0 013.5-3.5h23a3.5 3.5 0 013.5 3.5V26H17v-3.5z" fill="url(#goldEmb)"/>
-    <path d="M23 16v5M29 16v5M35 16v5M41 16v5" stroke="#fef9c3" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M23 16v5M29 16v5M35 16v5M41 16v5" stroke="#fffbeb" stroke-width="2.4" stroke-linecap="round"/>
   `,
   online: `
     <circle cx="32" cy="32" r="13" fill="url(#emeraldEmb)" stroke="#a7f3d0" stroke-width="2.4" filter="url(#emboss)"/>
   `,
   upcoming: `
-    <circle cx="32" cy="32" r="13" fill="url(#goldEmb)" stroke="#fef9c3" stroke-width="2.4" filter="url(#emboss)"/>
+    <circle cx="32" cy="32" r="13" fill="url(#goldEmb)" stroke="#fffbeb" stroke-width="2.4" filter="url(#emboss)"/>
   `,
   check: `
     <path d="M20 33l8 8 17-18" fill="none" stroke="url(#emeraldEmb)" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" filter="url(#emboss)"/>
@@ -1180,30 +1181,30 @@ function get3DIconUrl(name) {
   const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
     <defs>
       <linearGradient id="goldRim" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#fef9c3"/><stop offset="30%" stop-color="#facc15"/><stop offset="70%" stop-color="#ca8a04"/><stop offset="100%" stop-color="#713f12"/>
+        <stop offset="0%" stop-color="#fffbeb"/><stop offset="30%" stop-color="#fde68a"/><stop offset="70%" stop-color="#d97706"/><stop offset="100%" stop-color="#78350f"/>
       </linearGradient>
       <linearGradient id="goldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#fef9c3"/><stop offset="45%" stop-color="#facc15"/><stop offset="100%" stop-color="#a16207"/>
+        <stop offset="0%" stop-color="#fffbeb"/><stop offset="45%" stop-color="#fde68a"/><stop offset="100%" stop-color="#b45309"/>
       </linearGradient>
-      <radialGradient id="royalFace" cx="35%" cy="25%" r="75%">
-        <stop offset="0%" stop-color="#25489c"/><stop offset="60%" stop-color="#142966"/><stop offset="100%" stop-color="#091336"/>
+      <radialGradient id="emeraldFace" cx="35%" cy="25%" r="75%">
+        <stop offset="0%" stop-color="#10b981"/><stop offset="60%" stop-color="#065f46"/><stop offset="100%" stop-color="#022c22"/>
       </radialGradient>
-      <linearGradient id="royalBook" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#172554"/>
+      <linearGradient id="emeraldBook" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#064e3b"/>
       </linearGradient>
       <linearGradient id="emeraldEmb" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stop-color="#6ee7b7"/><stop offset="50%" stop-color="#10b981"/><stop offset="100%" stop-color="#065f46"/>
       </linearGradient>
       <filter id="emboss" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-color="#040814" flood-opacity="0.75"/>
+        <feDropShadow dx="0" dy="2.5" stdDeviation="1.6" flood-color="#02140f" flood-opacity="0.75"/>
       </filter>
     </defs>
-    <rect x="3" y="6" width="58" height="56" rx="15" fill="#5c330a"/>
+    <rect x="3" y="6" width="58" height="56" rx="15" fill="#451a03"/>
     <rect x="3" y="3" width="58" height="56" rx="15" fill="url(#goldRim)"/>
-    <rect x="7" y="7" width="50" height="48" rx="11.5" fill="url(#royalFace)" stroke="#713f12" stroke-width="1"/>
+    <rect x="7" y="7" width="50" height="48" rx="11.5" fill="url(#emeraldFace)" stroke="#78350f" stroke-width="1"/>
     <rect x="9" y="9" width="46" height="44" rx="10" fill="none" stroke="url(#goldRim)" stroke-width="1.5"/>
     ${inner}
-    <path d="M10 14a6 6 0 016-6h32a6 6 0 016 6v10c-14 4-30 4-44 0V14z" fill="#ffffff" opacity="0.12"/>
+    <path d="M10 14a6 6 0 016-6h32a6 6 0 016 6v10c-14 4-30 4-44 0V14z" fill="#ffffff" opacity="0.14"/>
   </svg>`;
 
   const uri = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svgStr);
@@ -1277,7 +1278,7 @@ window.trigger100CrossesDockToButton = function(targetEl) {
     cross.style.animation = "none";
     cross.style.zIndex = "9997";
     cross.style.opacity = "1";
-    cross.style.color = "#fef08a";
+    cross.style.color = "#fef9c3";
     cross.style.transition = `transform ${0.28 + (i % 5) * 0.025}s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease`;
 
     requestAnimationFrame(() => {
@@ -1639,7 +1640,6 @@ function applyTranslations() {
   setTxt("dashResultsDesc", t.dashResultsDesc);
   setTxt("linkResults", t.linkResults);
 
-  // Profile Modal Translations
   setTxt("lblStatExams", t.lblStatExams);
   setTxt("lblStatBest", t.lblStatBest);
   setTxt("lblStatTotal", t.lblStatTotal);
@@ -1687,7 +1687,6 @@ function handleProfilePhotoChange(event) {
   });
 }
 
-/* ================= FULL PROFILE MODAL LOGIC ================= */
 async function openProfileModal() {
   if (!currentUser) return;
   profileNewPhotoBase64 = null;
@@ -1838,7 +1837,6 @@ async function updatePasswordFromProfile() {
   }
 }
 
-/* ================= SESSION & AUTH ================= */
 function checkExistingSession() {
   applyTranslations();
   const saved = localStorage.getItem("logos_quest_user");
@@ -2289,6 +2287,3 @@ if ("serviceWorker" in navigator) {
 </script>
 </body>
 </html>
-
-
-
