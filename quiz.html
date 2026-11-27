@@ -36,6 +36,19 @@ body {
 body.exam-protected {
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body.capture-flash-hide #quizView {
+  opacity: 0;
+  filter: blur(18px);
+  transition: opacity 0.08s ease, filter 0.08s ease;
+}
+
+@media print {
+  body.exam-protected #quizView {
+    display: none !important;
+  }
 }
 
 /* ================= PREMIUM 3D HEADER ================= */
@@ -705,10 +718,40 @@ let timerInterval = null;
 let isSubmitted = false;
 let examStartTimeMs = Date.now();
 
+// ==========================================
+// EXAM-ONLY SCREENSHOT & ANTI-CHEAT GUARD
+// (Active from exam start; cleared immediately on exam completion)
+// ==========================================
 let examActive = false;
 let tabSwitchCount = 0;
 const MAX_TAB_WARNINGS = 3;
 let lastViolationTime = 0;
+let captureHideTimer = null;
+
+function enableExamCaptureGuard() {
+  examActive = true;
+  document.body.classList.add("exam-protected");
+  document.body.classList.remove("capture-flash-hide");
+}
+
+function disableExamCaptureGuard() {
+  examActive = false;
+  if (captureHideTimer) {
+    clearTimeout(captureHideTimer);
+    captureHideTimer = null;
+  }
+  document.body.classList.remove("exam-protected");
+  document.body.classList.remove("capture-flash-hide");
+}
+
+function flashHideDuringCapture() {
+  if (!examActive || isSubmitted) return;
+  document.body.classList.add("capture-flash-hide");
+  if (captureHideTimer) clearTimeout(captureHideTimer);
+  captureHideTimer = setTimeout(() => {
+    document.body.classList.remove("capture-flash-hide");
+  }, 1500);
+}
 
 const labels = {
   te: {
@@ -819,23 +862,39 @@ function recordTabViolation() {
 }
 
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden && examActive) {
+  if (!examActive || isSubmitted) return;
+  if (document.hidden) {
+    flashHideDuringCapture();
     recordTabViolation();
   }
 });
 
 window.addEventListener("blur", () => {
-  if (examActive) {
-    recordTabViolation();
+  if (!examActive || isSubmitted) return;
+  flashHideDuringCapture();
+  recordTabViolation();
+});
+
+document.addEventListener("keydown", e => {
+  if (!examActive || isSubmitted) return;
+  const key = (e.key || "").toLowerCase();
+  const isPrintScreen = e.key === "PrintScreen" || e.keyCode === 44;
+  const isPrintShortcut = (e.ctrlKey || e.metaKey) && key === "p";
+  const isSaveShortcut = (e.ctrlKey || e.metaKey) && key === "s";
+  const isDevToolsShortcut = (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(key)) || e.key === "F12";
+
+  if (isPrintScreen || isPrintShortcut || isSaveShortcut || isDevToolsShortcut) {
+    if (e.cancelable) e.preventDefault();
+    flashHideDuringCapture();
   }
-});
+}, true);
 
-document.addEventListener("contextmenu", e => {
-  if (examActive) e.preventDefault();
-});
-
-document.addEventListener("copy", e => {
-  if (examActive) e.preventDefault();
+["contextmenu", "copy", "cut", "paste", "selectstart", "dragstart"].forEach(evtName => {
+  document.addEventListener(evtName, e => {
+    if (examActive && !isSubmitted) {
+      e.preventDefault();
+    }
+  }, true);
 });
 
 function normalizeLangCode(val) {
@@ -848,6 +907,7 @@ function normalizeLangCode(val) {
 }
 
 function showError(msg) {
+  disableExamCaptureGuard();
   $("loadingView").innerHTML = `
     <div class="error-box">
       <p style="margin:0 0 14px; font-weight:700; display:flex; align-items:center; justify-content:center;">${icoImgHtml("warn")}<span>${msg}</span></p>
@@ -1074,9 +1134,8 @@ async function initExam() {
     $("loadingView").style.display = "none";
     $("quizView").style.display = "block";
 
-    examActive = true;
     tabSwitchCount = 0;
-    document.body.classList.add("exam-protected");
+    enableExamCaptureGuard();
 
     startTimer(end);
     renderQuestion();
@@ -1201,8 +1260,7 @@ async function submitExam(isAuto) {
   if (!isAuto && !confirm(t.confirmSub)) return;
 
   isSubmitted = true;
-  examActive = false;
-  document.body.classList.remove("exam-protected");
+  disableExamCaptureGuard();
   $("antiCheatModal").style.display = "none";
   clearInterval(timerInterval);
   $("submitBtn").disabled = true;
