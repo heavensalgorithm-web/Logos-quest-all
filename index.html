@@ -42,20 +42,54 @@ body {
   min-height: 100vh;
 }
 
-/* ================= BACKSIDE GOLDEN CROWN CLOSE-UP ANIMATION ================= */
-@keyframes crownApproach {
+/* ================= 100 BACKSIDE GOLDEN CROSSES CLOSE-UP ANIMATION ================= */
+@keyframes goldenCrossCloseZoom {
   0% {
-    transform: translate(-50%, -50%) scale(0.45) rotate(-6deg);
-    opacity: 0.08;
+    transform: translate3d(0, 12px, 0) scale(0.22);
+    opacity: 0;
   }
-  50% {
-    transform: translate(-50%, -50%) scale(1.08) rotate(2deg);
-    opacity: 0.22;
+  25% {
+    opacity: 0.45;
+  }
+  75% {
+    opacity: 0.35;
   }
   100% {
-    transform: translate(-50%, -50%) scale(1.75) rotate(0deg);
-    opacity: 0.05;
+    transform: translate3d(0, -18px, 0) scale(2.25);
+    opacity: 0;
   }
+}
+
+.golden-cross-sky {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-golden-cross {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #fef9c3 0%, #facc15 50%, #ca8a04 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.75)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.8));
+  will-change: transform, opacity;
+  animation-name: goldenCrossCloseZoom;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.lang-selector-box,
+#authContainer,
+#dashboardContainer {
+  position: relative;
+  z-index: 2;
 }
 
 .card {
@@ -70,23 +104,6 @@ body {
   border-radius: 20px;
   max-width: 620px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-}
-
-.card > *:not(.crown-backdrop-anim) {
-  position: relative;
-  z-index: 2;
-}
-
-.crown-backdrop-anim {
-  position: absolute;
-  top: 52%;
-  left: 50%;
-  width: 240px;
-  height: 180px;
-  pointer-events: none;
-  z-index: 1;
-  animation: crownApproach 7.5s ease-in-out infinite;
-  filter: drop-shadow(0 0 26px rgba(250, 204, 21, 0.45));
 }
 
 .lang-selector-box {
@@ -778,6 +795,9 @@ a {
 
 <body>
 
+<!-- 100 BACKSIDE GOLDEN CROSSES ANIMATION LAYER -->
+<div id="goldenCrossSky" class="golden-cross-sky" aria-hidden="true"></div>
+
 <div class="lang-selector-box">
   <img data-ico="globe" class="ico-img-md" style="margin:0;" alt="Language">
   <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
@@ -1197,31 +1217,31 @@ function hydrateAll3DImageIcons(root = document) {
   });
 }
 
-function injectBacksideGoldenCrownLayers() {
-  const crownSvg = `<svg viewBox="0 0 160 110" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="bgCrownGold" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#fef9c3"/>
-        <stop offset="45%" stop-color="#facc15"/>
-        <stop offset="100%" stop-color="#a16207"/>
-      </linearGradient>
-    </defs>
-    <path d="M16 84 L12 32 L46 56 L80 20 L114 56 L148 32 L144 84 Z" fill="url(#bgCrownGold)" stroke="#fef08a" stroke-width="2.5" stroke-linejoin="round"/>
-    <rect x="16" y="84" width="128" height="14" rx="6" fill="#ca8a04" stroke="#fef9c3" stroke-width="2"/>
-    <circle cx="80" cy="14" r="6" fill="#fef9c3"/>
-    <circle cx="12" cy="26" r="5" fill="#fde047"/>
-    <circle cx="148" cy="26" r="5" fill="#fde047"/>
-  </svg>`;
+function inject100GoldenCrosses() {
+  const sky = $("goldenCrossSky");
+  if (!sky || sky.children.length > 0) return;
 
-  document.querySelectorAll(".card").forEach(card => {
-    if (!card.querySelector(".crown-backdrop-anim")) {
-      const layer = document.createElement("div");
-      layer.className = "crown-backdrop-anim";
-      layer.setAttribute("aria-hidden", "true");
-      layer.innerHTML = crownSvg;
-      card.insertBefore(layer, card.firstChild);
-    }
-  });
+  const frag = document.createDocumentFragment();
+  for (let i = 0; i < 100; i++) {
+    const cross = document.createElement("span");
+    cross.className = "bg-golden-cross";
+    cross.textContent = "✝";
+
+    const leftPct = ((i * 37) % 100) + ((i % 7) * 0.35);
+    const topPct = ((i * 53) % 100) + ((i % 5) * 0.4);
+    const sizePx = 18 + (i % 5) * 7;
+    const durationSec = 5.5 + (i % 7) * 0.9;
+    const delaySec = -((i * 0.43) % 8);
+
+    cross.style.left = `${Math.min(98, leftPct)}%`;
+    cross.style.top = `${Math.min(98, topPct)}%`;
+    cross.style.fontSize = `${sizePx}px`;
+    cross.style.animationDuration = `${durationSec}s`;
+    cross.style.animationDelay = `${delaySec}s`;
+
+    frag.appendChild(cross);
+  }
+  sky.appendChild(frag);
 }
 
 window.toggleHomeSection = function(panelId, btnId) {
@@ -2189,7 +2209,7 @@ async function loadExams(){
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  injectBacksideGoldenCrownLayers();
+  inject100GoldenCrosses();
   hydrateAll3DImageIcons();
   checkExistingSession();
 });
