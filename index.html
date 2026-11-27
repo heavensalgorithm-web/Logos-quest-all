@@ -1,5 +1,4 @@
-మీ index.html పూర్తి కోడ్ ఇక్కడ ఉంది — ఇందులో 100 Golden Crosses Backside Close-up Animation, క్లిక్ చేసిన వెంటనే అదే 100 గోల్డెన్ క్రాస్‌లు బటన్ మీదకు ఎగిరి అతుక్కునే (trigger100CrossesDockToButton) యానిమేషన్, Live Bible Exam / Winners / My Results బటన్‌లు, క్రాస్ కనెక్టర్లు, 3D రాయల్ బ్లూ & గోల్డ్ ఇమేజ్ ఐకాన్‌లు, మరియు 4 భాషల ట్రాన్స్‌లేషన్ అన్నీ పూర్తిగా కలిపి ఇచ్చాను.
-GitHub లోని index.html లో పాత కోడ్ మొత్తం తొలగించి, దీన్ని పేస్ట్ చేసి Commit changes నొక్కండి:
+మీరు ఇంతకుముందు అడిగినట్లుగా, బ్యాక్‌గ్రౌండ్‌లో ఉన్న 100 గోల్డెన్ క్రాస్‌లు బూడిద/గోధుమ రంగులో కాకుండా 100% ప్రకాశవంతమైన బంగారు రంగు (#fde047) లో కనిపించడానికి మరియు బటన్ క్లిక్ చేసిన వెంటనే అదే 100 క్రాస్‌లు బటన్ మీదకు ఎగిరి అతుక్కునేలా సరిచేసిన పూర్తి index.html కోడ్ ఇక్కడ ఇస్తున్నాను:
 <!DOCTYPE html>
 <html lang="te">
 <head>
@@ -75,12 +74,11 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #fef9c3 0%, #facc15 50%, #ca8a04 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #fde047;
   font-weight: 900;
   line-height: 1;
-  filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.75)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.8));
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.95), 0 0 22px rgba(202, 138, 4, 0.75);
+  filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.85));
   will-change: transform, opacity;
   animation-name: goldenCrossCloseZoom;
   animation-timing-function: ease-in-out;
@@ -1262,7 +1260,7 @@ window.trigger100CrossesDockToButton = function(targetEl) {
   const destY = rect.top + rect.height / 2;
 
   targetEl.classList.add("btn-cross-docked");
-  setTimeout(() => targetEl.classList.remove("btn-cross-docked"), 650);
+  setTimeout(() => targetEl.classList.remove("btn-cross-docked"), 900);
 
   if (crossReturnTimer) clearTimeout(crossReturnTimer);
 
@@ -1271,18 +1269,19 @@ window.trigger100CrossesDockToButton = function(targetEl) {
     const curX = curRect.left + curRect.width / 2;
     const curY = curRect.top + curRect.height / 2;
 
-    const jitterX = ((i % 11) - 5) * 7;
-    const jitterY = ((i % 9) - 4) * 5;
-    const dx = (destX + jitterX) - curX;
-    const dy = (destY + jitterY) - curY;
+    const ringAngle = (i / crosses.length) * Math.PI * 2;
+    const ringRadius = (i % 5) * 9;
+    const dx = (destX + Math.cos(ringAngle) * ringRadius) - curX;
+    const dy = (destY + Math.sin(ringAngle) * (ringRadius * 0.55)) - curY;
 
     cross.style.animation = "none";
     cross.style.zIndex = "9997";
-    cross.style.opacity = "0.96";
-    cross.style.transition = `transform ${0.34 + (i % 6) * 0.03}s cubic-bezier(0.18, 0.9, 0.32, 1.08), opacity 0.45s ease`;
+    cross.style.opacity = "1";
+    cross.style.color = "#fef08a";
+    cross.style.transition = `transform ${0.28 + (i % 5) * 0.025}s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease`;
 
     requestAnimationFrame(() => {
-      cross.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(1.15)`;
+      cross.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(1.1)`;
     });
   });
 
@@ -1290,8 +1289,9 @@ window.trigger100CrossesDockToButton = function(targetEl) {
     crosses.forEach((cross, i) => {
       const durationSec = 5.5 + (i % 7) * 0.9;
       const delaySec = -((i * 0.43) % 8);
-      cross.style.transition = "transform 0.35s ease, opacity 0.35s ease";
+      cross.style.transition = "transform 0.4s ease, opacity 0.4s ease";
       cross.style.transform = "translate3d(0, 0, 0) scale(1)";
+      cross.style.color = "#fde047";
       cross.style.zIndex = "";
 
       setTimeout(() => {
@@ -1299,9 +1299,9 @@ window.trigger100CrossesDockToButton = function(targetEl) {
         cross.style.transform = "";
         cross.style.opacity = "";
         cross.style.animation = `goldenCrossCloseZoom ${durationSec}s ease-in-out ${delaySec}s infinite`;
-      }, 360);
+      }, 420);
     });
-  }, 520);
+  }, 850);
 };
 
 document.addEventListener("click", function(e) {
@@ -2289,4 +2289,6 @@ if ("serviceWorker" in navigator) {
 </script>
 </body>
 </html>
+
+ఇంకేమైనా మార్పులు చేయాలా?
 
