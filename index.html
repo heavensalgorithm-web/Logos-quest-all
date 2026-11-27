@@ -85,6 +85,34 @@ body {
   animation-iteration-count: infinite;
 }
 
+/* ================= INSTANT 100 CROSSES DOCK TO CLICKED BUTTON ================= */
+.cross-dock-burst-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  overflow: hidden;
+}
+
+.docking-cross-item {
+  position: fixed;
+  left: 0;
+  top: 0;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(180deg, #fef9c3 0%, #facc15 50%, #ca8a04 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.95));
+  transition: transform 0.38s cubic-bezier(0.18, 0.9, 0.32, 1.05), opacity 0.42s ease;
+  will-change: transform, opacity;
+}
+
+.btn-cross-docked {
+  box-shadow: 0 0 28px rgba(250, 204, 21, 0.85), 0 6px 0 #854d0e !important;
+  border-color: #fef08a !important;
+}
+
 .lang-selector-box,
 #authContainer,
 #dashboardContainer {
@@ -798,6 +826,9 @@ a {
 <!-- 100 BACKSIDE GOLDEN CROSSES ANIMATION LAYER -->
 <div id="goldenCrossSky" class="golden-cross-sky" aria-hidden="true"></div>
 
+<!-- INSTANT 100 CROSSES DOCK TO CLICKED BUTTON LAYER -->
+<div id="crossDockBurstLayer" class="cross-dock-burst-layer" aria-hidden="true"></div>
+
 <div class="lang-selector-box">
   <img data-ico="globe" class="ico-img-md" style="margin:0;" alt="Language">
   <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
@@ -913,7 +944,7 @@ a {
 
   <!-- 1. LIVE BIBLE EXAMS BUTTON + CROSS-SNAPPED OPTIONS -->
   <div class="card">
-    <button type="button" class="section-trigger-btn open" id="btnTriggerExams" onclick="toggleHomeSection('examsBodyPanel', 'btnTriggerExams')">
+    <button type="button" class="section-trigger-btn open" id="btnTriggerExams" onclick="toggleHomeSection('examsBodyPanel', 'btnTriggerExams', this)">
       <span class="section-trigger-left">
         <img data-ico="bible" class="ico-img-md" alt="Exams"><span id="dashExamsTitle">లైవ్ బైబిల్ పరీక్షలు</span>
         <span class="cross-tag-pill">✚</span>
@@ -939,7 +970,7 @@ a {
 
   <!-- 2. WINNERS BUTTON + CROSS-SNAPPED OPTIONS -->
   <div class="card">
-    <button type="button" class="section-trigger-btn" id="btnTriggerWinners" onclick="toggleHomeSection('winnersBodyPanel', 'btnTriggerWinners')">
+    <button type="button" class="section-trigger-btn" id="btnTriggerWinners" onclick="toggleHomeSection('winnersBodyPanel', 'btnTriggerWinners', this)">
       <span class="section-trigger-left">
         <img data-ico="trophy" class="ico-img-md" alt="Winners"><span id="dashWinnersTitle">విజేతలు</span>
         <span class="cross-tag-pill">✚</span>
@@ -959,7 +990,7 @@ a {
 
   <!-- 3. MY RESULTS BUTTON + CROSS-SNAPPED OPTIONS -->
   <div class="card">
-    <button type="button" class="section-trigger-btn" id="btnTriggerResults" onclick="toggleHomeSection('resultsBodyPanel', 'btnTriggerResults')">
+    <button type="button" class="section-trigger-btn" id="btnTriggerResults" onclick="toggleHomeSection('resultsBodyPanel', 'btnTriggerResults', this)">
       <span class="section-trigger-left">
         <img data-ico="chart" class="ico-img-md" alt="Results"><span id="dashResultsTitle">నా ఫలితాలు</span>
         <span class="cross-tag-pill">✚</span>
@@ -1243,6 +1274,62 @@ function inject100GoldenCrosses() {
   }
   sky.appendChild(frag);
 }
+
+window.trigger100CrossesDockToButton = function(targetEl) {
+  const burstLayer = $("crossDockBurstLayer");
+  if (!burstLayer || !targetEl) return;
+
+  const rect = targetEl.getBoundingClientRect();
+  const destX = rect.left + rect.width / 2;
+  const destY = rect.top + rect.height / 2;
+
+  targetEl.classList.add("btn-cross-docked");
+  setTimeout(() => targetEl.classList.remove("btn-cross-docked"), 550);
+
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const frag = document.createDocumentFragment();
+  const spawned = [];
+
+  for (let i = 0; i < 100; i++) {
+    const angle = (i / 100) * Math.PI * 2;
+    const radiusX = vw * (0.25 + ((i * 19) % 35) / 100);
+    const radiusY = vh * (0.25 + ((i * 29) % 35) / 100);
+    const startX = Math.max(8, Math.min(vw - 24, destX + Math.cos(angle) * radiusX));
+    const startY = Math.max(8, Math.min(vh - 24, destY + Math.sin(angle) * radiusY));
+
+    const el = document.createElement("span");
+    el.className = "docking-cross-item";
+    el.textContent = "✝";
+    el.style.fontSize = `${14 + (i % 4) * 4}px`;
+    el.style.opacity = "0.95";
+    el.style.transform = `translate3d(${startX}px, ${startY}px, 0) scale(0.85)`;
+    frag.appendChild(el);
+    spawned.push({ el, startX, startY, offsetX: ((i % 9) - 4) * 6, offsetY: ((i % 7) - 3) * 4 });
+  }
+
+  burstLayer.appendChild(frag);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      spawned.forEach(item => {
+        item.el.style.transform = `translate3d(${destX + item.offsetX - 8}px, ${destY + item.offsetY - 10}px, 0) scale(1.15)`;
+        item.el.style.opacity = "0.15";
+      });
+    });
+  });
+
+  setTimeout(() => {
+    spawned.forEach(item => item.el.remove());
+  }, 460);
+};
+
+document.addEventListener("click", function(e) {
+  const btn = e.target.closest("button, .btn-photo, .btn-action, .btn-secondary");
+  if (btn && !btn.disabled) {
+    window.trigger100CrossesDockToButton(btn);
+  }
+}, true);
 
 window.toggleHomeSection = function(panelId, btnId) {
   const panel = $(panelId);
